@@ -36,3 +36,24 @@ form#new-elements {
   width: 45%;
   float: left;
   display: inline-block; }
+
+.slider-wrapper {
+  width: 80%;
+  margin: 10px 0; }
+  .slider-wrapper #slider {
+    width: 100%;
+    margin-bottom: 2.5em; }
+    .slider-wrapper #slider label {
+      position: absolute;
+      width: 20px;
+      margin-top: 20px;
+      margin-left: -10px;
+      text-align: center; }
+
+.slider-legend {
+  width: 100%;
+  margin-top: 1em; }
+  .slider-legend p {
+    text-align: center;
+    width: 43px;
+    display: inline-block; }

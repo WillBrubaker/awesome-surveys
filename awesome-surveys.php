@@ -49,7 +49,9 @@ class Awesome_Surveys {
   add_action( 'init', array( &$this, 'init' ) );
   add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
   add_action( 'wp_ajax_create_survey', array( &$this, 'create_survey' ) );
-  add_action( 'wp_ajax_get_element_form', array( &$this, 'get_element_form' ) );
+  add_action( 'wp_ajax_get_element_form', array( &$this, 'element_info_inputs' ) );
+  add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
+  add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
  }
 
  /**
@@ -86,7 +88,7 @@ class Awesome_Surveys {
  {
 
   if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 1 ) {
-   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs' ), self::$wwm_plugin_values['version'] );
+   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip' ), self::$wwm_plugin_values['version'] );
    wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
    wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.css', __FILE__ ), array( 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
   }
@@ -184,19 +186,20 @@ class Awesome_Surveys {
   $form->addElement( new Element_Hidden( 'action', 'create_survey' ) );
   $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
   $form->addElement( new Element_HTML( '<div class="create_holder">') );
-  $form->addElement( new Element_Button( __( 'Create Survey', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+  $form->addElement( new Element_Button( __( 'Start Building', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
   $form->addElement( new Element_HTML( '</div>') );
   ?>
   <div class="wrap">
    <div id="tabs">
     <ul>
-     <li><a href="#create">Create Survey</a></li>
+     <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
     </ul>
     <div id="create" class="half">
      <?php
       $form->render();
       $form = new FormOverrides( 'new-elements' );
       $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div>' ) );
+      $form->addElement( new Element_Hidden( 'action', 'generate_preview' ) );
       $form->addElement( new Element_Button( __( 'Add Element', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
       $form->addElement( new Element_HTML( '</div>' ) );
       $form->render();
@@ -256,12 +259,19 @@ class Awesome_Surveys {
   return '<input type="' . $args['type'] . '" name="' . $args['name'] . '" value="' . $args['value'] . '"' . $atts . ' ' . $props . '>';
  }
 
+ /**
+  * Renders a dropdown select element with options
+  * that coincide with the pfbc form builder class
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  */
  private function render_element_selector()
  {
 
-  $types = array( 'select...' => '', 'text' => 'Element_Textbox', 'dropdown selection' => 'Element_Select', 'radio' => 'Element_Radio', 'checkbox' => 'Element_Checkbox', 'textarea' => 'Element_Textarea' );
-  $html = '<input type="hidden" name="survey_name" value="' . $_POST['survey_name'] . '">';
-  $html .= '<div id="new-element-selector">Add a field to your survey.<br><label>Select Field Type:<br><select name="type" class="type-selector">';
+  $types = array( 'select...' => '', __( 'text', $this->text_domain ) => 'Element_Textbox', __( 'dropdown selection', $this->text_domain ) => 'Element_Select', __( 'radio', $this->text_domain ) => 'Element_Radio', __( 'checkbox', $this->text_domain ) => 'Element_Checkbox', __( 'textarea', $this->text_domain ) => 'Element_Textarea' );
+  $html = '<input type="hidden" name="survey_name" value="' . stripslashes( $_POST['survey_name'] ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
+  $html .= '<div id="new-element-selector">' . __( 'Add a field to your survey.', $this->text_domain ) . '<br><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
   foreach ( $types as $type => $pfbc_method ) {
    $html .= '<option value="' . $pfbc_method . '">' . $type . '</option>';
   }
@@ -269,22 +279,35 @@ class Awesome_Surveys {
   return $html;
  }
 
- public function get_element_form()
+ /**
+  * Ajax handler which will output
+  * some form elements so that information can be gathered
+  * about the element that a user is trying to add to their survey
+  * @since 1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  */
+ public function element_info_inputs()
  {
 
   if ( ! current_user_can( 'manage_options' ) ) {
    exit;
   }
-  $html = '<label>input a name for this ' . $_POST['text']  . ' field<br><input type="text" name="name"></label>';
-  $html .= '<input type="hidden" name="type" value="' . $_POST['type'] . '">';
+  $html = '';
+  $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]"></label>';
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
-   $html .= '<label>Number of options required?<br><input type="number" name="num_options"></label>';
+   $html .= __( 'Number of options required?', $this->text_domain ) . '<br><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
   }
   echo json_encode( array( 'form' => $html, 'preview' => $preview ) );
   exit;
  }
 
+ /**
+  * Renders a preview of the survey form that is being built
+  * @param  array  $args function arguments
+  * @return  string $html the preview html of the form along with hidden form inputs.
+  */
  private function survey_preview( $args = array() )
  {
 
@@ -294,6 +317,58 @@ class Awesome_Surveys {
 
   $args = wp_parse_args( $args, $defaults );
   return null;
+ }
+
+ /**
+  * Ajax handler to generate some fields
+  * for survey option inputs
+  * @since 1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  */
+ public function options_fields()
+ {
+
+  $html = '';
+  for ( $iterations = 0; $iterations < absint( $_POST['num_options'] ); $iterations++ ) {
+   $label = $iterations + 1;
+   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input title="' . __( 'This is the text label that will displayed for this option', $this->text_domain ) . '" type="text" name="options[label][' . $iterations . ']"></label><label>' . __( 'option value', $this->text_domain ) . ' ' . $label . '<br><input title="' . __( 'This is a unique value for this option', $this->text_domain ) . '" type="text" name="options[value][' . $iterations . ']" value="' . $iterations . '"></label><label>' . __( 'default?', $this->text_domain ) . '<br><input title="' . __( 'Should this option be selected by default?', $this->text_domain ) . '" type="radio" name="options[default]" value="' . $iterations . '"></label>';
+  }
+  echo $html;
+  exit;
+ }
+
+ /**
+  * Ajax handler to generate the form preview
+  * @since 1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  */
+ public function generate_preview()
+ {
+
+  if ( ! class_exists( 'Form' ) ) {
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Form.php' );
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Overrides.php' );
+  }
+  $form = new FormOverrides( sanitize_title( $_POST['survey_name'] ) );
+  if ( isset( $_POST['existing_elements'] ) ) {
+   $element_json = json_decode( stripslashes( $_POST['existing_elements'] ), true );
+  }
+  $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $_POST['options'] ) ) : array( $_POST['options'] );
+  foreach ( $existing_elements as $element ) {
+   $options = array();
+   for ( $iterations = 0; $iterations < count( $element['label'] ); $iterations++ ) {
+    $options[$element['value'][$iterations] . ':pfbc'] = stripslashes( $element['label'][$iterations] );
+   }
+   $selected_value = ( isset( $element['default'] ) ) ? array( 'value' => $element['default'] ) : null;
+   $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $selected_value ) );
+  }
+  $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
+  $form->addElement( new Element_Hidden( 'survey_name', $_POST['survey_name'] ) );
+  $form->addElement( new Element_Button( __( 'Reset', $this->text_domain ), 'button', array( 'class' => 'button-secondary', ) ) );
+  $form->render();
+  exit;
  }
 
  /**

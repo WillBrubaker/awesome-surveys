@@ -17,7 +17,7 @@ abstract class Base {
             $method_reference = array();
             foreach($available as $method)
                 $method_reference[strtolower($method)] = $method;
-			
+
             foreach($properties as $property => $value) {
 				$property = strtolower($property);
                 /*Properties beginning with "_" cannot be set directly.*/
@@ -69,8 +69,8 @@ abstract class Base {
 				$str .= ' ' . $attribute;
 				if($this->_attributes[$attribute] !== "")
 					$str .= '="' . $this->filter($this->_attributes[$attribute]) . '"';
-			}	
-		}	
+			}
+		}
         return $str;
     }
 

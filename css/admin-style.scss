@@ -43,3 +43,30 @@ form#new-elements {
  float: left;
  display: inline-block;
 }
+
+.slider-wrapper {
+ width: 80%;
+ margin: 10px 0;
+ #slider {
+  width: 100%;
+  margin-bottom: 2.5em;
+  label{
+   position: absolute;
+   width: 20px;
+   margin-top: 20px;
+   margin-left: -10px;
+   text-align: center;
+  }
+ }
+}
+
+
+.slider-legend {
+ width: 100%;
+ margin-top: 1em;
+ p{
+  text-align: center;
+  width: 43px;
+  display: inline-block;
+ }
+}

@@ -13,10 +13,10 @@ jQuery(document).ready(function($) {
         var buttonHtml = $('.create_holder').html();
         $('#survey-manager').remove();
         var selectHtml = data.form;
-        $('#add-element').empty().append(data.form);
+        $(data.form).insertBefore('#add-element');
         $('#new-elements').show();
         var surveyName = $('input[type="hidden"][name="survey_name"]').val();
-        $('#preview h4.survey-name').text(surveyName);
+        $('#preview h4.survey-name').text('Preview of Survey: ' + surveyName);
       }
       overlay.hide();
     }, 'json');
@@ -28,12 +28,57 @@ jQuery(document).ready(function($) {
       'type': $(':selected', this).val(),
       'text': $(':selected', this).text()
     }, function(data) {
-      $(data.form).insertAfter('#add-element');
-      var i = 0;
-      $('#new-elements input[name*="type"]').each(function() {
-        $(this).attr('name', 'type[' + i + ']');
-        i++;
+      $('#add-element').empty().append(data.form);
+      $('#slider').slider({
+        range: false,
+        max: 10,
+        min: 0,
+        step: 1,
+        change: function(event, ui) {
+          var numOptions = ui.value;
+          $.post(ajaxurl, {
+            'action': 'options_fields',
+            'num_options': numOptions
+          }, function(data) {
+            $('#new-elements #options-holder').empty().append(data);
+          });
+        }
+      }).each(function() {
+        var opt = $(this).data().uiSlider.options;
+        var vals = opt.max - opt.min;
+        for (var i = 0; i <= vals; i++) {
+          var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
+          $("#slider").append(el);
+        }
       });
+      $('#new-elements').tooltip();
     }, 'json');
+  });
+  $('#new-elements').on('change', 'input[type="number"]', function() {
+    var numOptions = $(this).val();
+    $.post(ajaxurl, {
+      'action': 'options_fields',
+      'num_options': numOptions
+    }, function(data) {
+      $('#new-elements #options-holder').empty().append(data);
+    });
+  });
+  $('#tabs').on('submit', '#new-elements', function(e) {
+    e.preventDefault();
+    var previewForm = $('input[type="hidden"][name="survey_name"]', this).attr('data-id');
+    $('#new-elements input[type="hidden"][name="existing_elements"]').each( function(){
+      $(this).remove();
+    });
+    var existingData = $('#' + previewForm + ' input[type="hidden"][name="existing_elements"]').val();
+    console.log(existingData);
+    var input;
+    if ( typeof existingData != 'undefined' ) {
+      console.log('i won a pony');
+      input = $("<input>", { type: "hidden", name: "existing_elements", value: existingData});
+      $('#new-elements').append($(input));
+    }
+    $.post(ajaxurl, $('#new-elements').serializeArray(), function(data) {
+      $('#preview .survey-preview').empty().append(data);
+    });
   });
 });
