@@ -70,15 +70,27 @@ jQuery(document).ready(function($) {
       $(this).remove();
     });
     var existingData = $('#' + previewForm + ' input[type="hidden"][name="existing_elements"]').val();
-    console.log(existingData);
     var input;
     if ( typeof existingData != 'undefined' ) {
-      console.log('i won a pony');
       input = $("<input>", { type: "hidden", name: "existing_elements", value: existingData});
       $('#new-elements').append($(input));
     }
     $.post(ajaxurl, $('#new-elements').serializeArray(), function(data) {
       $('#preview .survey-preview').empty().append(data);
     });
+  });
+  $('#preview').on('submit', 'form', function(e){
+    e.preventDefault();
+    var form = $(this);
+    var button = $('input[type="submit"]:focus').attr('name');
+    if ( 'reset' == button ) {
+      $('#preview h4.survey-name').empty();
+      form.remove();
+      location.reload();
+    } else {
+      $.post(ajaxurl, $(this).serializeArray(), function(data){
+
+      });
+    }
   });
 });

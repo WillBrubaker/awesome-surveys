@@ -52,6 +52,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_get_element_form', array( &$this, 'element_info_inputs' ) );
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
+  add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
  }
 
  /**
@@ -193,8 +194,10 @@ class Awesome_Surveys {
    <div id="tabs">
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
+     <li><a href="#surveys">surveys - translate this</a></li>
     </ul>
-    <div id="create" class="half">
+    <div id="create">
+     <div class="create half">
      <?php
       $form->render();
       $form = new FormOverrides( 'new-elements' );
@@ -204,14 +207,23 @@ class Awesome_Surveys {
       $form->addElement( new Element_HTML( '</div>' ) );
       $form->render();
      ?>
-     </div><!--#create-->
+     </div><!--.create-->
      <div id="preview" class="half">
       <h4 class="survey-name"></h4>
       <div class="survey-preview">
-      <?php echo $this->survey_preview(); ?>
       </div><!--.survey-preview-->
      </div><!--#preview-->
      <div class="clear"></div>
+    </div><!--#create-->
+    <div id="surveys">
+     surveys
+     <pre>
+     <?php
+     $data = get_option( 'wwm_awesome_surveys', array() );
+     var_dump( $data );
+     ?>
+    </pre>
+    </div>
    </div><!--#tabs-->
   </div>
   <?php
@@ -269,7 +281,7 @@ class Awesome_Surveys {
  private function render_element_selector()
  {
 
-  $types = array( 'select...' => '', __( 'text', $this->text_domain ) => 'Element_Textbox', __( 'dropdown selection', $this->text_domain ) => 'Element_Select', __( 'radio', $this->text_domain ) => 'Element_Radio', __( 'checkbox', $this->text_domain ) => 'Element_Checkbox', __( 'textarea', $this->text_domain ) => 'Element_Textarea' );
+  $types = array( 'select...' => '', __( 'text', $this->text_domain ) => 'Element_Textbox', __( 'email', $this->text_domain ) => 'Element_Email', __( 'dropdown selection', $this->text_domain ) => 'Element_Select', __( 'radio', $this->text_domain ) => 'Element_Radio', __( 'checkbox', $this->text_domain ) => 'Element_Checkbox', __( 'textarea', $this->text_domain ) => 'Element_Textarea' );
   $html = '<input type="hidden" name="survey_name" value="' . stripslashes( $_POST['survey_name'] ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
   $html .= '<div id="new-element-selector">' . __( 'Add a field to your survey.', $this->text_domain ) . '<br><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
   foreach ( $types as $type => $pfbc_method ) {
@@ -295,28 +307,16 @@ class Awesome_Surveys {
   }
   $html = '';
   $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]"></label>';
+  $required_elements = array( 'text', 'email' );
+  if ( in_array( $_POST['text'], $required_elements ) ) {
+   $html .= '<label>' . __( 'required?', $this->text_domain ) . '<br><input type="checkbox" name="options[required]"></label>';
+  }
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
    $html .= __( 'Number of options required?', $this->text_domain ) . '<br><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
   }
   echo json_encode( array( 'form' => $html, 'preview' => $preview ) );
   exit;
- }
-
- /**
-  * Renders a preview of the survey form that is being built
-  * @param  array  $args function arguments
-  * @return  string $html the preview html of the form along with hidden form inputs.
-  */
- private function survey_preview( $args = array() )
- {
-
-  $defaults = array(
-   'id' => null,
-  );
-
-  $args = wp_parse_args( $args, $defaults );
-  return null;
  }
 
  /**
@@ -351,35 +351,62 @@ class Awesome_Surveys {
    include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Form.php' );
    include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Overrides.php' );
   }
+  $nonce = wp_create_nonce( 'create-survey' );
   $form = new FormOverrides( sanitize_title( $_POST['survey_name'] ) );
   if ( isset( $_POST['existing_elements'] ) ) {
    $element_json = json_decode( stripslashes( $_POST['existing_elements'] ), true );
   }
   $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $_POST['options'] ) ) : array( $_POST['options'] );
   foreach ( $existing_elements as $element ) {
+   $method = $element['type'];
    $options = array();
+   if ( isset( $element['required'] ) ) {
+    $options['required'] = 'required:pfbc';
+   }
    for ( $iterations = 0; $iterations < count( $element['label'] ); $iterations++ ) {
+    /**
+     * Since the pfbc is being used, and it has some weird issue with values of '0', but
+     * it will work if you append :pfbc to it...not well documented, but it works!
+     */
     $options[$element['value'][$iterations] . ':pfbc'] = stripslashes( $element['label'][$iterations] );
    }
    $selected_value = ( isset( $element['default'] ) ) ? array( 'value' => $element['default'] ) : null;
    $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $selected_value ) );
   }
   $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
+  $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
+  $form->addElement( new Element_Hidden( 'action', 'wwm_save_survey' ) );
   $form->addElement( new Element_Hidden( 'survey_name', $_POST['survey_name'] ) );
-  $form->addElement( new Element_Button( __( 'Reset', $this->text_domain ), 'button', array( 'class' => 'button-secondary', ) ) );
-  $form->render();
+  $form->addElement( new Element_Button( __( 'Reset', $this->text_domain ), 'submit', array( 'class' => 'button-secondary reset-button', 'name' => 'reset' ) ) );
+  $form->addElement( new Element_Button( __( 'Save Survey', $this->text_domain ), 'submit', array( 'class' => 'button-primary', 'name' => 'save' ) ) );
+  echo $form->render(true);
   exit;
  }
 
+
+ function save_survey()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) || ! current_user_can( 'manage_options' ) ) {
+   exit;
+  }
+  $data = get_option( 'wwm_awesome_surveys', array() );
+  $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
+  $form = serialize( json_decode( $_POST['existing_elements'], true ) );
+  $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form );
+  $data['surveys'] = $surveys;
+  update_option( $data );
+  exit;
+ }
  /**
- * adds a link on the plugins page
- * @param  array $actions     the actions array
- * @param  string $plugin_file this plugin file
- * @param  array $plugin_data plugin data
- * @param  string $context
- * @return array  $actions the action links array
- * @since 1.0
- */
+  * adds a link on the plugins page
+  * @param  array $actions     the actions array
+  * @param  string $plugin_file this plugin file
+  * @param  array $plugin_data plugin data
+  * @param  string $context
+  * @return array  $actions the action links array
+  * @since 1.0
+  */
  function plugin_manage_link( $actions, $plugin_file, $plugin_data, $context )
  {
 
