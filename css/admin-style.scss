@@ -4,30 +4,6 @@
  input[type="text"], input[type="submit"], select, input[type="checkbox"], input[type="radio"] {
   margin: .5em 0;
  }
- .overlay {
-  z-index: 1000;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background: #FFF;
-  opacity: 0.45;
-  -moz-opacity: 0.45;
-  filter: alpha(opacity=45);
-  display: none;
-  .preloader {
-  display: block;
-  width: 98px;
-  height: 98px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-top: -20px;
-  margin-left: -20px;
-  background: url('../images/maintenance.gif') no-repeat center;
-  }
- }
  label {
   width: 100%;
   float: left;
@@ -60,7 +36,6 @@ form#new-elements {
  }
 }
 
-
 .slider-legend {
  width: 100%;
  margin-top: 1em;
@@ -70,3 +45,28 @@ form#new-elements {
   display: inline-block;
  }
 }
+
+.overlay {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #FFF;
+  opacity: 0.45;
+  -moz-opacity: 0.45;
+  filter: alpha(opacity=45);
+  display: none;
+  .preloader {
+  display: block;
+  width: 98px;
+  height: 98px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  background: url('../images/maintenance.gif') no-repeat center;
+  }
+ }

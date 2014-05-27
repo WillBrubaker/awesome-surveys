@@ -197,6 +197,7 @@ class Awesome_Surveys {
      <li><a href="#surveys">surveys - translate this</a></li>
     </ul>
     <div id="create">
+     <div class="overlay"><span class="preloader"></span></div>
      <div class="create half">
      <?php
       $form->render();
@@ -307,10 +308,10 @@ class Awesome_Surveys {
   }
   $html = '';
   $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]"></label>';
-  $required_elements = array( 'text', 'email' );
-  if ( in_array( $_POST['text'], $required_elements ) ) {
+  //debug$required_elements = array( 'text', 'email', 'textarea', );
+  //debugif ( in_array( $_POST['text'], $required_elements ) ) {
    $html .= '<label>' . __( 'required?', $this->text_domain ) . '<br><input type="checkbox" name="options[required]"></label>';
-  }
+  //debug}
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
    $html .= __( 'Number of options required?', $this->text_domain ) . '<br><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
@@ -356,13 +357,19 @@ class Awesome_Surveys {
   if ( isset( $_POST['existing_elements'] ) ) {
    $element_json = json_decode( stripslashes( $_POST['existing_elements'] ), true );
   }
+  $required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email' );
   $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $_POST['options'] ) ) : array( $_POST['options'] );
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
-   $options = array();
+   $options = $atts = array();
    if ( isset( $element['required'] ) ) {
-    $options['required'] = 'required:pfbc';
-   }
+    if ( in_array( $method, $required_is_option ) )
+     $options['required'] = 1;
+     $options['class'] = 'required';
+    } else {
+     $atts['required'] = 1;
+     $atts['class'] = 'required';
+    }
    for ( $iterations = 0; $iterations < count( $element['label'] ); $iterations++ ) {
     /**
      * Since the pfbc is being used, and it has some weird issue with values of '0', but
@@ -370,8 +377,8 @@ class Awesome_Surveys {
      */
     $options[$element['value'][$iterations] . ':pfbc'] = stripslashes( $element['label'][$iterations] );
    }
-   $selected_value = ( isset( $element['default'] ) ) ? array( 'value' => $element['default'] ) : null;
-   $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $selected_value ) );
+   $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
+   $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $atts ) );
   }
   $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
   $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
