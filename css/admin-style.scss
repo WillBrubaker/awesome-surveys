@@ -1,13 +1,16 @@
-#tabs form {
+#tabs {
+ form {
  position: relative;
  margin: 1em;
  input[type="text"], input[type="submit"], select, input[type="checkbox"], input[type="radio"] {
   margin: .5em 0;
  }
- label {
-  width: 100%;
-  float: left;
+  label {
+   width: 100%;
+   float: left;
+  }
  }
+ margin-top: 2.5em;
 }
 
 form#new-elements {
@@ -75,11 +78,13 @@ form#new-elements {
   float: left;
   width: 80%;
   padding: 1em;
+  margin: 1em 0;
  }
 
  form {
-  span.label, .slider-wrapper, .options-holder {
+  span.label, .slider-wrapper, .options-holder, textarea {
   float: left;
   width: 100%;
+  margin: 1em 0;
  }
 }

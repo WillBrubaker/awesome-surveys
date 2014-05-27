@@ -1,11 +1,13 @@
-#tabs form {
-  position: relative;
-  margin: 1em; }
-  #tabs form input[type="text"], #tabs form input[type="submit"], #tabs form select, #tabs form input[type="checkbox"], #tabs form input[type="radio"] {
-    margin: .5em 0; }
-  #tabs form label {
-    width: 100%;
-    float: left; }
+#tabs {
+  margin-top: 2.5em; }
+  #tabs form {
+    position: relative;
+    margin: 1em; }
+    #tabs form input[type="text"], #tabs form input[type="submit"], #tabs form select, #tabs form input[type="checkbox"], #tabs form input[type="radio"] {
+      margin: .5em 0; }
+    #tabs form label {
+      width: 100%;
+      float: left; }
 
 form#new-elements {
   display: none; }
@@ -62,8 +64,10 @@ form#new-elements {
 .validation {
   float: left;
   width: 80%;
-  padding: 1em; }
+  padding: 1em;
+  margin: 1em 0; }
 
-form span.label, form .slider-wrapper, form .options-holder {
+form span.label, form .slider-wrapper, form .options-holder, form textarea {
   float: left;
-  width: 100%; }
+  width: 100%;
+  margin: 1em 0; }
