@@ -53,6 +53,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
+  add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
  }
 
  /**
@@ -203,6 +204,9 @@ class Awesome_Surveys {
       $form->render();
       $form = new FormOverrides( 'new-elements' );
       $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div>' ) );
+      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you' ) );
+      $options = array( '0:pfbc' => 'User Must be logged in', '1:pfbc' => 'Cookie based' );
+      $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options ) );
       $form->addElement( new Element_Hidden( 'action', 'generate_preview' ) );
       $form->addElement( new Element_Button( __( 'Add Element', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
       $form->addElement( new Element_HTML( '</div>' ) );
@@ -284,7 +288,7 @@ class Awesome_Surveys {
 
   $types = array( 'select...' => '', __( 'text', $this->text_domain ) => 'Element_Textbox', __( 'email', $this->text_domain ) => 'Element_Email', __( 'dropdown selection', $this->text_domain ) => 'Element_Select', __( 'radio', $this->text_domain ) => 'Element_Radio', __( 'checkbox', $this->text_domain ) => 'Element_Checkbox', __( 'textarea', $this->text_domain ) => 'Element_Textarea' );
   $html = '<input type="hidden" name="survey_name" value="' . stripslashes( $_POST['survey_name'] ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
-  $html .= '<div id="new-element-selector">' . __( 'Add a field to your survey.', $this->text_domain ) . '<br><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
+  $html .= '<div id="new-element-selector"><span>' . __( 'Add a field to your survey.', $this->text_domain ) . '</span><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
   foreach ( $types as $type => $pfbc_method ) {
    $html .= '<option value="' . $pfbc_method . '">' . $type . '</option>';
   }
@@ -306,18 +310,65 @@ class Awesome_Surveys {
   if ( ! current_user_can( 'manage_options' ) ) {
    exit;
   }
+  $elements = array();
+  /**
+   * Filter hook wwm_survey_validation_elements adds elements to the validation elements array
+   * $elements is an array with keys that hope to be self-explanatory (see the $defaults array below). The 'tag' key may be
+   * a bit ambiguous but should be thought of as the type of element i.e. 'input', 'select', etc...
+   * 'data' aims to be a key which will add data-rule-* attributes directly to the element for use by
+   * the jquery validation plugin e.g. data-rule-minlength="3", so the if the 'data' array has
+   * an element with the key minlength, and that element's value is 3, the validation element
+   * will have the attribute data-rule-minlength="3" appended to it (on the form output side of things). Care should be taken to
+   * keep the correct rules with the types of form elements where they make sense. When using this
+   * filter, ensure that you specify that it takes two arguments so that type of element is passed
+   * on to your filter e.g.: add_filter( 'wwm_survey_validation_elements', 'your_filter_hook', 10, 2 );
+   * @see  wwm_survey_validation_elements
+   * @see  https://github.com/jzaefferer/jquery-validation/blob/master/test/index.html
+   */
+  $validation_elements = apply_filters( 'wwm_survey_validation_elements', $elements, $_POST['text'] );
   $html = '';
   $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]"></label>';
-  //debug$required_elements = array( 'text', 'email', 'textarea', );
-  //debugif ( in_array( $_POST['text'], $required_elements ) ) {
-   $html .= '<label>' . __( 'required?', $this->text_domain ) . '<br><input type="checkbox" name="options[required]"></label>';
-  //debug}
+  if ( ! empty( $validation_elements ) ) {
+   $html .= '<div class="ui-widget-content validation ui-corner-all"><h5>'. __( 'Validation Options', $this->text_domain ) . '</h5>';
+    foreach ( $validation_elements as $element ) {
+     $defaults = array(
+      'label_text' => 'A filter broke someting',
+      'tag' => 'input',
+      'type' => 'text',
+      'name' => 'default',
+      'value' => 'A filter broke something',
+      'data' => array(),
+     );
+     $element = wp_parse_args( $element, $defaults );
+     $html .= '<label>' . $element['label_text'] . '<br><' . $element['tag'] . ' ' . ' type="' . $element['type'] . '"  value="' . $element['value'] . '" name="' . $element['name'] . '"></label>';
+    }
+   $html .= '</div>';
+  }
+   /*$html .= '<div class="ui-widget-content validation ui-corner-all"><h5>'. __( 'Validation Options', $this->text_domain ) . '</h5><label>' . __( 'required?', $this->text_domain ) . '<br><input type="checkbox" name="options[validation][required]"></label></div>';*/
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
-   $html .= __( 'Number of options required?', $this->text_domain ) . '<br><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
+   $html .= '<span class="label">' . __( 'Number of options required?', $this->text_domain ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
   }
   echo json_encode( array( 'form' => $html, 'preview' => $preview ) );
   exit;
+ }
+
+ public function wwm_survey_validation_elements( $elements = array(), $type = '' )
+ {
+
+  $simple_elements = array( 'text', 'email', 'textarea' );
+  $simple_elements = apply_filters( 'wwm_survey_simple_validation_elements', $simple_elements );
+  if ( in_array( $type, $simple_elements ) ) {
+
+  }
+  $elements[] = array(
+   'label_text' => __( 'required?', $this->text_domain ),
+   'tag' => 'input',
+   'type' => 'checkbox',
+   'value' => 1,
+   'name' => 'required',
+  );
+  return $elements;
  }
 
  /**
@@ -333,7 +384,7 @@ class Awesome_Surveys {
   $html = '';
   for ( $iterations = 0; $iterations < absint( $_POST['num_options'] ); $iterations++ ) {
    $label = $iterations + 1;
-   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input title="' . __( 'This is the text label that will displayed for this option', $this->text_domain ) . '" type="text" name="options[label][' . $iterations . ']"></label><label>' . __( 'option value', $this->text_domain ) . ' ' . $label . '<br><input title="' . __( 'This is a unique value for this option', $this->text_domain ) . '" type="text" name="options[value][' . $iterations . ']" value="' . $iterations . '"></label><label>' . __( 'default?', $this->text_domain ) . '<br><input title="' . __( 'Should this option be selected by default?', $this->text_domain ) . '" type="radio" name="options[default]" value="' . $iterations . '"></label>';
+   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']"></label><label>' . __( 'option value', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[value][' . $iterations . ']" value="' . $iterations . '"></label><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
   }
   echo $html;
   exit;
@@ -362,14 +413,15 @@ class Awesome_Surveys {
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
    $options = $atts = array();
-   if ( isset( $element['required'] ) ) {
-    if ( in_array( $method, $required_is_option ) )
+   if ( isset( $element['validation']['required'] ) ) {
+    if ( in_array( $method, $required_is_option ) ) {
      $options['required'] = 1;
      $options['class'] = 'required';
     } else {
      $atts['required'] = 1;
      $atts['class'] = 'required';
     }
+   }
    for ( $iterations = 0; $iterations < count( $element['label'] ); $iterations++ ) {
     /**
      * Since the pfbc is being used, and it has some weird issue with values of '0', but

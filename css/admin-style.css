@@ -58,3 +58,12 @@ form#new-elements {
     margin-top: -20px;
     margin-left: -20px;
     background: url("../images/maintenance.gif") no-repeat center; }
+
+.validation {
+  float: left;
+  width: 80%;
+  padding: 1em; }
+
+form span.label, form .slider-wrapper, form .options-holder {
+  float: left;
+  width: 100%; }

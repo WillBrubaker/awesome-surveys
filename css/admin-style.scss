@@ -70,3 +70,16 @@ form#new-elements {
   background: url('../images/maintenance.gif') no-repeat center;
   }
  }
+
+ .validation {
+  float: left;
+  width: 80%;
+  padding: 1em;
+ }
+
+ form {
+  span.label, .slider-wrapper, .options-holder {
+  float: left;
+  width: 100%;
+ }
+}
