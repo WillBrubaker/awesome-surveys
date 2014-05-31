@@ -82,6 +82,10 @@ class Awesome_Surveys {
   if ( ! isset( $_SESSION ) ) {
    session_start();
   }
+  if ( ! is_admin() && ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/class.awesome-surveys-frontend.php' );
+   $frontend = new Awesome_Surveys_Frontend;
+  }
  }
 
  /**
@@ -243,6 +247,9 @@ class Awesome_Surveys {
      <?php
      $data = get_option( 'wwm_awesome_surveys', array() );
      var_dump( $data );
+     $test = $data['surveys'][2];
+     $array = unserialize( $test['form'] );
+     print_r( $array );
      ?>
     </pre>
     </div>
@@ -622,10 +629,14 @@ class Awesome_Surveys {
    * that are free-form input (text, email, number)
    * and count of responses that are selected/checked options.
    */
-  $has_options( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
+  $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
+  $form_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
+  foreach ( $form_elements as $survey_question ) {
+
+  }
   $data = get_option( 'wwm_awesome_surveys', array() );
   $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
-  $form = serialize( json_decode( stripslashes( $_POST['existing_elements'] ), true ) );
+  $form = serialize( $form_elements );
   $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? esc_html( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
   $data['surveys'] = $surveys;
   update_option( 'wwm_awesome_surveys', $data );
