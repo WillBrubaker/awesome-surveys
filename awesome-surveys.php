@@ -24,7 +24,7 @@ class Awesome_Surveys {
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
  );
- public $wwm_page_link, $page_title, $menu_title, $menu_slug, $menu_link_text, $text_domain;
+ public $wwm_page_link, $page_title, $menu_title, $menu_slug, $menu_link_text, $text_domain, $frontend;
 
  /**
  * The construct runs every time plugins are loaded.  The bulk of the action and filter hooks go here
@@ -34,14 +34,18 @@ class Awesome_Surveys {
  public function __construct()
  {
 
+  if ( ! is_admin() && ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/class.awesome-surveys-frontend.php' );
+   $this->frontend = new Awesome_Surveys_Frontend;
+  }
   $this->page_title = 'Awesome Surveys';
   $this->menu_title = 'Awesome Surveys';
   $this->menu_slug = 'awesome-surveys.php';
   $this->menu_link_text = 'Awesome Surveys';
   $this->text_domain = 'awesome-surveys';
 
-  if ( ! defined( WWM_AWESOME_SURVEYS_URL ) ) {
-   define( WWM_AWESOME_SURVEYS_URL, plugins_url( '', __FILE__ ) );
+  if ( ! defined( 'WWM_AWESOME_SURVEYS_URL' ) ) {
+   define( 'WWM_AWESOME_SURVEYS_URL', plugins_url( '', __FILE__ ) );
   }
   register_activation_hook( __FILE__ , array( $this, 'init_plugin' ) );
   add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
@@ -56,6 +60,8 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
+  add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
+  add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
   add_filter( 'get_validation_elements_number', array( &$this, 'get_validation_elements_number' ) );
   add_action( 'contextual_help', array( &$this, 'contextual_help' ) );
@@ -85,10 +91,6 @@ class Awesome_Surveys {
    */
   if ( ! isset( $_SESSION ) ) {
    session_start();
-  }
-  if ( ! is_admin() && ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
-   include_once( plugin_dir_path( __FILE__ ) . 'includes/class.awesome-surveys-frontend.php' );
-   $frontend = new Awesome_Surveys_Frontend;
   }
  }
 
@@ -646,6 +648,17 @@ class Awesome_Surveys {
   update_option( 'wwm_awesome_surveys', $data );
   exit;
  }
+
+  public function process_response()
+ {
+
+  if ( ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/class.awesome-surveys-frontend.php' );
+   $frontend = new Awesome_Surveys_Frontend;
+  }
+  $frontend->process_response();
+ }
+
 
  /**
   * Adds a link on the plugins page. Nothing more than

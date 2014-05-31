@@ -3,7 +3,6 @@
  * @package Awesome_Surveys
  *
  */
-
 class Awesome_Surveys_Frontend {
 
  public $text_domain;
@@ -23,6 +22,7 @@ class Awesome_Surveys_Frontend {
    return;
   }
   wp_enqueue_script( 'awesome-surveys-frontend' );
+  wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
    return;
@@ -71,6 +71,7 @@ class Awesome_Surveys_Frontend {
    $form_output->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $atts ) );
   }
   $form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
+  $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
   $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ) ) );
   return $form_output->render( true );
  }
@@ -79,5 +80,15 @@ class Awesome_Surveys_Frontend {
  {
 
   wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script.js', array( 'jquery' ) );
+ }
+
+ public function process_response()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) ) {
+   exit;
+  }
+  var_dump( $_POST );
+  exit;
  }
 }
