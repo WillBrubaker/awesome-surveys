@@ -260,7 +260,7 @@ class Awesome_Surveys {
 
      $test = $data['surveys'][0];
      $array = $test['responses'];
-     print_r( $array );
+     print_r( $test );
      ?>
     </pre>
     </div><!--#surveys-->

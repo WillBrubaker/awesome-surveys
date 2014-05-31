@@ -101,12 +101,14 @@ class Awesome_Surveys_Frontend {
   if ( empty( $survey ) ) {
    exit;
   }
+  $form = unserialize( $survey['form'] );
+  $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   foreach ( $survey['responses'] as $key => $value ) {
-   if ( array_key_exists( absint( $_POST['question'][$key] ), $survey['responses'][$key]['answers'] ) ) {
-    $count = $value['answers'][$key] + 1;
-    $survey['responses'][$key]['answers'][$key] = $count;
+   if ( in_array( $form[$key]['type'], $has_options ) ) {
+    $count = $value['answers'][$_POST['question'][$key]] + 1;
+    $survey['responses'][$key]['answers'][$_POST['question'][$key]] = $count;
    } else {
-    $survey['responses'][$key]['answers'][$key] = $$_POST['question'][$key];
+    $survey['responses'][$key]['answers'][$key][] = $_POST['question'][$key];
    }
   }
   var_dump($survey);
