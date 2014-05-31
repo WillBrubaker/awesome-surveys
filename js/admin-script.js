@@ -94,18 +94,19 @@ jQuery(document).ready(function($) {
     overlay.show();
     var form = $(this);
     var buttonName = $('input[type="submit"][clicked="true"]').attr('name');
-    if ('reset' == buttonName) {
-      $('#preview h4.survey-name').empty();
-      $('.survey-preview').empty();
-      $('#add-element').empty();
-      $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
-      $('#new-elements').empty().append(newElementForm).hide();
-      $('#survey-manager').show();
-    } else {
+    if ('save' == buttonName) {
       $.post(ajaxurl, $(this).serializeArray(), function(data) {
-
       });
     }
+    $('#preview h4.survey-name').empty();
+    $('.survey-preview').empty();
+    $('#add-element').empty();
+    $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+    $('#new-elements').empty().append(newElementForm).hide();
+    $('#survey-manager').show();
     overlay.hide();
+  });
+  $('button.delete').on('click', function(){
+    $.post(ajaxurl,{'action':'delete_surveys'});
   });
 });

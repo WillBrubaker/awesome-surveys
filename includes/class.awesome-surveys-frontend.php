@@ -42,6 +42,7 @@ class Awesome_Surveys_Frontend {
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   $form_output = new FormOverrides( stripslashes( $name ) );
   $form_output->configure( array( 'class' => 'answer-survey' ) );
+  $form_output->addElement( new Element_HTML( '<p>' . $name . '</p>' ) );
   foreach ( $form as $element ) {
    $method = $element['type'];
    $options = array();
@@ -68,7 +69,7 @@ class Awesome_Surveys_Frontend {
      $options['required'] = 'required';
     }
    }
-   $form_output->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $atts ) );
+   $form_output->addElement( new $method( stripslashes( $element['name'] ), str_replace( '-', '_', sanitize_title( $element['name'] ) ), $options, $atts ) );
   }
   $form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
   $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );

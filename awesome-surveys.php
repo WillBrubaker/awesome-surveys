@@ -59,6 +59,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_get_element_form', array( &$this, 'element_info_inputs' ) );
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
+  add_action( 'wp_ajax_delete_surveys', array( &$this, 'delete_surveys' ) );
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
@@ -215,6 +216,9 @@ class Awesome_Surveys {
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
      <li><a href="#surveys">surveys - translate this</a></li>
+     <?php if ( isset( $_GET['debug'] ) ) : ?>
+     <li><a href="#debug"><?php _e( 'Debug', $this->text_domain ); ?></a></li>
+     <?php endif; ?>
     </ul>
     <div id="create">
      <div class="overlay"><span class="preloader"></span></div>
@@ -253,12 +257,17 @@ class Awesome_Surveys {
      <?php
      $data = get_option( 'wwm_awesome_surveys', array() );
      var_dump( $data );
-     $test = $data['surveys'][2];
-     $array = unserialize( $test['form'] );
+     $test = $data['surveys'][0];
+     $array = $test['responses'];
      print_r( $array );
      ?>
     </pre>
-    </div>
+    </div><!--#surveys-->
+    <?php if ( isset( $_GET['debug'] ) ) : ?>
+    <div id="debug">
+     <button class="button-primary delete">Clear Surveys?</button>
+    </div><!--#debug-->
+   <?php endif; ?>
    </div><!--#tabs-->
   </div>
   <?php
@@ -537,7 +546,7 @@ class Awesome_Surveys {
   $html = '';
   for ( $iterations = 0; $iterations < absint( $_POST['num_options'] ); $iterations++ ) {
    $label = $iterations + 1;
-   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']"></label><label>' . __( 'option value', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[value][' . $iterations . ']" value="' . $iterations . '"></label><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
+   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']"></label><input type="hidden" name="options[value][' . $iterations . ']" value="' . $iterations . '"><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
   }
   echo $html;
   exit;
@@ -637,8 +646,17 @@ class Awesome_Surveys {
    */
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   $form_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
+  $responses = array();
+  $question_count = 0;
   foreach ( $form_elements as $survey_question ) {
-
+   $responses[$question_count]['question'] = $survey_question['name'];
+   $responses[$question_count]['answers'] = array();
+   if ( in_array( $survey_question['type'],  $has_options ) ) {
+    foreach ( $survey_question['value'] as $key => $value ) {
+     $responses[$question_count]['answers'][$survey_question['label'][$key]] = 0;
+    }
+   }
+   $question_count++;
   }
   $data = get_option( 'wwm_awesome_surveys', array() );
   $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
@@ -649,7 +667,12 @@ class Awesome_Surveys {
   exit;
  }
 
-  public function process_response()
+ /**
+  * Alias for Awesome_Surveys_Frontend::process_response
+  * Here because of the way wp_ajax_$action works
+  *
+  */
+ public function process_response()
  {
 
   if ( ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
@@ -657,6 +680,15 @@ class Awesome_Surveys {
    $frontend = new Awesome_Surveys_Frontend;
   }
   $frontend->process_response();
+ }
+
+ public function delete_surveys()
+ {
+
+  if ( current_user_can( 'manage_options' ) ) {
+   delete_option( 'wwm_awesome_surveys' );
+  }
+  exit;
  }
 
 
