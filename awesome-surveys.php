@@ -20,6 +20,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.0',
+  'version' => '1.0',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -256,7 +257,7 @@ class Awesome_Surveys {
      <pre>
      <?php
      $data = get_option( 'wwm_awesome_surveys', array() );
-     var_dump( $data );
+
      $test = $data['surveys'][0];
      $array = $test['responses'];
      print_r( $array );
@@ -420,7 +421,6 @@ class Awesome_Surveys {
       'atts' => '',
      );
      $element = wp_parse_args( $element, $defaults );
-     error_log( print_r( $element, true ) );
      if ( ! is_null( $element['tag'] ) ) {
       $html .= '<label>' . $element['label_text'] . '<br><' . $element['tag'] . ' ' . ' type="' . $element['type'] . '"  value="' . $element['value'] . '" name="options[validation][' . $element['name'] . ']" ' . $element['atts'] . '></label>';
      }
@@ -653,7 +653,7 @@ class Awesome_Surveys {
    $responses[$question_count]['answers'] = array();
    if ( in_array( $survey_question['type'],  $has_options ) ) {
     foreach ( $survey_question['value'] as $key => $value ) {
-     $responses[$question_count]['answers'][$survey_question['label'][$key]] = 0;
+     $responses[$question_count]['answers'][] = 0;
     }
    }
    $question_count++;

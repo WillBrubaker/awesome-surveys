@@ -27,11 +27,15 @@ class Awesome_Surveys_Frontend {
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
    return;
   }
-  $form = $this->render_form( unserialize( $surveys['surveys'][$atts['id']]['form'] ), $surveys['surveys'][$atts['id']]['name']   );
+  $args = array(
+   'survey_id' => $atts['id'],
+   'name' => $surveys['surveys'][$atts['id']]['name'],
+  );
+  $form = $this->render_form( unserialize( $surveys['surveys'][$atts['id']]['form'] ), $args );
   return $form;
  }
 
- private function render_form( $form, $name )
+ private function render_form( $form, $args )
  {
 
   if ( ! class_exists( 'Form' ) ) {
@@ -40,9 +44,10 @@ class Awesome_Surveys_Frontend {
   }
   $nonce = wp_create_nonce( 'answer-survey' );
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
-  $form_output = new FormOverrides( stripslashes( $name ) );
+  $form_output = new FormOverrides( stripslashes( $args['name'] ) );
   $form_output->configure( array( 'class' => 'answer-survey' ) );
-  $form_output->addElement( new Element_HTML( '<p>' . $name . '</p>' ) );
+  $form_output->addElement( new Element_HTML( '<p>' . $args['name'] . '</p>' ) );
+  $questions_count = 0;
   foreach ( $form as $element ) {
    $method = $element['type'];
    $options = array();
@@ -69,9 +74,11 @@ class Awesome_Surveys_Frontend {
      $options['required'] = 'required';
     }
    }
-   $form_output->addElement( new $method( stripslashes( $element['name'] ), str_replace( '-', '_', sanitize_title( $element['name'] ) ), $options, $atts ) );
+   $form_output->addElement( new $method( stripslashes( $element['name'] ), 'question[' . $questions_count . ']', $options, $atts ) );
+   $questions_count++;
   }
   $form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
+  $form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
   $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
   $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ) ) );
   return $form_output->render( true );
@@ -86,10 +93,25 @@ class Awesome_Surveys_Frontend {
  public function process_response()
  {
 
-  if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) ) {
+  if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
    exit;
   }
-  var_dump( $_POST );
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][$_POST['survey_id']];
+  if ( empty( $survey ) ) {
+   exit;
+  }
+  foreach ( $survey['responses'] as $key => $value ) {
+   if ( array_key_exists( absint( $_POST['question'][$key] ), $survey['responses'][$key]['answers'] ) ) {
+    $count = $value['answers'][$key] + 1;
+    $survey['responses'][$key]['answers'][$key] = $count;
+   } else {
+    $survey['responses'][$key]['answers'][$key] = $$_POST['question'][$key];
+   }
+  }
+  var_dump($survey);
+  $surveys['surveys'][$_POST['survey_id']] = $survey;
+  update_option( 'wwm_awesome_surveys', $surveys );
   exit;
  }
 }
