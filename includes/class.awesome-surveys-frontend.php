@@ -13,6 +13,7 @@ class Awesome_Surveys_Frontend {
 
   $this->text_domain = 'awesome-surveys';
   add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
+  add_action( 'wp_enqueue_scripts', array( &$this, 'register_scripts' ) );
  }
 
  public function wwm_survey( $atts )
@@ -21,6 +22,7 @@ class Awesome_Surveys_Frontend {
   if ( ! isset( $atts['id'] ) ) {
    return;
   }
+  wp_enqueue_script( 'awesome-surveys-frontend' );
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
    return;
@@ -71,5 +73,11 @@ class Awesome_Surveys_Frontend {
   $form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
   $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ) ) );
   return $form_output->render( true );
+ }
+
+ public function register_scripts()
+ {
+
+  wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script.js', array( 'jquery' ) );
  }
 }

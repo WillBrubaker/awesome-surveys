@@ -39,6 +39,10 @@ class Awesome_Surveys {
   $this->menu_slug = 'awesome-surveys.php';
   $this->menu_link_text = 'Awesome Surveys';
   $this->text_domain = 'awesome-surveys';
+
+  if ( ! defined( WWM_AWESOME_SURVEYS_URL ) ) {
+   define( WWM_AWESOME_SURVEYS_URL, plugins_url( '', __FILE__ ) );
+  }
   register_activation_hook( __FILE__ , array( $this, 'init_plugin' ) );
   add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
   if ( is_admin() ) {
