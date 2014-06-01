@@ -71,3 +71,5 @@ form span.label, form .slider-wrapper, form .options-holder, form textarea {
   float: left;
   width: 100%;
   margin: 1em 0; }
+form .hidden {
+  display: none; }

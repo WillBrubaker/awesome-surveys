@@ -66,7 +66,10 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
   add_filter( 'get_validation_elements_number', array( &$this, 'get_validation_elements_number' ) );
+  add_filter( 'get_validation_elements_text', array( &$this, 'get_validation_elements_text' ) );
+  add_filter( 'get_validation_elements_textarea', array( &$this, 'get_validation_elements_textarea' ) );
   add_action( 'contextual_help', array( &$this, 'contextual_help' ) );
+  add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
  }
 
  /**
@@ -231,9 +234,25 @@ class Awesome_Surveys {
       $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you' ) );
       $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
       /**
-       * Implementation of survey_auth_options filter is incomplete and should not be used.
-       * todo: complete implementation of this filter - it needs to be processed
-       * in other places.
+       * *!!!IMPORTANT!!!*
+       * If an auth method is added via the survey_auth_options, a filter must also be added
+       * to return a boolean based on whether the auth method passed or not.
+       * The function that outputs the survey form will check for valid authentication via
+       * apply_filters( 'awesome_surveys_auth_method_{$your_method}', false )
+       * If a filter does not exist for your auth method then obviously the return value is false
+       * and the survey form output function will generate a null output.
+       * @see  class.awesome-surveys-frontend.php.
+       * The auth method of 'none' is added as a filter with an anonymous function that returns true.
+       * like so:
+       * add_filter( 'awesome_surveys_auth_method_none',
+       *  function() {
+       *   return true;
+       *  }
+       * );
+       * the auth method of 'login' is implemented similarily, but needs some actual logic.
+       * add_filter( 'awesome_surveys_auth_method_login', 'some_function' );
+       * When the survey is submitted, you can use do_action( 'awesome_surveys_update_' . $auth_method );
+       * to do whatever needs to be done i.e. set a cookie, update some database option, etc.
        */
       $options = apply_filters( 'survey_auth_options', $options );
       $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', $this->text_domain ) . '</p></span>' ) );
@@ -260,7 +279,7 @@ class Awesome_Surveys {
 
      $test = $data['surveys'][0];
      $array = $test['responses'];
-     print_r( $test );
+     print_r( $data );
      ?>
     </pre>
     </div><!--#surveys-->
@@ -407,7 +426,7 @@ class Awesome_Surveys {
    */
   $validation_elements = apply_filters( 'wwm_survey_validation_elements', $elements, $_POST['text'] );
   $html = '';
-  $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]"></label>';
+  $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]" required></label>';
   if ( ! empty( $validation_elements ) ) {
    $html .= '<div class="ui-widget-content validation ui-corner-all"><h5>'. __( 'Field Validation Options', $this->text_domain ) . '</h5>';
     foreach ( $validation_elements as $element ) {
@@ -436,16 +455,18 @@ class Awesome_Surveys {
         'value' => null,
         'atts' => '',
         'text' => '',
+        'label_atts' => null,
        );
       $rule = wp_parse_args( $rule, $defaults );
-      $html .= '<label>' . $rule['label_text'] . '<br></label>';
+      $label_atts = ( $rule['label_atts'] ) ? ' ' . $rule['label_atts'] : null;
+      $html .= '<label' . $label_atts . '>' . $rule['label_text'] . '<br>';
        $can_have_options = array( 'radio', 'checkbox' );
        if ( in_array( $rule['type'], $can_have_options ) && is_array( $rule['value'] ) ) {
         foreach ( $rule['value'] as $key => $value ) {
-         $html .= '<' . $rule['tag'] . ' ' . ' type="' . $rule['type'] . '"  value="' . $key . '" name="options[validation][rules][' . $rule['name'] . ']" ' . $rule['atts'] . '> ' . $value . '<br>';
+         $html .= ( ! is_null( $value ) ) ? '<' . $rule['tag'] . ' ' . ' type="' . $rule['type'] . '"  value="' . $key . '" name="options[validation][rules][' . $rule['name'] . ']" ' . $rule['atts'] . '> ' . $value . '<br></label>' : null;
         }
        } else {
-        $html .= '<' . $rule['tag'] . ' ' . ' type="' . $rule['type'] . '"  value="' . $rule['value'] . '" name="options[validation][rules][' . $rule['name'] . ']" ' . $rule['atts'] . '><br>';
+        $html .= '<' . $rule['tag'] . ' ' . ' type="' . $rule['type'] . '"  value="' . $rule['value'] . '" name="options[validation][rules][' . $rule['name'] . ']" ' . $rule['atts'] . '><br></label>';
        }
        $rule_count++;
       }
@@ -501,36 +522,40 @@ class Awesome_Surveys {
  public function get_validation_elements_number( $elements )
  {
 
-  $radios = array(
-   'label_text' => 'Type of Number Validation:',
-   'tag' => 'input',
-   'type' => 'radio',
-   'name' => 'range',
-   'value' => array( 'range' => 'range', 'min-max' => 'min-max', ),
-  );
-  $min_max_element_one = array(
+  $min = array(
    'label_text' => __( 'Min number allowed', $this->text_domain ),
    'tag' => 'input',
    'type' => 'number',
    'name' => 'min',
-   'atts' => 'data-related="min-max" disabled',
   );
-  $min_max_element_two = array(
+  $max = array(
    'label_text' => __( 'Max number allowed', $this->text_domain ),
    'tag' => 'input',
    'type' => 'number',
    'name' => 'max',
-   'atts' => 'data-related="min-max" disabled',
   );
-  $range_element = array(
-   'label_text' => __( 'Range', $this->text_domain ),
-   'tag' => 'input',
-   'type' => 'text',
-   'name' => 'range',
-   'atts' => 'data-related="range" disabled',
-  );
-  $elements[]['data'] = array( $radios, $min_max_element_one, $min_max_element_two, $range_element );
+
+  $elements[]['data'] = array( $min, $max, );
   return $elements;
+ }
+
+ public function get_validation_elements_text( $elements )
+ {
+
+  $maxlength_element = array(
+   'label_text' => __( 'Maximum Length (in number of characters)', $this->text_domain ),
+   'tag' => 'input',
+   'type' => 'number',
+   'name' => 'maxlength',
+  );
+  $elements[]['data'] = array( $maxlength_element );
+  return $elements;
+ }
+
+ public function get_validation_elements_textarea( $elements )
+ {
+
+  return $this->get_validation_elements_text( $elements );
  }
 
  /**
@@ -552,6 +577,20 @@ class Awesome_Surveys {
   exit;
  }
 
+ public function awesome_surveys_form_preview( $form_elements_array )
+ {
+
+  if ( isset( $form_elements_array['validation']['rules'] ) ) {
+   unset( $form_elements_array['validation']['rules']['number_validation_type'] );
+   foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
+    if ( empty( $value ) ) {
+     unset( $form_elements_array['validation']['rules'][$key] );
+    }
+   }
+  }
+  return $form_elements_array;
+ }
+
  /**
   * Ajax handler to generate the form preview
   * @since 1.0
@@ -567,7 +606,7 @@ class Awesome_Surveys {
    * those before processing.
    *
    */
-  $form_elements_array = apply_filters( 'awesome_surveys_form_preview', $form_elements_array );
+  $form_elements_array['options'] = apply_filters( 'awesome_surveys_form_preview', $form_elements_array['options'] );
   if ( ! class_exists( 'Form' ) ) {
    include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Form.php' );
    include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Overrides.php' );
@@ -581,19 +620,31 @@ class Awesome_Surveys {
   $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $form_elements_array['options'] ) ) : array( $form_elements_array['options'] );
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
-   $options = $atts = array();
+   $options = $atts = $rules = array();
+   if ( is_array( $element['validation']['rules'] ) ) {
+    foreach ( $element['validation']['rules'] as $key => $value ) {
+     $rules['data-' . $key] = $value;
+    }
+   }
+   if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
+     $options = array_merge( $options, $rules );
+     error_log( 'now the array is: ' . "\n" . print_r( $options, true ) );
+   } else {
+    $atts = array_merge( $options, $rules );
+    error_log( 'now the array is: ' . "\n" . print_r( $atts, true ) );
+   }
    if ( isset( $element['validation']['required'] ) ) {
     if ( in_array( $method, $required_is_option ) ) {
      $options['required'] = 1;
      $options['class'] = 'required';
-     $options['data-debug'] = 'debug';
     } else {
      $atts['required'] = 1;
      $atts['class'] = 'required';
      $atts['data-debug'] = 'debug';
     }
    }
-   for ( $iterations = 0; $iterations < count( $element['label'] ); $iterations++ ) {
+   $max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
+   for ( $iterations = 0; $iterations < $max; $iterations++ ) {
     /**
      * Since the pfbc is being used, and it has some weird issue with values of '0', but
      * it will work if you append :pfbc to it...not well documented, but it works!
@@ -690,7 +741,6 @@ class Awesome_Surveys {
   }
   exit;
  }
-
 
  /**
   * Adds a link on the plugins page. Nothing more than

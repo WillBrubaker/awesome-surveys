@@ -18,45 +18,53 @@ jQuery(document).ready(function($) {
         var surveyName = $('input[type="hidden"][name="survey_name"]').val();
         $('#preview h4.survey-name').text('Preview of Survey: ' + surveyName);
       }
-      $('.accordion').accordion({'collapsible' : true, 'active' : false});
+      $('.accordion').accordion({
+        'collapsible': true,
+        'active': false
+      });
       overlay.hide();
     }, 'json');
   });
 
   $('#new-elements').on('change', '.type-selector', function() {
     var overlay = $('#create > .overlay');
+    var type = $(':selected', this).val();
     overlay.show();
-    $.post(ajaxurl, {
-      'action': 'get_element_form',
-      'type': $(':selected', this).val(),
-      'text': $(':selected', this).text()
-    }, function(data) {
-      $('#add-element').empty().append(data.form);
-      $('#slider').slider({
-        range: false,
-        max: 10,
-        min: 0,
-        step: 1,
-        change: function(event, ui) {
-          var numOptions = ui.value;
-          $.post(ajaxurl, {
-            'action': 'options_fields',
-            'num_options': numOptions
-          }, function(data) {
-            $('#new-elements #options-holder').empty().append(data);
-          });
-        }
-      }).each(function() {
-        var opt = $(this).data().uiSlider.options;
-        var vals = opt.max - opt.min;
-        for (var i = 0; i <= vals; i++) {
-          var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
-          $("#slider").append(el);
-        }
-      });
-      $('#new-elements').tooltip();
-      overlay.hide();
-    }, 'json');
+    if (type != '') {
+      $.post(ajaxurl, {
+        'action': 'get_element_form',
+        'type': $(':selected', this).val(),
+        'text': $(':selected', this).text()
+      }, function(data) {
+        $('#add-element').empty().append(data.form);
+        $('#slider').slider({
+          range: false,
+          max: 10,
+          min: 0,
+          step: 1,
+          change: function(event, ui) {
+            var numOptions = ui.value;
+            $.post(ajaxurl, {
+              'action': 'options_fields',
+              'num_options': numOptions
+            }, function(data) {
+              $('#new-elements #options-holder').empty().append(data);
+            });
+          }
+        }).each(function() {
+          var opt = $(this).data().uiSlider.options;
+          var vals = opt.max - opt.min;
+          for (var i = 0; i <= vals; i++) {
+            var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
+            $("#slider").append(el);
+          }
+        });
+        $('#new-elements').tooltip();
+      }, 'json');
+    } else {
+      $('#add-element').empty();
+    }
+    overlay.hide();
   });
 
   $('#tabs').on('submit', '#new-elements', function(e) {
@@ -95,8 +103,7 @@ jQuery(document).ready(function($) {
     var form = $(this);
     var buttonName = $('input[type="submit"][clicked="true"]').attr('name');
     if ('save' == buttonName) {
-      $.post(ajaxurl, $(this).serializeArray(), function(data) {
-      });
+      $.post(ajaxurl, $(this).serializeArray(), function(data) {});
     }
     $('#preview h4.survey-name').empty();
     $('.survey-preview').empty();
@@ -106,7 +113,9 @@ jQuery(document).ready(function($) {
     $('#survey-manager').show();
     overlay.hide();
   });
-  $('button.delete').on('click', function(){
-    $.post(ajaxurl,{'action':'delete_surveys'});
+  $('button.delete').on('click', function() {
+    $.post(ajaxurl, {
+      'action': 'delete_surveys'
+    });
   });
 });
