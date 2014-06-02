@@ -14,13 +14,14 @@ jQuery(document).ready(function($) {
         $('#survey-manager').hide();
         var selectHtml = data.form;
         $(data.form).insertBefore('#add-element');
+        $('#new-elements input[type="submit"]').prop('disabled', true);
         $('#new-elements').show();
         var surveyName = $('input[type="hidden"][name="survey_name"]').val();
         $('#preview h4.survey-name').text('Preview of Survey: ' + surveyName);
       }
       $('.accordion').accordion({
         'collapsible': true,
-        'active': false
+        'active': 0
       });
       overlay.hide();
     }, 'json');
@@ -29,6 +30,7 @@ jQuery(document).ready(function($) {
   $('#new-elements').on('change', '.type-selector', function() {
     var overlay = $('#create > .overlay');
     var type = $(':selected', this).val();
+    $('#new-elements input[type="submit"]').prop('disabled', true);
     overlay.show();
     if (type != '') {
       $.post(ajaxurl, {
@@ -40,7 +42,7 @@ jQuery(document).ready(function($) {
         $('#slider').slider({
           range: false,
           max: 10,
-          min: 0,
+          min: 1,
           step: 1,
           change: function(event, ui) {
             var numOptions = ui.value;
@@ -60,6 +62,7 @@ jQuery(document).ready(function($) {
           }
         });
         $('#new-elements').tooltip();
+        $('#new-elements input[type="submit"]').prop('disabled', false);
       }, 'json');
     } else {
       $('#add-element').empty();

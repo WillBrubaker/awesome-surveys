@@ -219,7 +219,7 @@ class Awesome_Surveys {
    <div id="tabs">
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
-     <li><a href="#surveys">surveys - translate this</a></li>
+     <li><a href="#surveys"><?php _e( 'Your Surveys', $this->text_domain ); ?></a></li>
      <?php if ( isset( $_GET['debug'] ) ) : ?>
      <li><a href="#debug"><?php _e( 'Debug', $this->text_domain ); ?></a></li>
      <?php endif; ?>
@@ -272,16 +272,15 @@ class Awesome_Surveys {
      <div class="clear"></div>
     </div><!--#create-->
     <div id="surveys">
-     surveys
-     <pre>
+     <div class="your-surveys">
+     <h4><?php _e( 'Your Surveys', $this->text_domain ); ?></h4>
+    </div>
+    <div class="existing-surveys">
      <?php
-     $data = get_option( 'wwm_awesome_surveys', array() );
-
-     $test = $data['surveys'][0];
-     $array = $test['responses'];
-     print_r( $data );
+     $args = array();
+     echo $this->display_survey_results( $args );
      ?>
-    </pre>
+    </div>
     </div><!--#surveys-->
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
@@ -291,6 +290,15 @@ class Awesome_Surveys {
    </div><!--#tabs-->
   </div>
   <?php
+ }
+
+ private function display_survey_results( $args )
+ {
+
+  $defaults = array(
+   'survey_id' => null,
+  );
+  $args = wp_parse_args( $args, $defaults );
  }
 
  /**
@@ -307,31 +315,31 @@ class Awesome_Surveys {
    $args = array(
     'id' => 'survey_name',
     'title' => __( 'Survey Name', $this->text_domain ),
-    'content' => __( 'This field is a unique name for your survey and will be displayed before your survey form', $this->text_domain ),
+    'content' => '<p>' . __( 'This field is a unique name for your survey and will be displayed before your survey form', $this->text_domain ) . '</p>',
    );
    $screen->add_help_tab( $args );
    $args = array(
     'id' => 'field_type',
     'title' => __( 'Field Type', $this->text_domain ),
-    'content' => __( 'This is the type of form field you would like to add to your form, i.e.: checkbox, radio, text, email, textarea, etc.', $this->text_domain ),
+    'content' => '<p>' . sprintf( '%s<br><ul><li>text: <input type="text"></li><li>email: <input type="email"></li><li>number: <input type="number"></li><li>dropdown selector: <select><option>Make a selection</option></select></li><li>radio: <input type="radio"></li><li>checkbox: <input type="checkbox"></li><li>textarea: <textarea></textarea></li></ul>', __( 'This is the type of form field you would like to add to your form, i.e.: checkbox, radio, text, email, textarea, etc. Examples:', $this->text_domain ) ). '</p>',
    );
    $screen->add_help_tab( $args );
    $args = array(
     'id' => 'survey_options',
     'title' => __( 'General Survey Options', $this->text_domain ),
-    'content' => __( 'These are options for your survey, they are not built in to the survey form, but rather determine behavior of how your survey will work.', $this->text_domain ),
+    'content' => '<p>' . __( 'These are options for your survey, they are not built in to the survey form, but rather determine behavior of how your survey will work.', $this->text_domain ),
    );
    $screen->add_help_tab( $args );
    $args = array(
     'id' => 'survey_authentication',
     'title' => __( 'Authentication', $this->text_domain ),
-    'content' => __( 'Choose a method to prevent users from filling out the survey multiple times. User login is much more reliable, but may not be the best option for your site if you don\'t allow registrations. Cookie based authentication is very easy to circumvent, but will prevent most users from taking the survey multiple times. Of course, you may prefer to allow users to take the survey an unlimited number of times in which case you should leave both options unchecked. Note to developers: methods can be added via the survey_auth_options filter.', $this->text_domain ),
+    'content' => '<p>' . __( 'Choose a method to prevent users from filling out the survey multiple times. User login is much more reliable, but may not be the best option for your site if you don\'t allow registrations. Cookie based authentication is very easy to circumvent, but will prevent most users from taking the survey multiple times. Of course, you may prefer to allow users to take the survey an unlimited number of times in which case you should choose \'None\'. Note to developers: methods can be added via the survey_auth_options filter.', $this->text_domain ) . '</p>',
    );
    $screen->add_help_tab( $args );
    $args = array(
     'id' => 'survey_thank_you',
     'title' => __( 'Thank You Message', $this->text_domain ),
-    'content' => __( 'If this field is filled out, the message will be displayed to a user who completes the survey.', $this->text_domain ),
+    'content' => '<p>' . __( 'If this field is filled out, the message will be displayed to a user who completes the survey.', $this->text_domain ) . '</p>',
    );
    $screen->add_help_tab( $args );
   }
@@ -476,7 +484,9 @@ class Awesome_Surveys {
   }
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
-   $html .= '<span class="label">' . __( 'Number of options required?', $this->text_domain ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder"></div>';
+   $html .= '<span class="label">' . __( 'Number of options required?', $this->text_domain ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
+   $html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
+   $html .= '</div>';
   }
   echo json_encode( array( 'form' => $html ) );
   exit;
@@ -515,6 +525,9 @@ class Awesome_Surveys {
   * anything put inside the 'data' array will eventually be output as data-rule-*
   * attributes in the element shown on the survey. The intended use is for the jquery validation
   * plugin.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
   * @return array an array of validation element data
   * @see  element_info_inputs
   * @see  wwm_survey_validation_elements
@@ -539,6 +552,14 @@ class Awesome_Surveys {
   return $elements;
  }
 
+ /**
+  * Provides advanced validation for element type text
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  * @param  array $elements an array of form elements
+  * @return array $elements the filtered array of elements
+  */
  public function get_validation_elements_text( $elements )
  {
 
@@ -552,6 +573,16 @@ class Awesome_Surveys {
   return $elements;
  }
 
+ /**
+  * An alias of get_validation_elements_text
+  * to apply the same advanced validation option to
+  * a textarea element.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @link http://willthewebmechanic.com
+  * @param  array $elements an array of form elements
+  * @return array $elements the filtered array of elements
+  */
  public function get_validation_elements_textarea( $elements )
  {
 
@@ -565,18 +596,33 @@ class Awesome_Surveys {
   * @author Will the Web Mechanic <will@willthewebmechanic>
   * @link http://willthewebmechanic.com
   */
- public function options_fields()
+ public function options_fields( $args = array() )
  {
 
+  $defaults = array(
+   'num_options' => $_POST['num_options'],
+   'ajax' => true,
+  );
+  $args = wp_parse_args( $args, $defaults );
   $html = '';
-  for ( $iterations = 0; $iterations < absint( $_POST['num_options'] ); $iterations++ ) {
+  for ( $iterations = 0; $iterations < absint( $args['num_options'] ); $iterations++ ) {
    $label = $iterations + 1;
-   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']"></label><input type="hidden" name="options[value][' . $iterations . ']" value="' . $iterations . '"><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
+   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']" required></label><input type="hidden" name="options[value][' . $iterations . ']" value="' . $iterations . '"><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
   }
-  echo $html;
-  exit;
+  if ( $args['ajax'] ) {
+   echo $html;
+   exit;
+  }
+  else return $html;
  }
 
+ /**
+  * Removes some unneeded bits and pieces from
+  * the survey form prior to displaying for preview &
+  * prior to serializing the array of elements for storage in the db
+  * @param  array $form_elements_array an array of form elements
+  * @return array $form_elements_array the filtered form elements
+  */
  public function awesome_surveys_form_preview( $form_elements_array )
  {
 
@@ -602,9 +648,15 @@ class Awesome_Surveys {
 
   $form_elements_array = $_POST;
   /**
-   * If someone has added pieces to the form elements array, allow them to filter
-   * those before processing.
-   *
+   * This filter facilitates the modification of form elements
+   * prior to the form being output to preview, and prior to the
+   * form elements being serialized for db storage. The intended use is
+   * to allow for elements to exist within the form builder that do not have
+   * a purpose in the survey form. As an example, if an radio element were
+   * added to the form builder to choose a type of advanced validation, and
+   * that radio was used to add/enable a rule field, the rule field is the
+   * one that wants to be saved to the db, but the radio doesn't. Get rid of
+   * the radio via apply_filters( 'awesome_surveys_form_preview' ).
    */
   $form_elements_array['options'] = apply_filters( 'awesome_surveys_form_preview', $form_elements_array['options'] );
   if ( ! class_exists( 'Form' ) ) {
@@ -628,10 +680,8 @@ class Awesome_Surveys {
    }
    if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
      $options = array_merge( $options, $rules );
-     error_log( 'now the array is: ' . "\n" . print_r( $options, true ) );
    } else {
     $atts = array_merge( $options, $rules );
-    error_log( 'now the array is: ' . "\n" . print_r( $atts, true ) );
    }
    if ( isset( $element['validation']['required'] ) ) {
     if ( in_array( $method, $required_is_option ) ) {
@@ -700,9 +750,11 @@ class Awesome_Surveys {
   $responses = array();
   $question_count = 0;
   foreach ( $form_elements as $survey_question ) {
+   $responses[$question_count]['has_options'] = 0;
    $responses[$question_count]['question'] = $survey_question['name'];
    $responses[$question_count]['answers'] = array();
    if ( in_array( $survey_question['type'],  $has_options ) ) {
+    $responses[$question_count]['has_options'] = 1;
     foreach ( $survey_question['value'] as $key => $value ) {
      $responses[$question_count]['answers'][] = 0;
     }
