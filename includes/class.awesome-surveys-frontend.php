@@ -116,7 +116,7 @@ class Awesome_Surveys_Frontend {
       * append :pfbc to the key so that pfbc doesn't freak out
       * about numerically keyed arrays.
       */
-     $options[$value . ':pfbc'] = $element['label'][$key];
+     $options[$value . ':pfbc'] = stripslashes( $element['label'][$key] );
     }
    } else {
     $options = array_merge( $options, $rules );
@@ -169,7 +169,7 @@ class Awesome_Surveys_Frontend {
   if ( empty( $survey ) ) {
    exit;
   }
-  $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 1;
+  $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
   $survey['num_responses'] = $num_responses;
   $form = unserialize( $survey['form'] );
   $responses = $survey['responses'];
@@ -183,10 +183,10 @@ class Awesome_Surveys_Frontend {
       */
      $arr = array_values( $_POST['question'][$key] );
      foreach ( $arr as $answerkey ) {
-      $response['answers'][$answerkey]++;
+      $response['answers'][$answerkey][] = $num_responses;
      }
     } elseif ( isset( $_POST['question'][$key] ) && '' != $_POST['question'][$key] ) {
-     $response['answers'][$_POST['question'][$key]]++;
+     $response['answers'][$_POST['question'][$key]][] = $num_responses;
     }
    } else {
     $response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? apply_filters( 'wwm_filter_survey_answer', $_POST['question'][$key], $form[$key]['type'] ) : null;
@@ -194,7 +194,6 @@ class Awesome_Surveys_Frontend {
    $responses[$key] = $response;
   }
   $survey['responses'] = $responses;
-  var_dump( $responses );
   $survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
   $surveys['surveys'][$_POST['survey_id']] = $survey;
   $action_args = array(
@@ -202,6 +201,7 @@ class Awesome_Surveys_Frontend {
    'survey' => $survey,
   );
   do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
+  var_dump( $survey );
   update_option( 'wwm_awesome_surveys', $surveys );
   exit;
  }

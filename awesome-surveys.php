@@ -290,7 +290,7 @@ class Awesome_Surveys {
       <?php
       $surveys = get_option( 'wwm_awesome_surveys', array() );
       $survey = $surveys['surveys'][0];
-      var_dump( unserialize( $survey['form'] ) );
+      var_dump( $survey['responses'] );
       ?>
      </pre>
     </div><!--#debug-->
@@ -689,7 +689,7 @@ class Awesome_Surveys {
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
    $options = $atts = $rules = array();
-   if ( isset( $element['validation'] ) && is_array( $element['validation']['rules'] ) ) {
+   if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
      $rules['data-' . $key] = $value;
     }
@@ -772,7 +772,7 @@ class Awesome_Surveys {
    if ( in_array( $survey_question['type'],  $has_options ) ) {
     $responses[$question_count]['has_options'] = 1;
     foreach ( $survey_question['value'] as $key => $value ) {
-     $responses[$question_count]['answers'][] = 0;
+     $responses[$question_count]['answers'][] = array();
     }
    }
    $question_count++;
