@@ -96,4 +96,10 @@ form#new-elements {
  .hidden {
   display: none;
  }
+ label.error {
+  color: red;
+ }
+ input.error {
+  border-color: red;
+ }
 }

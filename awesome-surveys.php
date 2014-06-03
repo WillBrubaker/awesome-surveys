@@ -108,8 +108,9 @@ class Awesome_Surveys {
  public function admin_enqueue_scripts()
  {
 
-  if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 1 ) {
-   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion' ), self::$wwm_plugin_values['version'] );
+  wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.12.1pre' );
+  if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 0 ) {
+   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', ), self::$wwm_plugin_values['version'] );
    wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
    wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.css', __FILE__ ), array( 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
   }
@@ -203,7 +204,7 @@ class Awesome_Surveys {
   $nonce = wp_create_nonce( 'create-survey' );
   $form = new FormOverrides( 'survey-manager' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
-  $form->addElement( new Element_Textbox( __( 'Survey Name:', $this->text_domain ), 'survey_name' ) );
+  $form->addElement( new Element_Textbox( __( 'Survey Name:', $this->text_domain ), 'survey_name', array( 'required' => 1 ) ) );
   $form->addElement( new Element_Hidden( 'action', 'create_survey' ) );
   $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
   $form->addElement( new Element_HTML( '<div class="create_holder">') );
@@ -285,6 +286,13 @@ class Awesome_Surveys {
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
      <button class="button-primary delete">Clear Surveys?</button>
+     <pre>
+      <?php
+      $surveys = get_option( 'wwm_awesome_surveys', array() );
+      $survey = $surveys['surveys'][0];
+      var_dump( unserialize( $survey['form'] ) );
+      ?>
+     </pre>
     </div><!--#debug-->
    <?php endif; ?>
    </div><!--#tabs-->
@@ -299,6 +307,8 @@ class Awesome_Surveys {
    'survey_id' => null,
   );
   $args = wp_parse_args( $args, $defaults );
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  return '<pre>' . print_r( $surveys, true ) . '</pre>';
  }
 
  /**
@@ -600,7 +610,7 @@ class Awesome_Surveys {
  {
 
   $defaults = array(
-   'num_options' => $_POST['num_options'],
+   'num_options' => ( isset( $_POST ) ) ? $_POST['num_options'] : 1,
    'ajax' => true,
   );
   $args = wp_parse_args( $args, $defaults );
@@ -673,7 +683,7 @@ class Awesome_Surveys {
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
    $options = $atts = $rules = array();
-   if ( is_array( $element['validation']['rules'] ) ) {
+   if ( isset( $element['validation'] ) && is_array( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
      $rules['data-' . $key] = $value;
     }

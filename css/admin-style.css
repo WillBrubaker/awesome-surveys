@@ -77,3 +77,7 @@ form span.label, form .slider-wrapper, form .options-holder, form textarea {
       margin: .25em 0; }
 form .hidden {
   display: none; }
+form label.error {
+  color: red; }
+form input.error {
+  border-color: red; }
