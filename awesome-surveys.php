@@ -85,7 +85,7 @@ class Awesome_Surveys {
  /**
   * Hooked into the init action, does things required on that action
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function init()
@@ -102,7 +102,7 @@ class Awesome_Surveys {
  /**
   * enqueues the necessary css/js for the admin area
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function admin_enqueue_scripts()
@@ -119,7 +119,7 @@ class Awesome_Surveys {
  /**
   * Adds the WtWM menu item to the admin menu & adds a submenu link to this plugin to that menu item.
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function plugin_menu()
@@ -145,7 +145,7 @@ class Awesome_Surveys {
   * to the $links array to be displayed on the WWM
   * plugins page:
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   * @param  array $links the array of links
   * @return array $links the filtered array of links
@@ -163,7 +163,7 @@ class Awesome_Surveys {
   * admin pages that have been added to the $wwm_plugin_links array
   * via apply_filters
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function wwm_plugin_links()
@@ -191,7 +191,7 @@ class Awesome_Surveys {
  /**
   * Outputs the plugin options panel for this plugin
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function plugin_options()
@@ -314,7 +314,7 @@ class Awesome_Surveys {
  /**
   * Outputs contextual help for the plugin options panel
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function contextual_help()
@@ -331,7 +331,13 @@ class Awesome_Surveys {
    $args = array(
     'id' => 'field_type',
     'title' => __( 'Field Type', $this->text_domain ),
-    'content' => '<p>' . sprintf( '%s<br><ul><li>text: <input type="text"></li><li>email: <input type="email"></li><li>number: <input type="number"></li><li>dropdown selector: <select><option>Make a selection</option></select></li><li>radio: <input type="radio"></li><li>checkbox: <input type="checkbox"></li><li>textarea: <textarea></textarea></li></ul>', __( 'This is the type of form field you would like to add to your form, i.e.: checkbox, radio, text, email, textarea, etc. Examples:', $this->text_domain ) ). '</p>',
+    'content' => '<p>' . sprintf( '%s<br><ul><li>text: <input type="text"></li><li>email: <input type="email"></li><li>number: <input type="number"></li><li>dropdown selector: <select><option>Make a selection</option></select></li><li>radio: <input type="radio"></li><li>checkbox: <input type="checkbox"></li><li>textarea: <textarea></textarea></li></ul>', __( 'This is the type of form field you would like to add to your form, i.e.: checkbox, radio, text, email, textarea, etc. Examples:', $this->text_domain ) ) . '</p>',
+   );
+   $screen->add_help_tab( $args );
+   $args = array(
+    'id' => 'field_validation',
+    'title' => __( 'Field Validation Options', $this->text_domain ),
+    'content' => '<p>' . __( 'Based upon the type of field option you have selected, you may see different options for validation. Selecting \'required\' will make this part of your survey a required field. Some fields have a \'Maximum Length\' Validation option where you can specify a character limit. Field type "number" can have a maximum and minimum value added to it. As an example, if your survey asked a user their age, and you wanted to limit the survey to respondents who claim that they are 18 or older, you can enter 18 in the \'Min number allowed\' field.', $this->text_domain ) . '</p>',
    );
    $screen->add_help_tab( $args );
    $args = array(
@@ -358,7 +364,7 @@ class Awesome_Surveys {
  /**
   * Ajax handler to output a 'type' selector to the survey form builder
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   * @uses render_element_selector
   */
@@ -388,7 +394,7 @@ class Awesome_Surveys {
   * Renders a dropdown select element with options
   * that coincide with the pfbc form builder class
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  private function render_element_selector()
@@ -418,7 +424,7 @@ class Awesome_Surveys {
   * some form elements so that information can be gathered
   * about the element that a user is adding to their survey
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function element_info_inputs()
@@ -444,7 +450,7 @@ class Awesome_Surveys {
    */
   $validation_elements = apply_filters( 'wwm_survey_validation_elements', $elements, $_POST['text'] );
   $html = '';
-  $html .= '<label>' . __( 'Label this', $this->text_domain ) . ' ' . $_POST['text']  . ' ' . __( 'field', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]" required></label>';
+  $html .= '<label>' . __( 'The question you are asking:', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]" required></label>';
   if ( ! empty( $validation_elements ) ) {
    $html .= '<div class="ui-widget-content validation ui-corner-all"><h5>'. __( 'Field Validation Options', $this->text_domain ) . '</h5>';
     foreach ( $validation_elements as $element ) {
@@ -494,7 +500,7 @@ class Awesome_Surveys {
   }
   $needs_options = array( 'radio', 'checkbox', 'dropdown selection' );
   if ( in_array( $_POST['text'], $needs_options ) ) {
-   $html .= '<span class="label">' . __( 'Number of options required?', $this->text_domain ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
+   $html .= '<span class="label">' . __( 'Number of answers required?', $this->text_domain ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
    $html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
    $html .= '</div>';
   }
@@ -511,7 +517,7 @@ class Awesome_Surveys {
   * @param  string $type     the type of element that will be validated
   * @return array           the filtered elements
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function wwm_survey_validation_elements( $elements = array(), $type = '' )
@@ -536,7 +542,7 @@ class Awesome_Surveys {
   * attributes in the element shown on the survey. The intended use is for the jquery validation
   * plugin.
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   * @return array an array of validation element data
   * @see  element_info_inputs
@@ -565,7 +571,7 @@ class Awesome_Surveys {
  /**
   * Provides advanced validation for element type text
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   * @param  array $elements an array of form elements
   * @return array $elements the filtered array of elements
@@ -588,7 +594,7 @@ class Awesome_Surveys {
   * to apply the same advanced validation option to
   * a textarea element.
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   * @param  array $elements an array of form elements
   * @return array $elements the filtered array of elements
@@ -603,21 +609,21 @@ class Awesome_Surveys {
   * Ajax handler to generate some fields
   * for survey option inputs
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function options_fields( $args = array() )
  {
 
   $defaults = array(
-   'num_options' => ( isset( $_POST ) ) ? $_POST['num_options'] : 1,
+   'num_options' => ( isset( $_POST['num_options'] ) ) ? $_POST['num_options'] : 1,
    'ajax' => true,
   );
   $args = wp_parse_args( $args, $defaults );
   $html = '';
   for ( $iterations = 0; $iterations < absint( $args['num_options'] ); $iterations++ ) {
    $label = $iterations + 1;
-   $html .= '<label>' . __( 'option label', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']" required></label><input type="hidden" name="options[value][' . $iterations . ']" value="' . $iterations . '"><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
+   $html .= '<label>' . __( 'Answer', $this->text_domain ) . ' ' . $label . '<br><input type="text" name="options[label][' . $iterations . ']" required></label><input type="hidden" name="options[value][' . $iterations . ']" value="' . $iterations . '"><label>' . __( 'default?', $this->text_domain ) . '<br><input type="radio" name="options[default]" value="' . $iterations . '"></label>';
   }
   if ( $args['ajax'] ) {
    echo $html;
@@ -650,7 +656,7 @@ class Awesome_Surveys {
  /**
   * Ajax handler to generate the form preview
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function generate_preview()
@@ -740,7 +746,7 @@ class Awesome_Surveys {
  /**
   * Ajax handler to save the survey form details to the db.
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function save_survey()

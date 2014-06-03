@@ -21,6 +21,7 @@ class Awesome_Surveys_Frontend {
   add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
   add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
   add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
+  add_filter( 'wwm_filter_survey_answer', array( &$this, 'wwm_filter_survey_answer_filter', ), 10, 2  );
   add_action( 'awesome_surveys_update_cookie', array( &$this, 'awesome_surveys_update_cookie' ), 10, 1 );
  }
 
@@ -74,7 +75,7 @@ class Awesome_Surveys_Frontend {
   * @param  array $args an array of arguments, includes the survey id and the survey name
   * @return string an html form
   * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  private function render_form( $form, $args )
@@ -140,7 +141,7 @@ class Awesome_Surveys_Frontend {
  /**
   * registers necessary styles & scripts for later use
   * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic>
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
  public function register_scripts()
@@ -154,7 +155,8 @@ class Awesome_Surveys_Frontend {
  /**
   * Ajax handler to process the survey form
   * @since 1.0
-  *
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   */
  public function process_response()
  {
@@ -170,15 +172,29 @@ class Awesome_Surveys_Frontend {
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 1;
   $survey['num_responses'] = $num_responses;
   $form = unserialize( $survey['form'] );
-  $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
-  foreach ( $survey['responses'] as $key => $value ) {
-   if ( in_array( $form[$key]['type'], $has_options ) ) {
-    $count = $value['answers'][$_POST['question'][$key]] + 1;
-    $survey['responses'][$key]['answers'][$_POST['question'][$key]] = $count;
+  $responses = $survey['responses'];
+
+  foreach ( $responses as $key => $response ) {
+   if ( 1 == $response['has_options'] ) {
+    if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
+     /**
+      * Another quirk of PFBC is that checkbox arrays are unkeyed
+      * php doesn't like that so give 'em keys I say
+      */
+     $arr = array_values( $_POST['question'][$key] );
+     foreach ( $arr as $answerkey ) {
+      $response['answers'][$answerkey]++;
+     }
+    } elseif ( isset( $_POST['question'][$key] ) && '' != $_POST['question'][$key] ) {
+     $response['answers'][$_POST['question'][$key]]++;
+    }
    } else {
-    $survey['responses'][$key]['answers'][$key][] = $_POST['question'][$key];
+    $response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? apply_filters( 'wwm_filter_survey_answer', $_POST['question'][$key], $form[$key]['type'] ) : null;
    }
+   $responses[$key] = $response;
   }
+  $survey['responses'] = $responses;
+  var_dump( $responses );
   $survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
   $surveys['surveys'][$_POST['survey_id']] = $survey;
   $action_args = array(
@@ -193,6 +209,9 @@ class Awesome_Surveys_Frontend {
  /**
   * Handles the auth type 'login' to determine whether the
   * survey form should be output or not
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   * @param  array $args an array of function arguments - most
   * notably ['survey_id']
   * @return bool       whether or not the user is authorized to take this survey.
@@ -216,6 +235,9 @@ class Awesome_Surveys_Frontend {
  /**
   * Handles the auth type 'cookie', checks to see if the cookie
   * is set
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   * @param  array $args an array of function arguments, most notably the survey id
   * @return bool       whether or not the user is authorized to take this survey.
   */
@@ -230,6 +252,9 @@ class Awesome_Surveys_Frontend {
   * this method will be called by do_action( 'awesome_surveys_update_cookie' )
   * and will set a cookie indicating that the user has filled out this
   * survey ($args['survey_id']).
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   * @param  array $args [description]
   * @since 1.0
   */
@@ -243,6 +268,9 @@ class Awesome_Surveys_Frontend {
  /**
   * This filter is conditionally added if the auth method
   * is login and the user is not logged in.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   * @param  string $message a message to display to the user
   * @return string          the filtered message.
   */
@@ -257,6 +285,9 @@ class Awesome_Surveys_Frontend {
   * current user id to the survey['respondents'] array so that
   * the auth method 'login' can check if the current user has already
   * filled out the survey.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   * @param  array $survey    an array of survey responses
   * @param  string $auth_type an authorization type
   * @return array  $survey the filtered array of survey responses.
@@ -268,5 +299,32 @@ class Awesome_Surveys_Frontend {
    $survey['respondents'][] = get_current_user_id();
   }
   return $survey;
+ }
+
+ /**
+  * Sanitizes survey form inputs before storing in the database
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
+  * @param  mixed $input_value the value that was input into the form field
+  * @param  string $type a descriptor of what type data the form field is expecting (uses PFBC element types)
+  * @return mixed  $input_value sanitized value that aims to be safe for db storage.
+  */
+ public function wwm_filter_survey_answer_filter( $input_value, $type )
+ {
+
+  $input_value = ( '' == $input_value ) ? null : $input_value;
+  if ( 'Element_Textbox' == $type || 'Element_Textarea' == $type && ! is_null( $input_value ) ) {
+    sanitize_text_field( $input_value );
+  }
+
+  if ( 'Element_Number' == $type && ! is_null( $input_value ) ) {
+   intval( $input_value );
+  }
+
+  if ( 'Element_Email' == $type && ! is_null( $input_value ) ) {
+   sanitize_email( $input_value );
+  }
+  return $input_value;
  }
 }

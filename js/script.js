@@ -15,9 +15,9 @@ jQuery(document).ready(function($) {
     },
     submitHandler: function(form) {
       var overlay = $('.overlay', form);
-      overlay.show();
+      //overlay.show();
       $.post(wwm_awesome_surveys.ajaxurl, $(form).serializeArray(), function(data) {
-        $(form).empty();
+        //$(form).empty();
       });
     }
   });
