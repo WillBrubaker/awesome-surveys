@@ -103,3 +103,38 @@ form#new-elements {
   border-color: red;
  }
 }
+
+span.question {
+ float: left;
+ width: 100%;
+ margin: 1em;
+ text-decoration: underline;
+}
+
+div.answers {
+ width: 500px;
+ .options {
+  background-color: #e1455d;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+ }
+ .options-container {
+  width: 90%;
+  float: left;
+  position: relative;
+  border: 1px solid black;
+  padding: 1em 0 1em .25em;
+  margin: 1em;
+ }
+ div.data {
+  z-index: 1;
+  position: relative;
+ }
+}
+
+.question-container {
+ float: left;
+ margin: 1em 0;
+}

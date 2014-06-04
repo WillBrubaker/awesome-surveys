@@ -220,7 +220,7 @@ class Awesome_Surveys {
    <div id="tabs">
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
-     <li><a href="#surveys"><?php _e( 'Your Surveys', $this->text_domain ); ?></a></li>
+     <li><a href="#surveys"><?php _e( 'Your Survey Results', $this->text_domain ); ?></a></li>
      <?php if ( isset( $_GET['debug'] ) ) : ?>
      <li><a href="#debug"><?php _e( 'Debug', $this->text_domain ); ?></a></li>
      <?php endif; ?>
@@ -305,10 +305,55 @@ class Awesome_Surveys {
 
   $defaults = array(
    'survey_id' => null,
+   'ajax' => false,
   );
   $args = wp_parse_args( $args, $defaults );
   $surveys = get_option( 'wwm_awesome_surveys', array() );
-  return '<pre>' . print_r( $surveys, true ) . '</pre>';
+  $html = '<div id="survey-responses">' . "\n";
+  foreach ( $surveys['surveys'] as $key => $survey ) {
+   $form = unserialize( $survey['form'] );
+   $html .= "\t\t\t" . '<h5>' . stripslashes( $survey['name'] ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+   $html .= "\t\t\t\t" . '<ul><br>' . "\n";
+   $html .= "\t\t\t\t" . '<li>' . sprintf( __( 'This survey has received %d responses', $this->text_domain ), intval( $survey['num_responses'] ) ) . '</li>' . "\n";
+   $html .= "\t\t\t\t" . '</ul>' . "\n";
+   $html .= "\n\t\t\t" . '<div class="answers">' . "\n";
+    foreach ( $survey['responses'] as $response_key => $response ) {
+     if ( $response['has_options'] ) {
+      $html .= "\t\t\t\t" . '<div class="question-container ui-widget-content ui-corner-all"><span class="question">' . stripslashes( $response['question'] ) . '</span>' . "\n";
+      foreach ( $response['answers'] as $answer_key => $arr ) {
+       $num_answers = count( $response['answers'] );
+       $ttl_count = count( $response['answers'], COUNT_RECURSIVE );
+       $ttl_responses = $ttl_count - $num_answers;
+       $this_answer = count( $arr );
+       $percent = ( $ttl_responses > 0 ) ? sprintf( '%.1f', ( $this_answer / $ttl_responses ) * 100 ) : 0;
+       $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . stripslashes( $form[$response_key]['label'][$answer_key] ) . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div>' . "\n";
+      }
+      $html .= '</div><!--.question-container-->';
+     } else {
+      $html .= "\t\t\t\t" . '<div class="answer-accordion">' . "\n";
+      $html .= "\t\t\t\t\t" . '<h4 class="answers">' . stripslashes( $response['question'] ) . '</h4>' . "\n";
+      $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
+      foreach ( $response['answers'] as $answer ) {
+       $html .= "\t\t\t\t\t\t\t" . '<p>' . "\n";
+       $html .= "\t\t\t\t\t\t\t" . stripslashes( $answer ) . "\n";
+       $html .= "\t\t\t\t\t\t\t" . '</p>' . "\n";
+      }
+      $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
+      $html .= "\t\t\t\t" . '</div><!--.accordion-->';
+     }
+    }
+   $html .= "\n\t\t\t" . '</div><!--.answers-->' . "\n";
+   $html .= "\n\t\t" . '</div><!--.survey-->' . "\n";
+  }
+  $html .= '</div><!--#survey-responses-->' . "\n";
+
+  if ( $args['ajax'] ) {
+   echo $html;
+   exit;
+  }
+  else {
+   return $html;
+  }
  }
 
  /**
@@ -464,8 +509,9 @@ class Awesome_Surveys {
       'atts' => '',
      );
      $element = wp_parse_args( $element, $defaults );
+     $atts = apply_filters( 'wwm_survey_element_atts', $element['atts'], $element );
      if ( ! is_null( $element['tag'] ) ) {
-      $html .= '<label>' . $element['label_text'] . '<br><' . $element['tag'] . ' ' . ' type="' . $element['type'] . '"  value="' . $element['value'] . '" name="options[validation][' . $element['name'] . ']" ' . $element['atts'] . '></label>';
+      $html .= '<label>' . $element['label_text'] . '<br><' . $element['tag'] . ' ' . ' type="' . $element['type'] . '"  value="' . $element['value'] . '" name="options[validation][' . $element['name'] . ']" ' . $atts . '></label>';
      }
      $rule_count = 0;
      if ( ! empty( $element['data'] ) && is_array( $element['data'] ) ) {
@@ -688,6 +734,9 @@ class Awesome_Surveys {
   $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $form_elements_array['options'] ) ) : array( $form_elements_array['options'] );
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
+   if ( 'Element_Select' == $method ) {
+    $options[''] = __( 'make a selection...', $this->text_domain );
+   }
    $options = $atts = $rules = array();
    if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
