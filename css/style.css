@@ -27,4 +27,5 @@ form.answer-survey {
     width: 100%; }
   form.answer-survey div {
     float: left;
-    width: 100%; }
+    width: 100%;
+    margin: .5em 0; }
