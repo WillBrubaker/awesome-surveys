@@ -24,10 +24,3 @@ form.answer-survey {
       margin-top: -20px;
       margin-left: -20px;
       background: url("../images/maintenance.gif") no-repeat center; }
-  form.answer-survey label, form.answer-survey textarea, form.answer-survey input[type="email"], form.answer-survey input[type="text"], form.answer-survey input[type="number"] {
-    float: left;
-    width: 100%; }
-  form.answer-survey div {
-    float: left;
-    width: 100%;
-    margin: .5em 0; }

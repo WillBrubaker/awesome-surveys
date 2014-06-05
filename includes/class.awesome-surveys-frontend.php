@@ -88,7 +88,7 @@ class Awesome_Surveys_Frontend {
   $nonce = wp_create_nonce( 'answer-survey' );
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   $form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
-  $form_output->configure( array( 'class' => 'answer-survey' ) );
+  $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked' ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form_output->addElement( new Element_HTML( '<p>' . $args['name'] . '</p>' ) );
   $questions_count = 0;
@@ -147,9 +147,10 @@ class Awesome_Surveys_Frontend {
  public function register_scripts()
  {
 
+  wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css' );
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.12.1pre' );
   wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script.min.js', array( 'jquery', 'jquery-validation-plugin' ), '1.0', true );
-  wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style.min.css', array(), '1.0', 'all' );
+  wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style.min.css', array( 'pure-forms-css' ), '1.0', 'all' );
  }
 
  /**
