@@ -884,7 +884,7 @@ class Awesome_Surveys {
   $data = get_option( 'wwm_awesome_surveys', array() );
   $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
   $form = serialize( $form_elements );
-  $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? esc_html( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
+  $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? sanitize_text_field( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
   $data['surveys'] = $surveys;
   update_option( 'wwm_awesome_surveys', $data );
   exit;
@@ -922,7 +922,7 @@ class Awesome_Surveys {
           <li><a href="https://github.com/WillBrubaker/awesome-surveys" title="' . __( 'Fork Me on GitHub', $this->text_domain ) . '">' . __( 'Awesome Surveys on github', $this->text_domain ) . '</a></li>
           <li><a href="http://wordpress.org/support/plugin/awesome-surveys" title="Get Support">' . __( 'Support for Awesome Surveys', $this->text_domain ) . '</a></li>
           <li><a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys" title="' . __( 'Review the Awesome Surveys Plugin', $this->text_domain ) . '">' . __( 'Rate Awesome Surveys', $this->text_domain ) . '</a></li>
-          <li><a href="http://ctt.ec/BIYrv" title="' . __( 'Shout it From the Rooftops!' , $this->text_domain ) . '">' . __( 'Tweet this plugin', $this->text_domain ) . '</a></li>
+          <li><a href="http://ctt.ec/qNg6L" title="' . __( 'Shout it From the Rooftops!' , $this->text_domain ) . '">' . __( 'Tweet this plugin', $this->text_domain ) . '</a></li>
           <li>' . __( 'Donate to the development of the Awesome Surveys plugin', $this->text_domain ) . '
            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
             <input name="cmd" type="hidden" value="_s-xclick" />

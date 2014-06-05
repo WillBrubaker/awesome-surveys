@@ -66,7 +66,7 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 * If you would like to see more features, [let me know](http://wordpress.org/support/plugin/awesome-surveys "Feature Request").
 * Can you provide artwork for the banner or other assets? Please do - I'll put your name in pixels and will be forever grateful.
 * Are you a developer and would like to contribute code to this plugin? Find me on [github](https://github.com/WillBrubaker/awesome-surveys "Fork Me") and send a pull request (which will also result in your name in pixels).
-* [Tweet](http://ctt.ec/BIYrv "Shout it From the Rooftops") about this plugin, write about it on your blog.
+* [Tweet](http://ctt.ec/qNg6L "Shout it From the Rooftops") about this plugin, write about it on your blog.
 * Create translations for this plugin, provide improved help documentation, create a 'how-to-use' video.
 * Any of the above actions are truly and greatly appreciated!
 
