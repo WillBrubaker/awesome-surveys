@@ -86,6 +86,7 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 = Known Issues: =
 
 * Survey form display hasn't likely been tested with your theme. Styling may break and the form may look horrible. If you experience this, please do contact me with suggestions on how to fix it for your particular theme.
+* Cookie authentication for allowing/denying users to take the survey is very easily circumvented. If using cookie based authentication for your surveys, please keep this in mind. You will be far less likely to see "ballot-stuffing" if you are allowing registrations on your site and require the user to login to take the survey.
 * This plugin is using a pre-release version of the jQuery validation plugin which fixes a bug related to validating input type="number". Other issues in this pre-release may be present.
 * Many developer features are unfinished at this time. If you are developing an extension for this plugin or using any of the action/filter hooks included, proceed with caution.
 
