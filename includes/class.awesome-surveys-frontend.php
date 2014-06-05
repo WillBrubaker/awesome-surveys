@@ -87,7 +87,7 @@ class Awesome_Surveys_Frontend {
   }
   $nonce = wp_create_nonce( 'answer-survey' );
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
-  $form_output = new FormOverrides( stripslashes( $args['name'] ) );
+  $form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
   $form_output->configure( array( 'class' => 'answer-survey' ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form_output->addElement( new Element_HTML( '<p>' . $args['name'] . '</p>' ) );
@@ -201,8 +201,10 @@ class Awesome_Surveys_Frontend {
    'survey' => $survey,
   );
   do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
-  var_dump( $survey );
   update_option( 'wwm_awesome_surveys', $surveys );
+  $form_id = sanitize_title( stripslashes( $survey['name'] ) );
+  $thank_you = stripslashes( $survey['thank_you'] );
+  wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you ) );
   exit;
  }
 

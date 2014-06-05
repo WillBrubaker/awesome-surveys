@@ -233,7 +233,7 @@ class Awesome_Surveys {
       $form->render();
       $form = new FormOverrides( 'new-elements' );
       $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="ui-widget-content ui-corner-all validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
-      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you' ) );
+      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you', array( 'value' => __( 'Thank you for completing this survey', $this->text_domain ), 'required' => 1 ) ) );
       $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
       /**
        * *!!!IMPORTANT!!!*
@@ -291,7 +291,7 @@ class Awesome_Surveys {
       <?php
       $surveys = get_option( 'wwm_awesome_surveys', array() );
       $survey = $surveys['surveys'][0];
-      var_dump( $surveys['surveys'][2] );
+      var_dump( $surveys['surveys'][0] );
       ?>
      </pre>
     </div><!--#debug-->
@@ -418,7 +418,7 @@ class Awesome_Surveys {
    $args = array(
     'id' => 'survey_thank_you',
     'title' => __( 'Thank You Message', $this->text_domain ),
-    'content' => '<p>' . __( 'If this field is filled out, the message will be displayed to a user who completes the survey.', $this->text_domain ) . '</p>',
+    'content' => '<p>' . __( 'The message will be displayed to a user who completes the survey.', $this->text_domain ) . '</p>',
    );
    $screen->add_help_tab( $args );
   }
@@ -794,11 +794,9 @@ class Awesome_Surveys {
   $auth_type = esc_attr( $_POST['auth'] );
   $form->addElement( new Element_HTML( '<span class="label">' . __( 'Type of authentication: ', $this->text_domain ) . $auth_messages[ $auth_type ] . '</span>' ) );
   $form->addElement( new Element_Hidden( 'auth', $auth_type ) );
-  if ( isset( $_POST['thank_you'] ) && ! empty( $_POST['thank_you'] ) ) {
-   $thank_you_message = esc_html( $_POST['thank_you'] );
-   $form->addElement( new Element_Hidden( 'thank_you', $thank_you_message ) );
-   $form->addElement( new Element_HTML( '<span class="label">' . __( 'Thank you message:', $this->text_domain ) . '</span><div>' . $thank_you_message . '</div>' ) );
-  }
+  $thank_you_message = ( '' != $_POST['thank_you'] ) ? sanitize_text_field( $_POST['thank_you'] ) : __( 'Thank you for completing this survey', $this->text_domain );
+  $form->addElement( new Element_Hidden( 'thank_you', $thank_you_message ) );
+  $form->addElement( new Element_HTML( '<span class="label">' . __( 'Thank you message:', $this->text_domain ) . '</span><div>' . $thank_you_message . '</div>' ) );
   $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
   $form->addElement( new Element_Hidden( 'action', 'wwm_save_survey' ) );
   $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
