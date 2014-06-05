@@ -4,6 +4,9 @@ form.answer-survey {
   float: left;
   border: 1px solid #AAA;
   border-radius: 4px; }
+  form.answer-survey textarea {
+    min-width: 80%;
+    height: 200px; }
   form.answer-survey .overlay {
     z-index: 1000;
     position: absolute;
