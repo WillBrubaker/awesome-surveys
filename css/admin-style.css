@@ -109,4 +109,9 @@ div.answers {
 
 .question-container {
   float: left;
-  margin: 1em 0; }
+  margin: 1em 0;
+  width: 100%; }
+
+.answer-accordion {
+  float: left;
+  width: 100%; }

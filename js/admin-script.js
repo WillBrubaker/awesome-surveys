@@ -124,7 +124,23 @@ jQuery(document).ready(function($) {
     var form = $(this);
     var buttonName = $('input[type="submit"][clicked="true"]').attr('name');
     if ('save' == buttonName) {
-      $.post(ajaxurl, $(this).serializeArray(), function(data) {});
+      $.post(ajaxurl, $(this).serializeArray(), function(data) {
+        $.post(ajaxurl, {action: 'get_survey_results'}, function(html){
+          $('#existing-surveys').empty().append(html);
+          $('#survey-responses').accordion({
+    header: 'h5',
+    heightStyle: 'content',
+    collapsible: true,
+    active: false,
+  });
+  $('.answer-accordion').accordion({
+    header: 'h4.answers',
+    collapsible: true,
+    active: false,
+    heightStyle: 'content'
+  });
+        },'html')
+      });
     }
     $('#preview h4.survey-name').empty();
     $('.survey-preview').empty();
