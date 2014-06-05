@@ -1,4 +1,4 @@
-=== Automatic Post Publishing Scheduler ===
+=== Awesome Surveys ===
 Contributors: WilltheWebMechanic
 License: GPLv3.0+
 Requires at least: 3.9.1
