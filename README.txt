@@ -73,7 +73,11 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 == Screenshots ==
 
-1.
+1. The form builder
+2. Survey form built, ready to save
+3. Survey form output on the frontend
+4. The thank you message displayed after the survey has been submitted
+5. Survey results view
 
 
 == Changelog ==
@@ -93,7 +97,9 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 = Included Software =
 
 * Uses the [PHP Form Builder class](https://code.google.com/p/php-form-builder-class/ "PFBC") which is GPL v3 licensed.
-* Uses the [jQuery validaiton plugin](http://jqueryvalidation.org "jQuery validation") whis is MIT licensed.
+* Uses the [jQuery validaiton plugin](http://jqueryvalidation.org "jQuery validation") which is MIT licensed.
+* Uses [pure css](http://purecss.io) which is licensed under the Yahoo! BSD license
+* Uses [normalize css](https://github.com/necolas/normalize.css) which is MIT licensed
 
 = To Do List =
 
