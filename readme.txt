@@ -17,11 +17,12 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 1. Allows the creation of any number of surveys to collect data from visitors to your site.
 2. Build your survey forms with the powerful built-in form builder.
-2. Publish your surveys on pages or posts by including a shortcode.
-3. Advanced form field validation is included.
-4. View results of your surveys in the admin area of your WordPress site.
-5. Contextual help available for many of the survey builder options
-6. Extendable through action/filter hooks.
+3. Optionally require login or cookie authentication in order for a user to take the survey.
+4. Publish your surveys on pages or posts by including a shortcode.
+5. Advanced form field validation is included.
+6. View results of your surveys in the admin area of your WordPress site.
+7. Contextual help available for many of the survey builder options
+8. Extendable through action/filter hooks.
 
 == Installation ==
 
@@ -47,6 +48,14 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 == Frequently Asked Questions ==
 
+= How do I create a survey? =
+
+* This can be done by using the powerful survey form builder located in the plugin configuration screen.
+
+= How do I publish a survey? =
+
+* Surveys can be published in your blog posts or pages using a simple shortcode. After you have built a survey, its details are available in the plugin configuration screen under the 'Your Surveys' tab. The shortcode for each of your surveys is displayed there.
+
 = How can I support the development of this plugin? =
 
 = The most obvious way is to =
@@ -58,6 +67,7 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 * Can you provide artwork for the banner or other assets? Please do - I'll put your name in pixels and will be forever grateful.
 * Are you a developer and would like to contribute code to this plugin? Find me on [github](https://github.com/WillBrubaker/awesome-surveys "Fork Me") and send a pull request (which will also result in your name in pixels).
 * [Tweet](http://ctt.ec/BIYrv "Shout it From the Rooftops") about this plugin, write about it on your blog.
+* Create translations for this plugin, provide improved help documentation, create a 'how-to-use' video.
 * Any of the above actions are truly and greatly appreciated!
 
 
@@ -75,6 +85,7 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 = Known Issues: =
 
+* There hasn't been a whole lot of thought put into styling the survey form that will be published to the frontend of your blog. Survey forms may look horrible in your theme.
 * This plugin is using a pre-release version of the jQuery validation plugin which fixes a bug related to validating input type="number". Other issues in this pre-release may be present.
 * Many developer features are unfinished at this time. If you are developing an extension for this plugin or using any of the action/filter hooks included, proceed with caution.
 
@@ -85,6 +96,10 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 = To Do List =
 
+* Widget to display surveys?
+* Ability to add classes to survey form elements and add custom css.
+* Ability to export .csv file of the surveys
+* Add some survey management options (e.g. Delete survey, rename survey...)
 * View survey results sorted by how each individual respondent answered questions.
 * **Your feature request here.**
 
