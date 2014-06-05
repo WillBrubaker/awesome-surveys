@@ -1,5 +1,7 @@
 form.answer-survey {
-  position: relative; }
+  position: relative;
+  width: 100%;
+  float: left; }
   form.answer-survey .overlay {
     z-index: 1000;
     position: absolute;
