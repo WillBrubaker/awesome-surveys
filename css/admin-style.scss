@@ -102,6 +102,10 @@ form#new-elements {
  input.error {
   border-color: red;
  }
+ div.form-actions {
+   float: left;
+   margin: 1em 0;
+  }
 }
 
 span.question {
@@ -127,6 +131,7 @@ div.answers {
   border: 1px solid black;
   padding: 1em 0 1em .25em;
   margin: 1em;
+  background-color: #e1f4ff;
  }
  div.data {
   z-index: 1;

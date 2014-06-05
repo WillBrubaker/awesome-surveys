@@ -52,6 +52,7 @@ class Awesome_Surveys {
   add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
   if ( is_admin() ) {
    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( &$this, 'plugin_manage_link' ), 10, 4 );
+   add_action( 'after_wwm_plugin_links', array( &$this, 'output_links' ) );
   }
 
   add_action( 'init', array( &$this, 'init' ) );
@@ -111,9 +112,9 @@ class Awesome_Surveys {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.12.1pre' );
   if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 0 ) {
-   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', ), self::$wwm_plugin_values['version'] );
+   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', ), self::$wwm_plugin_values['version'] );
    wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
-   wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.css', __FILE__ ), array( 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
+   wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
   }
  }
 
@@ -218,6 +219,21 @@ class Awesome_Surveys {
      <?php _e( 'Need help? There are handy tips for some of the options in the help menu. Click the help tab in the upper right corner of your screen', $this->text_domain ); ?>
     </p>
    </div>
+   <p>
+    <ul><?php _e( 'Donate to the future development of this plugin:', $this->text_domain ); ?>
+     <li>
+      <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+       <input name="cmd" type="hidden" value="_s-xclick" />
+       <input name="hosted_button_id" type="hidden" value="634DZTUWQA2ZU" />
+       <input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" type="image" />
+       <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="Donate" width="1" height="1" border="0" />
+      </form>
+     </li>
+     <li>
+      <a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
+     </li>
+    </ul>
+   </p>
    <div id="tabs">
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
@@ -875,6 +891,27 @@ class Awesome_Surveys {
   exit;
  }
 
+ public function output_links( $plugin_links_version )
+ {
+
+  if ( 1 == $plugin_links_version ) {
+   echo '<ul>
+          <li><a href="https://github.com/WillBrubaker/awesome-surveys" title="' . __( 'Fork Me on GitHub', $this->text_domain ) . '">' . __( 'Awesome Surveys on github', $this->text_domain ) . '</a></li>
+          <li><a href="http://wordpress.org/support/plugin/awesome-surveys" title="Get Support">' . __( 'Support for Awesome Surveys', $this->text_domain ) . '</a></li>
+          <li><a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys" title="' . __( 'Review the Awesome Surveys Plugin', $this->text_domain ) . '">' . __( 'Rate Awesome Surveys', $this->text_domain ) . '</a></li>
+          <li><a href="http://ctt.ec/BIYrv" title="' . __( 'Shout it From the Rooftops!' , $this->text_domain ) . '">' . __( 'Tweet this plugin', $this->text_domain ) . '</a></li>
+          <li>' . __( 'Donate to the development of the Awesome Surveys plugin', $this->text_domain ) . '
+           <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+            <input name="cmd" type="hidden" value="_s-xclick" />
+            <input name="hosted_button_id" type="hidden" value="634DZTUWQA2ZU" />
+            <input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" type="image" />
+            <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="Donate" width="1" height="1" border="0" />
+           </form>
+          </li>
+          <li><a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">' . __( 'Donate Bitcoins', $this->text_domain ) . '</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script></li>
+         </ul>';
+  }
+ }
  /**
   * Adds a link on the plugins page. Nothing more than
   * shameless self-promotion, really.

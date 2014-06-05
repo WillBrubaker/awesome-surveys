@@ -81,6 +81,9 @@ form label.error {
   color: red; }
 form input.error {
   border-color: red; }
+form div.form-actions {
+  float: left;
+  margin: 1em 0; }
 
 span.question {
   float: left;
@@ -102,7 +105,8 @@ div.answers {
     position: relative;
     border: 1px solid black;
     padding: 1em 0 1em .25em;
-    margin: 1em; }
+    margin: 1em;
+    background-color: #e1f4ff; }
   div.answers div.data {
     z-index: 1;
     position: relative; }
