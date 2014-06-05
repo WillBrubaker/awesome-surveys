@@ -25,3 +25,6 @@ form.answer-survey {
   form.answer-survey label, form.answer-survey textarea, form.answer-survey input[type="email"], form.answer-survey input[type="text"], form.answer-survey input[type="number"] {
     float: left;
     width: 100%; }
+  form.answer-survey div {
+    float: left;
+    width: 100%; }
