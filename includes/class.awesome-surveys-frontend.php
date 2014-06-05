@@ -180,7 +180,7 @@ class Awesome_Surveys_Frontend {
    if ( 1 == $response['has_options'] ) {
     if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
      /**
-      * Another quirk of PFBC is that checkbox arrays are unkeyed
+      * A quirk of PFBC is that checkbox arrays are unkeyed
       * php doesn't like that so give 'em keys I say
       */
      $arr = array_values( $_POST['question'][$key] );
