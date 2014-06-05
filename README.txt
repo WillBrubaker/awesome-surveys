@@ -111,4 +111,4 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 * **Your feature request here.**
 
 = Credits =
-* **Your name could be here** make a contribution today! (see the FAQ for suggestions of how you can help with the development)]]
+* **Your name could be here** make a contribution today! (see the FAQ for suggestions of how you can help with the development)
