@@ -5,22 +5,37 @@
  input[type="text"], input[type="submit"], select, input[type="checkbox"], input[type="radio"] {
   margin: .5em 0;
  }
-  label {
-   width: 100%;
-   float: left;
-  }
+ select {
+  height: auto;
  }
+ input[type="text"]:focus {
+  width: 80%;
+ }
+}
  margin-top: 2.5em;
 }
 
 form#new-elements {
  display: none;
+ label {
+  float: left;
+  width: 100%;
+  input {
+   margin-top: .5em;
+  }
+ }
+ fieldset, .field-validation > * {
+  padding: .5em 1em;
+ }
 }
 
 .half {
- width: 45%;
+ width: 40%;
  float: left;
  display: inline-block;
+ &:hover {
+  width: 55%;
+ }
 }
 
 .slider-wrapper {
@@ -29,7 +44,7 @@ form#new-elements {
  #slider {
   width: 100%;
   margin-bottom: 2.5em;
-  label{
+  label {
    position: absolute;
    width: 20px;
    margin-top: 20px;
@@ -42,7 +57,7 @@ form#new-elements {
 .slider-legend {
  width: 100%;
  margin-top: 1em;
- p{
+ p {
   text-align: center;
   width: 43px;
   display: inline-block;
@@ -76,8 +91,7 @@ form#new-elements {
 
  .validation {
   float: left;
-  width: 80%;
-  padding: 1em;
+  width: 100%;
   margin: 1em 0;
  }
 
@@ -92,6 +106,9 @@ form#new-elements {
     margin: .25em 0;
    }
   }
+ }
+ span.label p {
+  margin: 1em;
  }
  .hidden {
   display: none;

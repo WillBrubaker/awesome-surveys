@@ -5,17 +5,27 @@
     margin: 1em; }
     #tabs form input[type="text"], #tabs form input[type="submit"], #tabs form select, #tabs form input[type="checkbox"], #tabs form input[type="radio"] {
       margin: .5em 0; }
-    #tabs form label {
-      width: 100%;
-      float: left; }
+    #tabs form select {
+      height: auto; }
+    #tabs form input[type="text"]:focus {
+      width: 80%; }
 
 form#new-elements {
   display: none; }
+  form#new-elements label {
+    float: left;
+    width: 100%; }
+    form#new-elements label input {
+      margin-top: .5em; }
+  form#new-elements fieldset, form#new-elements .field-validation > * {
+    padding: .5em 1em; }
 
 .half {
-  width: 45%;
+  width: 40%;
   float: left;
   display: inline-block; }
+  .half:hover {
+    width: 55%; }
 
 .slider-wrapper {
   width: 80%;
@@ -63,8 +73,7 @@ form#new-elements {
 
 .validation {
   float: left;
-  width: 80%;
-  padding: 1em;
+  width: 100%;
   margin: 1em 0; }
 
 form span.label, form .slider-wrapper, form .options-holder, form textarea {
@@ -75,6 +84,8 @@ form span.label, form .slider-wrapper, form .options-holder, form textarea {
     margin: .5em 0; }
     form span.label div.control-group label, form .slider-wrapper div.control-group label, form .options-holder div.control-group label, form textarea div.control-group label {
       margin: .25em 0; }
+form span.label p {
+  margin: 1em; }
 form .hidden {
   display: none; }
 form label.error {
