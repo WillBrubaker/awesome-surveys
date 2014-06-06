@@ -135,9 +135,11 @@ class Awesome_Surveys {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.12.1pre' );
   if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 0 ) {
+   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
+   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
    wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', ), self::$wwm_plugin_values['version'] );
    wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
-   wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
+   wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
   }
  }
 
@@ -271,7 +273,7 @@ class Awesome_Surveys {
      <?php
       $form->render();
       $form = new FormOverrides( 'new-elements' );
-      $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="ui-widget-content ui-corner-all validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
+      $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
       $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you', array( 'value' => __( 'Thank you for completing this survey', $this->text_domain ), 'required' => 1 ) ) );
       $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
       /**
@@ -296,11 +298,11 @@ class Awesome_Surveys {
        * to do whatever needs to be done i.e. set a cookie, update some database option, etc.
        */
       $options = apply_filters( 'survey_auth_options', $options );
-      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', $this->text_domain ) . '</p></span>' ) );
+      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', $this->text_domain ) . '</p></span>' ) );
       $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
       $form->addElement( new Element_HTML( '</div></div></div>' ) );
       $form->addElement( new Element_Hidden( 'action', 'generate_preview' ) );
-      $form->addElement( new Element_Button( __( 'Add Element', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+      $form->addElement( new Element_Button( __( 'Add Question', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
       $form->addElement( new Element_HTML( '</div>' ) );
       $form->render();
      ?>
@@ -513,7 +515,7 @@ class Awesome_Surveys {
    'textarea' => 'Element_Textarea'
   );
   $html = '<input type="hidden" name="survey_name" value="' . stripslashes( $_POST['survey_name'] ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
-  $html .= '<div id="new-element-selector"><span>' . __( 'Add a field to your survey.', $this->text_domain ) . '</span><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
+  $html .= '<div id="new-element-selector"><span>' . __( 'Add a question to your survey:', $this->text_domain ) . '</span><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
   foreach ( $types as $type => $pfbc_method ) {
    $html .= '<option value="' . $pfbc_method . '">' . $type . '</option>';
   }
@@ -552,9 +554,9 @@ class Awesome_Surveys {
    */
   $validation_elements = apply_filters( 'wwm_survey_validation_elements', $elements, $_POST['text'] );
   $html = '';
-  $html .= '<label>' . __( 'The question you are asking:', $this->text_domain ) . '<br><input title="' . __( 'The text that will appear with this form field, i.e. the question you are asking', $this->text_domain ) . '" type="text" name="options[name]" required></label>';
+  $html .= '<label>' . __( 'The question you are asking:', $this->text_domain ) . '<br><input type="text" name="options[name]" required></label>';
   if ( ! empty( $validation_elements ) ) {
-   $html .= '<div class="ui-widget-content validation ui-corner-all"><h5>'. __( 'Field Validation Options', $this->text_domain ) . '</h5>';
+   $html .= '<div class="ui-widget-content field-validation validation ui-corner-all"><h5>'. __( 'Field Validation Options', $this->text_domain ) . '</h5>';
     foreach ( $validation_elements as $element ) {
      $defaults = array(
       'label_text' => null,
@@ -784,6 +786,7 @@ class Awesome_Surveys {
   }
   $nonce = wp_create_nonce( 'create-survey' );
   $form = new FormOverrides( sanitize_title( $form_elements_array['survey_name'] ) );
+  $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
   if ( isset( $form_elements_array['existing_elements'] ) ) {
    $element_json = json_decode( stripslashes( $form_elements_array['existing_elements'] ), true );
   }
@@ -792,9 +795,6 @@ class Awesome_Surveys {
   foreach ( $existing_elements as $element ) {
    $method = $element['type'];
    $options = $atts = $rules = array();
-   if ( 'Element_Select' == $method ) {
-    $options[''] = __( 'make a selection...', $this->text_domain );
-   }
    if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
      $rules['data-' . $key] = $value;
