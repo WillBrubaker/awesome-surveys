@@ -750,7 +750,7 @@ class Awesome_Surveys {
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
    foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
-    if ( empty( $value ) ) {
+    if ( is_null( $value ) ) {
      unset( $form_elements_array['validation']['rules'][$key] );
     }
    }
