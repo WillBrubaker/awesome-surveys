@@ -31,6 +31,9 @@ class Awesome_Surveys_Frontend {
   * to eventually output the survey to the frontend. Also enqueues necessary js and css for the form.
   * @param  array $atts an array of shortcode attributes
   * @return mixed string|null  if there is a survey form to output will return an html form, else returns null
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   */
  public function wwm_survey( $atts )
  {
@@ -318,16 +321,15 @@ class Awesome_Surveys_Frontend {
  {
 
   $input_value = ( '' == $input_value ) ? null : $input_value;
+  $has_options = array( 'Element_Checkbox', 'Element_Radio', 'Element_Select' );
   if ( 'Element_Textbox' == $type || 'Element_Textarea' == $type && ! is_null( $input_value ) ) {
-    sanitize_text_field( $input_value );
-  }
-
-  if ( 'Element_Number' == $type && ! is_null( $input_value ) ) {
-   intval( $input_value );
-  }
-
-  if ( 'Element_Email' == $type && ! is_null( $input_value ) ) {
-   sanitize_email( $input_value );
+    $input_value = sanitize_text_field( $input_value );
+  } elseif ( 'Element_Number' == $type && ! is_null( $input_value ) ) {
+   $input_value = intval( $input_value );
+  } elseif ( 'Element_Email' == $type && ! is_null( $input_value ) ) {
+   $input_value = sanitize_email( $input_value );
+  } elseif ( in_array( $type,  $has_options ) ) {//This should cover radio/checkbox & select
+   $input_value = absint( $input_value );
   }
   return $input_value;
  }
