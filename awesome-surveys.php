@@ -360,7 +360,7 @@ class Awesome_Surveys {
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $html = '<div id="survey-responses">' . "\n";
   foreach ( $surveys['surveys'] as $key => $survey ) {
-   $form = unserialize( $survey['form'] );
+   $form = json_decode( stripslashes( $survey['form'] ), true );
    $html .= "\t\t\t" . '<h5>' . stripslashes( $survey['name'] ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
    $html .= "\t\t\t\t" . '<ul><br>' . "\n";
    $html .= "\t\t\t\t" . '<li>' .  __( 'You can insert this survey with shortcode: ', $this->text_domain ) . '[wwm_survey id="' . $key . '"]</li>' . "\n";
@@ -745,7 +745,7 @@ class Awesome_Surveys {
  /**
   * Removes some unneeded bits and pieces from
   * the survey form prior to displaying for preview &
-  * prior to serializing the array of elements for storage in the db
+  * prior to json_encoding the array of elements for storage in the db
   * @param  array $form_elements_array an array of form elements
   * @return array $form_elements_array the filtered form elements
   * @since  1.0
@@ -779,7 +779,7 @@ class Awesome_Surveys {
   /**
    * This filter facilitates the modification of form elements
    * prior to the form being output to preview, and prior to the
-   * form elements being serialized for db storage. The intended use is
+   * form elements being json_encoded for db storage. The intended use is
    * to allow for elements to exist within the form builder that do not have
    * a purpose in the survey form. As an example, if an radio element were
    * added to the form builder to choose a type of advanced validation, and
@@ -891,7 +891,7 @@ class Awesome_Surveys {
   }
   $data = get_option( 'wwm_awesome_surveys', array() );
   $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
-  $form = serialize( $form_elements );
+  $form = json_encode( $form_elements );
   $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? sanitize_text_field( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
   $data['surveys'] = $surveys;
   update_option( 'wwm_awesome_surveys', $data );
