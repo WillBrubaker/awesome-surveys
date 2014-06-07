@@ -56,6 +56,12 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 * Surveys can be published in your blog posts or pages using a simple shortcode. After you have built a survey, its details are available in the plugin configuration screen under the 'Your Surveys' tab. The shortcode for each of your surveys is displayed there.
 
+= Is there a howto video? =
+
+* Yes!
+
+[youtube https://www.youtube.com/watch?v=szKsMoKI9tU]
+
 = How can I support the development of this plugin? =
 
 = The most obvious way is to =

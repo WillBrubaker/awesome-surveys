@@ -264,6 +264,7 @@ class Awesome_Surveys {
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
      <li><a href="#surveys"><?php _e( 'Your Survey Results', $this->text_domain ); ?></a></li>
+     <li><a href="#video"><?php _e( 'How To Video', $this->text_domain ); ?></a></li>
      <?php if ( isset( $_GET['debug'] ) ) : ?>
      <li><a href="#debug"><?php _e( 'Debug', $this->text_domain ); ?></a></li>
      <?php endif; ?>
@@ -326,6 +327,9 @@ class Awesome_Surveys {
      ?>
     </div>
     </div><!--#surveys-->
+    <div id="video">
+     <iframe width="420" height="315" src="//www.youtube.com/embed/szKsMoKI9tU" frameborder="0" allowfullscreen></iframe>
+    </div>
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
      <pre>
