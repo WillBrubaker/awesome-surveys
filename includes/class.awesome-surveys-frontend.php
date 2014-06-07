@@ -58,7 +58,7 @@ class Awesome_Surveys_Frontend {
     'name' => $surveys['surveys'][$atts['id']]['name'],
     'auth_method' => $auth_method,
    );
-   $output = $this->render_form( unserialize( $surveys['surveys'][$atts['id']]['form'] ), $args );
+   $output = $this->render_form( json_decode( stripslashes( $surveys['surveys'][$atts['id']]['form'] ), true ), $args );
   } else {
    /**
    * If the user fails the authentication method, the failure message can be customized via
@@ -176,7 +176,7 @@ class Awesome_Surveys_Frontend {
   }
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
   $survey['num_responses'] = $num_responses;
-  $form = unserialize( $survey['form'] );
+  $form = json_decode( stripslashes( $survey['form'] ), true );
   $responses = $survey['responses'];
 
   foreach ( $responses as $key => $response ) {
