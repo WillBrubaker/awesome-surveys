@@ -85,7 +85,6 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
   add_action( 'wp_ajax_get_survey_results', array( &$this, 'get_survey_results' ) );
-  add_action( 'wp_ajax_delete_surveys', array( &$this, 'delete_surveys' ) );
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
@@ -101,6 +100,8 @@ class Awesome_Surveys {
  * stuff to do on plugin initialization
  * @return none
  * @since 1.0
+ * @author Will the Web Mechanic <will@willthewebmechanic.com>
+ * @link http://willthewebmechanic.com
  */
  public function init_plugin()
  {
@@ -326,14 +327,7 @@ class Awesome_Surveys {
     </div>
     </div><!--#surveys-->
     <?php if ( isset( $_GET['debug'] ) ) : ?>
-    <div id="debug">
-     <button class="button-primary delete">Clear Surveys?</button>
      <pre>
-      <?php
-      $surveys = get_option( 'wwm_awesome_surveys', array() );
-      $survey = $surveys['surveys'][0];
-      var_dump( $surveys['surveys'][0] );
-      ?>
      </pre>
     </div><!--#debug-->
    <?php endif; ?>
@@ -346,6 +340,9 @@ class Awesome_Surveys {
   * Generates html output with survey results
   * @param  array $args an array of function arguments
   * @return string       html markup with survey results.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   */
  private function display_survey_results( $args = array() )
  {
@@ -407,6 +404,9 @@ class Awesome_Surveys {
  /**
   * Ajax handler for get_survey_results
   * @return string html string with survey results.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   */
  public function get_survey_results()
  {
@@ -642,7 +642,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * provides some additional, advanced validation elements for input type="number"
+  * Provides some additional, advanced validation elements for input type="number"
   * anything put inside the 'data' array will eventually be output as data-rule-*
   * attributes in the element shown on the survey. The intended use is for the jquery validation
   * plugin.
@@ -743,6 +743,9 @@ class Awesome_Surveys {
   * prior to serializing the array of elements for storage in the db
   * @param  array $form_elements_array an array of form elements
   * @return array $form_elements_array the filtered form elements
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
   */
  public function awesome_surveys_form_preview( $form_elements_array )
  {
@@ -905,15 +908,13 @@ class Awesome_Surveys {
   $frontend->process_response();
  }
 
- public function delete_surveys()
- {
-
-  if ( current_user_can( 'manage_options' ) ) {
-   delete_option( 'wwm_awesome_surveys' );
-  }
-  exit;
- }
-
+ /**
+  * outputs some links to the WtWM main admin plugin page.
+  * @param  int $plugin_links_version the plugin links version.
+  * @since 1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
+  */
  public function output_links( $plugin_links_version )
  {
 
@@ -935,6 +936,7 @@ class Awesome_Surveys {
          </ul>';
   }
  }
+
  /**
   * Adds a link on the plugins page. Nothing more than
   * shameless self-promotion, really.
