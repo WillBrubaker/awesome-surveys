@@ -327,6 +327,7 @@ class Awesome_Surveys {
     </div>
     </div><!--#surveys-->
     <?php if ( isset( $_GET['debug'] ) ) : ?>
+    <div id="debug">
      <pre>
      </pre>
     </div><!--#debug-->
