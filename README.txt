@@ -4,25 +4,26 @@ License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 3.9.1
 Stable tag: 1.0
-Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls
+Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
-Create & publish feature-rich surveys with a few mouse clicks. Works better than healthcare.gov!
+Create & publish feature-rich surveys with a few mouse clicks. All data collected remains in your control. Works better than healthcare.gov!
 
 == Description ==
 
-This plugin allows you to create surveys with an easy-to-use form builder and to view survey results in the admin backend. Automatic form validation is included.
+This plugin allows you to create surveys with an easy-to-use form builder, publish surveys with a simple shortcode and view survey results in the admin backend. You maintain control of your data. Automatic form validation is included.
 
 = Features =
 
-1. Allows the creation of any number of surveys to collect data from visitors to your site.
-2. Build your survey forms with the powerful built-in form builder.
-3. Optionally require login or cookie authentication in order for a user to take the survey.
-4. Publish your surveys on pages or posts by including a shortcode.
-5. Advanced form field validation is included.
-6. View results of your surveys in the admin area of your WordPress site.
-7. Contextual help available for many of the survey builder options
-8. Extendable through action/filter hooks.
+1. **You maintain ownership of your data** - does not rely on third-party services.
+2. Allows the creation of any number of surveys to collect data from visitors to your site.
+3. Build your survey forms with the powerful built-in form builder.
+4. Optionally require login or cookie authentication in order for a user to take the survey.
+5. Publish your surveys on pages or posts by including a shortcode.
+6. Advanced form field validation is included.
+7. View results of your surveys in the admin area of your WordPress site.
+8. Contextual help available for many of the survey builder options
+9. Extendable through action/filter hooks.
 
 == Installation ==
 
@@ -60,7 +61,7 @@ This plugin allows you to create surveys with an easy-to-use form builder and to
 
 * Yes!
 
-[youtube https://www.youtube.com/watch?v=szKsMoKI9tU]
+[youtube https://www.youtube.com/watch?v=YIta2rDE-QU]
 
 = How can I support the development of this plugin? =
 
