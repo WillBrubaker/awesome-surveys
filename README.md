@@ -6,7 +6,7 @@
 **Requires at least:** 3.9.1
 **Tested up to:** 3.9.1
 **Stable tag:** 1.0
-**Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls
+**Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
 Create & publish feature-rich surveys with a few mouse clicks. All data collected remains in your control. Works better than healthcare.gov!
@@ -64,7 +64,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 *	Yes!
 
-[![Awesome Surveys Howto Video](http://img.youtube.com/vi/szKsMoKI9tU/0.jpg)](http://www.youtube.com/watch?v=szKsMoKI9tU)
+[![Awesome Surveys Howto Video](http://img.youtube.com/vi/YIta2rDE-QU/0.jpg)](http://www.youtube.com/watch?v=szKsMoKI9tU)
 
 
 ### How can I support the development of this plugin? ###

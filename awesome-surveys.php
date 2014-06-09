@@ -328,7 +328,7 @@ class Awesome_Surveys {
     </div>
     </div><!--#surveys-->
     <div id="video">
-     <iframe width="420" height="315" src="//www.youtube.com/embed/szKsMoKI9tU" frameborder="0" allowfullscreen></iframe>
+     <iframe width="420" height="315" src="//www.youtube.com/embed/YIta2rDE-QU" frameborder="0" allowfullscreen></iframe>
     </div>
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
