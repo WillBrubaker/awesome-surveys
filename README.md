@@ -64,7 +64,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 *	Yes!
 
-[![Awesome Surveys Howto Video](http://img.youtube.com/vi/YIta2rDE-QU/0.jpg)](http://www.youtube.com/watch?v=szKsMoKI9tU)
+[![Awesome Surveys Howto Video](http://img.youtube.com/vi/YIta2rDE-QU/0.jpg)](http://www.youtube.com/watch?v=YIta2rDE-QU)
 
 
 ### How can I support the development of this plugin? ###
