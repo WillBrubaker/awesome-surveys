@@ -2,8 +2,6 @@ form.answer-survey {
   position: relative;
   width: 100%;
   float: left;
-  border: 1px solid #AAA;
-  border-radius: 4px;
   padding: 1em;
   margin: 1em 0; }
   form.answer-survey textarea {
@@ -31,3 +29,6 @@ form.answer-survey {
       margin-top: -20px;
       margin-left: -20px;
       background: url("../images/maintenance.gif") no-repeat center; }
+
+.control-group {
+  margin: 1.5em 0; }

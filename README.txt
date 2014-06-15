@@ -89,8 +89,16 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
+= v1.0.1 =
+1. minor frontend styling changes
+
 = v1.0 =
 1. Initial Public Release
+
+== Upgrade Notice ==
+
+= v1.0.1 =
+* This update does very little other than change some styling. If you're happy with the way survey forms appear, there is no need to update at this time.
 
 == Additional Information ==
 
