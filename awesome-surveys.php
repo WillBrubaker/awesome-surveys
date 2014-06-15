@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description:
-Version: 1.0
+Version: 1.0.1
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -42,7 +42,7 @@ class Awesome_Surveys {
 
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
-  'dbversion' => '1.0',
+  'dbversion' => '1.0.1',
   'version' => '1.0',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
@@ -197,6 +197,7 @@ class Awesome_Surveys {
  public function wwm_plugin_links()
  {
 
+  $wwm_plugin_links = array();
   $wwm_plugin_links = apply_filters( 'wwm_plugin_links', $wwm_plugin_links );
   //set a version here so that everything can be overwritten by future plugins.
   //and pass it via the do_action calls

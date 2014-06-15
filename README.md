@@ -103,6 +103,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.0.1 ###
+1. minor frontend styling changes
+
 ### v1.0 ###
 1. Initial Public Release
 
