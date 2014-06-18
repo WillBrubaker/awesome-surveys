@@ -41,6 +41,7 @@ class Awesome_Surveys_Frontend {
   if ( ! isset( $atts['id'] ) ) {
    return;
   }
+  $atts['id'] = absint( $atts['id'] );
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
    return;
@@ -58,7 +59,7 @@ class Awesome_Surveys_Frontend {
     'name' => $surveys['surveys'][$atts['id']]['name'],
     'auth_method' => $auth_method,
    );
-   $output = $this->render_form( json_decode( stripslashes( $surveys['surveys'][$atts['id']]['form'] ), true ), $args );
+   $output = $this->render_form( json_decode( $surveys['surveys'][$atts['id']]['form'], true ), $args );
   } else {
    /**
    * If the user fails the authentication method, the failure message can be customized via
@@ -81,7 +82,7 @@ class Awesome_Surveys_Frontend {
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
- private function render_form( $form, $args )
+ private function render_form( $form = array(), $args = array() )
  {
 
   if ( ! class_exists( 'Form' ) ) {
@@ -103,7 +104,9 @@ class Awesome_Surveys_Frontend {
    }
    if ( isset( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
-     $rules['data-rule-' . $key] = $value;
+     if ( '' != $value ) {
+      $rules['data-rule-' . $key] = $value;
+     }
     }
    }
    if ( in_array( $method, $has_options ) ) {

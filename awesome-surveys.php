@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description:
-Version: 1.0.1
+Version: 1.0.2
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -42,7 +42,7 @@ class Awesome_Surveys {
 
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
-  'dbversion' => '1.0.1',
+  'dbversion' => '1.0.2',
   'version' => '1.0',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
@@ -334,6 +334,21 @@ class Awesome_Surveys {
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
      <pre>
+      <?php
+      if ( isset( $_GET['survey_id'] ) ) {
+       var_dump( $_GET['survey_id'] );
+       $surveys = get_option( 'wwm_awesome_surveys', array() );
+       print_r( $surveys['surveys'][$_GET['survey_id']] );
+       echo '<p><h4>Form:</h4></p>';
+       print_r( json_decode( $surveys['surveys'][$_GET['survey_id']]['form'], true ) );
+      } else {
+       $arr = array( 'key_zero' => 'this is a string', 'key_one' => 'this is another string' );
+       print_r( $arr );
+       echo '<br>';
+       print_r( json_encode( $arr, true ) );
+       echo '<br>php version: ' . phpversion() . '<br>json version: ' . phpversion( 'json' );
+      }
+      ?>
      </pre>
     </div><!--#debug-->
    <?php endif; ?>
@@ -759,7 +774,7 @@ class Awesome_Surveys {
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
    foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
-    if ( is_null( $value ) ) {
+    if ( is_null( $value ) || '' == $value ) {
      unset( $form_elements_array['validation']['rules'][$key] );
     }
    }
@@ -806,7 +821,9 @@ class Awesome_Surveys {
    $options = $atts = $rules = array();
    if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
     foreach ( $element['validation']['rules'] as $key => $value ) {
-     $rules['data-' . $key] = $value;
+     if ( '' != $value && ! is_null( $value ) ) {
+      $rules['data-' . $key] = $value;
+     }
     }
    }
    if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
@@ -821,7 +838,6 @@ class Awesome_Surveys {
     } else {
      $atts['required'] = 1;
      $atts['class'] = 'required';
-     $atts['data-debug'] = 'debug';
     }
    }
    $max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
@@ -938,7 +954,7 @@ class Awesome_Surveys {
             <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="Donate" width="1" height="1" border="0" />
            </form>
           </li>
-          <li><a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">' . __( 'Donate Bitcoins', $this->text_domain ) . '</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script></li>
+          <li><a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">' . __( 'Donate Bitcoins', $this->text_domain ) . '</a><script async src="https://coinbase.com/assets/button.js" type="text/javascript"></script></li>
          </ul>';
   }
  }
