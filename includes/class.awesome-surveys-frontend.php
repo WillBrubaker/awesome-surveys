@@ -81,7 +81,7 @@ class Awesome_Surveys_Frontend {
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
- private function render_form( $form, $args )
+ private function render_form( $form = array(), $args = array() )
  {
 
   if ( ! class_exists( 'Form' ) ) {

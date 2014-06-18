@@ -334,6 +334,20 @@ class Awesome_Surveys {
     <?php if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
      <pre>
+      <?php
+      if ( isset( $_GET['survey_id'] ) ) {
+       $surveys = get_option( 'wwm_awesome_surveys', array() );
+       print_r( $surveys['surveys'][$_GET['survey_id']] );
+       echo '<p><h4>Form:</h4></p>';
+       print_r( json_decode( $surveys['surveys'][$_GET['survey_id']]['form'], true ) );
+      } else {
+       $arr = array( 'key_zero' => 'this is a string', 'key_one' => 'this is another string' );
+       print_r( $arr );
+       echo '<br>';
+       print_r( json_encode( $arr, true ) );
+       echo '<br>php version: ' . phpversion() . '<br>json version: ' . phpversion( 'json' );
+      }
+      ?>
      </pre>
     </div><!--#debug-->
    <?php endif; ?>
