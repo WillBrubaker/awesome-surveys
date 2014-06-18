@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 3.9.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -89,6 +89,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
+= v1.0.2 =
+1. Bug fix on frontend output.
+2. Bug fix for bad 'maxlength' validation values on text boxes and textareas.
+3. This bug fix wouldn't have been possible without your bug reports. The users of this plugin ROCK!
+4. Even with the bugs, it worked better than healthcare.gov
+
 = v1.0.1 =
 1. minor frontend styling changes
 
@@ -96,9 +102,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 1. Initial Public Release
 
 == Upgrade Notice ==
-
-= v1.0.1 =
-* This update does very little other than change some styling. If you're happy with the way survey forms appear, there is no need to update at this time.
+v1.0.2 fixes a couple of bugs. If you have been experiencing PHP Warnings where the shortcode was or if you've been having problems with text boxes/textareas, this update fixes those things.
 
 == Additional Information ==
 

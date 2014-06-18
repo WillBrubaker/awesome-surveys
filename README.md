@@ -103,6 +103,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.0.2 ###
+1. Bug fix on frontend output.
+2. Bug fix for bad 'maxlength' validation values on text boxes and textareas.
+3. This bug fix wouldn't have been possible without your bug reports. The users of this plugin ROCK!
+4. Even with the bugs, it worked better than healthcare.gov
+
 ### v1.0.1 ###
 1. minor frontend styling changes
 
