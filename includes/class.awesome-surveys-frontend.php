@@ -170,11 +170,15 @@ class Awesome_Surveys_Frontend {
  {
 
   if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
+   $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (verification) at ' . date( 'Y-m-d H:i:s' ) );
+   wp_send_json_error( $data );
    exit;
   }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $survey = $surveys['surveys'][$_POST['survey_id']];
   if ( empty( $survey ) ) {
+   $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
+   wp_send_json_error( $data );
    exit;
   }
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
