@@ -89,6 +89,10 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
+= v1.0.3 =
+1. Addresses the report of the "spinner" failing to go away in certain instances when the survey form is submitted
+2. Attempts to provide something resembling useful feedback if the survey submission AJAX request fails
+
 = v1.0.2 =
 1. Bug fix on frontend output.
 2. Bug fix for bad 'maxlength' validation values on text boxes and textareas.
