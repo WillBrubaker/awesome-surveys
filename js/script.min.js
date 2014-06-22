@@ -6,7 +6,9 @@ jQuery(document).ready(function($) {
       $(this).prop('required', true);
     });
   });
+
   $('form.answer-survey input[type="submit"]').prop('disabled', false);
+
   $('form.answer-survey').validate({
     errorPlacement: function(error, element) {
       var scope = element.closest($('.control-group'));
@@ -17,9 +19,17 @@ jQuery(document).ready(function($) {
       var overlay = $('.overlay', form);
       overlay.show();
       $.post(wwm_awesome_surveys.ajaxurl, $(form).serializeArray(), function(data) {
-        $(form).empty().append('<p>' + data.data.thank_you + '</p>');
+        if ( null == data ) {
+          $(form).empty().append('<p class="error">An unknown error occured (data object is null)</p>');
+          return null;
+        }
+        msg = ('undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' + data.data + '</span>';
+        $(form).empty().append('<p>' + msg + '</p>');
+      }, 'json').fail(function(xhr) {
+        $(form).empty().append('<p class="error">There was an error. The error status code is: ' + xhr.status + ' The error message is: ' + xhr.statusText + '</p>');
+      }).always(function() {
         overlay.hide();
-      }, 'json');
+      });
     }
   });
 });
