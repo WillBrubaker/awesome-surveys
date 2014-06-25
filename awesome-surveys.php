@@ -86,6 +86,8 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_generate_preview', array( &$this, 'generate_preview' ) );
   add_action( 'wp_ajax_get_survey_results', array( &$this, 'get_survey_results' ) );
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
+  add_action( 'wp_ajax_wwm_delete_survey', array( &$this, 'delete_survey' ) );
+  add_action( 'wp_ajax_wwm_edit_question', array( &$this, 'edit_question' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
@@ -138,7 +140,7 @@ class Awesome_Surveys {
   if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 0 ) {
    wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
    wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
-   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', ), self::$wwm_plugin_values['version'] );
+   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', ), self::$wwm_plugin_values['version'] );
    wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
    wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
   }
@@ -376,42 +378,61 @@ class Awesome_Surveys {
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $html = '<div id="survey-responses">' . "\n";
   foreach ( $surveys['surveys'] as $key => $survey ) {
-   $form = json_decode( stripslashes( $survey['form'] ), true );
-   $html .= "\t\t\t" . '<h5>' . stripslashes( $survey['name'] ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
-   $html .= "\t\t\t\t" . '<ul><br>' . "\n";
-   $html .= "\t\t\t\t" . '<li>' .  __( 'You can insert this survey with shortcode: ', $this->text_domain ) . '[wwm_survey id="' . $key . '"]</li>' . "\n";
-   $html .= "\t\t\t\t" . '<li>' . sprintf( __( 'This survey has received %d responses', $this->text_domain ), ( isset( $survey['num_responses'] ) ) ? intval( $survey['num_responses'] + 1)  : 0 ) . '</li>' . "\n";
-   $html .= "\t\t\t\t" . '</ul>' . "\n";
-   $html .= "\n\t\t\t" . '<div class="answers">' . "\n";
-    foreach ( $survey['responses'] as $response_key => $response ) {
-     if ( $response['has_options'] ) {
-      $html .= "\n\t\t\t\t" . '<div class="question-container ui-widget-content ui-corner-all"><span class="question">' . stripslashes( $response['question'] ) . '</span>' . "\n";
-      foreach ( $response['answers'] as $answer_key => $arr ) {
-       $num_answers = count( $response['answers'] );
-       $ttl_count = count( $response['answers'], COUNT_RECURSIVE );
-       $ttl_responses = $ttl_count - $num_answers;
-       $this_answer = count( $arr );
-       $percent = ( $ttl_responses > 0 ) ? sprintf( '%.1f', ( $this_answer / $ttl_responses ) * 100 ) : 0;
-       $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . stripslashes( $form[$response_key]['label'][$answer_key] ) . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div><!--.options-container-->' . "\n";
+   if ( ! empty( $surveys['surveys'][$key] ) ) {
+    $form = json_decode( stripslashes( $survey['form'] ), true );
+    $html .= "\t\t\t" . '<h5>' . stripslashes( $survey['name'] ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+    $html .= "\t\t\t" . '<form class="delete-survey" method="post" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
+    $html .= "\t\t\t\t" . '<input type="hidden" name="action" value="wwm_delete_survey">' . "\n";
+    $html .= "\t\t\t\t" . '<input type="hidden" name="survey_id" value="' . intval( $key ) . '">' . "\n";
+    $html .= "\t\t\t\t" . wp_nonce_field( 'delete-survey_' . $key, 'delete_survey', false, false );
+    $html .= "\t\t\t\t" . '<input type="submit" value="' . __( 'Delete', $this->text_domain ) . '" class="button-secondary">' . "\n";
+    $html .= "\t\t\t" . '</form>' . "\n";
+    $html .= "\t\t\t\t" . '<ul><br>' . "\n";
+    $html .= "\t\t\t\t" . '<li>' .  __( 'You can insert this survey with shortcode: ', $this->text_domain ) . '[wwm_survey id="' . $key . '"]</li>' . "\n";
+    $html .= "\t\t\t\t" . '<li>' . sprintf( __( 'This survey has received %d responses', $this->text_domain ), ( isset( $survey['num_responses'] ) ) ? intval( $survey['num_responses'] + 1)  : 0 ) . '</li>' . "\n";
+    $html .= "\t\t\t\t" . '</ul>' . "\n";
+    $html .= "\n\t\t\t" . '<div class="answers">' . "\n";
+     foreach ( $survey['responses'] as $response_key => $response ) {
+      $question_edit_nonce = wp_create_nonce( 'edit-question_' . $key . '_' . $response_key );
+      $question_html = '<a class="edit-question" data-question_id="' . $response_key . '" data-survey_id="' . $key . '" data-nonce="' . $question_edit_nonce . '" href="#">' . sanitize_text_field( stripslashes( $response['question'] ) ) . '</a>';
+      if ( $response['has_options'] ) {
+       $html .= "\n\t\t\t\t" . '<div class="question-container ui-widget-content ui-corner-all"><span class="question">' . $question_html . '</span>' . "\n";
+       foreach ( $response['answers'] as $answer_key => $arr ) {
+        $num_answers = count( $response['answers'] );
+        $ttl_count = count( $response['answers'], COUNT_RECURSIVE );
+        $ttl_responses = $ttl_count - $num_answers;
+        $this_answer = count( $arr );
+        $percent = ( $ttl_responses > 0 ) ? sprintf( '%.1f', ( $this_answer / $ttl_responses ) * 100 ) : 0;
+        $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . stripslashes( $form[$response_key]['label'][$answer_key] ) . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div><!--.options-container-->' . "\n";
+       }
+       $html .= '</div><!--.question-container-->';
+      } else {
+       $html .= "\n\t\t\t\t" . '<div class="answer-accordion">' . "\n";
+       $html .= "\t\t\t\t\t" . '<h4 class="answers">' . $question_html . '</h4>' . "\n";
+       $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
+       foreach ( $response['answers'] as $answer ) {
+        $html .= "\t\t\t\t\t\t\t" . '<p>' . "\n";
+        $html .= "\t\t\t\t\t\t\t" . stripslashes( $answer ) . "\n";
+        $html .= "\t\t\t\t\t\t\t" . '</p>' . "\n";
+       }
+       $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
+       $html .= "\t\t\t\t" . '</div><!--.accordion-->';
       }
-      $html .= '</div><!--.question-container-->';
-     } else {
-      $html .= "\n\t\t\t\t" . '<div class="answer-accordion">' . "\n";
-      $html .= "\t\t\t\t\t" . '<h4 class="answers">' . stripslashes( $response['question'] ) . '</h4>' . "\n";
-      $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
-      foreach ( $response['answers'] as $answer ) {
-       $html .= "\t\t\t\t\t\t\t" . '<p>' . "\n";
-       $html .= "\t\t\t\t\t\t\t" . stripslashes( $answer ) . "\n";
-       $html .= "\t\t\t\t\t\t\t" . '</p>' . "\n";
-      }
-      $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
-      $html .= "\t\t\t\t" . '</div><!--.accordion-->';
      }
-    }
-   $html .= "\n\t\t\t" . '</div><!--.answers-->' . "\n";
-   $html .= "\n\t\t" . '</div><!--.survey-->' . "\n";
+    $html .= "\n\t\t\t" . '</div><!--.answers-->' . "\n";
+    $html .= "\n\t\t" . '</div><!--.survey-->' . "\n";
+   }
   }
   $html .= '</div><!--#survey-responses-->' . "\n";
+  $html .= '<div id="dialog">
+             <form id="edit-question" method="post" action="' . $_SERVER['PHP_SELF'] . '">
+              <input type="text" name="question" value="">
+              <input type="hidden" name="question_id" value="">
+              <input type="hidden" name="survey_id" value="">
+              <input type="hidden" name="_nonce" value="">
+              <input type="hidden" name="action" value="wwm_edit_question">
+             </form>
+            </div><!--#dialog-->';
 
   if ( $args['ajax'] ) {
    echo $html;
@@ -913,6 +934,46 @@ class Awesome_Surveys {
   $data['surveys'] = $surveys;
   update_option( 'wwm_awesome_surveys', $data );
   exit;
+ }
+
+ public function edit_question()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-question_' . $_POST['survey_id'] . '_' . $_POST['question_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   die();
+  }
+  $updated = false;
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  if ( isset( $surveys['surveys'][$_POST['survey_id']] ) ) {
+   $survey = $surveys['surveys'][$_POST['survey_id']];
+   $form = json_decode( $survey['form'], true );
+   $question = sanitize_text_field( $_POST['question'] );
+   $form[$_POST['question_id']]['name'] = $question;
+   $survey['form'] = json_encode( $form );
+   $survey['responses'][$_POST['question_id']]['question'] = $question;
+   $surveys['surveys'][$_POST['survey_id']] = $survey;
+   $updated = update_option( 'wwm_awesome_surveys', $surveys );
+  }
+
+  if ( $updated ) {
+   wp_send_json_success();
+  } else {
+   wp_send_json_error();
+  }
+
+  echo json_encode( $_POST );
+  exit;
+ }
+
+ public function delete_survey()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['delete_survey'], 'delete-survey_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   die();
+  }
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $surveys['surveys'][$_POST['survey_id']] = array();
+  update_option( 'wwm_awesome_surveys', $surveys );
  }
 
  /**

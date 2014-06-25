@@ -130,3 +130,6 @@ div.answers {
 .answer-accordion {
   float: left;
   width: 100%; }
+
+#dialog {
+  display: none; }
