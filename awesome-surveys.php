@@ -394,22 +394,26 @@ class Awesome_Surveys {
     $html .= "\n\t\t\t" . '<div class="answers">' . "\n";
      foreach ( $survey['responses'] as $response_key => $response ) {
       $question_edit_nonce = wp_create_nonce( 'edit-question_' . $key . '_' . $response_key );
-      $question_html = '<a class="edit-question" data-question_id="' . $response_key . '" data-survey_id="' . $key . '" data-nonce="' . $question_edit_nonce . '" href="#">' . sanitize_text_field( stripslashes( $response['question'] ) ) . '</a>';
+      $question_edit_link = '<a title="' . __( 'edit this question', $this->text_domain ) . '" class="edit-question" data-question_id="' . $response_key . '" data-survey_id="' . $key . '" data-nonce="' . $question_edit_nonce . '" href="#">' . sanitize_text_field( stripslashes( $response['question'] ) ) . '</a> (' . __( 'click to edit', $this->text_domain ) . ')';
       if ( $response['has_options'] ) {
-       $html .= "\n\t\t\t\t" . '<div class="question-container ui-widget-content ui-corner-all"><span class="question">' . $question_html . '</span>' . "\n";
+       $html .= "\n\t\t\t\t" . '<div class="question-container ui-widget-content ui-corner-all"><span class="question">' . $question_edit_link . '</span>' . "\n";
        foreach ( $response['answers'] as $answer_key => $arr ) {
         $num_answers = count( $response['answers'] );
         $ttl_count = count( $response['answers'], COUNT_RECURSIVE );
         $ttl_responses = $ttl_count - $num_answers;
         $this_answer = count( $arr );
         $percent = ( $ttl_responses > 0 ) ? sprintf( '%.1f', ( $this_answer / $ttl_responses ) * 100 ) : 0;
-        $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . stripslashes( $form[$response_key]['label'][$answer_key] ) . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div><!--.options-container-->' . "\n";
+        $edit_answer_nonce = wp_create_nonce( 'edit-answer_' . $response_key . '_' . $answer_key );
+        $edit_answer_text = stripslashes( $form[$response_key]['label'][$answer_key] );
+        $edit_answer_link = '<a href="#" class="edit-answer-option" data-survey_id="' . $key . '" data-question_id="' . $response_key . '" data-answer_id="' . $answer_key . '" data-nonce="' . $nonce . '">' . $edit_answer_text . '</a>';
+        $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . $edit_answer_link . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div><!--.options-container-->' . "\n";
        }
        $html .= '</div><!--.question-container-->';
       } else {
        $html .= "\n\t\t\t\t" . '<div class="answer-accordion">' . "\n";
-       $html .= "\t\t\t\t\t" . '<h4 class="answers">' . $question_html . '</h4>' . "\n";
+       $html .= "\t\t\t\t\t" . '<h4 class="answers">' . sanitize_text_field( stripslashes( $response['question'] ) ) . '</h4>' . "\n";
        $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
+       $html .= "\t\t\t\t\t\t" . $question_edit_link . "\n";
        foreach ( $response['answers'] as $answer ) {
         $html .= "\t\t\t\t\t\t\t" . '<p>' . "\n";
         $html .= "\t\t\t\t\t\t\t" . stripslashes( $answer ) . "\n";
@@ -427,12 +431,22 @@ class Awesome_Surveys {
   $html .= '<div id="dialog">
              <form id="edit-question" method="post" action="' . $_SERVER['PHP_SELF'] . '">
               <input type="text" name="question" value="">
-              <input type="hidden" name="question_id" value="">
+              <input type="hidden" name="question_id" value="" required>
               <input type="hidden" name="survey_id" value="">
               <input type="hidden" name="_nonce" value="">
               <input type="hidden" name="action" value="wwm_edit_question">
              </form>
             </div><!--#dialog-->';
+  $html .= '<div id="answer-dialog">
+             <form id="edit-answer" method="post" action="' . $_SERVER['PHP_SELF'] . '">
+              <input type="text" name="answer" value="">
+              <input type="hidden" name="question_id" value="" required>
+              <input type="hidden" name="answer_id" value="">
+              <input type="hidden" name="survey_id" value="">
+              <input type="hidden" name="_nonce" value="">
+              <input type="hidden" name="action" value="wwm_edit_answer">
+             </form>
+            </div><!--#answer-dialog-->';
 
   if ( $args['ajax'] ) {
    echo $html;
