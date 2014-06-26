@@ -536,6 +536,11 @@ class Awesome_Surveys {
    exit;
   }
   $data = get_option( 'wwm_awesome_surveys', array() );
+  foreach ( $data['surveys'] as $key => $survey ) {
+   if ( empty( $survey ) ) {
+    unset( $data['surveys'][$key] );
+   }
+  }
   if ( isset( $data['surveys'] ) && ! empty( $data['surveys'] ) ) {
    $names = wp_list_pluck( $data['surveys'], 'name' );
    if ( in_array( $_POST['survey_name'], $names ) ) {
