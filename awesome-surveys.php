@@ -88,6 +88,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_save_survey', array( &$this, 'save_survey' ) );
   add_action( 'wp_ajax_wwm_delete_survey', array( &$this, 'delete_survey' ) );
   add_action( 'wp_ajax_wwm_edit_question', array( &$this, 'edit_question' ) );
+  add_action( 'wp_ajax_wwm_edit_answer', array( &$this, 'edit_answer' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
@@ -405,7 +406,7 @@ class Awesome_Surveys {
         $percent = ( $ttl_responses > 0 ) ? sprintf( '%.1f', ( $this_answer / $ttl_responses ) * 100 ) : 0;
         $edit_answer_nonce = wp_create_nonce( 'edit-answer_' . $response_key . '_' . $answer_key );
         $edit_answer_text = stripslashes( $form[$response_key]['label'][$answer_key] );
-        $edit_answer_link = '<a href="#" class="edit-answer-option" data-survey_id="' . $key . '" data-question_id="' . $response_key . '" data-answer_id="' . $answer_key . '" data-nonce="' . $nonce . '">' . $edit_answer_text . '</a>';
+        $edit_answer_link = '<a href="#" class="edit-answer-option" data-survey_id="' . $key . '" data-question_id="' . $response_key . '" data-answer_id="' . $answer_key . '" data-nonce="' . $edit_answer_nonce . '">' . $edit_answer_text . '</a>';
         $html .= "\t\t\t\t" . '<div class="options-container"><span class="options" style="width: ' . $percent . '%;"></span><div class="data">' . $edit_answer_link . ' ' . $percent . '% (' . $this_answer . ' of ' . $ttl_responses . ')</div></div><!--.options-container-->' . "\n";
        }
        $html .= '</div><!--.question-container-->';
@@ -428,18 +429,18 @@ class Awesome_Surveys {
    }
   }
   $html .= '</div><!--#survey-responses-->' . "\n";
-  $html .= '<div id="dialog">
+  $html .= '<div id="question-dialog">
              <form id="edit-question" method="post" action="' . $_SERVER['PHP_SELF'] . '">
-              <input type="text" name="question" value="">
-              <input type="hidden" name="question_id" value="" required>
+              <input type="text" name="question" value="" required>
+              <input type="hidden" name="question_id" value="">
               <input type="hidden" name="survey_id" value="">
               <input type="hidden" name="_nonce" value="">
               <input type="hidden" name="action" value="wwm_edit_question">
              </form>
-            </div><!--#dialog-->';
+            </div><!--#question-dialog-->';
   $html .= '<div id="answer-dialog">
              <form id="edit-answer" method="post" action="' . $_SERVER['PHP_SELF'] . '">
-              <input type="text" name="answer" value="">
+              <input type="text" name="answer" value="" required>
               <input type="hidden" name="question_id" value="" required>
               <input type="hidden" name="answer_id" value="">
               <input type="hidden" name="survey_id" value="">
@@ -956,6 +957,7 @@ class Awesome_Surveys {
   if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-question_' . $_POST['survey_id'] . '_' . $_POST['question_id'] ) || ! current_user_can( 'manage_options' ) ) {
    die();
   }
+
   $updated = false;
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( isset( $surveys['surveys'][$_POST['survey_id']] ) ) {
@@ -974,8 +976,32 @@ class Awesome_Surveys {
   } else {
    wp_send_json_error();
   }
+  exit;
+ }
 
-  echo json_encode( $_POST );
+ public function edit_answer()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-answer_' . $_POST['question_id'] . '_' . $_POST['answer_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   die();
+  }
+  $updated = false;
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  if ( isset( $surveys['surveys'][$_POST['survey_id']] ) ) {
+   $survey = $surveys['surveys'][$_POST['survey_id']];
+   $form = json_decode( $survey['form'], true );
+   $answer = sanitize_text_field( $_POST['answer'] );
+   $form[$_POST['question_id']]['label'][$_POST['answer_id']] = $answer;
+   $survey['form'] = json_encode( $form );
+   $surveys['surveys'][$_POST['survey_id']] = $survey;
+   $updated = update_option( 'wwm_awesome_surveys', $surveys );
+  }
+
+  if ( $updated ) {
+   wp_send_json_success();
+  } else {
+   wp_send_json_error();
+  }
   exit;
  }
 
@@ -985,9 +1011,16 @@ class Awesome_Surveys {
   if ( ! wp_verify_nonce( $_POST['delete_survey'], 'delete-survey_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
    die();
   }
+  $updated = false;
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $surveys['surveys'][$_POST['survey_id']] = array();
-  update_option( 'wwm_awesome_surveys', $surveys );
+  $updated = update_option( 'wwm_awesome_surveys', $surveys );
+  if ( $updated ) {
+   wp_send_json_success();
+  } else {
+   wp_send_json_error();
+  }
+  exit;
  }
 
  /**

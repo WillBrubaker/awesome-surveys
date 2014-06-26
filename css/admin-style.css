@@ -131,5 +131,8 @@ div.answers {
   float: left;
   width: 100%; }
 
-#dialog, #answer-dialog {
+#question-dialog, #answer-dialog {
   display: none; }
+
+#edit-answer input[type="text"], #edit-question input[type="text"] {
+  width: 90%; }

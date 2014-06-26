@@ -167,6 +167,12 @@ div.answers {
  width: 100%;
 }
 
-#dialog, #answer-dialog {
+#question-dialog, #answer-dialog {
  display: none;
+}
+
+#edit-answer, #edit-question {
+ input[type="text"] {
+  width: 90%;
+ }
 }
