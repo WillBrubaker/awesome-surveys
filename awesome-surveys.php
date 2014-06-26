@@ -459,7 +459,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler for get_survey_results
+  * AJAX handler for get_survey_results
   * @return string html string with survey results.
   * @since  1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
@@ -523,7 +523,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler to output a 'type' selector to the survey form builder
+  * AJAX handler to output a 'type' selector to the survey form builder
   * @since 1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
@@ -586,7 +586,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler which will output
+  * AJAX handler which will output
   * some form elements so that information can be gathered
   * about the element that a user is adding to their survey
   * @since 1.0
@@ -773,7 +773,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler to generate some fields
+  * AJAX handler to generate some fields
   * for survey option inputs
   * @since 1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
@@ -824,7 +824,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler to generate the form preview
+  * AJAX handler to generate the form preview
   * @since 1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
@@ -892,7 +892,7 @@ class Awesome_Surveys {
    $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
    $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $atts ) );
   }
-  $preview_form = $form->render(true);
+  $preview_form = $form->render( true );
   $form = new FormOverrides( 'save-survey' );
   $form->configure( array( 'class' => 'save' ) );
   $auth_messages = array( 'none' => __( 'None', $this->text_domain ), 'cookie' => __( 'Cookie Based', $this->text_domain ), 'login' => __( 'User must be logged in', $this->text_domain ) );
@@ -914,7 +914,7 @@ class Awesome_Surveys {
  }
 
  /**
-  * Ajax handler to save the survey form details to the db.
+  * AJAX handler to save the survey form details to the db.
   * @since 1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
@@ -956,6 +956,11 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for question editing
+  * @since 1.1
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  */
  public function edit_question()
  {
 
@@ -984,6 +989,11 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for answer editing
+  * @since 1.1
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  */
  public function edit_answer()
  {
 
@@ -1010,6 +1020,11 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for survey removal
+  * @since 1.1
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  */
  public function delete_survey()
  {
 
@@ -1031,7 +1046,7 @@ class Awesome_Surveys {
  /**
   * Alias for Awesome_Surveys_Frontend::process_response
   * Here because of the way wp_ajax_$action works
-  *
+  * @since  1.0
   */
  public function process_response()
  {
