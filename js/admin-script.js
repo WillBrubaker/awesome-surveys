@@ -221,6 +221,18 @@ jQuery(document).ready(function($) {
       });
     }
   });
+
+  $('#styling-options').on('submit', function(e) {
+    e.preventDefault();
+    overlay = $('.overlay', $(this));
+    overlay.show();
+    $.post(ajaxurl, $(this).serializeArray(), function(data) {
+    }).fail(function(xhr) {
+      alert( 'error code: ' + xhr.status + ' error message ' + xhr.statusText );
+    }).always(function() {
+      overlay.hide();
+    });
+  })
   attachDialog($);
 });
 

@@ -89,6 +89,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_delete_survey', array( &$this, 'delete_survey' ) );
   add_action( 'wp_ajax_wwm_edit_question', array( &$this, 'edit_question' ) );
   add_action( 'wp_ajax_wwm_edit_answer', array( &$this, 'edit_answer' ) );
+  add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
@@ -267,6 +268,7 @@ class Awesome_Surveys {
    <div id="tabs">
     <ul>
      <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
+     <li><a href="#styles"><?php _e( 'Survey Styling Options', $this->text_domain ); ?></a></li>
      <li><a href="#surveys"><?php _e( 'Your Survey Results', $this->text_domain ); ?></a></li>
      <li><a href="#video"><?php _e( 'How To Video', $this->text_domain ); ?></a></li>
      <?php if ( isset( $_GET['debug'] ) ) : ?>
@@ -320,6 +322,9 @@ class Awesome_Surveys {
      </div><!--#preview-->
      <div class="clear"></div>
     </div><!--#create-->
+    <div id="styles">
+     <?php $this->styling_options(); ?>
+    </div>
     <div id="surveys">
      <div class="your-surveys">
      <h4><?php _e( 'Your Surveys', $this->text_domain ); ?></h4>
@@ -338,9 +343,9 @@ class Awesome_Surveys {
     <div id="debug">
      <pre>
       <?php
+      $surveys = get_option( 'wwm_awesome_surveys', array() );
       if ( isset( $_GET['survey_id'] ) ) {
        var_dump( $_GET['survey_id'] );
-       $surveys = get_option( 'wwm_awesome_surveys', array() );
        print_r( $surveys['surveys'][$_GET['survey_id']] );
        echo '<p><h4>Form:</h4></p>';
        print_r( json_decode( $surveys['surveys'][$_GET['survey_id']]['form'], true ) );
@@ -350,6 +355,7 @@ class Awesome_Surveys {
        echo '<br>';
        print_r( json_encode( $arr, true ) );
        echo '<br>php version: ' . phpversion() . '<br>json version: ' . phpversion( 'json' );
+       var_dump( $surveys );
       }
       ?>
      </pre>
@@ -381,7 +387,7 @@ class Awesome_Surveys {
   foreach ( $surveys['surveys'] as $key => $survey ) {
    if ( ! empty( $surveys['surveys'][$key] ) ) {
     $form = json_decode( stripslashes( $survey['form'] ), true );
-    $html .= "\t\t\t" . '<h5>' . stripslashes( $survey['name'] ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+    $html .= "\t\t\t" . '<h5>' . stripslashes( stripslashes( $survey['name'] ) ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
     $html .= "\t\t\t" . '<form class="delete-survey" method="post" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
     $html .= "\t\t\t\t" . '<input type="hidden" name="action" value="wwm_delete_survey">' . "\n";
     $html .= "\t\t\t\t" . '<input type="hidden" name="survey_id" value="' . intval( $key ) . '">' . "\n";
@@ -472,6 +478,30 @@ class Awesome_Surveys {
   exit;
  }
 
+ public function styling_options()
+ {
+
+  echo $this->get_styling_options();
+ }
+
+ private function get_styling_options()
+ {
+
+  $html = '<p>' . __( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', $this->text_domain ) . '</p>';
+  include_once( 'includes/PFBC/Form.php' );
+  include_once( 'includes/PFBC/Overrides.php' );
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $nonce = wp_create_nonce( 'update-styling-options' );
+  $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
+  $form = new FormOverrides( 'styling-options' );
+  $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
+  $form->addElement( new Element_YesNo( __( 'Use included css?', $this->text_domain ), 'options[include_css]', array( 'value' => $include_css, ) ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_styling_options' ) );
+  $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
+  $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+  return $html . $form->render( true );
+ }
+
  /**
   * Outputs contextual help for the plugin options panel
   * @since 1.0
@@ -520,6 +550,19 @@ class Awesome_Surveys {
    );
    $screen->add_help_tab( $args );
   }
+ }
+
+ public function update_styling_options()
+ {
+
+   if ( ! wp_verify_nonce( $_POST['_nonce'], 'update-styling-options' ) || ! current_user_can( 'manage_options' ) ) {
+    die();
+   }
+   $surveys = get_option( 'wwm_awesome_surveys', array() );
+   $surveys['include_css'] = absint( $_POST['options']['include_css'] );
+   update_option( 'wwm_awesome_surveys', $surveys );
+   wp_send_json_success();
+   exit;
  }
 
  /**
@@ -576,7 +619,7 @@ class Awesome_Surveys {
    'checkbox' => 'Element_Checkbox',
    'textarea' => 'Element_Textarea'
   );
-  $html = '<input type="hidden" name="survey_name" value="' . stripslashes( $_POST['survey_name'] ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
+  $html = '<input type="hidden" name="survey_name" value="' . esc_html( stripslashes( $_POST['survey_name'] ) ) . '" data-id="' . sanitize_title( stripslashes( $_POST['survey_name'] ) ) . '">';
   $html .= '<div id="new-element-selector"><span>' . __( 'Add a question to your survey:', $this->text_domain ) . '</span><label>' . __( 'Select Field Type:', $this->text_domain ) . '<br><select name="options[type]" class="type-selector">';
   foreach ( $types as $type => $pfbc_method ) {
    $html .= '<option value="' . $pfbc_method . '">' . $type . '</option>';

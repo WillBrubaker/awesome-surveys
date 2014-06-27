@@ -53,7 +53,10 @@ class Awesome_Surveys_Frontend {
   if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
    wp_enqueue_script( 'awesome-surveys-frontend' );
    wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
-   wp_enqueue_style( 'awesome-surveys-frontend-styles' );
+   $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
+   if ( $include_css ) {
+    wp_enqueue_style( 'awesome-surveys-frontend-styles' );
+   }
    $args = array(
     'survey_id' => $atts['id'],
     'name' => $surveys['surveys'][$atts['id']]['name'],
@@ -94,7 +97,7 @@ class Awesome_Surveys_Frontend {
   $form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
   $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked' ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
-  $form_output->addElement( new Element_HTML( '<p>' . $args['name'] . '</p>' ) );
+  $form_output->addElement( new Element_HTML( '<p>' . stripcslashes( stripslashes( $args['name'] ) ) . '</p>' ) );
   $questions_count = 0;
   foreach ( $form as $element ) {
    $method = $element['type'];
