@@ -501,8 +501,10 @@ class Awesome_Surveys {
  {
 
   $html = '<p>' . __( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', $this->text_domain ) . '</p>';
-  include_once( 'includes/PFBC/Form.php' );
-  include_once( 'includes/PFBC/Overrides.php' );
+  if ( ! class_exists( 'Form') ) {
+   include_once( 'includes/PFBC/Form.php' );
+   include_once( 'includes/PFBC/Overrides.php' );
+  }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $nonce = wp_create_nonce( 'update-styling-options' );
   $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
