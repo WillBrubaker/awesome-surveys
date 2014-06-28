@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
             duration: 800
           }
         });
-        //$('#tabs #new-elements input[type="number"]').each(function() {
+
         $('#tabs #new-elements').validate({
           submitHandler: function(form) {
             var overlay = $('#create > .overlay');
@@ -141,6 +141,7 @@ jQuery(document).ready(function($) {
             active: false,
             heightStyle: 'content'
           });
+          attachDialog($);
         }, 'html')
       });
     }
@@ -189,6 +190,14 @@ jQuery(document).ready(function($) {
     $('#edit-answer').dialog('open');
   });
 
+  $('#surveys').on('click', 'a.edit-survey-name', function(e) {
+    e.preventDefault();
+    $('#edit-survey-name input[name="survey_id"]').val($(this).attr('data-survey_id'));
+    $('#edit-survey-name input[name="_nonce"]').val($(this).attr('data-nonce'));
+    $('#edit-survey-name input[name="name"]').val($(this).text());
+    $('#edit-survey-name').dialog('open');
+  });
+
   $('#surveys').on('submit', 'form.delete-survey', function(e) {
     e.preventDefault();
     result = confirm('Really delete this survey? This action is permanent and not reversible!');
@@ -226,9 +235,8 @@ jQuery(document).ready(function($) {
     e.preventDefault();
     overlay = $('.overlay', $(this));
     overlay.show();
-    $.post(ajaxurl, $(this).serializeArray(), function(data) {
-    }).fail(function(xhr) {
-      alert( 'error code: ' + xhr.status + ' error message ' + xhr.statusText );
+    $.post(ajaxurl, $(this).serializeArray(), function(data) {}).fail(function(xhr) {
+      alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
     }).always(function() {
       overlay.hide();
     });
@@ -239,9 +247,9 @@ jQuery(document).ready(function($) {
 var activeDialog;
 
 function attachDialog($) {
-  $('#surveys #edit-question, #surveys #edit-answer').dialog({
+  $('#surveys #edit-question, #surveys #edit-answer, #surveys #edit-survey-name').dialog({
     autoOpen: false,
-    title: 'Edit Survey Question',
+    title: 'Edit Survey',
     height: 'auto',
     width: 500,
     modal: true,
@@ -274,6 +282,8 @@ function attachDialog($) {
               });
               attachDialog($);
             }, 'html')
+          } else if (false == data.success) {
+            alert(data.data.message)
           }
         }, 'json').fail(function(xhr) {
           alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
@@ -291,6 +301,14 @@ function attachDialog($) {
         $(this).dialog('close');
         $('div.wrap').css('cursor', 'default');
       }
-    }]
+    }],
+    open: function() {
+      $(this).keypress(function(e) {
+        if (13 == e.keyCode) {
+          e.preventDefault();
+          $('#button-ok', $(this).parent()).trigger('click');
+        }
+      })
+    }
   });
 }

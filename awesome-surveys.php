@@ -89,6 +89,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_delete_survey', array( &$this, 'delete_survey' ) );
   add_action( 'wp_ajax_wwm_edit_question', array( &$this, 'edit_question' ) );
   add_action( 'wp_ajax_wwm_edit_answer', array( &$this, 'edit_answer' ) );
+  add_action( 'wp_ajax_wwm_edit_survey_name', array( &$this, 'edit_survey_name' ) );
   add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
@@ -387,7 +388,11 @@ class Awesome_Surveys {
   foreach ( $surveys['surveys'] as $key => $survey ) {
    if ( ! empty( $surveys['surveys'][$key] ) ) {
     $form = json_decode( stripslashes( $survey['form'] ), true );
-    $html .= "\t\t\t" . '<h5>' . stripslashes( stripslashes( $survey['name'] ) ) . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+    $survey_name = stripslashes( stripslashes( $survey['name'] ) );
+    $edit_name_nonce = wp_create_nonce( 'edit-survey-name_' . $key );
+    $edit_survey_name_link = '<p><a href="#" title="' . __( 'Edit Survey Name', $this->text_domain ) . '" data-nonce="' . $edit_name_nonce . '" data-survey_id="' . $key . '" class="edit-survey-name">' . $survey_name . '</a> (click to edit)</p>';
+    $html .= "\t\t\t" . '<h5>' . $survey_name . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+    $html .= "\t\t\t" . $edit_survey_name_link . "\n";
     $html .= "\t\t\t" . '<form class="delete-survey" method="post" action="' . $_SERVER['PHP_SELF'] . '">' . "\n";
     $html .= "\t\t\t\t" . '<input type="hidden" name="action" value="wwm_delete_survey">' . "\n";
     $html .= "\t\t\t\t" . '<input type="hidden" name="survey_id" value="' . intval( $key ) . '">' . "\n";
@@ -447,13 +452,21 @@ class Awesome_Surveys {
   $html .= '<div id="answer-dialog">
              <form id="edit-answer" method="post" action="' . $_SERVER['PHP_SELF'] . '">
               <input type="text" name="answer" value="" required>
-              <input type="hidden" name="question_id" value="" required>
+              <input type="hidden" name="question_id" value="">
               <input type="hidden" name="answer_id" value="">
               <input type="hidden" name="survey_id" value="">
               <input type="hidden" name="_nonce" value="">
               <input type="hidden" name="action" value="wwm_edit_answer">
              </form>
             </div><!--#answer-dialog-->';
+  $html .= '<div id="survey-name-dialog">
+             <form id="edit-survey-name" method="post" action="' . $_SERVER['PHP_SELF'] . '">
+              <input type="text" name="name" value="" required>
+              <input type="hidden" name="survey_id" value="">
+              <input type="hidden" name="_nonce" value="">
+              <input type="hidden" name="action" value="wwm_edit_survey_name">
+             </form>
+            </div><!--#survey-name-dialog-->';
 
   if ( $args['ajax'] ) {
    echo $html;
@@ -579,14 +592,8 @@ class Awesome_Surveys {
    exit;
   }
   $data = get_option( 'wwm_awesome_surveys', array() );
-  foreach ( $data['surveys'] as $key => $survey ) {
-   if ( empty( $survey ) ) {
-    unset( $data['surveys'][$key] );
-   }
-  }
   if ( isset( $data['surveys'] ) && ! empty( $data['surveys'] ) ) {
-   $names = wp_list_pluck( $data['surveys'], 'name' );
-   if ( in_array( $_POST['survey_name'], $names ) ) {
+   if ( $this->is_existing_name( esc_html( stripslashes( $_POST['survey_name'] ) ), $data ) ) {
     echo json_encode( array( 'error' => __( 'A survey already exists named ', $this->text_domain ) .  $_POST['survey_name'] ) );
     exit;
    }
@@ -1063,6 +1070,26 @@ class Awesome_Surveys {
   exit;
  }
 
+ public function edit_survey_name()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-survey-name_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   die();
+  }
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  if ( $this->is_existing_name( esc_html( stripslashes( $_POST['name'] ) ), $surveys ) ) {
+   wp_send_json_error( array( 'message' => __( 'The name already exists', $this->text_domain ) ) );
+   exit;
+  }
+
+  $survey = $surveys['surveys'][$_POST['survey_id']];
+  $survey['name'] = esc_html( stripslashes( $_POST['name'] ) );
+  $surveys['surveys'][$_POST['survey_id']] = $survey;
+  update_option( 'wwm_awesome_surveys', $surveys );
+  wp_send_json_success();
+  exit;
+ }
+
  /**
   * AJAX handler for survey removal
   * @since 1.1
@@ -1099,6 +1126,26 @@ class Awesome_Surveys {
    $frontend = new Awesome_Surveys_Frontend;
   }
   $frontend->process_response();
+ }
+
+ private function is_existing_name( $name = '', $surveys = array() )
+ {
+
+  if ( empty( $surveys ) ) {
+   return false;
+  }
+  foreach ( $surveys['surveys'] as $key => $survey ) {
+   if ( empty( $survey ) ) {
+    unset( $surveys['surveys'][$key] );
+   }
+  }
+  if ( isset( $surveys['surveys'] ) && ! empty( $surveys['surveys'] ) ) {
+   $names = wp_list_pluck( $surveys['surveys'], 'name' );
+   if ( in_array( $name, $names ) ) {
+    return true;
+   }
+  }
+  return false;
  }
 
  /**
