@@ -121,13 +121,6 @@ class Awesome_Surveys {
   */
  public function init()
  {
-
-  /**
-   * This plugin uses PFBC (the php form builder class, which requires an active session)
-   */
-  if ( ! isset( $_SESSION ) ) {
-   session_start();
-  }
  }
 
  /**
