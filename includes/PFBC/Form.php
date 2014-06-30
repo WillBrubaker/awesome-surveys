@@ -34,15 +34,15 @@ class Form extends Base {
 
 		if(isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on")
 			$this->_prefix = "https";
-		
+
 		/*The Standard view class is applied by default and will be used unless a different view is
 		specified in the form's configure method*/
 		if(empty($this->view))
 			$this->view = new View_SideBySide;
 
-		if(empty($this->errorView))
-			$this->errorView = new ErrorView_Standard;
-		
+		//if(empty($this->errorView))
+			//$this->errorView = new ErrorView_Standard;
+
 		/*The resourcesPath property is used to identify where third-party resources needed by the
 		project are located.  This property will automatically be set properly if the PFBC directory
 		is uploaded within the server's document root.  If symbolic links are used to reference the PFBC
@@ -89,13 +89,13 @@ class Form extends Base {
     }
 
 	public static function clearErrors($id = "pfbc") {
-		if(!empty($_SESSION["pfbc"][$id]["errors"]))
-			unset($_SESSION["pfbc"][$id]["errors"]);
+		//if(!empty($_SESSION["pfbc"][$id]["errors"]))
+			//unset($_SESSION["pfbc"][$id]["errors"]);
 	}
 
 	public static function clearValues($id = "pfbc") {
-		if(!empty($_SESSION["pfbc"][$id]["values"]))
-			unset($_SESSION["pfbc"][$id]["values"]);
+		//if(!empty($_SESSION["pfbc"][$id]["values"]))
+			//unset($_SESSION["pfbc"][$id]["values"]);
 	}
 
     public function getAjax() {
@@ -124,41 +124,41 @@ class Form extends Base {
 
 	public function getErrors() {
 		$errors = array();
-		if(session_id() == "")
+		/*if(session_id() == "")
 			$errors[""] = array("Error: The pfbc project requires an active session to function properly.  Simply add session_start() to your script before any output has been sent to the browser.");
 		else {
 			$errors = array();
 			$id = $this->_attributes["id"];
 			if(!empty($_SESSION["pfbc"][$id]["errors"]))
 				$errors = $_SESSION["pfbc"][$id]["errors"];
-		}	
+		}	*/
 
-		return $errors;	
+		return $errors;
 	}
 
 	protected static function getSessionValues($id = "pfbc") {
 		$values = array();
-		if(!empty($_SESSION["pfbc"][$id]["values"]))
-			$values = $_SESSION["pfbc"][$id]["values"];
+		//if(!empty($_SESSION["pfbc"][$id]["values"]))
+			//$values = $_SESSION["pfbc"][$id]["values"];
 		return $values;
 	}
 
 	public static function isValid($id = "pfbc", $clearValues = true) {
 		$valid = true;
-		/*The form's instance is recovered (unserialized) from the session.*/
+		/*The form's instance is recovered (unserialized) from the session.*//*
 		$form = self::recover($id);
 		if(!empty($form)) {
 			if($_SERVER["REQUEST_METHOD"] == "POST")
 				$data = $_POST;
 			else
 				$data = $_GET;
-			
-			/*Any values/errors stored in the session for this form are cleared.*/
+
+			/*Any values/errors stored in the session for this form are cleared.*//*
 			self::clearValues($id);
-			self::clearErrors($id);
+			self::clearErrors($id);/*
 
 			/*Each element's value is saved in the session and checked against any validation rules applied
-			to the element.*/
+			to the element.*//*
 			if(!empty($form->_elements)) {
 				foreach($form->_elements as $element) {
 					$name = $element->getAttribute("name");
@@ -166,7 +166,7 @@ class Form extends Base {
 						$name = substr($name, 0, -2);
 
 					/*The File element must be handled differently b/c it uses the $_FILES superglobal and
-					not $_GET or $_POST.*/
+					not $_GET or $_POST.*//*
 					if($element instanceof Element_File)
 						$data[$name] = $_FILES[$name]["name"];
 
@@ -180,28 +180,28 @@ class Form extends Base {
 						else
 							$value = stripslashes($value);
 						self::_setSessionValue($id, $name, $value);
-					}		
+					}
 					else
 						$value = null;
-					
+
 					/*If a validation error is found, the error message is saved in the session along with
-					the element's name.*/
+					the element's name.*//*
 					if(!$element->isValid($value)) {
 						self::setError($id, $element->getErrors(), $name);
 						$valid = false;
-					}	
+					}
 				}
 			}
 
-			/*If no validation errors were found, the form's session values are cleared.*/
+			/*If no validation errors were found, the form's session values are cleared.*//*
 			if($valid) {
 				if($clearValues)
 					self::clearValues($id);
 				self::clearErrors($id);
-			}		
+			}
 		}
 		else
-			$valid = false;
+			$valid = false;*/
 
 		return $valid;
 	}
@@ -221,14 +221,14 @@ class Form extends Base {
 				if(!empty($label)) {
 					$element->setAttribute("placeholder", $label);
 					$element->setLabel("");
-				}	
-			}	
+				}
+			}
 		}
 
 		$this->view->_setForm($this);
-		$this->errorView->_setForm($this);
+		//$this->errorView->_setForm($this);
 
-		/*When validation errors occur, the form's submitted values are saved in a session 
+		/*When validation errors occur, the form's submitted values are saved in a session
 		array, which allows them to be pre-populated when the user is redirected to the form.*/
 		$values = self::getSessionValues($this->_attributes["id"]);
 		if(!empty($values))
@@ -252,7 +252,7 @@ class Form extends Base {
 		}
 	}
 
-	/*When ajax is used to submit the form's data, validation errors need to be manually sent back to the 
+	/*When ajax is used to submit the form's data, validation errors need to be manually sent back to the
 	form using json.*/
 	public static function renderAjaxErrorResponse($id = "pfbc") {
 		$form = self::recover($id);
@@ -280,32 +280,32 @@ class Form extends Base {
 			$elementUrls = $element->getCSSFiles();
 			if(is_array($elementUrls))
 				$urls = array_merge($urls, $elementUrls);
-		}	
+		}
 
-		/*This section prevents duplicate css files from being loaded.*/ 
-		if(!empty($urls)) {	
+		/*This section prevents duplicate css files from being loaded.*/
+		if(!empty($urls)) {
 			$urls = array_values(array_unique($urls));
 			foreach($urls as $url)
 				echo '<link type="text/css" rel="stylesheet" href="', $url, '"/>';
-		}	
+		}
 	}
 
 	protected function renderJS() {
-		$this->renderJSFiles();	
+		$this->renderJSFiles();
 
 		echo '<script type="text/javascript">';
 		$this->view->renderJS();
 		foreach($this->_elements as $element)
 			$element->renderJS();
-		
+
 		$id = $this->_attributes["id"];
 
 		echo 'jQuery(document).ready(function() {';
 
 		/*When the form is submitted, disable all submit buttons to prevent duplicate submissions.*/
 		echo <<<JS
-		jQuery("#$id").bind("submit", function() { 
-			jQuery(this).find("input[type=submit]").attr("disabled", "disabled"); 
+		jQuery("#$id").bind("submit", function() {
+			jQuery(this).find("input[type=submit]").attr("disabled", "disabled");
 		});
 JS;
 
@@ -316,31 +316,31 @@ JS;
 		$this->view->jQueryDocumentReady();
 		foreach($this->_elements as $element)
 			$element->jQueryDocumentReady();
-		
+
 		/*For ajax, an anonymous onsubmit javascript function is bound to the form using jQuery.  jQuery's
 		serialize function is used to grab each element's name/value pair.*/
 		if(!empty($this->ajax)) {
 			echo <<<JS
-			jQuery("#$id").bind("submit", function() { 
+			jQuery("#$id").bind("submit", function() {
 JS;
 
 			/*Clear any existing validation errors.*/
 			$this->errorView->clear();
 
 			echo <<<JS
-				jQuery.ajax({ 
-					url: "{$this->_attributes["action"]}", 
-					type: "{$this->_attributes["method"]}", 
-					data: jQuery("#$id").serialize(), 
-					success: function(response) { 
+				jQuery.ajax({
+					url: "{$this->_attributes["action"]}",
+					type: "{$this->_attributes["method"]}",
+					data: jQuery("#$id").serialize(),
+					success: function(response) {
 						if(response != undefined && typeof response == "object" && response.errors) {
 JS;
 
 			$this->errorView->applyAjaxErrorResponse();
 
 			echo <<<JS
-							jQuery("html, body").animate({ scrollTop: jQuery("#$id").offset().top }, 500 ); 
-						} 
+							jQuery("html, body").animate({ scrollTop: jQuery("#$id").offset().top }, 500 );
+						}
 						else {
 JS;
 
@@ -351,11 +351,11 @@ JS;
 
 			/*After the form has finished submitting, re-enable all submit buttons to allow additional submissions.*/
 			echo <<<JS
-						} 
-						jQuery("#$id").find("input[type=submit]").removeAttr("disabled"); 
-					}	
-				}); 
-				return false; 
+						}
+						jQuery("#$id").find("input[type=submit]").removeAttr("disabled");
+					}
+				});
+				return false;
 			});
 JS;
 		}
@@ -374,14 +374,14 @@ JS;
 			$elementUrls = $element->getJSFiles();
 			if(is_array($elementUrls))
 				$urls = array_merge($urls, $elementUrls);
-		}		
+		}
 
-		/*This section prevents duplicate js files from being loaded.*/ 
-		if(!empty($urls)) {	
+		/*This section prevents duplicate js files from being loaded.*/
+		if(!empty($urls)) {
 			$urls = array_values(array_unique($urls));
 			foreach($urls as $url)
 				echo '<script type="text/javascript" src="', $url, '"></script>';
-		}	
+		}
 	}
 
 	/*The save method serialized the form's instance and saves it in the session.*/

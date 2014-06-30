@@ -5,7 +5,7 @@
 **License:** GPLv3.0+
 **Requires at least:** 3.9.1
 **Tested up to:** 3.9.1
-**Stable tag:** 1.0.3
+**Stable tag:** 1.1
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -51,6 +51,15 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 * Rejoice in how amazingly easy it is to create and publish surveys.
 
 ## Frequently Asked Questions ##
+
+### How can I edit a survey? ###
+
+*	Under the 'Your Survey Results' tab, certain parts of your survey are editable. For instance you can click on the survey name or survey questions/answers. This will display a pop-up dialog box where you can edit the text in these fields.
+
+### How do I delete a survey? ###
+
+*	Each existing survey under the 'Your Survey Results' tab has a 'delete' button. Simply press this button, confirm your desired action and the survey will be nuked from the planet!
+
 
 ### How do I create a survey? ###
 
@@ -103,6 +112,13 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.1 ###
+1. Editing of Survey Name, Questions and Options/Answers now available by clicking a link
+2. Surveys can now be deleted
+3. Option to not load included CSS has been added
+4. Removed heaps of unnecessary files from the included PFBC package
+5. Bug fix in call to wp_list_pluck (invalid argument supplied for foreach)
+
 ### v1.0.3 ###
 1. Addresses the report of the "spinner" failing to go away in certain instances when the survey form is submitted
 2. Attempts to provide something resembling useful feedback if the survey submission AJAX request fails
@@ -123,6 +139,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ### Known Issues: ###
 
+* The Async JS and CSS plugin can cause the javascript for Awesome Surveys to not be loaded. See this [support thread](http://wordpress.org/support/topic/404-error-when-submitting?replies=20) for a workaround.
 * Survey form display hasn't likely been tested with your theme. Styling may break and the form may look horrible. If you experience this, please do contact me with suggestions on how to fix it for your particular theme.
 * Cookie authentication for allowing/denying users to take the survey is very easily circumvented. If using cookie based authentication for your surveys, please keep this in mind. You will be far less likely to see "ballot-stuffing" if you are allowing registrations on your site and require the user to login to take the survey.
 * This plugin is using a pre-release version of the jQuery validation plugin which fixes a bug related to validating input type="number". Other issues in this pre-release may be present.
@@ -140,7 +157,6 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 * Widget to display surveys?
 * Ability to add classes to survey form elements and add custom css.
 * Ability to export .csv file of the surveys
-* Add some survey management options (e.g. Delete survey, rename survey...)
 * View survey results sorted by how each individual respondent answered questions.
 * **Your feature request here.**
 

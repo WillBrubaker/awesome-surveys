@@ -130,3 +130,9 @@ div.answers {
 .answer-accordion {
   float: left;
   width: 100%; }
+
+#question-dialog, #answer-dialog, #survey-name-dialog {
+  display: none; }
+
+#edit-answer input[type="text"], #edit-question input[type="text"] {
+  width: 90%; }

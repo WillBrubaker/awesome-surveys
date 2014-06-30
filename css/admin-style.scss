@@ -166,3 +166,13 @@ div.answers {
  float: left;
  width: 100%;
 }
+
+#question-dialog, #answer-dialog, #survey-name-dialog {
+ display: none;
+}
+
+#edit-answer, #edit-question {
+ input[type="text"] {
+  width: 90%;
+ }
+}

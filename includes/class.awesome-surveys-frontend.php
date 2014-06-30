@@ -13,11 +13,7 @@ class Awesome_Surveys_Frontend {
   $this->text_domain = 'awesome-surveys';
   add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
   add_action( 'wp_enqueue_scripts', array( &$this, 'register_scripts' ) );
-  add_filter( 'awesome_surveys_auth_method_none',
-   function() {
-    return true;
-   }
-  );
+  add_filter( 'awesome_surveys_auth_method_none', array( &$this, 'awesome_surveys_auth_method_none' ) );
   add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
   add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
   add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
@@ -53,7 +49,10 @@ class Awesome_Surveys_Frontend {
   if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
    wp_enqueue_script( 'awesome-surveys-frontend' );
    wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
-   wp_enqueue_style( 'awesome-surveys-frontend-styles' );
+   $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
+   if ( $include_css ) {
+    wp_enqueue_style( 'awesome-surveys-frontend-styles' );
+   }
    $args = array(
     'survey_id' => $atts['id'],
     'name' => $surveys['surveys'][$atts['id']]['name'],
@@ -94,7 +93,7 @@ class Awesome_Surveys_Frontend {
   $form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
   $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked' ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
-  $form_output->addElement( new Element_HTML( '<p>' . $args['name'] . '</p>' ) );
+  $form_output->addElement( new Element_HTML( '<p>' . stripcslashes( stripslashes( $args['name'] ) ) . '</p>' ) );
   $questions_count = 0;
   foreach ( $form as $element ) {
    $method = $element['type'];
@@ -218,6 +217,17 @@ class Awesome_Surveys_Frontend {
   $thank_you = stripslashes( $survey['thank_you'] );
   wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you ) );
   exit;
+ }
+
+ /**
+  * Handles the auth type 'none'. Always returns true.
+  * @return boolean true
+  * @since  1.1
+  */
+ public function awesome_surveys_auth_method_none()
+ {
+
+  return true;
  }
 
  /**
