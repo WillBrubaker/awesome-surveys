@@ -6,7 +6,7 @@ class View_SideBySide extends View {
 		$this->_form->appendAttribute("class", $this->class);
 
 		echo '<form', $this->_form->getAttributes(), '><fieldset>';
-		$this->_form->getErrorView()->render();
+		//$this->_form->getErrorView()->render();
 
 		$elements = $this->_form->getElements();
 		$elementSize = sizeof($elements);
@@ -21,7 +21,7 @@ class View_SideBySide extends View {
 					echo '<div class="form-actions">';
 				else
 					echo ' ';
-				
+
 				$element->render();
 
                 if(($e + 1) == $elementSize || !$elements[($e + 1)] instanceof Element_Button)
@@ -42,7 +42,7 @@ class View_SideBySide extends View {
 			echo '<label class="control-label" for="', $element->getAttribute("id"), '">';
 			if($element->isRequired())
 				echo '<span class="required">* </span>';
-			echo $label, '</label>'; 
+			echo $label, '</label>';
         }
     }
 }

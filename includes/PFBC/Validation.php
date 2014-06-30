@@ -1,6 +1,6 @@
 <?php
 abstract class Validation extends Base {
-	protected $message = "%element% is invalid.";
+	/*protected $message = "%element% is invalid.";
 
 	public function __construct($message = "") {
 		if(!empty($message))
@@ -17,5 +17,5 @@ abstract class Validation extends Base {
 		return false;
 	}
 
-	public abstract function isValid($value);
+	public abstract function isValid($value);*/
 }

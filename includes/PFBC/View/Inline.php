@@ -6,7 +6,7 @@ class View_Inline extends View {
 		$this->_form->appendAttribute("class", $this->class);
 
 		echo '<form', $this->_form->getAttributes(), '>';
-		$this->_form->getErrorView()->render();
+		//$this->_form->getErrorView()->render();
 
 		$elements = $this->_form->getElements();
         $elementSize = sizeof($elements);
@@ -28,8 +28,8 @@ class View_Inline extends View {
 			echo '<label for="', $element->getAttribute("id"), '">';
 			if($element->isRequired())
 				echo '<span class="required">* </span>';
-			echo $label;	
-			echo '</label>'; 
+			echo $label;
+			echo '</label>';
         }
     }
-}	
+}

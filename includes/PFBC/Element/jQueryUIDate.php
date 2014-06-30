@@ -24,7 +24,7 @@ class Element_jQueryUIDate extends Element_Textbox {
     }
 
     public function render() {
-        $this->validation[] = new Validation_Date;
+        //$this->validation[] = new Validation_Date;
         parent::render();
     }
 }

@@ -2,7 +2,7 @@
 class View_Vertical extends View {
 	public function render() {
 		echo '<form', $this->_form->getAttributes(), '>';
-		$this->_form->getErrorView()->render();
+		//$this->_form->getErrorView()->render();
 
 		$elements = $this->_form->getElements();
         $elementSize = sizeof($elements);
@@ -36,8 +36,8 @@ class View_Vertical extends View {
         if(!empty($label)) {
 			if($element->isRequired())
 				echo '<span class="required">* </span>';
-			echo $label;	
+			echo $label;
         }
-		echo '</label>'; 
+		echo '</label>';
     }
-}	
+}
