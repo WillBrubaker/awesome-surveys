@@ -13,11 +13,7 @@ class Awesome_Surveys_Frontend {
   $this->text_domain = 'awesome-surveys';
   add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
   add_action( 'wp_enqueue_scripts', array( &$this, 'register_scripts' ) );
-  add_filter( 'awesome_surveys_auth_method_none',
-   function() {
-    return true;
-   }
-  );
+  add_filter( 'awesome_surveys_auth_method_none', array( &$this, 'awesome_surveys_auth_method_none' ) );
   add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
   add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
   add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
@@ -221,6 +217,17 @@ class Awesome_Surveys_Frontend {
   $thank_you = stripslashes( $survey['thank_you'] );
   wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you ) );
   exit;
+ }
+
+ /**
+  * Handles the auth type 'none'. Always returns true.
+  * @return boolean true
+  * @since  1.1
+  */
+ public function awesome_surveys_auth_method_none()
+ {
+
+  return true;
  }
 
  /**

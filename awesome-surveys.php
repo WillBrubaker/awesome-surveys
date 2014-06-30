@@ -102,12 +102,12 @@ class Awesome_Surveys {
  }
 
  /**
- * stuff to do on plugin initialization
- * @return none
- * @since 1.0
- * @author Will the Web Mechanic <will@willthewebmechanic.com>
- * @link http://willthewebmechanic.com
- */
+  * stuff to do on plugin initialization
+  * @return none
+  * @since 1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
+  */
  public function init_plugin()
  {
 
@@ -343,13 +343,17 @@ class Awesome_Surveys {
        print_r( $surveys['surveys'][$_GET['survey_id']] );
        echo '<p><h4>Form:</h4></p>';
        print_r( json_decode( $surveys['surveys'][$_GET['survey_id']]['form'], true ) );
+      } elseif ( isset( $_GET['plugins'] ) ) {
+       $plugins = get_option( 'active_plugins', array() );
+       foreach ( $plugins as $plugin ) {
+        echo '<p>' . $plugin . '</p>';
+       }
       } else {
        $arr = array( 'key_zero' => 'this is a string', 'key_one' => 'this is another string' );
        print_r( $arr );
        echo '<br>';
        print_r( json_encode( $arr, true ) );
        echo '<br>php version: ' . phpversion() . '<br>json version: ' . phpversion( 'json' );
-       var_dump( $surveys );
       }
       ?>
      </pre>
@@ -484,12 +488,21 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * Echos the styling options form
+  * @since 1.1
+  */
  public function styling_options()
  {
 
   echo $this->get_styling_options();
  }
 
+ /**
+  * Outputs the content for the styling options tab
+  * @return string html form for the styling options
+  * @since  1.1
+  */
  private function get_styling_options()
  {
 
@@ -560,6 +573,10 @@ class Awesome_Surveys {
   }
  }
 
+ /**
+  * AJAX handler to update styling options
+  * @since 1.1
+  */
  public function update_styling_options()
  {
 
