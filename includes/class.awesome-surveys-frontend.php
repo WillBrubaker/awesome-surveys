@@ -35,12 +35,12 @@ class Awesome_Surveys_Frontend {
  {
 
   if ( ! isset( $atts['id'] ) ) {
-   return;
+   return null;
   }
   $atts['id'] = absint( $atts['id'] );
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
-   return;
+   return null;
   }
   $auth_method = $surveys['surveys'][$atts['id']]['auth'];
   $auth_args = array(
