@@ -139,7 +139,7 @@ class Awesome_Surveys_Frontend {
   $form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
   $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
   $form_output->addElement( new Element_Hidden( 'auth_method', $args['auth_method'] ) );
-  $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ) ) );
+  $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ), array( 'disabled' => 1 ) ) );
   return $form_output->render( true );
  }
 
@@ -169,8 +169,7 @@ class Awesome_Surveys_Frontend {
  {
 
   if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
-   $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (verification) at ' . date( 'Y-m-d H:i:s' ) );
-   wp_send_json_error( $data );
+   status_header( 403 );
    exit;
   }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
