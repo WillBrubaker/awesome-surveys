@@ -51,12 +51,15 @@ abstract class Element extends Base {
 
 	/*This method provides a shortcut for checking if an element is required.*/
 	public function isRequired() {
-		if(!empty($this->validation)) {
+  if ( array_key_exists( 'required', $this->_attributes ) ) {
+   return true;
+  }
+		/*if(!empty($this->validation)) {
 			foreach($this->validation as $validation) {
 				if($validation instanceof Validation_Required)
 					return true;
 			}
-		}
+		}*/
 		return false;
 	}
 
