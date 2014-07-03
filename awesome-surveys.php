@@ -48,7 +48,7 @@ class Awesome_Surveys {
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
  );
- public $wwm_page_link, $page_title, $menu_title, $menu_slug, $menu_link_text, $text_domain, $frontend;
+ public $wwm_page_link, $page_title, $menu_title, $menu_slug, $menu_link_text, $text_domain, $frontend, $page_hook;
 
  /**
  * The construct runs every time plugins are loaded.  The bulk of the action and filter hooks go here
@@ -133,13 +133,24 @@ class Awesome_Surveys {
  {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.12.1pre' );
-  if ( strpos( $_SERVER['REQUEST_URI'], $this->menu_slug ) > 0 ) {
-   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
-   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
-   wp_enqueue_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', ), self::$wwm_plugin_values['version'] );
-   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
-   wp_enqueue_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
-  }
+  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', ), self::$wwm_plugin_values['version'] );
+
+  wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
+  wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
+  wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
+  wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
+ }
+
+ public function admin_print_scripts()
+ {
+
+  wp_enqueue_script( $this->text_domain . '-admin-script' );
+ }
+
+ public function admin_print_styles()
+ {
+
+  wp_enqueue_style( $this->text_domain . '-admin-style' );
  }
 
  /**
@@ -163,7 +174,9 @@ class Awesome_Surveys {
    $_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'manage_options', 'wwm_plugins', array( &$this, 'wwm_plugin_links' ), plugins_url( 'images/wwm_wp_menu.png', __FILE__ ), '60.9' );
    $_wwm_plugins_page[1] = $plugin_panel_version;
   }
-  add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'manage_options', $this->menu_slug, array( &$this, 'plugin_options' ) );
+  $this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'manage_options', $this->menu_slug, array( &$this, 'plugin_options' ) );
+  add_action( 'admin_print_scripts-' . $this->page_hook, array( &$this, 'admin_print_scripts' ) );
+  add_action( 'admin_print_styles-' . $this->page_hook, array( &$this, 'admin_print_styles' ) );
  }
 
  /**
@@ -200,11 +213,11 @@ class Awesome_Surveys {
   //set a version here so that everything can be overwritten by future plugins.
   //and pass it via the do_action calls
   $plugin_links_version = 1;
-  echo '<div class="wrap">' . "\n";
-  echo '<div id="icon-plugins" class="icon32"><br></div>' . "\n";
-  echo '<h2>Will the Web Mechanic Plugins</h2>' . "\n";
   do_action( 'before_wwm_plugin_links', $plugin_links_version, $wwm_plugin_links );
   if ( ! empty( $wwm_plugin_links ) ) {
+   echo '<div class="wrap">' . "\n";
+   echo '<div id="icon-plugins" class="icon32"><br></div>' . "\n";
+   echo '<h2>Will the Web Mechanic Plugins</h2>' . "\n";
    echo '<ul>' . "\n";
    foreach ( $wwm_plugin_links as $link ) {
     echo '<li>' . $link . '</li>' . "\n";
