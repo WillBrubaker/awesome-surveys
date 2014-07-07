@@ -141,12 +141,25 @@ class Awesome_Surveys {
   wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
  }
 
+ /**
+  * Hooked into admin_print_scripts-{$page-hook}
+  * to output required javascript for this plugin only
+  * on its page hook
+  * @since 1.1
+  */
  public function admin_print_scripts()
  {
 
   wp_enqueue_script( $this->text_domain . '-admin-script' );
  }
 
+ /**
+  * Hooked into admin_print_styles-{$page-hook}
+  * to output the css on a conditional basis when
+  * adimin pages for this plugin are loaded
+  * @since 1.1
+  *
+  */
  public function admin_print_styles()
  {
 
@@ -237,19 +250,7 @@ class Awesome_Surveys {
  public function plugin_options()
  {
 
-  if ( ! class_exists( 'Form' ) ) {
-   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Form.php' );
-   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Overrides.php' );
-  }
-  $nonce = wp_create_nonce( 'create-survey' );
-  $form = new FormOverrides( 'survey-manager' );
-  $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
-  $form->addElement( new Element_Textbox( __( 'Survey Name:', $this->text_domain ), 'survey_name', array( 'required' => 1 ) ) );
-  $form->addElement( new Element_Hidden( 'action', 'create_survey' ) );
-  $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
-  $form->addElement( new Element_HTML( '<div class="create_holder">') );
-  $form->addElement( new Element_Button( __( 'Start Building', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
-  $form->addElement( new Element_HTML( '</div>') );
+
   ?>
   <div class="wrap">
    <div class="updated">
@@ -274,79 +275,46 @@ class Awesome_Surveys {
    </p>
    <div id="tabs">
     <ul>
-     <li><a href="#create"><?php _e( 'Build Survey Form', $this->text_domain ); ?></a></li>
-     <li><a href="#styles"><?php _e( 'Survey Styling Options', $this->text_domain ); ?></a></li>
-     <li><a href="#surveys"><?php _e( 'Your Survey Results', $this->text_domain ); ?></a></li>
-     <li><a href="#video"><?php _e( 'How To Video', $this->text_domain ); ?></a></li>
-     <?php if ( isset( $_GET['debug'] ) ) : ?>
+    <?php
+    $tabs = array(
+     array(
+     'create',
+     __( 'Build Survey Form', $this->text_domain ),
+     array( &$this, 'create_survey_form' ),
+     ),
+     array(
+     'styles',
+     __( 'Survey Styling Options', $this->text_domain ),
+     array( &$this, 'get_styling_options' ),
+     ),
+     array(
+      'surveys',
+      __( 'Your Survey Results', $this->text_domain ),
+      array( &$this, 'output_survey_results' ),
+     ),
+     array(
+      'video',
+      __( 'How To Video', $this->text_domain ),
+      array( &$this, 'output_howto_video' ),
+     )
+    );
+    $tabs = apply_filters( 'awesome_surveys_options_panel', $tabs );
+    foreach ( $tabs as $tab ) {
+     echo '<li><a href="#' . $tab[0] . '">' . $tab[1] . '</a></li>' . "\n";
+    }
+
+    if ( isset( $_GET['debug'] ) ) : ?>
      <li><a href="#debug"><?php _e( 'Debug', $this->text_domain ); ?></a></li>
      <?php endif; ?>
     </ul>
-    <div id="create">
-     <div class="overlay"><span class="preloader"></span></div>
-     <div class="create half">
-     <?php
-      $form->render();
-      $form = new FormOverrides( 'new-elements' );
-      $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
-      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you', array( 'value' => __( 'Thank you for completing this survey', $this->text_domain ), 'required' => 1 ) ) );
-      $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
-      /**
-       * *!!!IMPORTANT!!!*
-       * If an auth method is added via the survey_auth_options, a filter must also be added
-       * to return a boolean based on whether the auth method passed or not.
-       * The function that outputs the survey form will check for valid authentication via
-       * apply_filters( 'awesome_surveys_auth_method_{$your_method}', false )
-       * If a filter does not exist for your auth method then obviously the return value is false
-       * and the survey form output function will generate a null output.
-       * @see  class.awesome-surveys-frontend.php.
-       * The auth method of 'none' is added as a filter with an anonymous function that returns true.
-       * like so:
-       * add_filter( 'awesome_surveys_auth_method_none',
-       *  function() {
-       *   return true;
-       *  }
-       * );
-       * the auth method of 'login' is implemented similarily, but needs some actual logic.
-       * add_filter( 'awesome_surveys_auth_method_login', 'some_function' );
-       * When the survey is submitted, you can use do_action( 'awesome_surveys_update_' . $auth_method );
-       * to do whatever needs to be done i.e. set a cookie, update some database option, etc.
-       */
-      $options = apply_filters( 'survey_auth_options', $options );
-      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', $this->text_domain ) . '</p></span>' ) );
-      $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
-      $form->addElement( new Element_HTML( '</div></div></div>' ) );
-      $form->addElement( new Element_Hidden( 'action', 'generate_preview' ) );
-      $form->addElement( new Element_Button( __( 'Add Question', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
-      $form->addElement( new Element_HTML( '</div>' ) );
-      $form->render();
-     ?>
-     </div><!--.create-->
-     <div id="preview" class="half">
-      <h4 class="survey-name"></h4>
-      <div class="survey-preview">
-      </div><!--.survey-preview-->
-     </div><!--#preview-->
-     <div class="clear"></div>
-    </div><!--#create-->
-    <div id="styles">
-     <?php $this->styling_options(); ?>
-    </div>
-    <div id="surveys">
-     <div class="your-surveys">
-     <h4><?php _e( 'Your Surveys', $this->text_domain ); ?></h4>
-    </div>
-    <div id="existing-surveys" class="existing-surveys">
-     <?php
-     $args = array();
-     echo $this->display_survey_results( $args );
-     ?>
-    </div>
-    </div><!--#surveys-->
-    <div id="video">
-     <iframe width="420" height="315" src="//www.youtube.com/embed/YIta2rDE-QU" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <?php if ( isset( $_GET['debug'] ) ) : ?>
+
+    <?php
+    foreach ( $tabs as $tab ) {
+     echo '<div id="' . $tab[0] . '">' . "\n";
+     echo call_user_func( $tab[2] );
+     echo '</div><!--#' . $tab[0] . '-->';
+    }
+    if ( isset( $_GET['debug'] ) ) : ?>
     <div id="debug">
      <pre>
       <?php
@@ -508,6 +476,7 @@ class Awesome_Surveys {
  public function styling_options()
  {
 
+  return 'styling options';
   echo $this->get_styling_options();
  }
 
@@ -601,6 +570,92 @@ class Awesome_Surveys {
    update_option( 'wwm_awesome_surveys', $surveys );
    wp_send_json_success();
    exit;
+ }
+
+ public function create_survey_form()
+ {
+
+  //return 'create survey form function';
+ if ( ! class_exists( 'Form' ) ) {
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Form.php' );
+   include_once( plugin_dir_path( __FILE__ ) . 'includes/PFBC/Overrides.php' );
+  }
+ $nonce = wp_create_nonce( 'create-survey' );
+ $form = new FormOverrides( 'survey-manager' );
+ $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
+ $form->addElement( new Element_Textbox( __( 'Survey Name:', $this->text_domain ), 'survey_name', array( 'required' => 1 ) ) );
+ $form->addElement( new Element_Hidden( 'action', 'create_survey' ) );
+ $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
+ $form->addElement( new Element_HTML( '<div class="create_holder">') );
+ $form->addElement( new Element_Button( __( 'Start Building', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+ $form->addElement( new Element_HTML( '</div>') );
+
+ $output = '
+     <div class="overlay"><span class="preloader"></span></div>
+     <div class="create half">';
+   $output .= $form->render( true );
+      $form = new FormOverrides( 'new-elements' );
+      $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
+      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you', array( 'value' => __( 'Thank you for completing this survey', $this->text_domain ), 'required' => 1 ) ) );
+      $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
+      /**
+       * *!!!IMPORTANT!!!*
+       * If an auth method is added via the survey_auth_options, a filter must also be added
+       * to return a boolean based on whether the auth method passed or not.
+       * The function that outputs the survey form will check for valid authentication via
+       * apply_filters( 'awesome_surveys_auth_method_{$your_method}', false )
+       * If a filter does not exist for your auth method then obviously the return value is false
+       * and the survey form output function will generate a null output.
+       * @see  class.awesome-surveys-frontend.php.
+       * The auth method of 'none' is added as a filter with an anonymous function that returns true.
+       * like so:
+       * add_filter( 'awesome_surveys_auth_method_none',
+       *  function() {
+       *   return true;
+       *  }
+       * );
+       * the auth method of 'login' is implemented similarily, but needs some actual logic.
+       * add_filter( 'awesome_surveys_auth_method_login', 'some_function' );
+       * When the survey is submitted, you can use do_action( 'awesome_surveys_update_' . $auth_method );
+       * to do whatever needs to be done i.e. set a cookie, update some database option, etc.
+       */
+      $options = apply_filters( 'survey_auth_options', $options );
+      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', $this->text_domain ) . '</p></span>' ) );
+      $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
+      $form->addElement( new Element_HTML( '</div></div></div>' ) );
+      $form->addElement( new Element_Hidden( 'action', 'generate_preview' ) );
+      $form->addElement( new Element_Button( __( 'Add Question', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+      $form->addElement( new Element_HTML( '</div>' ) );
+      $output .= $form->render( true );
+
+     $output .= '</div><!--.create-->
+     <div id="preview" class="half">
+      <h4 class="survey-name"></h4>
+      <div class="survey-preview">
+      </div><!--.survey-preview-->
+     </div><!--#preview-->
+     <div class="clear"></div>';
+    return $output;
+ }
+
+ public function output_survey_results()
+ {
+
+  $output = '
+   <div class="your-surveys">
+    <h4>' . __( 'Your Surveys', $this->text_domain ) . '</h4>
+   </div>
+   <div id="existing-surveys" class="existing-surveys">';
+  $args = array();
+  $output .= $this->display_survey_results( $args );
+  $output .= '</div>';
+  return $output;
+ }
+
+ public function output_howto_video()
+ {
+
+  return '<iframe width="420" height="315" src="//www.youtube.com/embed/YIta2rDE-QU" frameborder="0" allowfullscreen></iframe>';
  }
 
  /**
