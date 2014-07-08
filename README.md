@@ -5,7 +5,7 @@
 **License:** GPLv3.0+
 **Requires at least:** 3.9.1
 **Tested up to:** 3.9.1
-**Stable tag:** 1.1
+**Stable tag:** 1.1.1
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -112,6 +112,15 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.1.1 ###
+1. Fixed a bug where if two surveys were present on a page/post only the first one could be submitted
+2. Further improvments to error handling
+3. Further clean up of unneeded parts of the included PFBC package
+4. The survey form relies heavily on javascript. If javascript is not available, the form submit button is disabled
+5. Cleaner method of including js/css on admin pages implemented
+6. Added a filter for the admin panel tabs/content - This can now be extended
+7. Updated the jQuery validation plugin to stable release v1.13.0
+
 ### v1.1 ###
 1. Editing of Survey Name, Questions and Options/Answers now available by clicking a link
 2. Surveys can now be deleted
@@ -142,7 +151,6 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 * The Async JS and CSS plugin can cause the javascript for Awesome Surveys to not be loaded. See this [support thread](http://wordpress.org/support/topic/404-error-when-submitting?replies=20) for a workaround.
 * Survey form display hasn't likely been tested with your theme. Styling may break and the form may look horrible. If you experience this, please do contact me with suggestions on how to fix it for your particular theme.
 * Cookie authentication for allowing/denying users to take the survey is very easily circumvented. If using cookie based authentication for your surveys, please keep this in mind. You will be far less likely to see "ballot-stuffing" if you are allowing registrations on your site and require the user to login to take the survey.
-* This plugin is using a pre-release version of the jQuery validation plugin which fixes a bug related to validating input type="number". Other issues in this pre-release may be present.
 * Many developer features are unfinished at this time. If you are developing an extension for this plugin or using any of the action/filter hooks included, proceed with caution.
 
 ### Included Software ###
