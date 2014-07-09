@@ -8,8 +8,8 @@ jQuery(document).ready(function($) {
       overlay = $('.overlay', $(form));
       overlay.show();
       $.post(ajaxurl, $(form).serializeArray(), function(data) {
-        if (data.error) {
-          alert(data.error)
+        if (false == data.success) {
+          alert(data.data)
         } else {
           var buttonHtml = $('.create_holder').html();
           $('#survey-manager').hide();
@@ -102,7 +102,6 @@ jQuery(document).ready(function($) {
             overlay.hide();
           }
         });
-        //});
         $('#new-elements input[type="submit"]').prop('disabled', false);
       }, 'json');
     } else {
@@ -125,6 +124,7 @@ jQuery(document).ready(function($) {
     var buttonName = $('input[type="submit"][clicked="true"]').attr('name');
     if ('save' == buttonName) {
       $.post(ajaxurl, $(this).serializeArray(), function(data) {
+        if ( data.success ) {
         $.post(ajaxurl, {
           action: 'get_survey_results'
         }, function(html) {
@@ -143,27 +143,36 @@ jQuery(document).ready(function($) {
           });
           attachDialog($);
         }, 'html')
-      });
+      } else {
+        alert(data.data);
+      }
+      }).fail(function(xhr) {
+          alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
+        }).always(function() {
+          $('#preview h4.survey-name').empty();
+          $('.survey-preview').empty();
+          $('#add-element').empty();
+          $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+          $('#new-elements').empty().append(newElementForm).hide();
+          $('#survey-manager').show();
+          overlay.hide();
+        });
     }
-    $('#preview h4.survey-name').empty();
-    $('.survey-preview').empty();
-    $('#add-element').empty();
-    $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
-    $('#new-elements').empty().append(newElementForm).hide();
-    $('#survey-manager').show();
-    overlay.hide();
   });
+
   $('button.delete').on('click', function() {
     $.post(ajaxurl, {
       'action': 'delete_surveys'
     });
   });
+
   $('#survey-responses').accordion({
     header: 'h5',
     heightStyle: 'content',
     collapsible: true,
     active: false,
   });
+
   $('.answer-accordion').accordion({
     header: 'h4.answers',
     collapsible: true,
@@ -240,7 +249,8 @@ jQuery(document).ready(function($) {
     }).always(function() {
       overlay.hide();
     });
-  })
+  });
+
   attachDialog($);
 });
 
