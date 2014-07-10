@@ -160,12 +160,6 @@ jQuery(document).ready(function($) {
     }
   });
 
-  $('button.delete').on('click', function() {
-    $.post(ajaxurl, {
-      'action': 'delete_surveys'
-    });
-  });
-
   $('#survey-responses').accordion({
     header: 'h5',
     heightStyle: 'content',

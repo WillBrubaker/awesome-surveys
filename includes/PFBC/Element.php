@@ -54,12 +54,6 @@ abstract class Element extends Base {
   if ( array_key_exists( 'required', $this->_attributes ) ) {
    return true;
   }
-		/*if(!empty($this->validation)) {
-			foreach($this->validation as $validation) {
-				if($validation instanceof Validation_Required)
-					return true;
-			}
-		}*/
 		return false;
 	}
 
@@ -144,7 +138,6 @@ abstract class Element extends Base {
 	/*This method provides a shortcut for applying the Required validation class to an element.*/
 	public function setRequired($required) {
 		if(!empty($required))
-			//$this->validation[] = new Validation_Required;
 		$this->_attributes["required"] = "";
 	}
 
