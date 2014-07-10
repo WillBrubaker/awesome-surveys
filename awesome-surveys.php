@@ -1074,8 +1074,12 @@ class Awesome_Surveys {
   $form = json_encode( $form_elements );
   $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? sanitize_text_field( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
   $data['surveys'] = $surveys;
-  update_option( 'wwm_awesome_surveys', $data );
-  wp_send_json_success();
+  $sucess = update_option( 'wwm_awesome_surveys', $data );
+  if ( $success ) {
+   wp_send_json_success();
+  } else {
+   wp_send_json_error( 'The update_option function returned false. Survey not saved?' );
+  }
  }
 
  /**
