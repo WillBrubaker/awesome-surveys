@@ -1052,8 +1052,7 @@ class Awesome_Surveys {
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   $form_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
   if ( is_null( $form_elements ) || false == $form_elements ) {
-   $data = 'json failure';
-   wp_send_json_error( $data );
+   wp_send_json_error( 'json failure' );
   }
   $responses = array();
   $question_count = 0;
