@@ -250,14 +250,21 @@ class Awesome_Surveys {
  public function plugin_options()
  {
 
+  $user_id = get_current_user_id();
+  if ( isset( $_GET['wwm_dismiss'] ) ) {
+   if ( wp_verify_nonce( $_GET['wwm_dismiss'], 'wwm_dismiss' ) && current_user_can( 'manage_options' ) ) {
+    update_user_meta( $user_id, 'wwm_as_notice_dismissed', true );
+   }
+  }
 
+  $dismissed = get_user_meta( $user_id, 'wwm_as_notice_dismissed', true );
+  if ( empty( $dismissed ) ) {
+   add_action( 'admin_notices', array( &$this, 'admin_notices' ) );
+  }
   ?>
+  <h2>Awesome Surveys</h2>
   <div class="wrap">
-   <div class="updated">
-    <p>
-     <?php _e( 'Need help? There are handy tips for some of the options in the help menu. Click the help tab in the upper right corner of your screen', $this->text_domain ); ?>
-    </p>
-   </div>
+   <?php do_action( 'admin_notices' ); ?>
    <p>
     <ul><?php _e( 'Donate to the future development of this plugin:', $this->text_domain ); ?>
      <li>
@@ -637,6 +644,23 @@ class Awesome_Surveys {
  {
 
   return '<iframe width="420" height="315" src="//www.youtube.com/embed/YIta2rDE-QU" frameborder="0" allowfullscreen></iframe>';
+ }
+
+ public function admin_notices()
+ {
+
+  ?>
+  <div class="updated">
+    <p>
+     <?php
+      _e( 'Need help? There are handy tips for some of the options in the help menu. Click the help tab in the upper right corner of your screen', $this->text_domain );
+      ?>
+    </p>
+    <?php
+     printf( '<p><a href="%s">%s</a></p>', esc_url( add_query_arg( 'wwm_dismiss', wp_create_nonce( 'wwm_dismiss' ) ) ), __( 'Dismiss', $this->text_domain ) );
+    ?>
+   </div>
+   <?php
  }
 
  /**
