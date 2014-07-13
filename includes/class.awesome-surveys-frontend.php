@@ -214,7 +214,12 @@ class Awesome_Surveys_Frontend {
   update_option( 'wwm_awesome_surveys', $surveys );
   $form_id = sanitize_title( stripslashes( $survey['name'] ) );
   $thank_you = stripslashes( $survey['thank_you'] );
-  wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you ) );
+  /*
+   Feature request - 'Can I redirect to some page after survey submission?'
+   @see https://gist.github.com/WillBrubaker/57157ee587a9d580ddef
+   */
+  $url = esc_url( apply_filters( 'after_awesome_survey_response_processed', null, array( 'survey_id' => $_POST['survey_id'], 'survey' => $survey, 'responses' => $_POST['question'], ) ) );
+  wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you, 'url' => $url ) );
   exit;
  }
 

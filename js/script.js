@@ -25,6 +25,9 @@ jQuery(document).ready(function($) {
           }
           msg = ('undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' + data.data + '</span>';
           $(form).empty().append('<p>' + msg + '</p>');
+          if (null != data.data.url) {
+            window.location = data.data.url;
+          }
         }, 'json').fail(function(xhr) {
           $(form).empty().append('<p class="error">There was an error. The error status code is: ' + xhr.status + ' The error message is: ' + xhr.statusText + '</p>');
         }).always(function() {

@@ -201,6 +201,78 @@ jQuery(document).ready(function($) {
     $('#edit-survey-name').dialog('open');
   });
 
+  $('#surveys').on('click', 'a.edit-thanks', function(e) {
+    e.preventDefault();
+    $('#edit-survey-thanks input[name="survey_id"]').val($(this).attr('data-survey_id'));
+    $('#edit-survey-thanks input[name="_nonce"]').val($(this).attr('data-nonce'));
+    $('#edit-survey-thanks textarea[name="thank_you"]').val($(this).text());
+    $('#edit-survey-thanks').dialog('open');
+  });
+
+  $('#surveys').on('click', 'a.edit-auth-method', function(e) {
+    e.preventDefault();
+    $.post(ajaxurl, {action: 'wwm_get_auth_method_edit_form', survey_id: $(this).attr('data-survey_id'), _nonce: $(this).attr('data-nonce')}, function(data) {
+      $(data.data).dialog({
+        modal: true,
+        title: 'Edit Survey Auth Method',
+        width: 500,
+        buttons: [{
+          text: 'Submit',
+          id: 'button-ok',
+          click: function() {
+            $('div.wrap').css('cursor', 'progress');
+            submitVals = $($(this)).serializeArray();
+            activeDialog = $(this);
+            $.post(ajaxurl, submitVals, function(data) {
+              if (data.success) {
+                $.post(ajaxurl, {
+                  action: 'get_survey_results'
+                }, function(html) {
+                  $('#existing-surveys').empty().append(html);
+                  $('#survey-responses').accordion({
+                    header: 'h5',
+                    heightStyle: 'content',
+                    collapsible: true,
+                    active: false,
+                  });
+                  $('.answer-accordion').accordion({
+                    header: 'h4.answers',
+                    collapsible: true,
+                    active: false,
+                    heightStyle: 'content'
+                  });
+                  attachDialog($);
+                }, 'html')
+              } else if (false == data.success) {
+                alert(data.data.message)
+              }
+            }, 'json').fail(function(xhr) {
+              alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
+            }).always(function() {
+              activeDialog.dialog('destroy');
+              $('div.wrap').css('cursor', 'default');
+            });
+          }
+        }, {
+          text: 'Cancel',
+          id: 'button-cancel',
+          click: function() {
+            $(this).dialog('destroy');
+            $('div.wrap').css('cursor', 'default');
+          }
+        }],
+        open: function() {
+          $(this).keypress(function(e) {
+            if (13 == e.keyCode) {
+              e.preventDefault();
+              $('#button-ok', $(this).parent()).trigger('click');
+            }
+          })
+        }
+      });
+    })
+  })
+
   $('#surveys').on('submit', 'form.delete-survey', function(e) {
     e.preventDefault();
     result = confirm('Really delete this survey? This action is permanent and not reversible!');
@@ -251,7 +323,7 @@ jQuery(document).ready(function($) {
 var activeDialog;
 
 function attachDialog($) {
-  $('#surveys #edit-question, #surveys #edit-answer, #surveys #edit-survey-name').dialog({
+  $('#surveys #edit-question, #surveys #edit-answer, #surveys #edit-survey-name, #surveys #edit-survey-thanks').dialog({
     autoOpen: false,
     title: 'Edit Survey',
     height: 'auto',

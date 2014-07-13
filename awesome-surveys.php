@@ -2,7 +2,7 @@
 /*
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
-Description:
+Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
 Version: 1.1.1
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
@@ -90,6 +90,9 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_edit_question', array( &$this, 'edit_question' ) );
   add_action( 'wp_ajax_wwm_edit_answer', array( &$this, 'edit_answer' ) );
   add_action( 'wp_ajax_wwm_edit_survey_name', array( &$this, 'edit_survey_name' ) );
+  add_action( 'wp_ajax_wwm_edit_survey_thanks', array( &$this, 'edit_survey_thanks' ) );
+  add_action( 'wp_ajax_wwm_get_auth_method_edit_form', array( &$this, 'get_auth_method_edit_form' ) );
+  add_action( 'wp_ajax_wwm_edit_survey_auth', array( &$this, 'edit_survey_auth' ) );
   add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
@@ -99,6 +102,7 @@ class Awesome_Surveys {
   add_filter( 'get_validation_elements_textarea', array( &$this, 'get_validation_elements_textarea' ) );
   add_action( 'contextual_help', array( &$this, 'contextual_help' ) );
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
+  add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
  }
 
  /**
@@ -136,9 +140,9 @@ class Awesome_Surveys {
   wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
-  wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
-  wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'pure-forms-css', 'jquery-ui-lightness' ), self::$wwm_plugin_values['version'], 'all' );
+  wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
+  wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'jquery-ui-lightness', 'pure-forms-css' ), self::$wwm_plugin_values['version'], 'all' );
  }
 
  /**
@@ -371,6 +375,8 @@ class Awesome_Surveys {
      $form = json_decode( stripslashes( $survey['form'] ), true );
      $survey_name = stripslashes( stripslashes( $survey['name'] ) );
      $edit_name_nonce = wp_create_nonce( 'edit-survey-name_' . $key );
+     $edit_auth_nonce = wp_create_nonce( 'edit-survey-auth_' . $key );
+     $edit_thanks_nonce = wp_create_nonce( 'edit-survey-thanks_' . $key );
      $edit_survey_name_link = '<p><a href="#" title="' . __( 'Edit Survey Name', $this->text_domain ) . '" data-nonce="' . $edit_name_nonce . '" data-survey_id="' . $key . '" class="edit-survey-name">' . $survey_name . '</a> (click to edit)</p>';
      $html .= "\t\t\t" . '<h5>' . $survey_name . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
      $html .= "\t\t\t" . $edit_survey_name_link . "\n";
@@ -417,10 +423,11 @@ class Awesome_Surveys {
        }
       }
      $html .= "\n\t\t\t" . '</div><!--.answers-->' . "\n";
+     $html .=  "\t\t\t" . '<p>' . __( 'Thank You Message:', $this->text_domain ) . ' <a href="#" data-survey_id="' . $key . '" data-nonce="' . $edit_thanks_nonce . '" class="edit-thanks">' . sanitize_text_field( $survey['thank_you'] ) . '</a> (' . __( 'click to edit', $this->text_domain ) . ')</p>';
+     $html .=  "\t\t\t" . '<p>' . __( 'Survey Authentication Method:', $this->text_domain ) . ' <a href="#"  data-survey_id="' . $key . '" data-nonce="' . $edit_auth_nonce . '" class="edit-auth-method">' . sanitize_text_field( $survey['auth'] ) . '</a> (' . __( 'click to edit', $this->text_domain ) . ')</p>';
      $html .= "\n\t\t" . '</div><!--.survey-->' . "\n";
     }
    }
-   $html .= '</div><!--#survey-responses-->' . "\n";
    $html .= '<div id="question-dialog">
               <form id="edit-question" method="post" action="' . $_SERVER['PHP_SELF'] . '">
                <input type="text" name="question" value="" required>
@@ -446,9 +453,19 @@ class Awesome_Surveys {
                <input type="hidden" name="survey_id" value="">
                <input type="hidden" name="_nonce" value="">
                <input type="hidden" name="action" value="wwm_edit_survey_name">
-              </form>';
+              </form>
+             </div><!--survey-name-dialog-->';
+   $html .= '<div id="survey-thanks-dialog">
+              <form id="edit-survey-thanks" method="post" action="' . $_SERVER['PHP_SELF'] . '">
+               <textarea name="thank_you" value="" required></textarea>
+               <input type="hidden" name="survey_id" value="">
+               <input type="hidden" name="_nonce" value="">
+               <input type="hidden" name="action" value="wwm_edit_survey_thanks">
+              </form>
+             </div><!--survey-thanks-dialog-->';
+
   }
-  $html .= '</div><!--#survey-name-dialog-->';
+  $html .= '</div><!--#survey-responses-->';
   return $html;
  }
 
@@ -594,7 +611,7 @@ class Awesome_Surveys {
      $form = new FormOverrides( 'new-elements' );
      $form->addElement( new Element_HTML( '<div class="submit_holder"><div id="add-element"></div><div class="validation accordion"><h5>' . __( 'General Survey Options:', $this->text_domain ) . '</h5><div>' ) );
      $form->addElement( new Element_Textarea( __( 'A Thank You message:', $this->text_domain ), 'thank_you', array( 'value' => __( 'Thank you for completing this survey', $this->text_domain ), 'required' => 1 ) ) );
-     $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
+     $options = array();
      /**
       * *!!!IMPORTANT!!!*
       * If an auth method is added via the survey_auth_options, a filter must also be added
@@ -1095,7 +1112,7 @@ class Awesome_Surveys {
   $data = get_option( 'wwm_awesome_surveys', array() );
   $surveys = ( isset( $data['surveys'] ) ) ? $data['surveys'] : array();
   $form = json_encode( $form_elements );
-  $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? sanitize_text_field( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses );
+  $surveys[] = array( 'name' => sanitize_text_field( $_POST['survey_name'] ), 'form' => $form, 'thank_you' => ( isset( $_POST['thank_you'] ) ) ? sanitize_text_field( $_POST['thank_you'] ) : null, 'auth' => esc_attr( $_POST['auth'] ), 'responses' => $responses, );
   $data['surveys'] = $surveys;
   $success = update_option( 'wwm_awesome_surveys', $data );
   if ( $success ) {
@@ -1192,6 +1209,68 @@ class Awesome_Surveys {
   exit;
  }
 
+ public function edit_survey_thanks()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-survey-thanks_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   status_header( 403 );
+   die();
+  }
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][$_POST['survey_id']];
+  $survey['thank_you'] = sanitize_text_field( $_POST['thank_you'] );
+  $surveys['surveys'][$_POST['survey_id']] = $survey;
+  update_option( 'wwm_awesome_surveys', $surveys );
+  wp_send_json_success( $survey['thank_you'] );
+  exit;
+ }
+
+ public function get_auth_method_edit_form()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-survey-auth_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   status_header( 403 );
+   die();
+  }
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][$_POST['survey_id']];
+  $options = apply_filters( 'survey_auth_options', array() );
+  $html = '<form id="edit-survey-auth-method" class="pure-form pure-form-stacked">';
+  $html .= '<p>' . __( 'A survey that has had responses can not be changed to the "Logged in" auth method', $this->text_domain ) . '</p>';
+  foreach ( $options as $key => $value ) {
+   $html .= '<p><input type="radio" name="auth" value="' . $key . '"' . checked( $key == $survey['auth'], true, false ) . disabled(  'login' == $key && isset( $survey['num_responses'] ), true, false ) . '> ' . $value . '</p>';
+  }
+  $html .= '<input type="hidden" name="original_auth" value="' . $survey['auth'] . '">
+            <input type="hidden" name="_nonce" value="' . $_POST['_nonce'] . '">
+            <input type="hidden" name="survey_id" value="' . $_POST['survey_id'] . '">
+            <input type="hidden" name="action" value="wwm_edit_survey_auth">
+           </form>';
+   wp_send_json_success( $html );
+ }
+
+ public function edit_survey_auth()
+ {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'edit-survey-auth_' . $_POST['survey_id'] ) || ! current_user_can( 'manage_options' ) ) {
+   status_header( 403 );
+   die();
+  }
+
+  if ( $_POST['original_auth'] == $_POST['auth'] ) {
+   wp_send_json_success();//nothing to do.
+  }
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][$_POST['survey_id']];
+  $survey['auth'] = sanitize_text_field( $_POST['auth'] );
+  if ( 'login' != $survey['auth'] && 'login' == $_POST['original_auth'] && isset( $survey['respondents'] ) ) {
+   unset( $survey['respondents'] );
+  }
+  $surveys['surveys'][$_POST['survey_id']] = $survey;
+  update_option( 'wwm_awesome_surveys', $surveys );
+  wp_send_json_success();
+ }
+
  /**
   * AJAX handler for survey removal
   * @since 1.1
@@ -1229,6 +1308,13 @@ class Awesome_Surveys {
    $frontend = new Awesome_Surveys_Frontend;
   }
   $frontend->process_response();
+ }
+
+ public function default_auth_methods( $options = array() )
+ {
+
+  $options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
+  return $options;
  }
 
  private function is_existing_name( $name = '', $surveys = array() )
