@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 3.9.1
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -96,6 +96,16 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 == Changelog ==
+
+= v1.1.2 =
+1. New feature: conditionally edit survey authentication method
+2. New feature: edit the thank you method
+3. Added ability to redirect after survey submission (requires an addon)
+4. Attempts to provide meaningful feedback if survey fails to save
+5. Added uninstall.php
+6. Bug fixes
+7. Changed behaviour of the admin notice - can now be dismissed on a per-user basis
+8. Code cleanup of external library
 
 = v1.1.1 =
 1. Fixed a bug where if two surveys were present on a page/post only the first one could be submitted
