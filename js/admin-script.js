@@ -1,3 +1,4 @@
+
 jQuery(document).ready(function($) {
 
   var newElementForm = $('#new-elements').html();
