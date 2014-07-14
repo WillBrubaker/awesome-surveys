@@ -8,8 +8,8 @@ jQuery(document).ready(function($) {
       overlay = $('.overlay', $(form));
       overlay.show();
       $.post(ajaxurl, $(form).serializeArray(), function(data) {
-        if (data.error) {
-          alert(data.error)
+        if (false == data.success) {
+          alert(data.data)
         } else {
           var buttonHtml = $('.create_holder').html();
           $('#survey-manager').hide();
@@ -102,7 +102,6 @@ jQuery(document).ready(function($) {
             overlay.hide();
           }
         });
-        //});
         $('#new-elements input[type="submit"]').prop('disabled', false);
       }, 'json');
     } else {
@@ -125,6 +124,7 @@ jQuery(document).ready(function($) {
     var buttonName = $('input[type="submit"][clicked="true"]').attr('name');
     if ('save' == buttonName) {
       $.post(ajaxurl, $(this).serializeArray(), function(data) {
+        if ( data.success ) {
         $.post(ajaxurl, {
           action: 'get_survey_results'
         }, function(html) {
@@ -143,27 +143,30 @@ jQuery(document).ready(function($) {
           });
           attachDialog($);
         }, 'html')
-      });
+      } else {
+        alert(data.data);
+      }
+      }).fail(function(xhr) {
+          alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
+        }).always(function() {
+          $('#preview h4.survey-name').empty();
+          $('.survey-preview').empty();
+          $('#add-element').empty();
+          $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+          $('#new-elements').empty().append(newElementForm).hide();
+          $('#survey-manager').show();
+          overlay.hide();
+        });
     }
-    $('#preview h4.survey-name').empty();
-    $('.survey-preview').empty();
-    $('#add-element').empty();
-    $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
-    $('#new-elements').empty().append(newElementForm).hide();
-    $('#survey-manager').show();
-    overlay.hide();
   });
-  $('button.delete').on('click', function() {
-    $.post(ajaxurl, {
-      'action': 'delete_surveys'
-    });
-  });
+
   $('#survey-responses').accordion({
     header: 'h5',
     heightStyle: 'content',
     collapsible: true,
     active: false,
   });
+
   $('.answer-accordion').accordion({
     header: 'h4.answers',
     collapsible: true,
@@ -197,6 +200,78 @@ jQuery(document).ready(function($) {
     $('#edit-survey-name input[name="name"]').val($(this).text());
     $('#edit-survey-name').dialog('open');
   });
+
+  $('#surveys').on('click', 'a.edit-thanks', function(e) {
+    e.preventDefault();
+    $('#edit-survey-thanks input[name="survey_id"]').val($(this).attr('data-survey_id'));
+    $('#edit-survey-thanks input[name="_nonce"]').val($(this).attr('data-nonce'));
+    $('#edit-survey-thanks textarea[name="thank_you"]').val($(this).text());
+    $('#edit-survey-thanks').dialog('open');
+  });
+
+  $('#surveys').on('click', 'a.edit-auth-method', function(e) {
+    e.preventDefault();
+    $.post(ajaxurl, {action: 'wwm_get_auth_method_edit_form', survey_id: $(this).attr('data-survey_id'), _nonce: $(this).attr('data-nonce')}, function(data) {
+      $(data.data).dialog({
+        modal: true,
+        title: 'Edit Survey Auth Method',
+        width: 500,
+        buttons: [{
+          text: 'Submit',
+          id: 'button-ok',
+          click: function() {
+            $('div.wrap').css('cursor', 'progress');
+            submitVals = $($(this)).serializeArray();
+            activeDialog = $(this);
+            $.post(ajaxurl, submitVals, function(data) {
+              if (data.success) {
+                $.post(ajaxurl, {
+                  action: 'get_survey_results'
+                }, function(html) {
+                  $('#existing-surveys').empty().append(html);
+                  $('#survey-responses').accordion({
+                    header: 'h5',
+                    heightStyle: 'content',
+                    collapsible: true,
+                    active: false,
+                  });
+                  $('.answer-accordion').accordion({
+                    header: 'h4.answers',
+                    collapsible: true,
+                    active: false,
+                    heightStyle: 'content'
+                  });
+                  attachDialog($);
+                }, 'html')
+              } else if (false == data.success) {
+                alert(data.data.message)
+              }
+            }, 'json').fail(function(xhr) {
+              alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
+            }).always(function() {
+              activeDialog.dialog('destroy');
+              $('div.wrap').css('cursor', 'default');
+            });
+          }
+        }, {
+          text: 'Cancel',
+          id: 'button-cancel',
+          click: function() {
+            $(this).dialog('destroy');
+            $('div.wrap').css('cursor', 'default');
+          }
+        }],
+        open: function() {
+          $(this).keypress(function(e) {
+            if (13 == e.keyCode) {
+              e.preventDefault();
+              $('#button-ok', $(this).parent()).trigger('click');
+            }
+          })
+        }
+      });
+    })
+  })
 
   $('#surveys').on('submit', 'form.delete-survey', function(e) {
     e.preventDefault();
@@ -240,14 +315,15 @@ jQuery(document).ready(function($) {
     }).always(function() {
       overlay.hide();
     });
-  })
+  });
+
   attachDialog($);
 });
 
 var activeDialog;
 
 function attachDialog($) {
-  $('#surveys #edit-question, #surveys #edit-answer, #surveys #edit-survey-name').dialog({
+  $('#surveys #edit-question, #surveys #edit-answer, #surveys #edit-survey-name, #surveys #edit-survey-thanks').dialog({
     autoOpen: false,
     title: 'Edit Survey',
     height: 'auto',

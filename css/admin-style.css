@@ -9,6 +9,9 @@
       height: auto; }
     #tabs form input[type="text"]:focus {
       width: 80%; }
+  #tabs .survey p {
+    width: 100%;
+    float: left; }
 
 form#new-elements {
   display: none; }
@@ -131,7 +134,7 @@ div.answers {
   float: left;
   width: 100%; }
 
-#question-dialog, #answer-dialog, #survey-name-dialog {
+#question-dialog, #answer-dialog, #survey-name-dialog, #survey-thanks-dialog {
   display: none; }
 
 #edit-answer input[type="text"], #edit-question input[type="text"] {

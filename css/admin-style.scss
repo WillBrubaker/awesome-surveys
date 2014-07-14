@@ -12,6 +12,10 @@
   width: 80%;
  }
 }
+.survey p {
+ width: 100%;
+ float: left;
+}
  margin-top: 2.5em;
 }
 
@@ -167,7 +171,7 @@ div.answers {
  width: 100%;
 }
 
-#question-dialog, #answer-dialog, #survey-name-dialog {
+#question-dialog, #answer-dialog, #survey-name-dialog, #survey-thanks-dialog {
  display: none;
 }
 
