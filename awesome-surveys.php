@@ -60,7 +60,7 @@ class Awesome_Surveys {
 
   if ( ! is_admin() && ! class_exists( 'Awesome_Surveys_Frontend' ) ) {
    include_once( plugin_dir_path( __FILE__ ) . 'includes/class.awesome-surveys-frontend.php' );
-   $this->frontend = new Awesome_Surveys_Frontend;
+   $this->frontend = new Awesome_Surveys_Frontend( self::$wwm_plugin_values['version'] );
   }
   $this->page_title = 'Awesome Surveys';
   $this->menu_title = 'Awesome Surveys';
