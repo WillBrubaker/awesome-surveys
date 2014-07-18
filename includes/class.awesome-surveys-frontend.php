@@ -92,7 +92,7 @@ class Awesome_Surveys_Frontend {
   $nonce = wp_create_nonce( 'answer-survey' );
   $has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
   $form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
-  $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked' ) );
+  $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked', 'action' => $_SERVER['REQUEST_URI'], ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form_output->addElement( new Element_HTML( '<p>' . stripcslashes( stripslashes( $args['name'] ) ) . '</p>' ) );
   $questions_count = 0;
@@ -140,7 +140,7 @@ class Awesome_Surveys_Frontend {
   $form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
   $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
   $form_output->addElement( new Element_Hidden( 'auth_method', $args['auth_method'] ) );
-  $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', ), array( 'disabled' => 1 ) ) );
+  $form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
   return $form_output->render( true );
  }
 
