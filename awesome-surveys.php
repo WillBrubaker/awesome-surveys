@@ -96,6 +96,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
+  add_action( 'wp_ajax_wwm_as_get_json', array( &$this, 'get_json' ) );
   add_filter( 'wwm_survey_validation_elements', array( &$this, 'wwm_survey_validation_elements' ), 10, 2 );
   add_filter( 'get_validation_elements_number', array( &$this, 'get_validation_elements_number' ) );
   add_filter( 'get_validation_elements_text', array( &$this, 'get_validation_elements_text' ) );
@@ -974,7 +975,6 @@ class Awesome_Surveys {
   );
 
   $form_elements_array['validation'] = wp_parse_args( $form_elements_array['validation'], $defaults );
-  error_log( print_r( $form_elements_array, true ) );
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
    foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
@@ -1344,6 +1344,18 @@ class Awesome_Surveys {
    }
   }
   return false;
+ }
+
+ public function get_json() {
+
+  $defaults = array(
+   'validation' => array(
+    'required' => false,
+    'rules' => array(),
+   ),
+  );
+  $arr = wp_parse_args( $_POST['options'], $defaults );
+  wp_send_json_success( json_encode( $arr ) );
  }
 
  /**
