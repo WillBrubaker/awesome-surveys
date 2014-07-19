@@ -1,3 +1,4 @@
+$break-large: 1072px;
 #tabs {
  form {
  position: relative;
@@ -39,6 +40,9 @@ form#new-elements {
  display: inline-block;
  &:hover {
   width: 55%;
+ }
+ @media screen and ( max-width: $break-large ) {
+  width: 100%;
  }
 }
 
@@ -178,5 +182,31 @@ div.answers {
 #edit-answer, #edit-question {
  input[type="text"] {
   width: 90%;
+ }
+}
+
+#preview {
+ .button-holder {
+  float: right;
+  width: 50%;
+  max-width: 200px;
+  display: none;
+  button {
+   float: left;
+   margin-top: .5em;
+  }
+ }
+ .control-group {
+   float: left;
+   max-width: 50%;
+  }
+ .single-element-edit {
+  &:hover {
+  border: 1px #c0c0c0 dashed;
+   .button-holder {
+    display: block;
+   }
+  }
+  padding: .5em;
  }
 }
