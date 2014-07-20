@@ -96,8 +96,7 @@ jQuery(document).ready(function($) {
               $('#preview .survey-preview').empty().append(data);
               $('button').button();
               elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
-              $(elementsJSON).each(function(index, value) {
-              })
+              $(elementsJSON).each(function(index, value) {})
             });
             $('#add-element').empty();
             $('#new-elements input[type="submit"]').prop('disabled', true);
@@ -329,14 +328,24 @@ jQuery(document).ready(function($) {
     });
   });
 
+  $('#tabs').on('change', 'form#save-survey [name="existing_elements"]', function() {
+    target = $('#tabs #save-survey input[type="submit"][name="save"]')
+    if ('null' == $(this).val()) {
+      $(this).val('')
+      target.prop('disabled', true)
+    } else {
+      target.prop('disabled', false)
+    }
+  })
+
   $('#tabs').on('click', '#preview button.element-edit', function(e) {
     e.preventDefault()
     action = $(this).attr('data-action')
     var index = $(this).attr('data-index')
+    var container = $(this).closest('.single-element-edit')
     var elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
-    console.log(elementsJSON)
     if ('delete' == action) {
-      $(this).closest('.single-element-edit').remove();
+      container.remove();
       delete elementsJSON[index]
     } else {
       label = $('label.control-label', $(this).closest('.single-element-edit'))
@@ -355,23 +364,48 @@ jQuery(document).ready(function($) {
           click: function(e) {
             elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
             e.preventDefault()
+            var form = $('form', dynamicDialog);
             var formValues = $('form', dynamicDialog).serializeArray();
-            $.post(ajaxurl, formValues, function(data) {
-              formValues = data.data;
-              formValues = $.parseJSON(formValues);
-              elementType = elementsJSON[index].type
-              elementsJSON[index] = formValues
-              elementsJSON[index].type = elementType
-              //console.log(elementsJSON[index].label.length)
-              label.text(formValues.name)
-              if (1 == elementsJSON[index].validation.required) {
-                label.prepend('<span class="required">* </span>')
+            var validator = form.validate()
+            if ( validator.form() ) {
+              $.post(ajaxurl, formValues, function(data) {
+                formValues = data.data;
+                formValues = $.parseJSON(formValues);
+                elementType = elementsJSON[index].type
+                elementsJSON[index] = formValues
+                elementsJSON[index].type = elementType
+                label.text(formValues.name)
+                if (1 == elementsJSON[index].validation.required) {
+                  label.prepend('<span class="required">* </span>')
+                }
+                elementsJSON = removeNulls(elementsJSON)
+                var types = {Element_Radio:"radio", Element_Checkbox:"checkbox"}
+              //console.log('testing index ' + elementsJSON[index].type )
+              //console.log( elementsJSON[index].type in types)
+              if ('undefined' != typeof elementsJSON[index].label ) {
+                var target
+                newHtml = ''
+                type = ( elementsJSON[index].type in types ) ? types[elementsJSON[index].type] : 'option'
+                if ( 'option' == type ) {
+                  target = $('select', container)
+
+                  for(key in elementsJSON[index].value) {
+                    newHtml += '<option value="' + key + '">' + elementsJSON[index].label[key] + '</option>'
+                  }
+
+                } else {
+                  target = $('.controls', container)
+                  for(key in elementsJSON[index].value) {
+                    newHtml += '<label class="' + type + '"><input type="' + type + '" name="' + elementsJSON[index].name + '" value="' + key + '"> ' + elementsJSON[index].label[key] + '</label>'
+                  }
+                }
+                target.empty().append(newHtml)
               }
-              elementsJSON = removeNulls(elementsJSON)
-              $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON))
-            });
-            $(this).dialog('destroy')
-            $('#edit-slider').slider('destroy')
+                $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+                dynamicDialog.dialog('destroy')
+                $('#edit-slider').slider('destroy')
+              });
+            }
           }
         }],
         open: function() {
@@ -382,24 +416,36 @@ jQuery(document).ready(function($) {
             }
           })
           $('#edit-slider').slider({
-            value: ( 'undefined' != typeof elementsJSON[index].label ) ? elementsJSON[index].label.length : 0,
+            value: ('undefined' != typeof elementsJSON[index].label) ? elementsJSON[index].label.length : 0,
             range: false,
             max: 10,
             min: 1,
             step: 1,
+            change: function(event, ui) {
+              var numOptions = ui.value;
+              $.post(ajaxurl, {
+                'action': 'options_fields',
+                'num_options': numOptions
+              }, function(data) {
+                $('#edit-answers-holder').empty().append(data);
+                for (key in elementsJSON[index].label) {
+                  $('[name="options[label][' + key + ']"]').val(elementsJSON[index].label[key])
+                }
+              });
+            }
           }).each(function() {
-          var opt = $(this).data().uiSlider.options;
-          var vals = opt.max - opt.min;
-          for (var i = 0; i <= vals; i++) {
-            var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
-            $("#edit-slider").append(el);
-          }
-        })
+            var opt = $(this).data().uiSlider.options;
+            var vals = opt.max - opt.min;
+            for (var i = 0; i <= vals; i++) {
+              var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
+              $("#edit-slider").append(el);
+            }
+          })
         }
       })
     }
     elementsJSON = removeNulls(elementsJSON)
-    $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON))
+    $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
   })
 
   attachDialog($);
@@ -408,24 +454,30 @@ jQuery(document).ready(function($) {
 var activeDialog;
 
 function generateDynamicDialog(obj) {
-  html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal"><input name="options[name]" value="'
+  html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal" method="post" action=""><input name="options[name]" value="'
   html += obj.name
-  html += '"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
+  html += '" required="required"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
   if (typeof obj.validation != 'undefined' && typeof obj.validation.required != 'undefined' && 1 == obj.validation.required) {
     html += ' checked="checked"'
   }
   html += '>'
-  if ( 'undefined' != typeof obj.label) {
+  if ('undefined' != typeof obj.label) {
     html += '<div class="slider-wrapper"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
     html += '<p>answers:</p>'
+    html += '<div id="edit-answers-holder">'
     for (key in obj.label) {
-      console.log( obj.label[key], obj.value[key])
-      html += '<input type="text" name="options[label][' + key + ']" value="' + obj.label[key] +'">'
+      count = Number(key) + 1
+      html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="' + obj.label[key] + '" required="required">'
+      html += '<label for="options-default-' + key + '">default?<br></label><input id="options-default-' + key + '" type="radio" name="options[default]" value="' + key + '"'
+      if (key == obj.default) {
+        html += ' checked="checked"'
+      }
+      html += '>'
     }
+    html += '</div>'
   }
   if ('undefined' != typeof obj.validation.rules) {
     for (index in obj.validation.rules) {
-      console.log(index, obj.validation.rules[index])
       html += '<input type="hidden" name="options[validation][rules][' + index + ']" value="' + obj.validation.rules[index] + '">'
     }
   }
@@ -503,10 +555,13 @@ function attachDialog($) {
 
 function removeNulls(elementsJSON) {
   var temp = [];
+
   for (i = 0; i < elementsJSON.length; i++) {
-    if (elementsJSON[i] != null) {
+      console.log(elementsJSON[i])
+    if (elementsJSON[i] != null && 'undefined' != typeof elementsJSON[i] && 'null' != typeof elementsJSON[i]) {
       temp.push(elementsJSON[i])
     }
   }
-  return elementsJSON
+  console.log(temp.length)
+  return ( temp.length > 0 ) ? temp : null
 }

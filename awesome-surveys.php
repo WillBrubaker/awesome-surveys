@@ -1347,7 +1347,6 @@ class Awesome_Surveys {
  }
 
  public function get_json() {
-
   $defaults = array(
    'validation' => array(
     'required' => false,
@@ -1360,7 +1359,6 @@ class Awesome_Surveys {
    $arr['value'][$iterations] = $iterations;
   }
 
-  error_log( print_r( $arr, true ) );
   wp_send_json_success( json_encode( $arr ) );
  }
 
