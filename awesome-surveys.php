@@ -1355,6 +1355,12 @@ class Awesome_Surveys {
    ),
   );
   $arr = wp_parse_args( $_POST['options'], $defaults );
+  $max = ( isset( $_POST['options']['label'] ) ) ? count( $_POST['options']['label'] ) : 0;
+  for ( $iterations = 0; $iterations < $max; $iterations++ ) {
+   $arr['value'][$iterations] = $iterations;
+  }
+
+  error_log( print_r( $arr, true ) );
   wp_send_json_success( json_encode( $arr ) );
  }
 

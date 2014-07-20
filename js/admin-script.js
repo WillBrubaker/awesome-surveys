@@ -97,7 +97,6 @@ jQuery(document).ready(function($) {
               $('button').button();
               elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
               $(elementsJSON).each(function(index, value) {
-                //console.log('index: ' + index + ' name: ' + value.name);
               })
             });
             $('#add-element').empty();
@@ -129,40 +128,40 @@ jQuery(document).ready(function($) {
     overlay.show();
     if ('save' == buttonName) {
       $.post(ajaxurl, $(this).serializeArray(), function(data) {
-        if ( data.success ) {
-        $.post(ajaxurl, {
-          action: 'get_survey_results'
-        }, function(html) {
-          $('#existing-surveys').empty().append(html);
-          $('#survey-responses').accordion({
-            header: 'h5',
-            heightStyle: 'content',
-            collapsible: true,
-            active: false,
-          });
-          $('.answer-accordion').accordion({
-            header: 'h4.answers',
-            collapsible: true,
-            active: false,
-            heightStyle: 'content'
-          });
-          $('#survey-manager [name="survey_name"]').val('');
-          attachDialog($);
-        }, 'html')
-      } else {
-        alert(data.data);
-      }
+        if (data.success) {
+          $.post(ajaxurl, {
+            action: 'get_survey_results'
+          }, function(html) {
+            $('#existing-surveys').empty().append(html);
+            $('#survey-responses').accordion({
+              header: 'h5',
+              heightStyle: 'content',
+              collapsible: true,
+              active: false,
+            });
+            $('.answer-accordion').accordion({
+              header: 'h4.answers',
+              collapsible: true,
+              active: false,
+              heightStyle: 'content'
+            });
+            $('#survey-manager [name="survey_name"]').val('');
+            attachDialog($);
+          }, 'html')
+        } else {
+          alert(data.data);
+        }
       }).fail(function(xhr) {
-          alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
-        }).always(function() {
-          $('#preview h4.survey-name').empty();
-          $('.survey-preview').empty();
-          $('#add-element').empty();
-          $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
-          $('#new-elements').empty().append(newElementForm).hide();
-          $('#survey-manager').show();
-          overlay.hide();
-        });
+        alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
+      }).always(function() {
+        $('#preview h4.survey-name').empty();
+        $('.survey-preview').empty();
+        $('#add-element').empty();
+        $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+        $('#new-elements').empty().append(newElementForm).hide();
+        $('#survey-manager').show();
+        overlay.hide();
+      });
     } else {
       $('#survey-manager').trigger('reset')
       location.reload()
@@ -220,7 +219,11 @@ jQuery(document).ready(function($) {
 
   $('#surveys').on('click', 'a.edit-auth-method', function(e) {
     e.preventDefault();
-    $.post(ajaxurl, {action: 'wwm_get_auth_method_edit_form', survey_id: $(this).attr('data-survey_id'), _nonce: $(this).attr('data-nonce')}, function(data) {
+    $.post(ajaxurl, {
+      action: 'wwm_get_auth_method_edit_form',
+      survey_id: $(this).attr('data-survey_id'),
+      _nonce: $(this).attr('data-nonce')
+    }, function(data) {
       $(data.data).dialog({
         modal: true,
         title: 'Edit Survey Auth Method',
@@ -326,65 +329,73 @@ jQuery(document).ready(function($) {
     });
   });
 
-  $('#tabs').on( 'click', '#preview button.element-edit', function(e) {
+  $('#tabs').on('click', '#preview button.element-edit', function(e) {
     e.preventDefault()
     action = $(this).attr('data-action')
-    index = $(this).attr('data-index')
-    elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
+    var index = $(this).attr('data-index')
+    var elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
+    console.log(elementsJSON)
     if ('delete' == action) {
       $(this).closest('.single-element-edit').remove();
       delete elementsJSON[index]
     } else {
-      label = $('label.control-label',$(this).closest('.single-element-edit') )
+      label = $('label.control-label', $(this).closest('.single-element-edit'))
       var dynamicDialog = generateDynamicDialog(elementsJSON[index]);
       dynamicDialog.dialog({
         title: "Edit Survey Question",
         modal: true,
-        buttons: [
-                  {
-                    text: "Cancel",
-                    click: function() {
-                      $(this).dialog('destroy')
-                    }
-                  },
-                  {
-                    text: "Submit",
-                    click: function(e) {
-                      e.preventDefault()
-                      var formValues = $('form', dynamicDialog).serializeArray();
-                     $.post(ajaxurl, formValues, function(data, formValues) {
-                      formValues = data.data;
-                      //console.log('posting')
-                      formValues = $.parseJSON(formValues);
-                      for (key in formValues) {
-                        //console.log(formValues[key])
-                        //console.log(elementsJSON[index][key])
-                        elementsJSON[index][key] = formValues[key]
-                      }
-                     //console.log(JSON.stringify(elementsJSON))
-                     elementsJSON = removeNulls(elementsJSON)
-                      label.text(formValues.name)
-                      if (1 == elementsJSON[index].validation.required ) {
-                        label.prepend('<span class="required">* </span>')
-                      }
-                      $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON))
-                        //console.log( 'key ' + key + ' value ' + value )
-                      });
-                      //console.log('stringfied ' + JSON.stringify(formValues))
-
-
-                      $(this).dialog('destroy')
-                    }
-                  }
-                 ],
-          open: function() {
-            $(this).keypress(function(e) {
-              if (e.keyCode == $.ui.keyCode.ENTER) {
-                e.preventDefault();
-                $(this).parent().find('button:eq(2)').trigger('click')
-              }
-            })
+        buttons: [{
+          text: "Cancel",
+          click: function() {
+            $(this).dialog('destroy')
+            $('#edit-slider').slider('destroy')
           }
+        }, {
+          text: "Submit",
+          click: function(e) {
+            elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
+            e.preventDefault()
+            var formValues = $('form', dynamicDialog).serializeArray();
+            $.post(ajaxurl, formValues, function(data) {
+              formValues = data.data;
+              formValues = $.parseJSON(formValues);
+              elementType = elementsJSON[index].type
+              elementsJSON[index] = formValues
+              elementsJSON[index].type = elementType
+              //console.log(elementsJSON[index].label.length)
+              label.text(formValues.name)
+              if (1 == elementsJSON[index].validation.required) {
+                label.prepend('<span class="required">* </span>')
+              }
+              elementsJSON = removeNulls(elementsJSON)
+              $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON))
+            });
+            $(this).dialog('destroy')
+            $('#edit-slider').slider('destroy')
+          }
+        }],
+        open: function() {
+          $(this).keypress(function(e) {
+            if (e.keyCode == $.ui.keyCode.ENTER) {
+              e.preventDefault();
+              $(this).parent().find('button:eq(2)').trigger('click')
+            }
+          })
+          $('#edit-slider').slider({
+            value: ( 'undefined' != typeof elementsJSON[index].label ) ? elementsJSON[index].label.length : 0,
+            range: false,
+            max: 10,
+            min: 1,
+            step: 1,
+          }).each(function() {
+          var opt = $(this).data().uiSlider.options;
+          var vals = opt.max - opt.min;
+          for (var i = 0; i <= vals; i++) {
+            var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
+            $("#edit-slider").append(el);
+          }
+        })
+        }
       })
     }
     elementsJSON = removeNulls(elementsJSON)
@@ -400,13 +411,27 @@ function generateDynamicDialog(obj) {
   html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal"><input name="options[name]" value="'
   html += obj.name
   html += '"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
-  if (typeof obj.validation != 'undefined' && typeof obj.validation.required != 'undefined' && 1 == obj.validation.required ) {
+  if (typeof obj.validation != 'undefined' && typeof obj.validation.required != 'undefined' && 1 == obj.validation.required) {
     html += ' checked="checked"'
   }
   html += '>'
+  if ( 'undefined' != typeof obj.label) {
+    html += '<div class="slider-wrapper"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
+    html += '<p>answers:</p>'
+    for (key in obj.label) {
+      console.log( obj.label[key], obj.value[key])
+      html += '<input type="text" name="options[label][' + key + ']" value="' + obj.label[key] +'">'
+    }
+  }
+  if ('undefined' != typeof obj.validation.rules) {
+    for (index in obj.validation.rules) {
+      console.log(index, obj.validation.rules[index])
+      html += '<input type="hidden" name="options[validation][rules][' + index + ']" value="' + obj.validation.rules[index] + '">'
+    }
+  }
   html += '<input type="hidden" name="action" value="wwm_as_get_json">'
   html += '</form></div>'
-   return jQuery( html )
+  return jQuery(html)
 }
 
 function attachDialog($) {
@@ -478,10 +503,10 @@ function attachDialog($) {
 
 function removeNulls(elementsJSON) {
   var temp = [];
-  for ( i = 0; i < elementsJSON.length; i++) {
-        if ( elementsJSON[i] != null ) {
-          temp.push(elementsJSON[i])
-        }
-      }
-      return elementsJSON
+  for (i = 0; i < elementsJSON.length; i++) {
+    if (elementsJSON[i] != null) {
+      temp.push(elementsJSON[i])
+    }
+  }
+  return elementsJSON
 }

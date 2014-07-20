@@ -49,7 +49,7 @@ form#new-elements {
 .slider-wrapper {
  width: 80%;
  margin: 10px 0;
- #slider {
+ #slider, #edit-slider {
   width: 100%;
   margin-bottom: 2.5em;
   label {
@@ -208,5 +208,11 @@ div.answers {
    }
   }
   padding: .5em;
+ }
+}
+
+.dyn-dialog {
+ #slider {
+  margin: 1em 0;
  }
 }
