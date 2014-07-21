@@ -138,7 +138,7 @@ class Awesome_Surveys {
  {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( 'he', WWM_AWESOME_SURVEYS_URL . '/js/he.js', array(), '0.4.1' );
+  wp_register_script( 'he', WWM_AWESOME_SURVEYS_URL . '/js/he.min.js', array(), '0.4.1' );
   wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'he', 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
