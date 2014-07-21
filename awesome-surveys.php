@@ -138,7 +138,8 @@ class Awesome_Surveys {
  {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
+  wp_register_script( 'he', WWM_AWESOME_SURVEYS_URL . '/js/he.js', array(), '0.4.1' );
+  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'he', 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
@@ -1348,6 +1349,7 @@ class Awesome_Surveys {
 
  public function get_json() {
   $defaults = array(
+   'name' => null,
    'validation' => array(
     'required' => false,
     'rules' => array(),
@@ -1358,7 +1360,13 @@ class Awesome_Surveys {
   for ( $iterations = 0; $iterations < $max; $iterations++ ) {
    $arr['value'][$iterations] = $iterations;
   }
-
+  $arr['name'] = stripslashes( sanitize_text_field( $arr['name'] ) );
+  if ( $arr['label'] ) {
+   foreach ( $arr['label'] as $key => $value ) {
+    $arr['label'][$key] = stripslashes( sanitize_text_field( $value ) );
+   }
+  }
+  error_log( print_r( $arr, true ) );
   wp_send_json_success( json_encode( $arr ) );
  }
 

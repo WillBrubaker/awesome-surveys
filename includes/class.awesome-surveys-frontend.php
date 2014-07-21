@@ -114,7 +114,7 @@ class Awesome_Surveys_Frontend {
     if ( isset( $element['default'] ) ) {
      $atts['value'] = $element['default'];
     }
-    if ( isset( $element['validation']['required'] ) ) {
+    if ( $element['validation']['required'] ) {
      $atts['required'] = 'required';
     }
     foreach ( $element['value'] as $key => $value ) {
@@ -129,7 +129,7 @@ class Awesome_Surveys_Frontend {
     if ( isset( $element['default'] ) ) {
      $options['value'] = $element['default'];
     }
-    if ( isset( $element['validation']['required'] ) ) {
+    if ( $element['validation']['required'] ) {
      $options['required'] = 'required';
     }
    }
