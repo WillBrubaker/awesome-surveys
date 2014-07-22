@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
                 name: "existing_elements",
                 value: existingData
               });
-              $('#new-elements').append($(input));
+              $('#new-elements').remove('[name="existing_elements"]').append($(input));
             }
             $.post(ajaxurl, $(form).serializeArray(), function(data) {
               $('#preview .survey-preview').empty().append(data);
@@ -427,6 +427,12 @@ jQuery(document).ready(function($) {
               $(this).parent().find('button:eq(2)').trigger('click')
             }
           })
+          $('[name="options[name]"]', dynamicDialog).val(elementsJSON[index].name.replace(/\\/g,''))
+          textInputs = $('#edit-answers-holder [type="text"]', dynamicDialog)
+          textInputs.each(function() {
+            currentEl = textInputs.index($(this))
+            $(this).val(elementsJSON[index].label[currentEl].replace(/\\/g,''))
+          })
           $('#edit-slider').slider({
             value: ('undefined' != typeof elementsJSON[index].label) ? elementsJSON[index].label.length : 0,
             range: false,
@@ -473,7 +479,6 @@ var activeDialog;
 
 function generateDynamicDialog(obj) {
   html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal" method="post" action=""><input type="text" name="options[name]" value="'
-  html += he.encode(obj.name.replace(/\\/g, ''))
   html += '" required="required"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
   if (typeof obj.validation != 'undefined' && typeof obj.validation.required != 'undefined' && 1 == obj.validation.required) {
     html += ' checked="checked"'
@@ -485,8 +490,7 @@ function generateDynamicDialog(obj) {
     html += '<div id="edit-answers-holder">'
     for (key in obj.label) {
       count = Number(key) + 1
-      var strippedLabel = he.encode(obj.label[key].replace(/\\/g, ''))
-      html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="' + strippedLabel + '" required="required">'
+      html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="" required="required">'
       html += '<label for="options-default-' + key + '">default?<br></label><input id="options-default-' + key + '" type="radio" name="options[default]" value="' + key + '"'
       if (key == obj.default) {
         html += ' checked="checked"'

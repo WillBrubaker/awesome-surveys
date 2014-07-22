@@ -138,8 +138,7 @@ class Awesome_Surveys {
  {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( 'he', WWM_AWESOME_SURVEYS_URL . '/js/he.min.js', array(), '0.4.1' );
-  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'he', 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
+  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-tooltip', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
@@ -1052,11 +1051,11 @@ class Awesome_Surveys {
      * Since the pfbc is being used, and it has some weird issue with values of '0', but
      * it will work if you append :pfbc to it...not well documented, but it works!
      */
-    $options[$element['value'][$iterations] . ':pfbc'] = stripslashes( $element['label'][$iterations] );
+    $options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
    }
    $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
    $form->addElement( new Element_HTML( '<div class="single-element-edit">' ) );
-   $form->addElement( new $method( stripslashes( $element['name'] ), sanitize_title( $element['name'] ), $options, $atts ) );
+   $form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
    $form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', $this->text_domain ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', $this->text_domain ) . '</button></div><div class="clear"></div></div>' ) );
    $elements_count++;
   }
