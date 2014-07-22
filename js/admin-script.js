@@ -394,7 +394,7 @@ jQuery(document).ready(function($) {
                     target = $('select', container)
                     for (key in elementsJSON[index].value) {
                       newHtml += '<option value="' + key + '"'
-                      if (key = elementsJSON[index].default) {
+                      if (key = elementsJSON[index]['default']) {
                         newHtml += ' selected="selected"'
                       }
                       newHtml += '>' + elementsJSON[index].label[key] + '</option>'
@@ -405,7 +405,7 @@ jQuery(document).ready(function($) {
                     setName = $('[type="' + type + '"]:first', target).attr('name');
                     for (key in elementsJSON[index].value) {
                       newHtml += '<label class="' + type + '"><input type="' + type + '" name="' + setName + '" value="' + key + '"'
-                      if (key == elementsJSON[index].default) {
+                      if (key == elementsJSON[index]['default']) {
                         newHtml += ' checked="checked"'
                       }
                       newHtml += '> ' + formValues.label[key] + '</label>'
@@ -492,7 +492,7 @@ function generateDynamicDialog(obj) {
       count = Number(key) + 1
       html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="" required="required">'
       html += '<label for="options-default-' + key + '">default?<br></label><input id="options-default-' + key + '" type="radio" name="options[default]" value="' + key + '"'
-      if (key == obj.default) {
+      if (key == obj['default']) {
         html += ' checked="checked"'
       }
       html += '>'

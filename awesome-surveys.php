@@ -281,7 +281,7 @@ class Awesome_Surveys {
       </form>
      </li>
      <li>
-      <a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">Donate Bitcoins</a><script src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
+      <a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">Donate Bitcoins</a><script async src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
      </li>
     </ul>
    </p>
