@@ -26,8 +26,12 @@ jQuery(document).ready(function($) {
           header: 'h5',
           heightStyle: 'content',
         });
-        overlay.hide();
-      }, 'json');
+
+      }, 'json').fail(function(xhr) {
+        alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
+      }).always(function() {
+        overlay.hide()
+      })
     }
   });
 
@@ -50,12 +54,23 @@ jQuery(document).ready(function($) {
           step: 1,
           change: function(event, ui) {
             var numOptions = ui.value;
+            var radios = $('[type="radio"]', $('#options-holder'))
+            var selectedIndex = radios.index($('[type="radio"]:checked', $('#options-holder')))
+            var values = []
+            $('[name^="options[label]["]', $('#options-holder')).each(function() {
+              values.push($(this).val())
+            })
             $.post(ajaxurl, {
               'action': 'options_fields',
               'num_options': numOptions
             }, function(data) {
               $('#new-elements #options-holder').empty().append(data);
-
+              $('[name^="options[label]["]', $('#options-holder')).each(function(index) {
+                $(this).val(values[index])
+              })
+              if (selectedIndex > -1) {
+                $('[type="radio"]:eq(' + selectedIndex + ')', $('#options-holder')).prop('checked', true)
+              }
             });
           }
         }).each(function() {
@@ -93,17 +108,11 @@ jQuery(document).ready(function($) {
               $('#new-elements').remove('[name="existing_elements"]').append($(input));
             }
             $.post(ajaxurl, $(form).serializeArray(), function(data) {
-              $('#preview .survey-preview').empty().append(data);
-              $('#add-element').empty();
-              $('#new-elements input[type="submit"]').prop('disabled', true);
+              populatePreview($, data)
               $('.accordion').accordion('option', 'active', false);
-              $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
-              $('button').button();
-              elementsJSON = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
-              $(elementsJSON).each(function(index, value) {})
             }).fail(function(xhr) {
               alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
-            }).always(function(){
+            }).always(function() {
               overlay.hide();
             });
           }
@@ -414,6 +423,9 @@ jQuery(document).ready(function($) {
                   target.empty().append(newHtml)
                 }
                 $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+              }).fail(function(xhr) {
+                alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
+              }).always(function() {
                 dynamicDialog.dialog('destroy')
                 $('#edit-slider').slider('destroy')
               });
@@ -427,11 +439,11 @@ jQuery(document).ready(function($) {
               $(this).parent().find('button:eq(2)').trigger('click')
             }
           })
-          $('[name="options[name]"]', dynamicDialog).val(elementsJSON[index].name.replace(/\\/g,''))
+          $('[name="options[name]"]', dynamicDialog).val(elementsJSON[index].name.replace(/\\/g, ''))
           textInputs = $('#edit-answers-holder [type="text"]', dynamicDialog)
           textInputs.each(function() {
             currentEl = textInputs.index($(this))
-            $(this).val(elementsJSON[index].label[currentEl].replace(/\\/g,''))
+            $(this).val(elementsJSON[index].label[currentEl].replace(/\\/g, ''))
           })
           $('#edit-slider').slider({
             value: ('undefined' != typeof elementsJSON[index].label) ? elementsJSON[index].label.length : 0,
@@ -443,7 +455,6 @@ jQuery(document).ready(function($) {
               var numOptions = ui.value;
               var radios = $('[type="radio"]', dynamicDialog)
               var selectedIndex = radios.index($('[type="radio"]:checked', dynamicDialog))
-
               $.post(ajaxurl, {
                 'action': 'options_fields',
                 'num_options': numOptions
@@ -472,10 +483,108 @@ jQuery(document).ready(function($) {
     $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
   })
 
+  $('#tabs').on('click', '#preview button.survey-name-edit', function(e) {
+    e.preventDefault()
+    var input = ''
+    var form = $('<form method="post" action="' + ajaxurl + '"><label for="edit-survey-name">Edit Survey Name:</label><input id="edit-survey-name" type="text" name="edit_survey_name" required="required"><input type="hidden" name="action" value="survey_edit_name_inline"></form>')
+    form.dialog({
+      title: "Edit Survey Name",
+      modal: true,
+      open: function() {
+        $('input#edit-survey-name').val($('#save-survey [name="survey_name"]').val())
+        $(this).keypress(function(e) {
+          if (e.keyCode == $.ui.keyCode.ENTER) {
+            e.preventDefault();
+            $(this).parent().find('button:eq(2)').trigger('click')
+          }
+        })
+      },
+      buttons: [{
+        text: "Cancel",
+        click: function() {
+          $(this).dialog('destroy')
+        }
+      }, {
+        text: "Submit",
+        click: function(e) {
+          e.preventDefault()
+          var validator = form.validate()
+          if (validator.form()) {
+            $.post(ajaxurl, $(this).serializeArray(), function(data) {
+              $('#preview h4.survey-name').text('Preview of Survey: ' + data.replace(/\\/g, ''))
+              $('[name="survey_name"]').val(data.replace(/\\/g, ''))
+            }).fail(function(xhr) {
+              alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
+            }).always(function() {
+              form.dialog('destroy')
+            })
+          }
+        }
+      }],
+
+    })
+  })
+
+  $('#tabs').on('click', 'a.dup-edit', function(e) {
+    e.preventDefault()
+    id = $(this).attr('data-survey_id')
+    elements = $.parseJSON($(this).attr('data-existing_elements'))
+    options = elements.pop()
+    for (key in options) {
+      if ('string' == typeof options[key]) {
+        options[key] = options[key].replace(/\\/g, '')
+      }
+    }
+    existing_elements = JSON.stringify(elements)
+    var survey_name = $(this).attr('data-survey_name')
+    var thank_you = $(this).attr('data-thank_you')
+    var auth = $(this).attr('data-auth_method')
+    $.post(ajaxurl, {
+      survey_id: id,
+      existing_elements: existing_elements,
+      options: options,
+      survey_name: survey_name,
+      thank_you: thank_you,
+      auth: auth,
+      action: 'generate_preview'
+    }, function(data) {
+      populatePreview($, data)
+      $('#survey-manager').trigger('reset').hide()
+      $('.accordion').accordion({
+        collapsible: true,
+        active: 0,
+        header: 'h5',
+        heightStyle: 'content',
+      });
+      $.post(ajaxurl, {
+        action: 'get_element_selector',
+        survey_name: survey_name,
+        survey_id: id
+      }, function(html) {
+        $('#new-element-selector').remove()
+        $(html).insertBefore('#add-element')
+      })
+      $('#preview h4.survey-name').text('Preview of Survey: ' + survey_name);
+      $('#new-elements').show()
+      $('input[type="hidden"][name="survey_name"]').val(survey_name);
+      $('input[type="hidden"][name="survey_id"]').val(id);
+      $('#tabs').tabs("option", "active", $('#tabs a[href="#create"]').parent().index())
+    }).fail(function(xhr) {
+      alert('error code: ' + xhr.status + ' error message: ' + xhr.statusText)
+    }).always(function() {})
+  })
   attachDialog($);
 });
 
 var activeDialog;
+
+function populatePreview($, data) {
+  $('#preview .survey-preview').empty().append(data);
+  $('#add-element').empty();
+  $('#new-elements input[type="submit"]').prop('disabled', true);
+  $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+  $('button').button();
+}
 
 function generateDynamicDialog(obj) {
   html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal" method="post" action=""><input type="text" name="options[name]" value="'

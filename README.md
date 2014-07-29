@@ -112,6 +112,14 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.2 ###
+1. New feature: Editing of questions/answers now available during the survey build process
+2. New feature: Clone a survey
+3. New feature: If a survey has no responses, it can be loaded into the survey builder and edited - questions can be added, answers can be added to questions
+4. frontend js/css now gets a version string appended
+5. frontend form is now rendered with the submit button disabled, it is then enabled by the included javascript. This is an attempt to alleviate the 404 errors that some users are experiencing - probably due to the javascript not loading for any number of reasons.
+6. There was no good reason to require survey names to be unique, will now allow duplicate names.
+
 ### v1.1.2 ###
 1. New feature: conditionally edit survey authentication method
 2. New feature: edit the thank you method
