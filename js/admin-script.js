@@ -567,7 +567,7 @@ jQuery(document).ready(function($) {
       $('#preview h4.survey-name').text('Preview of Survey: ' + survey_name);
       $('#new-elements').show()
       $('input[type="hidden"][name="survey_name"]').val(survey_name);
-      $('input[type="hidden"][name="survey_id"]').val(id);
+      $('input[type="hidden"][name="survey_id"]').val(id + ':pfbc');
       $('#tabs').tabs("option", "active", $('#tabs a[href="#create"]').parent().index())
     }).fail(function(xhr) {
       alert('error code: ' + xhr.status + ' error message: ' + xhr.statusText)
