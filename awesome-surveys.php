@@ -282,9 +282,6 @@ class Awesome_Surveys {
        <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="Donate" width="1" height="1" border="0" />
       </form>
      </li>
-     <li>
-      <a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">Donate Bitcoins</a><script async src="https://coinbase.com/assets/button.js" type="text/javascript"></script>
-     </li>
     </ul>
    </p>
    <div id="tabs">
@@ -1436,7 +1433,6 @@ class Awesome_Surveys {
             <img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="Donate" width="1" height="1" border="0" />
            </form>
           </li>
-          <li><a class="coinbase-button" data-code="39735a28948aab41c695a3550c2c93d4" data-button-style="donation_large" href="https://coinbase.com/checkouts/39735a28948aab41c695a3550c2c93d4">' . __( 'Donate Bitcoins', $this->text_domain ) . '</a><script async src="https://coinbase.com/assets/button.js" type="text/javascript"></script></li>
          </ul>';
   }
  }
