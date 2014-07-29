@@ -399,7 +399,6 @@ jQuery(document).ready(function($) {
                   var target
                   newHtml = ''
                   type = (elementsJSON[index].type in types) ? types[elementsJSON[index].type] : 'option'
-                  console.log(type)
                   if ('option' == type) {
                     target = $('select', container)
                     for (key in elementsJSON[index].value) {
