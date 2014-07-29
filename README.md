@@ -5,7 +5,7 @@
 **License:** GPLv3.0+
 **Requires at least:** 3.9.1
 **Tested up to:** 3.9.1
-**Stable tag:** 1.2
+**Stable tag:** 1.2.1
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -111,6 +111,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+### v1.2.1 ###
+1. Bug fix - 'Edit Survey' was actually cloning survey in certain cases.
 
 ### v1.2 ###
 1. New feature: Editing of questions/answers now available during the survey build process
