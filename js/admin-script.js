@@ -403,10 +403,10 @@ jQuery(document).ready(function($) {
                     target = $('select', container)
                     for (key in elementsJSON[index].value) {
                       newHtml += '<option value="' + key + '"'
-                      if (key = elementsJSON[index]['default']) {
+                      if (key == elementsJSON[index]['default']) {
                         newHtml += ' selected="selected"'
                       }
-                      newHtml += '>' + elementsJSON[index].label[key] + '</option>'
+                      newHtml += '>' + formValues.label[key] + '</option>'
                     }
 
                   } else {
