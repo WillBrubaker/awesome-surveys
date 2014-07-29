@@ -44,7 +44,8 @@ form#new-elements {
       width: 20px;
       margin-top: 20px;
       margin-left: -10px;
-      text-align: center; }
+      text-align: center;
+      font-size: 1rem; }
 
 .slider-legend {
   width: 100%;
