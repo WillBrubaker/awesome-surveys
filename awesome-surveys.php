@@ -71,6 +71,10 @@ class Awesome_Surveys {
   if ( ! defined( 'WWM_AWESOME_SURVEYS_URL' ) ) {
    define( 'WWM_AWESOME_SURVEYS_URL', plugins_url( '', __FILE__ ) );
   }
+  if ( ! defined( 'WWM_AWESOME_SURVEYS_PATH' ) ) {
+   define( 'WWM_AWESOME_SURVEYS_PATH', plugin_dir_path( __FILE__ ) );
+
+  }
   register_activation_hook( __FILE__ , array( $this, 'init_plugin' ) );
   add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
   if ( is_admin() ) {
@@ -150,7 +154,7 @@ class Awesome_Surveys {
 
  /**
   * Hooked into admin_print_scripts-{$page-hook}
-  * to output required javascript for this plugin only
+  * to output required javascript for this plugin is_network_only_plugin( $plugin )
   * on its page hook
   * @since 1.1
   */

@@ -50,6 +50,9 @@ class Awesome_Surveys_Frontend {
   if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
    wp_enqueue_script( 'awesome-surveys-frontend' );
    wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
+   if ( defined( 'WPLANG' ) ) {
+    add_action( 'wp_footer', array( &$this, 'validation_messages' ), 90, 0 );
+   }
    $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
    if ( $include_css ) {
     wp_enqueue_style( 'awesome-surveys-frontend-styles' );
@@ -354,5 +357,18 @@ class Awesome_Surveys_Frontend {
    $input_value = absint( $input_value );
   }
   return $input_value;
+ }
+
+ public function validation_messages() {
+  $lang = substr( WPLANG, 0, 2 );
+  $path = WWM_AWESOME_SURVEYS_PATH . '/js/localization/';
+  if ( $messages_file = fopen( $path . 'messages_' . $lang . '.js', 'r' ) ) {
+   $messages = fread( $messages_file, filesize( $path . 'messages_' . $lang . '.js' ) );
+   echo '<script>';
+   echo 'jQuery(document).ready(function($){';
+   echo $messages;
+   echo '});';
+   echo '</script>';
+  }
  }
 }
