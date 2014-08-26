@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.2.2
+Version: 1.3-pre
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.2.2',
+  'version' => '1.3-pre',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -154,7 +154,7 @@ class Awesome_Surveys {
 
  /**
   * Hooked into admin_print_scripts-{$page-hook}
-  * to output required javascript for this plugin is_network_only_plugin( $plugin )
+  * to output required javascript for this plugin only
   * on its page hook
   * @since 1.1
   */

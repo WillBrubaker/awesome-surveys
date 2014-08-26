@@ -359,6 +359,11 @@ class Awesome_Surveys_Frontend {
   return $input_value;
  }
 
+ /**
+  * Attempts to output language localized validation messages if the localized
+  * messages file exists. Wraps those messages up in a jQuery noconflict wrapper.
+  * @since 1.3
+  */
  public function validation_messages() {
   $lang = substr( WPLANG, 0, 2 );
   $path = WWM_AWESOME_SURVEYS_PATH . '/js/localization/';
