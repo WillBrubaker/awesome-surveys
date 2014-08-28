@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 3.9.1
-Stable tag: 1.3
+Stable tag: 1.4
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -96,6 +96,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 == Changelog ==
+
+= v1.4 =
+1. Added drag & drop re-ordering of questions
 
 = v1.3 =
 1. Attempts to add localized form validation messages if WPLANG is defined and the messages file exists for WPLANG
