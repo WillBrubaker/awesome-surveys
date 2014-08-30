@@ -158,7 +158,8 @@ div.answers {
 #preview .single-element-edit {
   padding: .5em; }
   #preview .single-element-edit:hover {
-    border: 1px #c0c0c0 dashed; }
+    border: 1px #c0c0c0 dashed;
+    cursor: move; }
     #preview .single-element-edit:hover .button-holder {
       display: block; }
 
