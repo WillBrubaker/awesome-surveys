@@ -1,4 +1,8 @@
+h3.hndle > span {
+  margin-left: 1em; }
+
 #tabs {
+  margin-bottom: 1em;
   margin-top: 2.5em; }
   #tabs form {
     position: relative;

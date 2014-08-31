@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
 
+  postboxes.add_postbox_toggles(pagenow);
   var newElementForm = $('#new-elements').html();
   $('#tabs').tabs();
 

@@ -84,6 +84,7 @@ class Awesome_Surveys {
 
   add_action( 'init', array( &$this, 'init' ) );
   add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
+  add_action( 'admin_init', array( &$this, 'add_meta_boxes' ) );
   add_action( 'wp_ajax_create_survey', array( &$this, 'create_survey' ) );
   add_action( 'wp_ajax_get_element_form', array( &$this, 'element_info_inputs' ) );
   add_action( 'wp_ajax_options_fields', array( &$this, 'options_fields' ) );
@@ -144,7 +145,7 @@ class Awesome_Surveys {
  {
 
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button' ), self::$wwm_plugin_values['version'] );
+  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
@@ -361,6 +362,9 @@ class Awesome_Surveys {
     </div><!--#debug-->
    <?php endif; ?>
    </div><!--#tabs-->
+   <?php
+   do_meta_boxes( 'awesome-surveys.php', 'normal', null );
+   ?>
   </div>
   <?php
  }
@@ -1439,6 +1443,42 @@ class Awesome_Surveys {
           </li>
          </ul>';
   }
+ }
+
+ /*public function add_meta_boxes() {
+  error_log( __METHOD__ );
+  //add_meta_box( 'wwm_ratings', __( 'Rate Awesome Surveys', $this->text_domain ), array( &$this, 'rating_box' ), null, 'advanced', 'default', null );
+  add_meta_box( 'wwm-ratings', 'Rate Awesome Surveys', array( &$this, 'rating_box' ), 'awesome-surveys.php' );
+ }*/
+
+ public function add_meta_boxes()
+ {
+
+  add_meta_box( 'wwm-awesome-surveys-ratings', __( 'Rate Awesome Surveys', $this->text_domain ), array( &$this, 'rating_box' ), $this->menu_slug, 'normal' );
+  add_meta_box( 'wwm-ratings-awesome-surveys-news', __( 'News', $this->text_domain ), array( &$this, 'news_box' ), $this->menu_slug, 'normal' );
+ }
+
+ public function rating_box() {
+
+  /*
+
+  $url = 'http://wpapi.org/api/plugin/awesome-surveys.php';
+  $info = wp_remote_get( $url, array(
+   'timeout' => 15, //seconds
+   'headers' => array( 'Accept' => 'application/json' ),
+   )
+  );
+  if ( ! is_wp_error( $info ) ) {
+   $info = unserialize( $info['body'] );
+   error_log( print_r( $info, true ) );
+   echo '<div class="star-holder"><div class="star star-rating" style="width: ' . $info['rating'] . 'px;"></div></div>';
+   echo '<p>based on ' . $info['num_ratings'] . ' reviews</p>';
+  }*/
+  echo '<p>Have you found the Awesome Surveys plugin useful? Has it saved you some time? Have you received a response to your support inquiry?</p><p>If so, this otter would love it if you <a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating">give this plugin 5 stars</a></p><p><img src="' . WWM_AWESOME_SURVEYS_URL . '/images/otter.jpg" alt="begging otter"></p>';
+ }
+
+ public function news_box() {
+  echo 'this is the news box';
  }
 
  /**
