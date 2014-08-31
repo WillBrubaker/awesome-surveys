@@ -98,7 +98,8 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 == Changelog ==
 
 = v1.4 =
-1. Added drag & drop re-ordering of questions
+1. Added drag & drop re-ordering of questions. See [this video](https://www.youtube.com/watch?v=-rZENBxYuOo) for a quick demonstration.
+2. Metaboxes for news and ratings
 
 = v1.3 =
 1. Attempts to add localized form validation messages if WPLANG is defined and the messages file exists for WPLANG

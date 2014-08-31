@@ -52,6 +52,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Frequently Asked Questions ##
 
+### Can I change the order of my survey questions? ###
+
+*	Yes! Version 1.4 added this feature. See [this video](https://www.youtube.com/watch?v=-rZENBxYuOo) for a quick demonstration.
+
+
 ### How can I edit a survey? ###
 
 *	Under the 'Your Survey Results' tab, certain parts of your survey are editable. For instance you can click on the survey name or survey questions/answers. This will display a pop-up dialog box where you can edit the text in these fields.
@@ -113,7 +118,8 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 ## Changelog ##
 
 ### v1.4 ###
-1. Added drag & drop re-ordering of questions
+1. Added drag & drop re-ordering of questions. See [this video](https://www.youtube.com/watch?v=-rZENBxYuOo) for a quick demonstration.
+2. Metaboxes for news and ratings
 
 ### v1.3 ###
 1. Attempts to add localized form validation messages if WPLANG is defined and the messages file exists for WPLANG

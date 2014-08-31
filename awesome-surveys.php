@@ -1445,40 +1445,32 @@ class Awesome_Surveys {
   }
  }
 
- /*public function add_meta_boxes() {
-  error_log( __METHOD__ );
-  //add_meta_box( 'wwm_ratings', __( 'Rate Awesome Surveys', $this->text_domain ), array( &$this, 'rating_box' ), null, 'advanced', 'default', null );
-  add_meta_box( 'wwm-ratings', 'Rate Awesome Surveys', array( &$this, 'rating_box' ), 'awesome-surveys.php' );
- }*/
-
+ /**
+  * hooked into admin_init and simply adds a couple of meta boxes to the admin interface for this plugin
+  * @since  1.4
+  */
  public function add_meta_boxes()
  {
 
   add_meta_box( 'wwm-awesome-surveys-ratings', __( 'Rate Awesome Surveys', $this->text_domain ), array( &$this, 'rating_box' ), $this->menu_slug, 'normal' );
-  add_meta_box( 'wwm-ratings-awesome-surveys-news', __( 'News', $this->text_domain ), array( &$this, 'news_box' ), $this->menu_slug, 'normal' );
+  add_meta_box( 'wwm-ratings-awesome-surveys-news', __( 'Awesome Surveys News', $this->text_domain ), array( &$this, 'news_box' ), $this->menu_slug, 'normal' );
  }
 
+ /**
+  * outputs the content of the ratings meta box
+  * @since  1.4
+  */
  public function rating_box() {
 
-  /*
-
-  $url = 'http://wpapi.org/api/plugin/awesome-surveys.php';
-  $info = wp_remote_get( $url, array(
-   'timeout' => 15, //seconds
-   'headers' => array( 'Accept' => 'application/json' ),
-   )
-  );
-  if ( ! is_wp_error( $info ) ) {
-   $info = unserialize( $info['body'] );
-   error_log( print_r( $info, true ) );
-   echo '<div class="star-holder"><div class="star star-rating" style="width: ' . $info['rating'] . 'px;"></div></div>';
-   echo '<p>based on ' . $info['num_ratings'] . ' reviews</p>';
-  }*/
-  echo '<p>Have you found the Awesome Surveys plugin useful? Has it saved you some time? Have you received a response to your support inquiry?</p><p>If so, this otter would love it if you <a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating">give this plugin 5 stars</a></p><p><img src="' . WWM_AWESOME_SURVEYS_URL . '/images/otter.jpg" alt="begging otter"></p>';
+  echo '<p>Have you found the Awesome Surveys plugin useful? Has it saved you some time? Have you received a response to your support inquiry?</p><p>If so, this otter would love it if you <a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating">give this plugin 5 stars</a></p><p><a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating"><img src="' . WWM_AWESOME_SURVEYS_URL . '/images/otter.jpg" alt="begging otter"></a></p>';
  }
 
+ /**
+  * outputs the contents of the news meta box
+  * @since 1.4
+  */
  public function news_box() {
-  echo 'this is the news box';
+  echo '<h3>Call for beta testers</h3><p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
  }
 
  /**
