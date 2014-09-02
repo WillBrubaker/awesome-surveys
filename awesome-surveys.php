@@ -1462,7 +1462,7 @@ class Awesome_Surveys {
   */
  public function rating_box() {
 
-  echo '<p>Have you found the Awesome Surveys plugin useful? Has it saved you some time? Have you received a response to your support inquiry?</p><p>If so, this otter would love it if you <a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating">give this plugin 5 stars</a></p><p><a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating"><img src="' . WWM_AWESOME_SURVEYS_URL . '/images/otter.jpg" alt="begging otter"></a></p>';
+  echo '<p>This otter would love it if you <a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating">give this plugin 5 stars</a></p><p><a href="http://wordpress.org/support/view/plugin-reviews/awesome-surveys?filter=5" title="give this plugin a 5-star rating"><img src="' . WWM_AWESOME_SURVEYS_URL . '/images/otter.jpg" alt="begging otter"></a></p>';
  }
 
  /**
