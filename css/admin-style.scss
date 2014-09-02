@@ -1,5 +1,9 @@
 $break-large: 1072px;
+h3.hndle > span {
+ margin-left: 1em;
+}
 #tabs {
+ margin-bottom: 1em;
  form {
  position: relative;
  margin: 1em;
@@ -204,6 +208,7 @@ div.answers {
  .single-element-edit {
   &:hover {
   border: 1px #c0c0c0 dashed;
+  cursor: move;
    .button-holder {
     display: block;
    }

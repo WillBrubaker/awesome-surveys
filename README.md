@@ -4,8 +4,8 @@
 **Contributors:** WilltheWebMechanic
 **License:** GPLv3.0+
 **Requires at least:** 3.9.1
-**Tested up to:** 3.9.1
-**Stable tag:** 1.3
+**Tested up to:** 4.0-RC1
+**Stable tag:** 1.4
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -51,6 +51,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 * Rejoice in how amazingly easy it is to create and publish surveys.
 
 ## Frequently Asked Questions ##
+
+### Can I change the order of my survey questions? ###
+
+*	Yes! Version 1.4 added this feature. See [this video](https://www.youtube.com/watch?v=-rZENBxYuOo) for a quick demonstration.
+
 
 ### How can I edit a survey? ###
 
@@ -111,6 +116,10 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+### v1.4 ###
+1. Added drag & drop re-ordering of questions. See [this video](https://www.youtube.com/watch?v=-rZENBxYuOo) for a quick demonstration.
+2. Metaboxes for news and ratings
 
 ### v1.3 ###
 1. Attempts to add localized form validation messages if WPLANG is defined and the messages file exists for WPLANG

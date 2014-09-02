@@ -63,6 +63,11 @@ class Awesome_Surveys_Frontend {
     'auth_method' => $auth_method,
    );
    $output = $this->render_form( json_decode( $surveys['surveys'][$atts['id']]['form'], true ), $args );
+   /**
+    * wwm_survey action hook added in v1.4
+    * a hook so that any js/css needed by extensions can be enqueued
+    */
+   do_action( 'wwm_survey' );
   } else {
    /**
    * If the user fails the authentication method, the failure message can be customized via

@@ -1,5 +1,6 @@
 jQuery(document).ready(function($) {
 
+  postboxes.add_postbox_toggles(pagenow);
   var newElementForm = $('#new-elements').html();
   $('#tabs').tabs();
 
@@ -79,17 +80,6 @@ jQuery(document).ready(function($) {
           for (var i = 0; i <= vals; i++) {
             var el = $('<label>' + (i + opt.min) + '</label>').css('left', (i / vals * 100) + '%');
             $("#slider").append(el);
-          }
-        });
-
-        $('#new-elements').tooltip({
-          position: {
-            my: "left+15 center",
-            at: 'right top'
-          },
-          show: {
-            effect: 'blind',
-            duration: 800
           }
         });
 
@@ -579,10 +569,29 @@ jQuery(document).ready(function($) {
 var activeDialog;
 
 function populatePreview($, data) {
+  var startingIndex = 0
+  var endingIndex = 0
+  var surveyElements = []
   $('#preview .survey-preview').empty().append(data);
   $('#add-element').empty();
   $('#new-elements input[type="submit"]').prop('disabled', true);
   $('#new-element-selector .type-selector option[value=""]').prop('selected', true);
+  var sortables = $('#preview form fieldset')
+  sortables.sortable({
+    start: function(event, ui) {
+      surveyElements = $.parseJSON($('form#save-survey [name="existing_elements"]').val())
+      startingIndex = ui.item.index()
+    },
+    stop: function(event, ui) {
+      endingIndex = ui.item.index()
+      if ( startingIndex != endingIndex ) {
+        activeElement = surveyElements[startingIndex]
+        surveyElements.splice(startingIndex, 1)
+        surveyElements.splice(endingIndex, 0, activeElement)
+        $('form#save-survey [name="existing_elements"]').val(JSON.stringify(surveyElements))
+      }
+    }
+  });
   $('button').button();
 }
 

@@ -1,4 +1,8 @@
+h3.hndle > span {
+  margin-left: 1em; }
+
 #tabs {
+  margin-bottom: 1em;
   margin-top: 2.5em; }
   #tabs form {
     position: relative;
@@ -158,7 +162,8 @@ div.answers {
 #preview .single-element-edit {
   padding: .5em; }
   #preview .single-element-edit:hover {
-    border: 1px #c0c0c0 dashed; }
+    border: 1px #c0c0c0 dashed;
+    cursor: move; }
     #preview .single-element-edit:hover .button-holder {
       display: block; }
 
