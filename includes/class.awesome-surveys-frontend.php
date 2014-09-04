@@ -372,7 +372,8 @@ class Awesome_Surveys_Frontend {
  public function validation_messages() {
   $lang = substr( WPLANG, 0, 2 );
   $path = WWM_AWESOME_SURVEYS_PATH . '/js/localization/';
-  if ( $messages_file = fopen( $path . 'messages_' . $lang . '.js', 'r' ) ) {
+  $file = $path . 'messages_' . $lang . '.js';
+  if ( file_exists( $file ) && $messages_file = fopen( $file, 'r' ) ) {
    $messages = fread( $messages_file, filesize( $path . 'messages_' . $lang . '.js' ) );
    echo '<script>';
    echo 'jQuery(document).ready(function($){';
