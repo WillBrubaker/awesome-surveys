@@ -97,6 +97,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
+= v1.4.3 =
+1. Bug fix - after re-ordering of questions, the 'edit question' & 'delete question' buttons would act on the wrong question. Thanks wordpress.org user vexweb for pointing this out.
+2. Following form submission the browswer window should scroll back to the top of the form - see this thread: https://wordpress.org/support/topic/scroll-back-to-top-on-submit
+3. Dutch translations added. Thanks wordpress.org user Mariavd for the translations
+
 = v1.4.2 =
 1. Added frontend check to ensure that JavaScript validation messages file exists before trying to load it (defaults to English) - Shout out to Kirk! Thanks for the report.
 

@@ -6,6 +6,7 @@ jQuery(document).ready(function($) {
     });
   });
 
+  var currentPosition = $('form.answer-survey').position()
   $('form.answer-survey input[type="submit"]').prop('disabled', false);
 
   $('form.answer-survey').each(function() {
@@ -31,6 +32,7 @@ jQuery(document).ready(function($) {
         }, 'json').fail(function(xhr) {
           $(form).empty().append('<p class="error">There was an error. The error status code is: ' + xhr.status + ' The error message is: ' + xhr.statusText + '</p>');
         }).always(function() {
+          window.scroll(currentPosition.left, - currentPosition.top)
           overlay.hide();
         });
       }
