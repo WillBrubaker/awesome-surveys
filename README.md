@@ -5,7 +5,7 @@
 **License:** GPLv3.0+
 **Requires at least:** 3.9.1
 **Tested up to:** 4.0
-**Stable tag:** 1.4.2
+**Stable tag:** 1.4.3
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 **Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -116,6 +116,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+### v1.4.3 ###
+1. Bug fix - after re-ordering of questions, the 'edit question' & 'delete question' buttons would act on the wrong question. Thanks wordpress.org user vexweb for pointing this out.
+2. Following form submission the browswer window should scroll back to the top of the form - see this thread: https://wordpress.org/support/topic/scroll-back-to-top-on-submit
+3. Dutch translations added. Thanks wordpress.org user Mariavd for the translations
 
 ### v1.4.2 ###
 1. Added frontend check to ensure that JavaScript validation messages file exists before trying to load it (defaults to English) - Shout out to Kirk! Thanks for the report.

@@ -1,0 +1,332 @@
+# Copyright (C) 2014 Awesome Surveys
+# This file is distributed under the same license as the Awesome Surveys package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Awesome Surveys 1.0\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
+"POT-Creation-Date: 2014-06-09 11:30:59+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-09-18 19:43-0500\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.6.9\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: nl_NL\n"
+
+#: awesome-surveys.php:235
+msgid "Survey Name:"
+msgstr "Naam Enquête"
+
+#: awesome-surveys.php:239
+msgid "Start Building"
+msgstr "Start met het maken van de enquête"
+
+#: awesome-surveys.php:245
+msgid ""
+"Need help? There are handy tips for some of the options in the help menu. "
+"Click the help tab in the upper right corner of your screen"
+msgstr "Hulp nodig? Je vindt handige tips in het help menu."
+
+#: awesome-surveys.php:249
+msgid "Donate to the future development of this plugin:"
+msgstr "Doneer voor de verdere ontwikkeling van deze plugin"
+
+#: awesome-surveys.php:265
+msgid "Build Survey Form"
+msgstr "Maak een enquête formulier"
+
+#: awesome-surveys.php:266
+msgid "Your Survey Results"
+msgstr "Resultaten van je enquête"
+
+#: awesome-surveys.php:267
+msgid "How To Video"
+msgstr "Video-Hoe een enquête maken?"
+
+#: awesome-surveys.php:269
+msgid "Debug"
+msgstr ""
+
+#: awesome-surveys.php:278
+msgid "General Survey Options:"
+msgstr "Algemene opties"
+
+#: awesome-surveys.php:279
+msgid "A Thank You message:"
+msgstr "Een dankwoord"
+
+#: awesome-surveys.php:279 awesome-surveys.php:844
+msgid "Thank you for completing this survey"
+msgstr "Hartelijk dank voor het invullen van deze enquête"
+
+#: awesome-surveys.php:280 awesome-surveys.php:840
+msgid "User must be logged in"
+msgstr "log in als gebruiker"
+
+#: awesome-surveys.php:280
+msgid "Cookie based"
+msgstr ""
+
+#: awesome-surveys.php:280 awesome-surveys.php:840
+msgid "None"
+msgstr "geen"
+
+#: awesome-surveys.php:303
+msgid ""
+"To prevent people from filling the survey out multiple times you may select "
+"one of the options below"
+msgstr ""
+"Om te verhinderen dat eenzelfde persoon de enquête meerdere keren invult kan "
+"u één van onderstaande opties selecteren"
+
+#: awesome-surveys.php:307
+msgid "Add Question"
+msgstr "Een vraag toevoegen"
+
+#: awesome-surveys.php:321
+msgid "Your Surveys"
+msgstr "Je enquête"
+
+#: awesome-surveys.php:366
+msgid "You can insert this survey with shortcode: "
+msgstr "Je kan deze enquëte toevoegen met de shortcode"
+
+#: awesome-surveys.php:367
+msgid "This survey has received %d responses"
+msgstr "Deze enquête heeft %d antwoorden ontvangen"
+
+#: awesome-surveys.php:436
+msgid "Survey Name"
+msgstr "Naam van de enquête"
+
+#: awesome-surveys.php:437
+msgid ""
+"This field is a unique name for your survey and will be displayed before "
+"your survey form"
+msgstr ""
+"Dit veld is een unieke naam voor je enquête en zal boven uw enquêteformulier "
+"worden weergegeven."
+
+#: awesome-surveys.php:442
+msgid "Field Type"
+msgstr "Veldtype"
+
+#: awesome-surveys.php:443
+msgid ""
+"This is the type of form field you would like to add to your form, i.e.: "
+"checkbox, radio, text, email, textarea, etc. Examples:"
+msgstr ""
+"Dit is het veldtype dat je wilt toevoegen aan je formulier, d.w.z.:checkbox, "
+"radio, tekst, tekstvak, enz.. Voorbeelden:"
+
+#: awesome-surveys.php:448 awesome-surveys.php:564
+msgid "Field Validation Options"
+msgstr "Veld Validatie-opties"
+
+#: awesome-surveys.php:449
+msgid ""
+"Based upon the type of field option you have selected, you may see different "
+"options for validation. Selecting 'required' will make this part of your "
+"survey a required field. Some fields have a 'Maximum Length' Validation "
+"option where you can specify a character limit. Field type \"number\" can "
+"have a maximum and minimum value added to it. As an example, if your survey "
+"asked a user their age, and you wanted to limit the survey to respondents "
+"who claim that they are 18 or older, you can enter 18 in the 'Min number "
+"allowed' field."
+msgstr ""
+"Afhankelijk van het geselecteerde veldtype ziet u verschillende validatie-"
+"opties\"\"Selecteert u 'verplicht' dan maakt u van dit onderdeel van de "
+"enquëte een verplicht in te vullen veld\"\"Sommmige velden hebben een "
+"'maximale lengte' validatie-\"\"optie waar je het aantal karakters kan "
+"beperken. Het veldtype \"aantal\" kan zowel een maximum als een minimum "
+"waarde hebben. \"Bijvoorbeeld, als je in de enquête vraagt naar de leeftijd "
+"van de gebruiker en je wilt deze enquête voorbehouden\"\"voor personen van "
+"18 jaar of ouder, dan kan je 18 noteren in het veld \"'Minimale toegestane "
+"aantal'"
+
+#: awesome-surveys.php:454
+msgid "General Survey Options"
+msgstr "Algemene Enquête Opties"
+
+#: awesome-surveys.php:455
+msgid ""
+"These are options for your survey, they are not built in to the survey form, "
+"but rather determine behavior of how your survey will work."
+msgstr ""
+"Dit zijn opties voor je enquête die niet in het formulier voorkomen\"\"maar "
+"wel bepalen op welke manier de enquête zal werken."
+
+#: awesome-surveys.php:460
+msgid "Authentication"
+msgstr "Verificatie"
+
+#: awesome-surveys.php:461
+msgid ""
+"Choose a method to prevent users from filling out the survey multiple times. "
+"User login is much more reliable, but may not be the best option for your "
+"site if you don't allow registrations. Cookie based authentication is very "
+"easy to circumvent, but will prevent most users from taking the survey "
+"multiple times. Of course, you may prefer to allow users to take the survey "
+"an unlimited number of times in which case you should choose 'None'. Note to "
+"developers: methods can be added via the survey_auth_options filter."
+msgstr ""
+"Kies een manier om te voorkomen dat gebruikers de enquête meerdere keren "
+"kunnen invullen.\"\"Een gebruikerslogin is betrouwbaar, maar is mogelijk "
+"niet de beste optie voor uw\"\"website, indien u geen registraties toestaat. "
+"Verificatie op basis van cookies is\"\"makkelijk te omzeilen, maar zal de "
+"meeste gebruikers ervan weerhouden om de enquête\"\"meerdere keren in te "
+"vullen. Natuurlijk kan u er ook voor kiezen om gebruikers wel toe te staan\" "
+"\" de enquête meerdere keren in te vullen. In dit geval kiest u de optie "
+"'Geen'.\"\"Bericht aan ontwikkelaars: methodes kunnen toegevoegd worden via "
+"de survey_auth_options filter."
+
+#: awesome-surveys.php:466
+msgid "Thank You Message"
+msgstr "Dankwoord"
+
+#: awesome-surveys.php:467
+msgid "The message will be displayed to a user who completes the survey."
+msgstr ""
+"Dit bericht wordt getoond aan een gebruiker die de enquête verzonden heeft"
+
+#: awesome-surveys.php:490
+msgid "A survey already exists named "
+msgstr "Er is al een enquête met deze naam"
+
+#: awesome-surveys.php:494
+msgid "Survey Name cannot be blank"
+msgstr "Het veld 'Naam van de Enquête' kan niet leeg zijn"
+
+#: awesome-surveys.php:523
+msgid "Add a question to your survey:"
+msgstr "Voeg een vraag toe aan je enquête"
+
+#: awesome-surveys.php:523
+msgid "Select Field Type:"
+msgstr "Selecteer een veldtype"
+
+#: awesome-surveys.php:562
+msgid "The question you are asking:"
+msgstr "De vraag die u stelt:"
+
+#: awesome-surveys.php:582
+msgid "Advanced Validation Rules:"
+msgstr "Geavanceerde validatieregels"
+
+#: awesome-surveys.php:613
+msgid "Number of answers required?"
+msgstr "Aantal vereiste antwoorden?"
+
+#: awesome-surveys.php:639
+msgid "required?"
+msgstr "verplicht veld?"
+
+#: awesome-surveys.php:665
+msgid "Min number allowed"
+msgstr "Minimale toegestane aantal"
+
+#: awesome-surveys.php:671
+msgid "Max number allowed"
+msgstr "Maximale toegestane aantal"
+
+#: awesome-surveys.php:693
+msgid "Maximum Length (in number of characters)"
+msgstr "maximale lengte (aantal karakters)"
+
+#: awesome-surveys.php:736
+msgid "Answer"
+msgstr "Antwoord"
+
+#: awesome-surveys.php:736
+msgid "default?"
+msgstr "standaard"
+
+#: awesome-surveys.php:840
+msgid "Cookie Based"
+msgstr ""
+
+#: awesome-surveys.php:842
+msgid "Type of authentication: "
+msgstr "Type verificatie"
+
+#: awesome-surveys.php:846
+msgid "Thank you message:"
+msgstr "Dankwoord"
+
+#: awesome-surveys.php:851
+msgid "Reset"
+msgstr ""
+
+#: awesome-surveys.php:852
+msgid "Save Survey"
+msgstr "Enquête opslaan"
+
+#: awesome-surveys.php:928
+msgid "Fork Me on GitHub"
+msgstr ""
+
+#: awesome-surveys.php:928
+msgid "Awesome Surveys on github"
+msgstr ""
+
+#: awesome-surveys.php:929
+msgid "Support for Awesome Surveys"
+msgstr "Steun Awesome Surveys"
+
+#: awesome-surveys.php:930
+msgid "Review the Awesome Surveys Plugin"
+msgstr "Schrijf een review over de  Awesome Surveys plugin"
+
+#: awesome-surveys.php:930
+msgid "Rate Awesome Surveys"
+msgstr "Geef een waardering aan Awesome Surveys"
+
+#: awesome-surveys.php:931
+msgid "Shout it From the Rooftops!"
+msgstr "Schreeuw het van de daken!"
+
+#: awesome-surveys.php:931
+msgid "Tweet this plugin"
+msgstr "Tweet deze plugin"
+
+#: awesome-surveys.php:932
+msgid "Donate to the development of the Awesome Surveys plugin"
+msgstr "Geef een donatie voor het ontwikkelen van de Awesome Surveys plugin"
+
+#: awesome-surveys.php:940
+msgid "Donate Bitcoins"
+msgstr "Doneer Bitcoins"
+
+#: includes/class.awesome-surveys-frontend.php:70
+msgid "Your response to this survey has already been recorded. Thank you!"
+msgstr "Uw reactie op deze enquête werd reeds geregistreerd. Dank u!"
+
+#: includes/class.awesome-surveys-frontend.php:102
+msgid "make a selection..."
+msgstr "maak een selectie ..."
+
+#: includes/class.awesome-surveys-frontend.php:140
+msgid "Submit Response"
+msgstr "Verzenden"
+
+#: includes/class.awesome-surveys-frontend.php:287
+msgid "You must be logged in to participate in this survey"
+msgstr "U moet ingelogd zijn om deel te nemen aan deze enquête"
+
+#. Plugin Name of the plugin/theme
+msgid "Awesome Surveys"
+msgstr "Fantastische Enquêtes"
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com/awesome-surveys"
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "Will Brubaker"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com"
+msgstr ""
