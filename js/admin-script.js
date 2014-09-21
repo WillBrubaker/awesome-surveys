@@ -600,7 +600,6 @@ function renumberButtons($) {
   var parent = $('.survey-preview form')
  $('.single-element-edit', parent).each(function() {
   $('.button-holder button[data-index]', $(this)).attr('data-index',$(this).index())
-  console.log($(this).index())
  })
 }
 
