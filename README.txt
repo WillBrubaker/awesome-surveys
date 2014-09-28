@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 4.0
-Stable tag: 1.4.3
+Stable tag: 1.4.4
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -96,6 +96,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 == Changelog ==
+
+= v1.4.4 =
+1. Improved handling of non-English characters in the 'Survey Results' tab.
 
 = v1.4.3 =
 1. Bug fix - after re-ordering of questions, the 'edit question' & 'delete question' buttons would act on the wrong question. Thanks wordpress.org user vexweb for pointing this out.
