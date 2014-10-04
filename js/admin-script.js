@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
     }
   });
 
-  $('#survey-responses').accordion({
+  $('#survey-responses, #survey-results').accordion({
     header: 'h5',
     heightStyle: 'content',
     collapsible: true,
