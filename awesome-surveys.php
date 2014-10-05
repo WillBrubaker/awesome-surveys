@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.4.4
+Version: 1.4.5
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.4.4',
+  'version' => '1.4.5',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -111,6 +111,7 @@ class Awesome_Surveys {
   add_action( 'contextual_help', array( &$this, 'contextual_help' ) );
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
   add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
+  add_action( 'plugins_loaded', array(&$this, 'load_textdomain' ) );
  }
 
  /**
@@ -1493,6 +1494,17 @@ class Awesome_Surveys {
    ),
    $actions
   );
+ }
+  /**
+  * load translation
+  * @return none
+  * @since 1.4.5
+  * @author Tobias Perschon <office@bitconnect.at>
+  * @link bitconnect.at
+  */
+ public function load_textdomain()
+ {
+    load_plugin_textdomain($this->text_domain,false, dirname( plugin_basename( __FILE__ ) ) .  '/languages');
  }
 }
 $var = new Awesome_Surveys;
