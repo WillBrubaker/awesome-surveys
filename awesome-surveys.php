@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.4.5
+Version: 1.5-pre
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.4.5',
+  'version' => '1.5-pre',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -111,7 +111,7 @@ class Awesome_Surveys {
   add_action( 'contextual_help', array( &$this, 'contextual_help' ) );
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
   add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
-  add_action( 'plugins_loaded', array(&$this, 'load_textdomain' ) );
+  add_action( 'plugins_loaded', array( &$this, 'load_translations' ) );
  }
 
  /**
@@ -310,6 +310,11 @@ class Awesome_Surveys {
       array( &$this, 'output_survey_results' ),
      ),
      array(
+      'results',
+      __( 'Survey Results by User', $this->text_domain ),
+      array( &$this, 'output_results_by_user' ),
+     ),
+     array(
       'video',
       __( 'How To Video', $this->text_domain ),
       array( &$this, 'output_howto_video' ),
@@ -490,6 +495,129 @@ class Awesome_Surveys {
 
   }
   $html .= '</div><!--#survey-responses-->';
+  return $html;
+ }
+
+  /**
+  * Generates html output with survey results by user
+  * @param  array $args an array of function arguments
+  * @return string       html markup with survey results.
+  * @since  n/a
+  * @author Toby Hawkins <toby@genobi.net> based on above function by
+  *   Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://www.genobi.net
+  */
+ function display_results_by_user( $args = array() )
+ {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  // Need to rearrange the surveys array to make it per user
+  $surveys_new = array();
+  $html = '<div id="survey-results">' . "\n";
+
+  if ( ! empty( $surveys['surveys'] ) )
+  {
+   foreach( $surveys['surveys'] as $survey_key => $survey )
+   {
+    if( 'login' == $survey['auth'] )
+    {
+     $form = json_decode( stripslashes( $survey['form'] ), true );
+
+     // First, recreate the survey in the new array with the same key
+     $surveys_new[$survey_key] = array();
+     $surveys_new[$survey_key]['name'] = $survey['name'];
+     // and then questions and respondents sections
+     $surveys_new[$survey_key]['questions'] = array();
+     $surveys_new[$survey_key]['respondents'] = array();
+
+     // Then reconstruct the questions for this survey
+     foreach( $survey['responses'] as $response_key => $response )
+     {
+      $surveys_new[$survey_key]['questions'][$response_key] = $response['question'];
+     }
+
+     // Now create the respondents sections
+     foreach( $survey['respondents'] as $respondent_key => $user_id )
+     {
+      $user_info = get_userdata( $user_id );
+      $user_name = $user_info->display_name;
+
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+     }
+
+     // Finally, populate the respondents section with the relevant responses
+     foreach( $surveys_new[$survey_key]['respondents'] as $respondents_key => $arr )
+     {
+      foreach( $survey['responses'] as $response_key => $response_arr )
+      {
+       // Responses with options are handled slightly differently
+       if( 0 == $response_arr['has_options'] )
+       {
+        if( array_key_exists( $respondents_key, $response_arr['answers'] ) )
+         $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key] = $response_arr['answers'][$respondents_key];
+       }
+       else
+       {
+        foreach( $response_arr['answers'] as $answer_key => $answer_arr )
+        {
+         // Get the answer from the form label
+         $answer = $form[$response_key]['label'][$answer_key];
+         // Options questions may have multiple answers for the same question. Store in an array.
+         if( in_array( $respondents_key, $answer_arr ) )
+          $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
+        }
+       }
+      }
+     }
+    }
+   }
+   // Now set up the HTML and out put the array for display
+   if( ! empty( $surveys_new ) )
+   {
+    foreach ( $surveys_new as $key => $survey )
+    {
+     if ( ! empty( $surveys_new[$key]['respondents'] ) ) {
+      $survey_name = stripslashes( stripslashes( $survey['name'] ) );
+      $html .= "\t\t\t" . '<h5>' . $survey_name . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+      $html .= apply_filters( 'before_individual_survey_result', null, $survey );
+      $html .= "\t\t\t\t" . '<ul>' . "\n";
+      foreach( $survey['questions'] as $question_key => $question )
+      {
+       $question_text = absint( $question_key ) + 1 . ": " . stripslashes( stripslashes( $question ) );
+       $html.= "\t\t\t\t\t" . "<li>$question_text</li>" . "\n";
+      }
+      $html .= "\t\t\t\t" . '</ul>' . "\n";
+      foreach( $survey['respondents'] as $respondent_key => $respondent_arr )
+      {
+       $html .= "\t\t\t\t\t" . '<div class="answer-accordion">' . "\n";
+       $html .= "\t\t\t\t\t\t" . '<h4 class="answers">' . sanitize_text_field( stripslashes( $respondent_arr['user_name'] ) ) . '</h4>' . "\n";
+       $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
+       foreach ( $respondent_arr['answers'] as $answer_key => $answer ) {
+        // Check for multiple response answers
+        if( is_array($answer) ) {
+         foreach( $answer['multi'] as $multi )
+         {
+          $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $multi );
+          $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
+         }
+        }
+        else
+        {
+         $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $answer );
+         $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
+        }
+       }
+       $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
+       $html .= "\t\t\t\t\t" . '</div><!--.answer-accordion-->' . "\n";
+      }
+      $html .= "\t\t\t" . '</div><!-- .survey -->' . "\n";
+     }
+    }
+   }
+  }
+  $html .= '</div><!--#survey-results-->';
   return $html;
  }
 
@@ -677,6 +805,20 @@ class Awesome_Surveys {
    <div id="existing-surveys" class="existing-surveys">';
   $args = array();
   $output .= $this->display_survey_results( $args );
+  $output .= '</div>';
+  return $output;
+ }
+
+ public function output_results_by_user()
+ {
+
+  $output = '
+   <div class="your-surveys">
+    <h4>' . __( 'Results by User', $this->text_domain ) . '</h4>
+   </div>
+   <div id="survey-results" class="existing-surveys">';
+  $args = array();
+  $output .= $this->display_results_by_user( $args );
   $output .= '</div>';
   return $output;
  }
@@ -1495,16 +1637,15 @@ class Awesome_Surveys {
    $actions
   );
  }
-  /**
-  * load translation
-  * @return none
-  * @since 1.4.5
-  * @author Tobias Perschon <office@bitconnect.at>
-  * @link bitconnect.at
+
+ /**
+  * loads translation files as applicable
+  * @since 1.5
   */
- public function load_textdomain()
+ public function load_translations()
  {
-    load_plugin_textdomain($this->text_domain,false, dirname( plugin_basename( __FILE__ ) ) .  '/languages');
+
+  load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
  }
 }
 $var = new Awesome_Surveys;
