@@ -537,14 +537,17 @@ class Awesome_Surveys {
      }
 
      // Now create the respondents sections
-     foreach( $survey['respondents'] as $respondent_key => $user_id )
+     if( ! empty( $survey['respondents'] ) )
      {
-      $user_info = get_userdata( $user_id );
-      $user_name = $user_info->display_name;
-
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+      foreach( $survey['respondents'] as $respondent_key => $user_id )
+      {
+       $user_info = get_userdata( $user_id );
+       $user_name = $user_info->display_name;
+ 
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+      }
      }
 
      // Finally, populate the respondents section with the relevant responses
