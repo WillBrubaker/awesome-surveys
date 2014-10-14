@@ -521,7 +521,7 @@ class Awesome_Surveys {
    {
     if( 'login' == $survey['auth'] )
     {
-     $form = json_decode( stripslashes( $survey['form'] ), true );
+     $form = json_decode( $survey['form'], true );
 
      // First, recreate the survey in the new array with the same key
      $surveys_new[$survey_key] = array();
@@ -566,7 +566,7 @@ class Awesome_Surveys {
         foreach( $response_arr['answers'] as $answer_key => $answer_arr )
         {
          // Get the answer from the form label
-         $answer = $form[$response_key]['label'][$answer_key];
+         $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
          // Options questions may have multiple answers for the same question. Store in an array.
          if( in_array( $respondents_key, $answer_arr ) )
           $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
