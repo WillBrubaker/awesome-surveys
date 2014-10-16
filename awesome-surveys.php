@@ -1648,7 +1648,7 @@ class Awesome_Surveys {
  public function load_translations()
  {
 
-  load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+  load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
  }
 }
 $var = new Awesome_Surveys;
