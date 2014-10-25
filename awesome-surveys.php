@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.4.4
+Version: 1.5-pre
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.4.4',
+  'version' => '1.5-pre',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -521,7 +521,7 @@ class Awesome_Surveys {
    {
     if( 'login' == $survey['auth'] )
     {
-     $form = json_decode( stripslashes( $survey['form'] ), true );
+     $form = json_decode( $survey['form'], true );
 
      // First, recreate the survey in the new array with the same key
      $surveys_new[$survey_key] = array();
@@ -537,14 +537,17 @@ class Awesome_Surveys {
      }
 
      // Now create the respondents sections
-     foreach( $survey['respondents'] as $respondent_key => $user_id )
+     if( ! empty( $survey['respondents'] ) )
      {
-      $user_info = get_userdata( $user_id );
-      $user_name = $user_info->display_name;
-
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
-      $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+      foreach( $survey['respondents'] as $respondent_key => $user_id )
+      {
+       $user_info = get_userdata( $user_id );
+       $user_name = $user_info->display_name;
+ 
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+      }
      }
 
      // Finally, populate the respondents section with the relevant responses
@@ -563,7 +566,7 @@ class Awesome_Surveys {
         foreach( $response_arr['answers'] as $answer_key => $answer_arr )
         {
          // Get the answer from the form label
-         $answer = $form[$response_key]['label'][$answer_key];
+         $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
          // Options questions may have multiple answers for the same question. Store in an array.
          if( in_array( $respondents_key, $answer_arr ) )
           $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
@@ -1640,12 +1643,12 @@ class Awesome_Surveys {
 
  /**
   * loads translation files as applicable
-  * @since 1.4.5
+  * @since 1.5
   */
  public function load_translations()
  {
 
-  load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+  load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
  }
 }
 $var = new Awesome_Surveys;

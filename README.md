@@ -1,7 +1,7 @@
 ![banner](assets/banner-772x250.png)
 
 # Awesome Surveys #
-**Contributors:** WilltheWebMechanic
+**Contributors:** WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 
 **License:** GPLv3.0+
 

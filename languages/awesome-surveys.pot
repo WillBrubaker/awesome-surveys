@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the Awesome Surveys package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Awesome Surveys 1.0\n"
+"Project-Id-Version: Awesome Surveys 1.5-pre\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2014-06-09 11:30:59+00:00\n"
+"POT-Creation-Date: 2014-10-14 21:50:30+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -12,111 +12,113 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
-#: awesome-surveys.php:235
-msgid "Survey Name:"
-msgstr ""
-
-#: awesome-surveys.php:239
-msgid "Start Building"
-msgstr ""
-
-#: awesome-surveys.php:245
-msgid ""
-"Need help? There are handy tips for some of the options in the help menu. "
-"Click the help tab in the upper right corner of your screen"
-msgstr ""
-
-#: awesome-surveys.php:249
+#: awesome-surveys.php:282
 msgid "Donate to the future development of this plugin:"
 msgstr ""
 
-#: awesome-surveys.php:265
+#: awesome-surveys.php:299
 msgid "Build Survey Form"
 msgstr ""
 
-#: awesome-surveys.php:266
+#: awesome-surveys.php:304
+msgid "Survey Styling Options"
+msgstr ""
+
+#: awesome-surveys.php:309
 msgid "Your Survey Results"
 msgstr ""
 
-#: awesome-surveys.php:267
+#: awesome-surveys.php:314
+msgid "Survey Results by User"
+msgstr ""
+
+#: awesome-surveys.php:319
 msgid "How To Video"
 msgstr ""
 
-#: awesome-surveys.php:269
+#: awesome-surveys.php:329
 msgid "Debug"
 msgstr ""
 
-#: awesome-surveys.php:278
-msgid "General Survey Options:"
+#: awesome-surveys.php:402
+msgid "Edit Survey Name"
 msgstr ""
 
-#: awesome-surveys.php:279
-msgid "A Thank You message:"
+#: awesome-surveys.php:407
+msgid "Edit this survey"
 msgstr ""
 
-#: awesome-surveys.php:279 awesome-surveys.php:844
-msgid "Thank you for completing this survey"
+#: awesome-surveys.php:409
+msgid "Clone this survey"
 msgstr ""
 
-#: awesome-surveys.php:280 awesome-surveys.php:840
-msgid "User must be logged in"
+#: awesome-surveys.php:415
+msgid "Delete"
 msgstr ""
 
-#: awesome-surveys.php:280
-msgid "Cookie based"
-msgstr ""
-
-#: awesome-surveys.php:280 awesome-surveys.php:840
-msgid "None"
-msgstr ""
-
-#: awesome-surveys.php:303
-msgid ""
-"To prevent people from filling the survey out multiple times you may select "
-"one of the options below"
-msgstr ""
-
-#: awesome-surveys.php:307
-msgid "Add Question"
-msgstr ""
-
-#: awesome-surveys.php:321
-msgid "Your Surveys"
-msgstr ""
-
-#: awesome-surveys.php:366
+#: awesome-surveys.php:418
 msgid "You can insert this survey with shortcode: "
 msgstr ""
 
-#: awesome-surveys.php:367
+#: awesome-surveys.php:419
 msgid "This survey has received %d responses"
 msgstr ""
 
-#: awesome-surveys.php:436
+#: awesome-surveys.php:424
+msgid "edit this question"
+msgstr ""
+
+#: awesome-surveys.php:424 awesome-surveys.php:454 awesome-surveys.php:455
+msgid "click to edit"
+msgstr ""
+
+#: awesome-surveys.php:454
+msgid "Thank You Message:"
+msgstr ""
+
+#: awesome-surveys.php:455
+msgid "Survey Authentication Method:"
+msgstr ""
+
+#: awesome-surveys.php:657
+msgid ""
+"This plugin outputs some very basic structural css. You can enable/disable "
+"this by setting the option below"
+msgstr ""
+
+#: awesome-surveys.php:667
+msgid "Use included css?"
+msgstr ""
+
+#: awesome-surveys.php:670
+msgid "Save"
+msgstr ""
+
+#: awesome-surveys.php:687
 msgid "Survey Name"
 msgstr ""
 
-#: awesome-surveys.php:437
+#: awesome-surveys.php:688
 msgid ""
-"This field is a unique name for your survey and will be displayed before "
-"your survey form"
+"This field is a name for your survey and will be displayed before your "
+"survey form"
 msgstr ""
 
-#: awesome-surveys.php:442
+#: awesome-surveys.php:693
 msgid "Field Type"
 msgstr ""
 
-#: awesome-surveys.php:443
+#: awesome-surveys.php:694
 msgid ""
 "This is the type of form field you would like to add to your form, i.e.: "
 "checkbox, radio, text, email, textarea, etc. Examples:"
 msgstr ""
 
-#: awesome-surveys.php:448 awesome-surveys.php:564
+#: awesome-surveys.php:699 awesome-surveys.php:943
 msgid "Field Validation Options"
 msgstr ""
 
-#: awesome-surveys.php:449
+#: awesome-surveys.php:700
 msgid ""
 "Based upon the type of field option you have selected, you may see different "
 "options for validation. Selecting 'required' will make this part of your "
@@ -128,21 +130,21 @@ msgid ""
 "allowed' field."
 msgstr ""
 
-#: awesome-surveys.php:454
+#: awesome-surveys.php:705
 msgid "General Survey Options"
 msgstr ""
 
-#: awesome-surveys.php:455
+#: awesome-surveys.php:706
 msgid ""
 "These are options for your survey, they are not built in to the survey form, "
 "but rather determine behavior of how your survey will work."
 msgstr ""
 
-#: awesome-surveys.php:460
+#: awesome-surveys.php:711
 msgid "Authentication"
 msgstr ""
 
-#: awesome-surveys.php:461
+#: awesome-surveys.php:712
 msgid ""
 "Choose a method to prevent users from filling out the survey multiple times. "
 "User login is much more reliable, but may not be the best option for your "
@@ -153,135 +155,209 @@ msgid ""
 "developers: methods can be added via the survey_auth_options filter."
 msgstr ""
 
-#: awesome-surveys.php:466
+#: awesome-surveys.php:717
 msgid "Thank You Message"
 msgstr ""
 
-#: awesome-surveys.php:467
+#: awesome-surveys.php:718
 msgid "The message will be displayed to a user who completes the survey."
 msgstr ""
 
-#: awesome-surveys.php:490
-msgid "A survey already exists named "
+#: awesome-surveys.php:752
+msgid "Survey Name:"
 msgstr ""
 
-#: awesome-surveys.php:494
+#: awesome-surveys.php:756
+msgid "Start Building"
+msgstr ""
+
+#: awesome-surveys.php:764
+msgid "General Survey Options:"
+msgstr ""
+
+#: awesome-surveys.php:765
+msgid "A Thank You message:"
+msgstr ""
+
+#: awesome-surveys.php:765 awesome-surveys.php:1245
+msgid "Thank you for completing this survey"
+msgstr ""
+
+#: awesome-surveys.php:780
+msgid ""
+"To prevent people from filling the survey out multiple times you may select "
+"one of the options below"
+msgstr ""
+
+#: awesome-surveys.php:784
+msgid "Add Question"
+msgstr ""
+
+#: awesome-surveys.php:803
+msgid "Your Surveys"
+msgstr ""
+
+#: awesome-surveys.php:817
+msgid "Results by User"
+msgstr ""
+
+#: awesome-surveys.php:839
+msgid ""
+"Need help? There are handy tips for some of the options in the help menu. "
+"Click the help tab in the upper right corner of your screen"
+msgstr ""
+
+#: awesome-surveys.php:843
+msgid "Dismiss"
+msgstr ""
+
+#: awesome-surveys.php:866
 msgid "Survey Name cannot be blank"
 msgstr ""
 
-#: awesome-surveys.php:523
+#: awesome-surveys.php:901
 msgid "Add a question to your survey:"
 msgstr ""
 
-#: awesome-surveys.php:523
+#: awesome-surveys.php:901
 msgid "Select Field Type:"
 msgstr ""
 
-#: awesome-surveys.php:562
+#: awesome-surveys.php:941
 msgid "The question you are asking:"
 msgstr ""
 
-#: awesome-surveys.php:582
+#: awesome-surveys.php:961
 msgid "Advanced Validation Rules:"
 msgstr ""
 
-#: awesome-surveys.php:613
+#: awesome-surveys.php:992
 msgid "Number of answers required?"
 msgstr ""
 
-#: awesome-surveys.php:639
+#: awesome-surveys.php:1027
 msgid "required?"
 msgstr ""
 
-#: awesome-surveys.php:665
+#: awesome-surveys.php:1053
 msgid "Min number allowed"
 msgstr ""
 
-#: awesome-surveys.php:671
+#: awesome-surveys.php:1059
 msgid "Max number allowed"
 msgstr ""
 
-#: awesome-surveys.php:693
+#: awesome-surveys.php:1081
 msgid "Maximum Length (in number of characters)"
 msgstr ""
 
-#: awesome-surveys.php:736
+#: awesome-surveys.php:1124
 msgid "Answer"
 msgstr ""
 
-#: awesome-surveys.php:736
+#: awesome-surveys.php:1124
 msgid "default?"
 msgstr ""
 
-#: awesome-surveys.php:840
+#: awesome-surveys.php:1235
+msgid "Delete question"
+msgstr ""
+
+#: awesome-surveys.php:1235
+msgid "Edit question"
+msgstr ""
+
+#: awesome-surveys.php:1241 awesome-surveys.php:1517
+msgid "None"
+msgstr ""
+
+#: awesome-surveys.php:1241
 msgid "Cookie Based"
 msgstr ""
 
-#: awesome-surveys.php:842
+#: awesome-surveys.php:1241 awesome-surveys.php:1517
+msgid "User must be logged in"
+msgstr ""
+
+#: awesome-surveys.php:1243
 msgid "Type of authentication: "
 msgstr ""
 
-#: awesome-surveys.php:846
+#: awesome-surveys.php:1247
 msgid "Thank you message:"
 msgstr ""
 
-#: awesome-surveys.php:851
+#: awesome-surveys.php:1253
 msgid "Reset"
 msgstr ""
 
-#: awesome-surveys.php:852
+#: awesome-surveys.php:1254
 msgid "Save Survey"
 msgstr ""
 
-#: awesome-surveys.php:928
+#: awesome-surveys.php:1396
+msgid "The name already exists"
+msgstr ""
+
+#: awesome-surveys.php:1435
+msgid ""
+"A survey that has had responses can not be changed to the \"Logged in\" auth "
+"method"
+msgstr ""
+
+#: awesome-surveys.php:1517
+msgid "Cookie based"
+msgstr ""
+
+#: awesome-surveys.php:1575
 msgid "Fork Me on GitHub"
 msgstr ""
 
-#: awesome-surveys.php:928
+#: awesome-surveys.php:1575
 msgid "Awesome Surveys on github"
 msgstr ""
 
-#: awesome-surveys.php:929
+#: awesome-surveys.php:1576
 msgid "Support for Awesome Surveys"
 msgstr ""
 
-#: awesome-surveys.php:930
+#: awesome-surveys.php:1577
 msgid "Review the Awesome Surveys Plugin"
 msgstr ""
 
-#: awesome-surveys.php:930
+#: awesome-surveys.php:1577 awesome-surveys.php:1598
 msgid "Rate Awesome Surveys"
 msgstr ""
 
-#: awesome-surveys.php:931
+#: awesome-surveys.php:1578
 msgid "Shout it From the Rooftops!"
 msgstr ""
 
-#: awesome-surveys.php:931
+#: awesome-surveys.php:1578
 msgid "Tweet this plugin"
 msgstr ""
 
-#: awesome-surveys.php:932
+#: awesome-surveys.php:1579
 msgid "Donate to the development of the Awesome Surveys plugin"
 msgstr ""
 
-#: awesome-surveys.php:940
-msgid "Donate Bitcoins"
+#: awesome-surveys.php:1599
+msgid "Awesome Surveys News"
 msgstr ""
 
-#: includes/class.awesome-surveys-frontend.php:70
+#: includes/class.awesome-surveys-frontend.php:79
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr ""
 
-#: includes/class.awesome-surveys-frontend.php:102
+#: includes/class.awesome-surveys-frontend.php:111
 msgid "make a selection..."
 msgstr ""
 
-#: includes/class.awesome-surveys-frontend.php:140
+#: includes/class.awesome-surveys-frontend.php:151
 msgid "Submit Response"
 msgstr ""
 
-#: includes/class.awesome-surveys-frontend.php:287
+#: includes/class.awesome-surveys-frontend.php:317
 msgid "You must be logged in to participate in this survey"
 msgstr ""
 
@@ -291,6 +367,12 @@ msgstr ""
 
 #. Plugin URI of the plugin/theme
 msgid "http://www.willthewebmechanic.com/awesome-surveys"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Easily create surveys for your WordPress website and publish them with a "
+"simple shortcode"
 msgstr ""
 
 #. Author of the plugin/theme

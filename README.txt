@@ -1,5 +1,5 @@
 === Awesome Surveys ===
-Contributors: WilltheWebMechanic
+Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 4.0
