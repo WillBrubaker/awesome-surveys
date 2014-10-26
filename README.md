@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.0
 
-**Stable tag:** 1.4.4
+**Stable tag:** 1.5
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -122,6 +122,14 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+### v1.5 - Las Lajas ###
+1. Adds 'view results by user' functionality
+2. German translations added
+3. Whoops...forgot to load textdomain for translations
+4. In an earlier version, I was using a closure or anonymous function - Earlier versions of PHP don't support such nonsense so that didn't work. Added a function which always returned true without the knowledge of some WordPress functions that accomplish this very thing. This has been updated with that.
+5. Lots of work done to improve loading of translations and jQuery validation messages since WordPress now uses a setting for 'WPLANG' and the constant is no longer used.
+6. Front end French translations started
 
 ### v1.4.4 ###
 1. Improved handling of non-English characters in the 'Survey Results' tab.

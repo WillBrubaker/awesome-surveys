@@ -14,7 +14,7 @@ class Awesome_Surveys_Frontend {
   $this->text_domain = 'awesome-surveys';
   add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
   add_action( 'wp_enqueue_scripts', array( &$this, 'register_scripts' ) );
-  add_filter( 'awesome_surveys_auth_method_none', array( &$this, 'awesome_surveys_auth_method_none' ) );
+  add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
   add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
   add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
   add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
@@ -35,6 +35,7 @@ class Awesome_Surveys_Frontend {
  public function wwm_survey( $atts )
  {
 
+  load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
   if ( ! isset( $atts['id'] ) ) {
    return null;
   }
@@ -50,7 +51,7 @@ class Awesome_Surveys_Frontend {
   if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
    wp_enqueue_script( 'awesome-surveys-frontend' );
    wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
-   if ( defined( 'WPLANG' ) ) {
+   if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
     add_action( 'wp_footer', array( &$this, 'validation_messages' ), 90, 0 );
    }
    $include_css = ( isset( $surveys['include_css'] ) ) ? absint( $surveys['include_css'] ) : 1;
@@ -233,17 +234,6 @@ class Awesome_Surveys_Frontend {
  }
 
  /**
-  * Handles the auth type 'none'. Always returns true.
-  * @return boolean true
-  * @since  1.1
-  */
- public function awesome_surveys_auth_method_none()
- {
-
-  return true;
- }
-
- /**
   * Handles the auth type 'login' to determine whether the
   * survey form should be output or not
   * @since  1.0
@@ -370,9 +360,19 @@ class Awesome_Surveys_Frontend {
   * @since 1.3
   */
  public function validation_messages() {
-  $lang = substr( WPLANG, 0, 2 );
+
+  if ( ! $lang = get_option( 'WPLANG', false ) ) {
+   $lang = WPLANG;
+  }
+
   $path = WWM_AWESOME_SURVEYS_PATH . '/js/localization/';
   $file = $path . 'messages_' . $lang . '.js';
+  //There are some language files which are regionally specific
+  //if that one exists, use it, if not, look for the general one
+  if ( ! file_exists( $file ) ) {
+   $lang = substr( $lang, 0, 2 );
+   $file = $path . 'messages_' . $lang . '.js';
+  }
   if ( file_exists( $file ) && $messages_file = fopen( $file, 'r' ) ) {
    $messages = fread( $messages_file, filesize( $path . 'messages_' . $lang . '.js' ) );
    echo '<script>';
