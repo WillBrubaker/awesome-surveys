@@ -519,58 +519,64 @@ class Awesome_Surveys {
    {
     foreach( $surveys['surveys'] as $survey_key => $survey )
     {
-     if( 'login' == $survey['auth'] )
+     $form = json_decode( $survey['form'], true );
+
+     // First, recreate the survey in the new array with the same key
+     $surveys_new[$survey_key] = array();
+     $surveys_new[$survey_key]['name'] = $survey['name'];
+     // and then questions and respondents sections
+     $surveys_new[$survey_key]['questions'] = array();
+     $surveys_new[$survey_key]['respondents'] = array();
+
+     // Then reconstruct the questions for this survey
+     foreach( $survey['responses'] as $response_key => $response )
      {
-      $form = json_decode( $survey['form'], true );
+      $surveys_new[$survey_key]['questions'][$response_key] = $response['question'];
+     }
 
-      // First, recreate the survey in the new array with the same key
-      $surveys_new[$survey_key] = array();
-      $surveys_new[$survey_key]['name'] = $survey['name'];
-      // and then questions and respondents sections
-      $surveys_new[$survey_key]['questions'] = array();
-      $surveys_new[$survey_key]['respondents'] = array();
+     // Now create the respondents sections
+     if( ! empty( $survey['respondents'] ) )
+     {
+      foreach( $survey['respondents'] as $respondent_key => $user_id )
+      {
+       $user_info = get_userdata( $user_id );
+       $user_name = $user_info->display_name;
 
-      // Then reconstruct the questions for this survey
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+      }
+     }
+     else
+     {
       foreach( $survey['responses'] as $response_key => $response )
       {
-       $surveys_new[$survey_key]['questions'][$response_key] = $response['question'];
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $response_key;
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = "User " . ( $response_key + 1 );
+       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
       }
+     }
 
-      // Now create the respondents sections
-      if( ! empty( $survey['respondents'] ) )
+     // Finally, populate the respondents section with the relevant responses
+     foreach( $surveys_new[$survey_key]['respondents'] as $respondents_key => $arr )
+     {
+      foreach( $survey['responses'] as $response_key => $response_arr )
       {
-       foreach( $survey['respondents'] as $respondent_key => $user_id )
+       // Responses with options are handled slightly differently
+       if( 0 == $response_arr['has_options'] )
        {
-        $user_info = get_userdata( $user_id );
-        $user_name = $user_info->display_name;
-
-        $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
-        $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
-        $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+        if( array_key_exists( $respondents_key, $response_arr['answers'] ) )
+         $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key] = $response_arr['answers'][$respondents_key];
        }
-      }
-
-      // Finally, populate the respondents section with the relevant responses
-      foreach( $surveys_new[$survey_key]['respondents'] as $respondents_key => $arr )
-      {
-       foreach( $survey['responses'] as $response_key => $response_arr )
+       else
        {
-        // Responses with options are handled slightly differently
-        if( 0 == $response_arr['has_options'] )
+        foreach( $response_arr['answers'] as $answer_key => $answer_arr )
         {
-         if( array_key_exists( $respondents_key, $response_arr['answers'] ) )
-          $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key] = $response_arr['answers'][$respondents_key];
-        }
-        else
-        {
-         foreach( $response_arr['answers'] as $answer_key => $answer_arr )
-         {
-          // Get the answer from the form label
-          $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
-          // Options questions may have multiple answers for the same question. Store in an array.
-          if( in_array( $respondents_key, $answer_arr ) )
-           $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
-         }
+         // Get the answer from the form label
+         $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
+         // Options questions may have multiple answers for the same question. Store in an array.
+         if( in_array( $respondents_key, $answer_arr ) )
+          $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
         }
        }
       }
