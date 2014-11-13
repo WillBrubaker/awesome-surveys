@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.0
 
-**Stable tag:** 1.5
+**Stable tag:** 1.5.1
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -122,6 +122,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+### v1.5.1 ###
+1. Changes how 'results by user' works
 
 ### v1.5 - Las Lajas ###
 1. Adds 'view results by user' functionality
