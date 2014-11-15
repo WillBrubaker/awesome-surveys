@@ -551,9 +551,9 @@ class Awesome_Surveys {
      {
       foreach( $survey['responses'] as $response_key => $response )
       {
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $response_key;
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = "User " . ( $response_key + 1 );
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+       $surveys_new[$survey_key]['respondents'][$response_key]['user_id'] = $response_key;
+       $surveys_new[$survey_key]['respondents'][$response_key]['user_name'] = "User " . ( $response_key + 1 );
+       $surveys_new[$survey_key]['respondents'][$response_key]['answers'] = array();
       }
      }
 
