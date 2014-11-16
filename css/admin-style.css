@@ -169,3 +169,7 @@ div.answers {
 
 .dyn-dialog #slider {
   margin: 1em 0; }
+
+#email-options input[type="text"], #email-options input[type="email"] {
+  width: 100%;
+  max-width: 250px; }

@@ -163,8 +163,13 @@ jQuery(document).ready(function($) {
         overlay.hide();
       });
     } else {
-      $('#survey-manager').trigger('reset')
-      location.reload()
+      reset = confirm('Are you sure you want to proceed? All of your unsaved changes will be lost!')
+      if ( true == reset) {
+        $('#survey-manager').trigger('reset')
+        location.reload()
+      } else {
+        overlay.hide()
+      }
     }
   });
 
@@ -563,6 +568,30 @@ jQuery(document).ready(function($) {
     }).always(function() {})
   })
   attachDialog($);
+
+  $('input[type="radio"][name="options[enable_wwm_as_emails]"]').on('change', function() {
+    val = $(this).val();
+    target = $('form#email-options .hidden')
+    if ( 1 == val ) {
+      target.show();
+    } else {
+      target.hide();
+    }
+    console.log(val);
+  })
+
+  $('form#email-options input.hidden').each(function() {
+    label = $( 'label', $(this).parent().parent() )
+    label.addClass('hidden')
+  })
+
+  $('form#email-options input[type="radio"].hidden').each(function() {
+    label = $( 'label', $(this).parent().parent().parent() )
+    console.log(label)
+    label.addClass('hidden')
+  })
+
+  //$('form#email-options div.hidden').parent().parent().addClass('hidden');
 });
 
 var activeDialog;
