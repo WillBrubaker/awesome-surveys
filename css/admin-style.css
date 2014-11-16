@@ -175,3 +175,5 @@ div.answers {
   max-width: 250px; }
 #email-options .control-group, #email-options .controls {
   margin: 1em 1em; }
+#email-options p.italics {
+  font-style: italic; }

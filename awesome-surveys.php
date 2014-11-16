@@ -1632,7 +1632,8 @@ class Awesome_Surveys {
   $form = new FormOverrides( 'email-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form->addElement( new Element_YesNo( __( 'Enable emails on survey completion?', $this->text_domain ), 'options[enable_wwm_as_emails]', array( 'value' => $enable_email, ) ) );
-  $class = ( 'no' == $enable_email ) ? 'hidden' : null;
+  $class = 'toggle';
+  $class .= ( ! $enable_email ) ? ' hidden' : null;
   $form->addElement( new Element_Email( __( 'Send Notifications for all survey completions to', $this->text_domain ), 'options[mail_to]', array( 'value' => $mail_to, 'class' => $class, ) ) );
   $form->addElement( new Element_YesNo( 'Send email to survey respondent?', 'options[enable_wwm_as_respondent_email]', array( 'value' => $enable_wwm_as_respondent_email, 'class' => $class, ) ) );
   $form->addElement( new Element_HTML( '<p class="italics ' . $class . '">For this to work, the survey must have an element of type "email"</p>' ) );

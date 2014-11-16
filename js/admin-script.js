@@ -571,7 +571,7 @@ jQuery(document).ready(function($) {
 
   $('input[type="radio"][name="options[enable_wwm_as_emails]"]').on('change', function() {
     val = $(this).val();
-    target = $('form#email-options .hidden')
+    target = $('form#email-options .toggle')
     if ( 1 == val ) {
       target.show();
     } else {
@@ -579,14 +579,20 @@ jQuery(document).ready(function($) {
     }
   })
 
-  $('form#email-options input.hidden').each(function() {
+  $('form#email-options input.toggle').each(function() {
     label = $( 'label', $(this).parent().parent() )
-    label.addClass('hidden')
+    label.addClass('toggle')
+    if ( $(this).hasClass('hidden') ) {
+      label.addClass('hidden')
+    }
   })
 
-  $('form#email-options input[type="radio"].hidden').each(function() {
+  $('form#email-options input[type="radio"].toggle').each(function() {
     label = $( 'label', $(this).parent().parent().parent() )
-    label.addClass('hidden')
+    label.addClass('toggle')
+    if ( $(this).hasClass('hidden') ) {
+      label.addClass('hidden')
+    }
   })
 });
 
