@@ -99,6 +99,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_get_auth_method_edit_form', array( &$this, 'get_auth_method_edit_form' ) );
   add_action( 'wp_ajax_wwm_edit_survey_auth', array( &$this, 'edit_survey_auth' ) );
   add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
+  add_action( 'wp_ajax_update_email_options', array( &$this, 'update_email_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_wwm_as_get_json', array( &$this, 'get_json' ) );
@@ -112,6 +113,7 @@ class Awesome_Surveys {
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
   add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
   add_action( 'plugins_loaded', array( &$this, 'load_translations' ) );
+  add_action( 'wwm_as_response_saved', array( &$this, 'send_survey_emails' ) );
  }
 
  /**
@@ -493,137 +495,137 @@ class Awesome_Surveys {
   return $html;
  }
 
-  /**
-  * Generates html output with survey results by user
-  * @param  array $args an array of function arguments
-  * @return string       html markup with survey results.
-  * @since  1.5
-  * @author Toby Hawkins <toby@genobi.net> based on above function by
-  *   Will the Web Mechanic <will@willthewebmechanic.com>
-  * @link http://www.genobi.net
-  */
-  function display_results_by_user( $args = array() )
+ /**
+ * Generates html output with survey results by user
+ * @param  array $args an array of function arguments
+ * @return string       html markup with survey results.
+ * @since  1.5
+ * @author Toby Hawkins <toby@genobi.net> based on above function by
+ *   Will the Web Mechanic <will@willthewebmechanic.com>
+ * @link http://www.genobi.net
+ */
+ function display_results_by_user( $args = array() )
+ {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  // Need to rearrange the surveys array to make it per user
+  $surveys_new = array();
+  $html = '<div id="survey-results">' . "\n";
+
+  if ( ! empty( $surveys['surveys'] ) )
   {
-
-   $surveys = get_option( 'wwm_awesome_surveys', array() );
-   // Need to rearrange the surveys array to make it per user
-   $surveys_new = array();
-   $html = '<div id="survey-results">' . "\n";
-
-   if ( ! empty( $surveys['surveys'] ) )
+   foreach ( $surveys['surveys'] as $survey_key => $survey )
    {
-    foreach ( $surveys['surveys'] as $survey_key => $survey )
+    $form = json_decode( $survey['form'], true );
+
+    // First, recreate the survey in the new array with the same key
+    $surveys_new[$survey_key] = array();
+    $surveys_new[$survey_key]['name'] = $survey['name'];
+    // and then questions and respondents sections
+    $surveys_new[$survey_key]['questions'] = array();
+    $surveys_new[$survey_key]['respondents'] = array();
+
+    // Then reconstruct the questions for this survey
+    foreach ( $survey['responses'] as $response_key => $response )
     {
-     $form = json_decode( $survey['form'], true );
+     $surveys_new[$survey_key]['questions'][$response_key] = $response['question'];
+    }
 
-     // First, recreate the survey in the new array with the same key
-     $surveys_new[$survey_key] = array();
-     $surveys_new[$survey_key]['name'] = $survey['name'];
-     // and then questions and respondents sections
-     $surveys_new[$survey_key]['questions'] = array();
-     $surveys_new[$survey_key]['respondents'] = array();
-
-     // Then reconstruct the questions for this survey
-     foreach ( $survey['responses'] as $response_key => $response )
+    // Now create the respondents sections
+    if ( ! empty( $survey['respondents'] ) )
+    {
+     foreach ( $survey['respondents'] as $respondent_key => $user_id )
      {
-      $surveys_new[$survey_key]['questions'][$response_key] = $response['question'];
-     }
+      $user_info = get_userdata( $user_id );
+      $user_name = $user_info->display_name;
 
-     // Now create the respondents sections
-     if ( ! empty( $survey['respondents'] ) )
-     {
-      foreach ( $survey['respondents'] as $respondent_key => $user_id )
-      {
-       $user_info = get_userdata( $user_id );
-       $user_name = $user_info->display_name;
-
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
-      }
-     }
-     else
-     {
-      foreach ( $survey['responses'] as $response_key => $response )
-      {
-       $surveys_new[$survey_key]['respondents'][$response_key]['user_id'] = $response_key;
-       $surveys_new[$survey_key]['respondents'][$response_key]['user_name'] = "User " . ( $response_key + 1 );
-       $surveys_new[$survey_key]['respondents'][$response_key]['answers'] = array();
-      }
-     }
-
-     // Finally, populate the respondents section with the relevant responses
-     foreach ( $surveys_new[$survey_key]['respondents'] as $respondents_key => $arr )
-     {
-      foreach ( $survey['responses'] as $response_key => $response_arr )
-      {
-       // Responses with options are handled slightly differently
-       if ( 0 == $response_arr['has_options'] )
-       {
-        if ( array_key_exists( $respondents_key, $response_arr['answers'] ) )
-         $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key] = $response_arr['answers'][$respondents_key];
-       }
-       else
-       {
-        foreach ( $response_arr['answers'] as $answer_key => $answer_arr )
-        {
-         // Get the answer from the form label
-         $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
-         // Options questions may have multiple answers for the same question. Store in an array.
-         if ( in_array( $respondents_key, $answer_arr ) )
-          $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
-        }
-       }
-      }
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $user_id;
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = $user_name;
+      $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
      }
     }
-    // Now set up the HTML and out put the array for display
-    if ( ! empty( $surveys_new ) )
+    else
     {
-     foreach ( $surveys_new as $key => $survey )
+     foreach ( $survey['responses'] as $response_key => $response )
      {
-      if ( ! empty( $surveys_new[$key]['respondents'] ) ) {
-       $survey_name = stripslashes( stripslashes( $survey['name'] ) );
-       $html .= "\t\t\t" . '<h5>' . $survey_name . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
-       $html .= apply_filters( 'before_individual_survey_result', null, $survey );
-       $html .= "\t\t\t\t" . '<ul>' . "\n";
-       foreach ( $survey['questions'] as $question_key => $question )
+      $surveys_new[$survey_key]['respondents'][$response_key]['user_id'] = $response_key;
+      $surveys_new[$survey_key]['respondents'][$response_key]['user_name'] = "User " . ( $response_key + 1 );
+      $surveys_new[$survey_key]['respondents'][$response_key]['answers'] = array();
+     }
+    }
+
+    // Finally, populate the respondents section with the relevant responses
+    foreach ( $surveys_new[$survey_key]['respondents'] as $respondents_key => $arr )
+    {
+     foreach ( $survey['responses'] as $response_key => $response_arr )
+     {
+      // Responses with options are handled slightly differently
+      if ( 0 == $response_arr['has_options'] )
+      {
+       if ( array_key_exists( $respondents_key, $response_arr['answers'] ) )
+        $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key] = $response_arr['answers'][$respondents_key];
+      }
+      else
+      {
+       foreach ( $response_arr['answers'] as $answer_key => $answer_arr )
        {
-        $question_text = absint( $question_key ) + 1 . ": " . stripslashes( stripslashes( $question ) );
-        $html.= "\t\t\t\t\t" . "<li>$question_text</li>" . "\n";
+        // Get the answer from the form label
+        $answer = stripslashes( $form[$response_key]['label'][$answer_key] );
+        // Options questions may have multiple answers for the same question. Store in an array.
+        if ( in_array( $respondents_key, $answer_arr ) )
+         $surveys_new[$survey_key]['respondents'][$respondents_key]['answers'][$response_key]['multi'][] = $answer;
        }
-       $html .= "\t\t\t\t" . '</ul>' . "\n";
-       foreach ( $survey['respondents'] as $respondent_key => $respondent_arr )
-       {
-        $html .= "\t\t\t\t\t" . '<div class="answer-accordion">' . "\n";
-        $html .= "\t\t\t\t\t\t" . '<h4 class="answers">' . sanitize_text_field( stripslashes( $respondent_arr['user_name'] ) ) . '</h4>' . "\n";
-        $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
-        foreach ( $respondent_arr['answers'] as $answer_key => $answer ) {
-         // Check for multiple response answers
-         if ( is_array($answer) ) {
-          foreach ( $answer['multi'] as $multi )
-          {
-           $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $multi );
-           $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
-          }
-         }
-         else
-         {
-          $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $answer );
-          $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
-         }
-        }
-        $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
-        $html .= "\t\t\t\t\t" . '</div><!--.answer-accordion-->' . "\n";
-       }
-       $html .= "\t\t\t" . '</div><!-- .survey -->' . "\n";
       }
      }
     }
    }
-   $html .= '</div><!--#survey-results-->';
-   return $html;
+   // Now set up the HTML and out put the array for display
+   if ( ! empty( $surveys_new ) )
+   {
+    foreach ( $surveys_new as $key => $survey )
+    {
+     if ( ! empty( $surveys_new[$key]['respondents'] ) ) {
+      $survey_name = stripslashes( stripslashes( $survey['name'] ) );
+      $html .= "\t\t\t" . '<h5>' . $survey_name . '</h5>' . "\n\t\t\t" . '<div class="survey">' . "\n";
+      $html .= apply_filters( 'before_individual_survey_result', null, $survey );
+      $html .= "\t\t\t\t" . '<ul>' . "\n";
+      foreach ( $survey['questions'] as $question_key => $question )
+      {
+       $question_text = absint( $question_key ) + 1 . ": " . stripslashes( stripslashes( $question ) );
+       $html.= "\t\t\t\t\t" . "<li>$question_text</li>" . "\n";
+      }
+      $html .= "\t\t\t\t" . '</ul>' . "\n";
+      foreach ( $survey['respondents'] as $respondent_key => $respondent_arr )
+      {
+       $html .= "\t\t\t\t\t" . '<div class="answer-accordion">' . "\n";
+       $html .= "\t\t\t\t\t\t" . '<h4 class="answers">' . sanitize_text_field( stripslashes( $respondent_arr['user_name'] ) ) . '</h4>' . "\n";
+       $html .= "\t\t\t\t\t\t" . '<div>' . "\n";
+       foreach ( $respondent_arr['answers'] as $answer_key => $answer ) {
+        // Check for multiple response answers
+        if ( is_array($answer) ) {
+         foreach ( $answer['multi'] as $multi )
+         {
+          $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $multi );
+          $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
+         }
+        }
+        else
+        {
+         $answer_text = absint( $answer_key ) + 1 . ": " . stripslashes( $answer );
+         $html .= "\t\t\t\t\t\t\t" . "<li>$answer_text</li>" . "\n";
+        }
+       }
+       $html .= "\t\t\t\t\t\t" . '</div>' . "\n";
+       $html .= "\t\t\t\t\t" . '</div><!--.answer-accordion-->' . "\n";
+      }
+      $html .= "\t\t\t" . '</div><!-- .survey -->' . "\n";
+     }
+    }
+   }
   }
+  $html .= '</div><!--#survey-results-->';
+  return $html;
+ }
 
  /**
   * AJAX handler for get_survey_results
@@ -669,7 +671,7 @@ class Awesome_Surveys {
   $form = new FormOverrides( 'styling-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form->addElement( new Element_YesNo( __( 'Use included css?', $this->text_domain ), 'options[include_css]', array( 'value' => $include_css, ) ) );
-  $form->addElement( new Element_Hidden( 'action', 'update_styling_options' ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
   $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
   $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
   return $html . $form->render( true );
@@ -1635,19 +1637,50 @@ class Awesome_Surveys {
   echo '<h3>Call for beta testers</h3><p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
  }
 
+
+ /**
+  * outputs the email settings
+  * @return string the rendered form
+  * @since  1.6
+  */
  public function get_email_settings_form() {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
   $nonce = wp_create_nonce( 'update-email-options' );
-  $enable_email = ( isset( $surveys['enable_email'] ) ) ? absint( $surveys['enable_email'] ) : 0;
+  $enable_email = ( isset( $surveys['enable_wwm_as_emails'] ) ) ? absint( $surveys['enable_wwm_as_emails'] ) : 0;
+  $enable_wwm_as_respondent_email = ( isset( $surveys['enable_wwm_as_respondent_email'] ) ) ? absint( $surveys['enable_wwm_as_respondent_email'] ) : 0;
+  $mail_to = ( isset( $surveys['mail_to'] ) ) ? sanitize_email( $surveys['mail_to'] ) : get_option( 'admin_email', 'webmaster@localhost.com' );
   $form = new FormOverrides( 'email-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form->addElement( new Element_YesNo( __( 'Enable emails on survey completion?', $this->text_domain ), 'options[enable_wwm_as_emails]', array( 'value' => $enable_email, ) ) );
   $class = ( 'no' == $enable_email ) ? 'hidden' : null;
-  $form->addElement( new Element_Email( __( 'Send Notifications for all survey completions to', $this->text_domain ), 'options[admin_email]', array( 'value' => 'someemail@somedomain.com', 'class' => $class, ) ) );
-  $form->addElement( new Element_YesNo( __( 'Send email to survey respondent?', $this->text_domain ), 'options[enable_wwm_as_respondent_email]', array( 'value' => $enable_respondent_email, 'class' => $class, ) ) );
-  $form->addElement( new Element_Hidden( 'action', 'update_styling_options' ) );
+  $form->addElement( new Element_Email( __( 'Send Notifications for all survey completions to', $this->text_domain ), 'options[mail_to]', array( 'value' => $mail_to, 'class' => $class, ) ) );
+  $form->addElement( new Element_YesNo( 'Send email to survey respondent? *future*', 'options[enable_wwm_as_respondent_email]', array( 'value' => $enable_wwm_as_respondent_email, 'class' => $class,  'disabled' => 'disabled', ) ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
   $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
   $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
   return $form->render( true );
+ }
+
+ /**
+  * AJAX handler for updating email options
+  * @since 1.6
+  */
+ public function update_email_options() {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'update-email-options' ) || ! current_user_can( 'manage_options' ) ) {
+    status_header( 403 );
+    die();
+   }
+   $surveys = get_option( 'wwm_awesome_surveys', array() );
+   error_log( print_r( $_POST, true ) );
+   $enable_wwm_as_respondent_email = ( isset( $_POST['options']['enable_wwm_as_respondent_email'] ) ) ? absint( $_POST['options']['enable_wwm_as_respondent_email'] ) : 0;
+   $surveys['enable_wwm_as_emails'] = absint( $_POST['options']['enable_wwm_as_emails'] );
+   $surveys['enable_wwm_as_respondent_email'] = $enable_wwm_as_respondent_email;
+   $surveys['mail_to'] = sanitize_email( $_POST['options']['mail_to'] );
+   update_option( 'wwm_awesome_surveys', $surveys );
+   wp_send_json_success();
+   exit;
  }
 
  /**
@@ -1680,6 +1713,22 @@ class Awesome_Surveys {
  {
 
   load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+ }
+
+ /**
+  * Hooked into wwm_as_response_saved to send email if set
+  * @param  array $survey the survey that was just completed
+  * @since 1.6
+  */
+ public function send_survey_emails( $survey ) {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  if ( $surveys['enable_wwm_as_emails'] ) {
+   $subject = __( 'Survey Completed', $this->text_domain );
+   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
+   $to = $surveys['mail_to'];
+   wp_mail( $to, $subject, $message );
+  }
  }
 }
 $var = new Awesome_Surveys;

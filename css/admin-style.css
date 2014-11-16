@@ -173,3 +173,5 @@ div.answers {
 #email-options input[type="text"], #email-options input[type="email"] {
   width: 100%;
   max-width: 250px; }
+#email-options .control-group, #email-options .controls {
+  margin: 1em 1em; }

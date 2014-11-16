@@ -323,7 +323,7 @@ jQuery(document).ready(function($) {
     }
   });
 
-  $('#styling-options').on('submit', function(e) {
+  $('form#styling-options, form#email-options').on('submit', function(e) {
     e.preventDefault();
     overlay = $('.overlay', $(this));
     overlay.show();
@@ -577,7 +577,6 @@ jQuery(document).ready(function($) {
     } else {
       target.hide();
     }
-    console.log(val);
   })
 
   $('form#email-options input.hidden').each(function() {
@@ -587,11 +586,8 @@ jQuery(document).ready(function($) {
 
   $('form#email-options input[type="radio"].hidden').each(function() {
     label = $( 'label', $(this).parent().parent().parent() )
-    console.log(label)
     label.addClass('hidden')
   })
-
-  //$('form#email-options div.hidden').parent().parent().addClass('hidden');
 });
 
 var activeDialog;
