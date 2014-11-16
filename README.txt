@@ -98,10 +98,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 == Changelog ==
 
 == v1.6 - La Barqueta ==
-1. Moved survey styling options out of the tabs into a general settings meta box
+1. Moved survey styling options out of the tabs and into a general settings meta box
 2. **New Feature** send emails on survey submission
 3. Fixes for a couple of undefined variable/index notices
 4. Adds confirmation dialog to the build survey -> reset survey button
+5. Allow HTML in thank you message
 
 == v1.5.1 ==
 1. Changes how 'results by user' works

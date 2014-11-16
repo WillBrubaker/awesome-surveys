@@ -327,7 +327,11 @@ jQuery(document).ready(function($) {
     e.preventDefault();
     overlay = $('.overlay', $(this));
     overlay.show();
-    $.post(ajaxurl, $(this).serializeArray(), function(data) {}).fail(function(xhr) {
+    $.post(ajaxurl, $(this).serializeArray(), function(data) {
+      if ( ! data.success ) {
+        alert(data.data);
+      }
+    }).fail(function(xhr) {
       alert('error code: ' + xhr.status + ' error message ' + xhr.statusText);
     }).always(function() {
       overlay.hide();
