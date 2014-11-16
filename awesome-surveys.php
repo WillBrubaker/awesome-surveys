@@ -1673,7 +1673,6 @@ class Awesome_Surveys {
     die();
    }
    $surveys = get_option( 'wwm_awesome_surveys', array() );
-   error_log( print_r( $_POST, true ) );
    $enable_wwm_as_respondent_email = ( isset( $_POST['options']['enable_wwm_as_respondent_email'] ) ) ? absint( $_POST['options']['enable_wwm_as_respondent_email'] ) : 0;
    $surveys['enable_wwm_as_emails'] = absint( $_POST['options']['enable_wwm_as_emails'] );
    $surveys['enable_wwm_as_respondent_email'] = $enable_wwm_as_respondent_email;
