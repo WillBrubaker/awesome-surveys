@@ -1130,7 +1130,10 @@ class Awesome_Surveys {
    'rules' => array(),
   );
 
-  $form_elements_array['validation'] = array();
+
+  if ( ! isset( $form_elements_array['validation'] ) ) {
+   $form_elements_array['validation'] = array();
+  }
   $form_elements_array['validation'] = wp_parse_args( $form_elements_array['validation'], $defaults );
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
