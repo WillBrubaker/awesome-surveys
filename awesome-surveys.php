@@ -549,11 +549,14 @@ class Awesome_Surveys {
      }
      else
      {
-      foreach( $survey['responses'] as $response_key => $response )
+      if( array_key_exists( 'num_responses', $survey ) )
       {
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_id'] = $response_key;
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['user_name'] = "User " . ( $response_key + 1 );
-       $surveys_new[$survey_key]['respondents'][$respondent_key]['answers'] = array();
+       $num_responses = $survey['num_responses'] + 1;
+       for( $x = 0; $x < $num_responses; $x++ )
+       {
+        $surveys_new[$survey_key]['respondents'][$x]['user_name'] = "User " . ( $x + 1 );
+        $surveys_new[$survey_key]['respondents'][$x]['answers'] = array();
+       }
       }
      }
 
