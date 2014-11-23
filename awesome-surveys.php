@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.5.1
+Version: 1.5.2
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.5',
+  'version' => '1.5.2',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -1625,7 +1625,11 @@ class Awesome_Surveys {
   * @since 1.4
   */
  public function news_box() {
-  echo '<h3>Call for beta testers</h3><p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
+  echo '
+  <h3>Major Bug identified in the CSV exporter</h3>
+  <p>If you are using the CSV Exporter version 0.2 or lower, please either uninstall/delete it or update to 0.3 or higher</p>
+  <h3>Call for beta testers</h3>
+  <p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
  }
 
  /**

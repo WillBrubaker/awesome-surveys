@@ -2,8 +2,8 @@
 Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
-Tested up to: 4.0
-Stable tag: 1.5.1
+Tested up to: 4.0.1
+Stable tag: 1.5.2
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -97,7 +97,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
-== v1.5.1 ==
+= v1.5.2 =
+1. **Important** If you use the Awesome Surveys CSV Exporter, please either update it to version 0.4 or de-activate it before updating Awesome Surveys.
+2. Fixes for results by user
+
+= v1.5.1 =
 1. Changes how 'results by user' works
 
 = v1.5 - Las Lajas =
@@ -187,7 +191,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 1. Initial Public Release
 
 == Upgrade Notice ==
-v1.0.2 fixes a couple of bugs. If you have been experiencing PHP Warnings where the shortcode was or if you've been having problems with text boxes/textareas, this update fixes those things.
+
+= v1.5.2 =
+If you have the companion CSV export installed and it's at verson 0.3 or earlier, de-activate it prior to updating this plugin or update the exporter plugin to 0.4
+
+= v1.0.2 =
+fixes a couple of bugs. If you have been experiencing PHP Warnings where the shortcode was or if you've been having problems with text boxes/textareas, this update fixes those things.
 
 == Additional Information ==
 
@@ -207,10 +216,10 @@ v1.0.2 fixes a couple of bugs. If you have been experiencing PHP Warnings where 
 
 = To Do List =
 
+* Send emails upon survey completion.
 * Widget to display surveys?
 * Ability to add classes to survey form elements and add custom css.
 * Ability to export .csv file of the surveys
-* View survey results sorted by how each individual respondent answered questions.
 * **Your feature request here.**
 
 = Credits =

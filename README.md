@@ -7,9 +7,9 @@
 
 **Requires at least:** 3.9.1
 
-**Tested up to:** 4.0
+**Tested up to:** 4.0.1
 
-**Stable tag:** 1.5.1
+**Stable tag:** 1.5.2
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -123,6 +123,10 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+### v1.5.2 ###
+1. *Important* If you use the Awesome Surveys CSV Exporter, please either update it to version 0.4 or de-activate it before updating Awesome Surveys.
+2. Fixes for results by user
+
 ### v1.5.1 ###
 1. Changes how 'results by user' works
 
@@ -229,10 +233,10 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ### To Do List ###
 
+* Send emails upon survey completion.
 * Widget to display surveys?
 * Ability to add classes to survey form elements and add custom css.
 * Ability to export .csv file of the surveys
-* View survey results sorted by how each individual respondent answered questions.
 * **Your feature request here.**
 
 ### Credits ###
