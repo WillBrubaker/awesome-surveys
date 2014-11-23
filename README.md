@@ -124,8 +124,11 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 ## Changelog ##
 
 ### v1.5.2 ###
-1. *Important* If you use the Awesome Surveys CSV Exporter, please either update it to version 0.4 or de-activate it before updating Awesome Surveys.
+1. *Important* bug If you use the Awesome Surveys CSV Exporter, please either update it to version 0.4 or de-activate it before updating Awesome Surveys.
 2. Fixes for results by user
+3. Enhancement - now requires confirmation when pressing 'reset survey'
+4. Now uses WordPress constant SCRIPT_DEBUG for dev/workflow purposes
+
 
 ### v1.5.1 ###
 1. Changes how 'results by user' works

@@ -145,13 +145,14 @@ class Awesome_Surveys {
  public function admin_enqueue_scripts()
  {
 
+  $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script.min.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), self::$wwm_plugin_values['version'] );
+  wp_register_script( $this->text_domain . '-admin-script', plugins_url( 'js/admin-script' . $suffix . '.js', __FILE__ ), array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), self::$wwm_plugin_values['version'] );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', plugins_url( 'css/jquery-ui.min.css', __FILE__ ), array(), '1.10.13', 'all' );
   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
-  wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style.min.css', __FILE__ ), array( 'jquery-ui-lightness', 'pure-forms-css' ), self::$wwm_plugin_values['version'], 'all' );
+  wp_register_style( $this->text_domain . '-admin-style', plugins_url( 'css/admin-style' . $suffix . '.css', __FILE__ ), array( 'jquery-ui-lightness', 'pure-forms-css' ), self::$wwm_plugin_values['version'], 'all' );
  }
 
  /**
@@ -1160,7 +1161,7 @@ class Awesome_Surveys {
    'rules' => array(),
   );
 
-  $form_elements_array['validation'] = wp_parse_args( $form_elements_array['validation'], $defaults );
+  $form_elements_array['validation'] = wp_parse_args( ( $form_elements_array['validation'] ) ? $form_elements_array['validation'] : array(), $defaults );
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
    foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
@@ -1627,7 +1628,7 @@ class Awesome_Surveys {
  public function news_box() {
   echo '
   <h3>Major Bug identified in the CSV exporter</h3>
-  <p>If you are using the CSV Exporter version 0.2 or lower, please either uninstall/delete it or update to 0.3 or higher</p>
+  <p>If you are using the CSV Exporter version 0.2 or lower, please either uninstall/delete it or update to 0.4 or higher</p>
   <h3>Call for beta testers</h3>
   <p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
  }

@@ -163,8 +163,13 @@ jQuery(document).ready(function($) {
         overlay.hide();
       });
     } else {
-      $('#survey-manager').trigger('reset')
-      location.reload()
+      reset = confirm('Are you sure you want to proceed? All of your unsaved changes will be lost!')
+      if (true == reset) {
+        $('#survey-manager').trigger('reset')
+        location.reload()
+      } else {
+        overlay.hide()
+      }
     }
   });
 
@@ -583,7 +588,7 @@ function populatePreview($, data) {
     },
     stop: function(event, ui) {
       endingIndex = ui.item.index()
-      if ( startingIndex != endingIndex ) {
+      if (startingIndex != endingIndex) {
         activeElement = surveyElements[startingIndex]
         surveyElements.splice(startingIndex, 1)
         surveyElements.splice(endingIndex, 0, activeElement)
@@ -598,9 +603,9 @@ function populatePreview($, data) {
 //added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
 function renumberButtons($) {
   var parent = $('.survey-preview form')
- $('.single-element-edit', parent).each(function() {
-  $('.button-holder button[data-index]', $(this)).attr('data-index',$(this).index())
- })
+  $('.single-element-edit', parent).each(function() {
+    $('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
+  })
 }
 
 function generateDynamicDialog(obj) {

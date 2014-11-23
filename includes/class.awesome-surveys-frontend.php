@@ -162,11 +162,12 @@ class Awesome_Surveys_Frontend {
  public function register_scripts()
  {
 
+  $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css' );
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.1' );
-  wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script.min.js', array( 'jquery', 'jquery-validation-plugin' ), $this->plugin_version, true );
-  wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style.min.css', array( 'normalize-css', 'pure-forms-css' ), $this->plugin_version, 'all' );
+  wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script' . $suffix . '.js', array( 'jquery', 'jquery-validation-plugin' ), $this->plugin_version, true );
+  wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style' . $suffix . '.css', array( 'normalize-css', 'pure-forms-css' ), $this->plugin_version, 'all' );
  }
 
  /**
