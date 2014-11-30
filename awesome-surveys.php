@@ -146,7 +146,6 @@ class Awesome_Surveys {
    'num_answers' => 10
    );
   $args = apply_filters( 'wwm_as_admin_script_vars', $defaults );
-  error_log( print_r( $args, true ) );
   $args = wp_parse_args( $args, $defaults );
   wp_enqueue_script( $this->text_domain . '-admin-script' );
   wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
@@ -658,7 +657,7 @@ class Awesome_Surveys {
   $form = new FormOverrides( 'styling-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form->addElement( new Element_YesNo( __( 'Use included css?', $this->text_domain ), 'options[include_css]', array( 'value' => $include_css, ) ) );
-  $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_styling_options' ) );
   $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
   $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
   return $html . $form->render( true );
@@ -1676,8 +1675,8 @@ class Awesome_Surveys {
    $surveys['enable_wwm_as_emails'] = absint( $_POST['options']['enable_wwm_as_emails'] );
    $surveys['enable_wwm_as_respondent_email'] = $enable_wwm_as_respondent_email;
    sanitize_text_field( $surveys['respondent_email_subject'] );
-   $surveys['respondent_email_subject'] = sanitize_text_field( $surveys['respondent_email_subject'] );
-   $surveys['respondent_email_message'] = sanitize_text_field( $surveys['respondent_email_message'] );
+   $surveys['respondent_email_subject'] = sanitize_text_field( $_POST['options']['respondent_email_subject'] );
+   $surveys['respondent_email_message'] = sanitize_text_field( $_POST['options']['respondent_email_message'] );
    $surveys['mail_to'] = sanitize_email( $_POST['options']['mail_to'] );
    if ( is_email( $surveys['mail_to'] ) ) {
     update_option( 'wwm_awesome_surveys', $surveys );
@@ -1737,15 +1736,15 @@ class Awesome_Surveys {
    $form = json_decode( $survey['form'], true );
    foreach ( $args[2] as $key => $arr ) {
     $answer = null;
-    $message .= "\n\nReply to " . $arr['question'] . ":\n";
+    $message .= "\n\nReply to " . stripslashes( $arr['question'] . ":\n" );
     if ( $arr['has_options'] ) {
      foreach ( $arr['answers'] as $answer_key => $answer_value ) {
       if ( count( $args[2][ $key ]['answers'][ $answer_key ]  ) > count( $args[3][ $key ]['answers'][ $answer_key ] ) ) {
-       $answer = $form[ $key ]['label'][ $answer_key ];
+       $answer = stripslashes( $form[ $key ]['label'][ $answer_key ] );
       }
      }
     } else {
-     $answer = end( $args[2][ $key ]['answers'] );
+     $answer = stripslashes( end( $args[2][ $key ]['answers'] ) );
     }
     $message .= ( ! empty( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
    }

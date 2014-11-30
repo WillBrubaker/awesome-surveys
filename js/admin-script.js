@@ -323,7 +323,7 @@ jQuery(document).ready(function($) {
     }
   });
 
-  $('#styling-options').on('submit', function(e) {
+    $('form#styling-options, form#email-options').on('submit', function(e) {
     e.preventDefault();
     overlay = $('.overlay', $(this));
     overlay.show();
@@ -567,6 +567,29 @@ jQuery(document).ready(function($) {
       alert('error code: ' + xhr.status + ' error message: ' + xhr.statusText)
     }).always(function() {})
   })
+
+$('input[type="radio"][name="options[enable_wwm_as_emails]"]').on('change', function() {
+    val = $(this).val();
+    target = $('form#email-options .hidden')
+    if ( 1 == val ) {
+      target.show();
+    } else {
+      target.hide();
+    }
+    console.log(val);
+  })
+
+  $('form#email-options input.hidden, form#email-options textarea.hidden').each(function() {
+    label = $( 'label', $(this).parent().parent() )
+    label.addClass('hidden')
+  })
+
+  $('form#email-options input[type="radio"].hidden').each(function() {
+    label = $( 'label', $(this).parent().parent().parent() )
+    console.log(label)
+    label.addClass('hidden')
+  })
+
   attachDialog($);
 });
 
