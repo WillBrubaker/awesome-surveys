@@ -111,7 +111,7 @@ class Awesome_Surveys {
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
   add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
   add_action( 'plugins_loaded', array( &$this, 'load_translations' ) );
-  add_action( 'wwm_as_response_saved', array( &$this, 'send_survey_emails' ) );
+  add_action( 'wwm_as_response_saved', array( &$this, 'send_survey_emails' ), 10, 1 );
  }
 
  /**
@@ -1642,7 +1642,8 @@ class Awesome_Surveys {
   $nonce = wp_create_nonce( 'update-email-options' );
   $enable_email = ( isset( $surveys['enable_wwm_as_emails'] ) ) ? absint( $surveys['enable_wwm_as_emails'] ) : 0;
   $enable_wwm_as_respondent_email = ( isset( $surveys['enable_wwm_as_respondent_email'] ) ) ? absint( $surveys['enable_wwm_as_respondent_email'] ) : 0;
-  $respondent_email_subject = ( isset( $surveys['$respondent_email_subject'] ) ) ? sanitize_text_field( $surveys['$respondent_email_subject'] ) : __( 'Thank you for your response', $this->text_domain );
+  $respondent_email_subject = ( isset( $surveys['respondent_email_subject'] ) ) ? sanitize_text_field( $surveys['respondent_email_subject'] ) : __( 'Thank you for your response', $this->text_domain );
+  $respondent_email_message = ( isset( $surveys['respondent_email_message'] ) ) ? sanitize_text_field( $surveys['respondent_email_message'] ) : __( 'Thank you for your response to a survey', $this->text_domain );
   $mail_to = ( isset( $surveys['mail_to'] ) ) ? sanitize_email( $surveys['mail_to'] ) : get_option( 'admin_email', 'webmaster@localhost.com' );
   $form = new FormOverrides( 'email-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
@@ -1653,6 +1654,7 @@ class Awesome_Surveys {
   $form->addElement( new Element_YesNo( 'Send email to survey respondent?', 'options[enable_wwm_as_respondent_email]', array( 'value' => $enable_wwm_as_respondent_email, 'class' => $class, ) ) );
   $form->addElement( new Element_HTML( '<p class="italics ' . $class . '">For this to work, the survey must have an element of type "email"</p>' ) );
   $form->addElement( new Element_Textbox( __( 'Respondent email subject', $this->text_domain ), 'options[respondent_email_subject]', array( 'class' => $class, 'value' => $respondent_email_subject ) ) );
+  $form->addElement( new Element_Textarea( __( 'Respondent email message', $this->text_domain ), 'options[respondent_email_message]', array( 'class' => $class, 'value' => $respondent_email_message ) ) );
   $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
   $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
   $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
@@ -1675,6 +1677,7 @@ class Awesome_Surveys {
    $surveys['enable_wwm_as_respondent_email'] = $enable_wwm_as_respondent_email;
    sanitize_text_field( $surveys['respondent_email_subject'] );
    $surveys['respondent_email_subject'] = sanitize_text_field( $surveys['respondent_email_subject'] );
+   $surveys['respondent_email_message'] = sanitize_text_field( $surveys['respondent_email_message'] );
    $surveys['mail_to'] = sanitize_email( $_POST['options']['mail_to'] );
    if ( is_email( $surveys['mail_to'] ) ) {
     update_option( 'wwm_awesome_surveys', $surveys );
@@ -1722,14 +1725,31 @@ class Awesome_Surveys {
   * @param  array $survey the survey that was just completed
   * @since 1.6
   */
- public function send_survey_emails( $survey ) {
+ public function send_survey_emails( $args) {
 
   $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][ $args[0] ];
 
   if ( $surveys['enable_wwm_as_emails'] ) {
-   $subject = __( 'Survey Completed', $this->text_domain );
-   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
+   $subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
    $to = $surveys['mail_to'];
+   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
+   $form = json_decode( $survey['form'], true );
+   foreach ( $args[2] as $key => $arr ) {
+    $answer = null;
+    $message .= "\n\nReply to " . $arr['question'] . ":\n";
+    if ( $arr['has_options'] ) {
+     foreach ( $arr['answers'] as $answer_key => $answer_value ) {
+      if ( count( $args[2][ $key ]['answers'][ $answer_key ]  ) > count( $args[3][ $key ]['answers'][ $answer_key ] ) ) {
+       $answer = $form[ $key ]['label'][ $answer_key ];
+      }
+     }
+    } else {
+     $answer = end( $args[2][ $key ]['answers'] );
+    }
+    $message .= ( ! empty( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
+   }
+   $message = apply_filters( 'wwm_as_admin_email', $message );
    wp_mail( $to, $subject, $message );
   }
 

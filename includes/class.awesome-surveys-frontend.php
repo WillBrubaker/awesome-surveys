@@ -194,7 +194,7 @@ class Awesome_Surveys_Frontend {
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
   $survey['num_responses'] = $num_responses;
   $form = json_decode( stripslashes( $survey['form'] ), true );
-  $responses = $survey['responses'];
+  $original_responses = $responses = $survey['responses'];
 
   foreach ( $responses as $key => $response ) {
    if ( 1 == $response['has_options'] ) {
@@ -224,7 +224,7 @@ class Awesome_Surveys_Frontend {
   );
   do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
   update_option( 'wwm_awesome_surveys', $surveys );
-  do_action( 'wwm_as_response_saved', $survey );
+  do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
   $form_id = sanitize_title( stripslashes( $survey['name'] ) );
   $thank_you = stripslashes( $survey['thank_you'] );
   /*
