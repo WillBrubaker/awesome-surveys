@@ -578,7 +578,7 @@ $('input[type="radio"][name="options[enable_wwm_as_emails]"]').on('change', func
     }
   })
 
-  $('form#email-options input.toggle').each(function() {
+  $('form#email-options input.toggle, form#email-options textarea.toggle').each(function() {
     label = $( 'label', $(this).parent().parent() )
     label.addClass('toggle')
     if ( $(this).hasClass('hidden') ) {
