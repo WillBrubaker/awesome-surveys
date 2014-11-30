@@ -1341,7 +1341,7 @@ class Awesome_Surveys {
   if ( $updated ) {
    wp_send_json_success();
   } else {
-   wp_send_json_error();
+   wp_send_json_error( array( 'message' => 'Saving changes failed. Perhaps there was no change' ) );
   }
   exit;
  }
@@ -1373,7 +1373,7 @@ class Awesome_Surveys {
   if ( $updated ) {
    wp_send_json_success();
   } else {
-   wp_send_json_error();
+   wp_send_json_error( array( 'message' => 'Saving changes failed. Perhaps there was no change' ) );
   }
   exit;
  }
@@ -1500,7 +1500,7 @@ class Awesome_Surveys {
   if ( $updated ) {
    wp_send_json_success();
   } else {
-   wp_send_json_error();
+   wp_send_json_error( array( 'data' => 'delete survey failed' ) );
   }
   exit;
  }
