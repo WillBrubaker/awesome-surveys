@@ -142,7 +142,14 @@ class Awesome_Surveys {
  public function admin_print_scripts()
  {
 
+  $defaults = array(
+   'num_answers' => 10
+   );
+  $args = apply_filters( 'wwm_as_admin_script_vars', $defaults );
+  error_log( print_r( $args, true ) );
+  $args = wp_parse_args( $args, $defaults );
   wp_enqueue_script( $this->text_domain . '-admin-script' );
+  wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
  }
 
  /**

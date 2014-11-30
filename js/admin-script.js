@@ -49,7 +49,7 @@ jQuery(document).ready(function($) {
         $('#add-element').empty().append(data.form);
         $('#slider').slider({
           range: false,
-          max: 10,
+          max: ( wwm_as_admin_script.num_answers ) ? wwm_as_admin_script.num_answers : 10,
           min: 1,
           step: 1,
           change: function(event, ui) {
