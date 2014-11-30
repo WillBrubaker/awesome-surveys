@@ -222,3 +222,16 @@ div.answers {
   margin: 1em 0;
  }
 }
+
+#email-options {
+ input[type="text"], input[type="email"] {
+  width: 100%;
+  max-width: 250px;
+ }
+ .control-group, .controls {
+  margin: 1em 1em;
+ }
+ p.italics {
+  font-style: italic;
+ }
+}

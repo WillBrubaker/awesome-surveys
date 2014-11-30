@@ -185,6 +185,7 @@ class Awesome_Surveys_Frontend {
   }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $survey = $surveys['surveys'][$_POST['survey_id']];
+  do_action( 'wwm_as_before_save_responses', $survey );
   if ( empty( $survey ) ) {
    $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
    wp_send_json_error( $data );
@@ -223,6 +224,7 @@ class Awesome_Surveys_Frontend {
   );
   do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
   update_option( 'wwm_awesome_surveys', $surveys );
+  do_action( 'wwm_as_response_saved', $survey );
   $form_id = sanitize_title( stripslashes( $survey['name'] ) );
   $thank_you = stripslashes( $survey['thank_you'] );
   /*

@@ -3,7 +3,7 @@
 Plugin Name: Awesome Surveys
 Plugin URI: http://www.willthewebmechanic.com/awesome-surveys
 Description: Easily create surveys for your WordPress website and publish them with a simple shortcode
-Version: 1.5.2
+Version: 1.6-pre
 Author: Will Brubaker
 Author URI: http://www.willthewebmechanic.com
 License: GPLv3.0
@@ -43,7 +43,7 @@ class Awesome_Surveys {
  static private $wwm_plugin_values = array(
   'name' => 'Awesome_Surveys',
   'dbversion' => '1.1',
-  'version' => '1.5.2',
+  'version' => '1.6-pre',
   'supplementary' => array(
    'hire_me_html' => '<a href="http://www.willthewebmechanic.com">Hire Me</a>',
   )
@@ -75,14 +75,12 @@ class Awesome_Surveys {
    define( 'WWM_AWESOME_SURVEYS_PATH', plugin_dir_path( __FILE__ ) );
 
   }
-  register_activation_hook( __FILE__ , array( $this, 'init_plugin' ) );
   add_action( 'admin_menu', array( &$this, 'plugin_menu' ) );
   if ( is_admin() ) {
    add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), array( &$this, 'plugin_manage_link' ), 10, 4 );
    add_action( 'after_wwm_plugin_links', array( &$this, 'output_links' ) );
   }
 
-  add_action( 'init', array( &$this, 'init' ) );
   add_action( 'admin_enqueue_scripts', array( &$this, 'admin_enqueue_scripts' ) );
   add_action( 'admin_init', array( &$this, 'add_meta_boxes' ) );
   add_action( 'wp_ajax_create_survey', array( &$this, 'create_survey' ) );
@@ -99,6 +97,7 @@ class Awesome_Surveys {
   add_action( 'wp_ajax_wwm_get_auth_method_edit_form', array( &$this, 'get_auth_method_edit_form' ) );
   add_action( 'wp_ajax_wwm_edit_survey_auth', array( &$this, 'edit_survey_auth' ) );
   add_action( 'wp_ajax_update_styling_options', array( &$this, 'update_styling_options' ) );
+  add_action( 'wp_ajax_update_email_options', array( &$this, 'update_email_options' ) );
   add_action( 'wp_ajax_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_nopriv_answer_survey', array( &$this, 'process_response' ) );
   add_action( 'wp_ajax_wwm_as_get_json', array( &$this, 'get_json' ) );
@@ -112,28 +111,7 @@ class Awesome_Surveys {
   add_filter( 'awesome_surveys_form_preview', array( &$this, 'awesome_surveys_form_preview' ) );
   add_filter( 'survey_auth_options', array( &$this, 'default_auth_methods' ) );
   add_action( 'plugins_loaded', array( &$this, 'load_translations' ) );
- }
-
- /**
-  * stuff to do on plugin initialization
-  * @return none
-  * @since 1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic.com>
-  * @link http://willthewebmechanic.com
-  */
- public function init_plugin()
- {
-
- }
-
- /**
-  * Hooked into the init action, does things required on that action
-  * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic.com>
-  * @link http://willthewebmechanic.com
-  */
- public function init()
- {
+  add_action( 'wwm_as_response_saved', array( &$this, 'send_survey_emails' ) );
  }
 
  /**
@@ -301,11 +279,6 @@ class Awesome_Surveys {
      array( &$this, 'create_survey_form' ),
      ),
      array(
-     'styles',
-     __( 'Survey Styling Options', $this->text_domain ),
-     array( &$this, 'get_styling_options' ),
-     ),
-     array(
       'surveys',
       __( 'Your Survey Results', $this->text_domain ),
       array( &$this, 'output_survey_results' ),
@@ -398,7 +371,7 @@ class Awesome_Surveys {
      $edit_auth_nonce = wp_create_nonce( 'edit-survey-auth_' . $key );
      $edit_thanks_nonce = wp_create_nonce( 'edit-survey-thanks_' . $key );
      $existing_elements_value = htmlentities( $survey['form'] );
-     $thanks_message = sanitize_text_field( $survey['thank_you'] );
+     $thanks_message = sanitize_post_field( 'post_content', $survey['thank_you'], null, 'display' );
      $auth_method = sanitize_text_field( $survey['auth'] );
      $edit_survey_name_link = '<p><a href="#" title="' . __( 'Edit Survey Name', $this->text_domain ) . '" data-nonce="' . $edit_name_nonce . '" data-survey_id="' . $key . '" class="edit-survey-name">' . $survey_name . '</a> (click to edit)</p><div class="clear"></div>';
      $num_responses = ( isset( $survey['num_responses'] ) ) ? intval( $survey['num_responses'] + 1)  : 0;
@@ -499,7 +472,7 @@ class Awesome_Surveys {
   return $html;
  }
 
-  /**
+ /**
   * Generates html output with survey results by user
   * @param  array $args an array of function arguments
   * @return string       html markup with survey results.
@@ -508,7 +481,7 @@ class Awesome_Surveys {
   *   Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://www.genobi.net
   */
-  function display_results_by_user( $args = array() )
+ function display_results_by_user( $args = array() )
   {
 
    $surveys = get_option( 'wwm_awesome_surveys', array() );
@@ -678,7 +651,7 @@ class Awesome_Surveys {
   $form = new FormOverrides( 'styling-options' );
   $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $form->addElement( new Element_YesNo( __( 'Use included css?', $this->text_domain ), 'options[include_css]', array( 'value' => $include_css, ) ) );
-  $form->addElement( new Element_Hidden( 'action', 'update_styling_options' ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
   $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
   $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
   return $html . $form->render( true );
@@ -1015,6 +988,7 @@ class Awesome_Surveys {
   * @since 1.3
   */
  public function get_element_selector() {
+
   echo $this->render_element_selector();
   exit;
  }
@@ -1255,7 +1229,7 @@ class Awesome_Surveys {
   $auth_type = esc_attr( $_POST['auth'] );
   $form->addElement( new Element_HTML( '<span class="label">' . __( 'Type of authentication: ', $this->text_domain ) . $auth_messages[ $auth_type ] . '</span>' ) );
   $form->addElement( new Element_Hidden( 'auth', $auth_type ) );
-  $thank_you_message = ( '' != $_POST['thank_you'] ) ? sanitize_text_field( $_POST['thank_you'] ) : __( 'Thank you for completing this survey', $this->text_domain );
+  $thank_you_message = ( '' != $_POST['thank_you'] ) ? sanitize_post_field( 'post_content', $_POST['thank_you'], null, 'display' ) : __( 'Thank you for completing this survey', $this->text_domain );
   $form->addElement( new Element_Hidden( 'thank_you', $thank_you_message ) );
   $form->addElement( new Element_HTML( '<span class="label">' . __( 'Thank you message:', $this->text_domain ) . '</span><div>' . $thank_you_message . '</div>' ) );
   $form->addElement( new Element_Hidden( 'create_survey_nonce', $nonce ) );
@@ -1397,6 +1371,10 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for editing survey name
+  * @since 1.2
+  */
  public function edit_survey_name()
  {
 
@@ -1405,11 +1383,6 @@ class Awesome_Surveys {
    die();
   }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
-  if ( $this->is_existing_name( esc_html( stripslashes( $_POST['name'] ) ), $surveys ) ) {
-   wp_send_json_error( array( 'message' => __( 'The name already exists', $this->text_domain ) ) );
-   exit;
-  }
-
   $survey = $surveys['surveys'][$_POST['survey_id']];
   $survey['name'] = esc_html( stripslashes( $_POST['name'] ) );
   $surveys['surveys'][$_POST['survey_id']] = $survey;
@@ -1418,6 +1391,10 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for editing survey thank you message
+  * @since 1.2
+  */
  public function edit_survey_thanks()
  {
 
@@ -1434,6 +1411,10 @@ class Awesome_Surveys {
   exit;
  }
 
+ /**
+  * AJAX handler for getting the edit auth method form
+  * @since 1.2
+  */
  public function get_auth_method_edit_form()
  {
 
@@ -1457,6 +1438,10 @@ class Awesome_Surveys {
    wp_send_json_success( $html );
  }
 
+ /**
+  * AJAX handler for editing the auth method
+  * @since 1.2
+  */
  public function edit_survey_auth()
  {
 
@@ -1480,6 +1465,10 @@ class Awesome_Surveys {
   wp_send_json_success();
  }
 
+ /**
+  * AJAX handler for inline survey name editing
+  * @since 1.2
+  */
  public function survey_edit_name_inline() {
   echo sanitize_text_field( $_POST['edit_survey_name'] );
   exit;
@@ -1524,6 +1513,11 @@ class Awesome_Surveys {
   $frontend->process_response();
  }
 
+ /**
+  * hooked into 'survey_auth_options' - provides the default array of authentication methods
+  * @param  array  $options associative array of authentication method names
+  * @return array  associative array of authentication method names
+  */
  public function default_auth_methods( $options = array() )
  {
 
@@ -1531,26 +1525,10 @@ class Awesome_Surveys {
   return $options;
  }
 
- private function is_existing_name( $name = '', $surveys = array() )
- {
-
-  if ( empty( $surveys ) ) {
-   return false;
-  }
-  foreach ( $surveys['surveys'] as $key => $survey ) {
-   if ( empty( $survey ) ) {
-    unset( $surveys['surveys'][$key] );
-   }
-  }
-  if ( isset( $surveys['surveys'] ) && ! empty( $surveys['surveys'] ) ) {
-   $names = wp_list_pluck( $surveys['surveys'], 'name' );
-   if ( in_array( $name, $names ) ) {
-    return true;
-   }
-  }
-  return false;
- }
-
+ /**
+  * hooked into 'wp_ajax_wwm_as_get_json' used by dynamic dialog function in admin-script.js
+  *
+  */
  public function get_json() {
   $defaults = array(
    'name' => null,
@@ -1608,8 +1586,20 @@ class Awesome_Surveys {
  public function add_meta_boxes()
  {
 
+  add_meta_box( 'wwm-awesome-surveys-settings', __( 'General Settings', $this->text_domain ), array( &$this, 'general_settings' ), $this->menu_slug, 'normal' );
   add_meta_box( 'wwm-awesome-surveys-ratings', __( 'Rate Awesome Surveys', $this->text_domain ), array( &$this, 'rating_box' ), $this->menu_slug, 'normal' );
   add_meta_box( 'wwm-ratings-awesome-surveys-news', __( 'Awesome Surveys News', $this->text_domain ), array( &$this, 'news_box' ), $this->menu_slug, 'normal' );
+ }
+
+ /**
+  * outputs the content of the general settings box
+  * @since  1.6
+  */
+ public function general_settings() {
+  echo '<h4>Styling Options</h4>';
+  echo $this->get_styling_options();
+  echo '<h4>Notification Emails</h4>';
+  echo $this->get_email_settings_form();
  }
 
  /**
@@ -1631,6 +1621,61 @@ class Awesome_Surveys {
   <p>If you are using the CSV Exporter version 0.2 or lower, please either uninstall/delete it or update to 0.4 or higher</p>
   <h3>Call for beta testers</h3>
   <p>Did you know that an extension for Awesome Surveys that will allow the exporting of survey results in CSV format is being actively developed? I need feedback from YOU!. Get started by <a href="http://plugins.willthewebmechanic.com/repo/awesome-surveys-export-csv.zip" title="get beta version of plugin extension">downloading the extension</a> today!</p>';
+ }
+
+
+ /**
+  * outputs the email settings
+  * @return string the rendered form
+  * @since  1.6
+  */
+ public function get_email_settings_form() {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $nonce = wp_create_nonce( 'update-email-options' );
+  $enable_email = ( isset( $surveys['enable_wwm_as_emails'] ) ) ? absint( $surveys['enable_wwm_as_emails'] ) : 0;
+  $enable_wwm_as_respondent_email = ( isset( $surveys['enable_wwm_as_respondent_email'] ) ) ? absint( $surveys['enable_wwm_as_respondent_email'] ) : 0;
+  $respondent_email_subject = ( isset( $surveys['$respondent_email_subject'] ) ) ? sanitize_text_field( $surveys['$respondent_email_subject'] ) : __( 'Thank you for your response', $this->text_domain );
+  $mail_to = ( isset( $surveys['mail_to'] ) ) ? sanitize_email( $surveys['mail_to'] ) : get_option( 'admin_email', 'webmaster@localhost.com' );
+  $form = new FormOverrides( 'email-options' );
+  $form->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
+  $form->addElement( new Element_YesNo( __( 'Enable emails on survey completion?', $this->text_domain ), 'options[enable_wwm_as_emails]', array( 'value' => $enable_email, ) ) );
+  $class = 'toggle';
+  $class .= ( ! $enable_email ) ? ' hidden' : null;
+  $form->addElement( new Element_Email( __( 'Send Notifications for all survey completions to', $this->text_domain ), 'options[mail_to]', array( 'value' => $mail_to, 'class' => $class, ) ) );
+  $form->addElement( new Element_YesNo( 'Send email to survey respondent?', 'options[enable_wwm_as_respondent_email]', array( 'value' => $enable_wwm_as_respondent_email, 'class' => $class, ) ) );
+  $form->addElement( new Element_HTML( '<p class="italics ' . $class . '">For this to work, the survey must have an element of type "email"</p>' ) );
+  $form->addElement( new Element_Textbox( __( 'Respondent email subject', $this->text_domain ), 'options[respondent_email_subject]', array( 'class' => $class, 'value' => $respondent_email_subject ) ) );
+  $form->addElement( new Element_Hidden( 'action', 'update_email_options' ) );
+  $form->addElement( new Element_Hidden( '_nonce', $nonce ) );
+  $form->addElement( new Element_Button( __( 'Save', $this->text_domain ), 'submit', array( 'class' => 'button-primary' ) ) );
+  return $form->render( true );
+ }
+
+ /**
+  * AJAX handler for updating email options
+  * @since 1.6
+  */
+ public function update_email_options() {
+
+  if ( ! wp_verify_nonce( $_POST['_nonce'], 'update-email-options' ) || ! current_user_can( 'manage_options' ) ) {
+    status_header( 403 );
+    die();
+   }
+   $surveys = get_option( 'wwm_awesome_surveys', array() );
+   $enable_wwm_as_respondent_email = ( isset( $_POST['options']['enable_wwm_as_respondent_email'] ) ) ? absint( $_POST['options']['enable_wwm_as_respondent_email'] ) : 0;
+   $surveys['enable_wwm_as_emails'] = absint( $_POST['options']['enable_wwm_as_emails'] );
+   $surveys['enable_wwm_as_respondent_email'] = $enable_wwm_as_respondent_email;
+   sanitize_text_field( $surveys['respondent_email_subject'] );
+   $surveys['respondent_email_subject'] = sanitize_text_field( $surveys['respondent_email_subject'] );
+   $surveys['mail_to'] = sanitize_email( $_POST['options']['mail_to'] );
+   if ( is_email( $surveys['mail_to'] ) ) {
+    update_option( 'wwm_awesome_surveys', $surveys );
+    wp_send_json_success();
+   } else {
+    $data = __( 'You must enter an email in a valid format', $this->text_domain );
+    wp_send_json_error( $data );
+   }
  }
 
  /**
@@ -1663,6 +1708,36 @@ class Awesome_Surveys {
  {
 
   load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+ }
+
+ /**
+  * Hooked into wwm_as_response_saved to send email if set
+  * @param  array $survey the survey that was just completed
+  * @since 1.6
+  */
+ public function send_survey_emails( $survey ) {
+
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+
+  if ( $surveys['enable_wwm_as_emails'] ) {
+   $subject = __( 'Survey Completed', $this->text_domain );
+   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
+   $to = $surveys['mail_to'];
+   wp_mail( $to, $subject, $message );
+  }
+
+  if ( $surveys['enable_wwm_as_respondent_email'] ) {
+   $form = json_decode( $survey['form'] );
+   foreach ( $form as $key => $value ) {
+    if ( 'Element_Email' == $value->type && is_email( $_POST['question'][$key] ) ) {
+     $to = $_POST['question'][$key];
+     $subject = sanitize_text_field( $surveys['respondent_email_subject'] );
+     $message = sprintf( __( 'Your response to %s has been recorded, your input is appreciated', $this->text_domain ), $survey['name'] );
+     wp_mail( $to, $subject, $message );
+     break;
+    }
+   }
+  }
  }
 }
 $var = new Awesome_Surveys;
