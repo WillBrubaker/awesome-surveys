@@ -124,7 +124,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 ## Changelog ##
 
 ### v1.6 - La Barqueta ###
-1. *New Feature* Send emails on completion of surveys - 6 hours dev time, 0 hours of testing, that's what the users are for :)
+1. *New Feature* Send emails on completion of surveys - 6 hours dev time, 0 hours of testing.
 2. *Bug Fix* JavaScript error when editing a survey question/answer and no changes made - 15 minutes dev/testing time
 3. Added `wwm_as_admin_script_vars` filter, through which one can change the number of answers available to questions with options (radio, checkbox, select) 15 minutes dev/testing time
 4. Danish translations provided by WordPress user heinohund
