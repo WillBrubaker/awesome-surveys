@@ -1602,9 +1602,13 @@ class Awesome_Surveys {
   * @since  1.6
   */
  public function general_settings() {
-  echo '<h4>Styling Options</h4>';
+  echo '<h4>';
+  _e( 'Survey Styling Options', $this->text_domain );
+  echo '</h4>';
   echo $this->get_styling_options();
-  echo '<h4>Notification Emails</h4>';
+  echo '<h4>';
+  _e( 'Notification Emails', $this->text_domain );
+  echo '</h4>';
   echo $this->get_email_settings_form();
  }
 
