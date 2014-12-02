@@ -127,6 +127,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 1. *New Feature* Send emails on completion of surveys - 6 hours dev time, 0 hours of testing, that's what the users are for :)
 2. *Bug Fix* JavaScript error when editing a survey question/answer and no changes made - 15 minutes dev/testing time
 3. Added `wwm_as_admin_script_vars` filter, through which one can change the number of answers available to questions with options (radio, checkbox, select) 15 minutes dev/testing time
+4. Danish translations provided by WordPress user heinohund
 
 ### v1.5.2 ###
 1. *Important* bug If you use the Awesome Surveys CSV Exporter, please either update it to version 0.4 or de-activate it before updating Awesome Surveys.

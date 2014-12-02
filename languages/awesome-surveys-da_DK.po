@@ -1,0 +1,418 @@
+# Copyright (C) 2014 Awesome Surveys
+# This file is distributed under the same license as the Awesome Surveys package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Awesome Surveys 1.5-pre\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
+"POT-Creation-Date: 2014-10-14 21:50:30+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2014-11-28 23:11+0100\n"
+"Last-Translator: Henrik Karmark <henrik@karmark.com>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.6.10\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: da_DK\n"
+
+#: awesome-surveys.php:282
+msgid "Donate to the future development of this plugin:"
+msgstr "Donner til den fremtidige udvikling af dette plugin:"
+
+#: awesome-surveys.php:299
+msgid "Build Survey Form"
+msgstr "Byg dit spørgeskema"
+
+#: awesome-surveys.php:304
+msgid "Survey Styling Options"
+msgstr "Opsætning af style"
+
+#: awesome-surveys.php:309
+msgid "Your Survey Results"
+msgstr "Dine samlede svar"
+
+#: awesome-surveys.php:314
+msgid "Survey Results by User"
+msgstr "Svar fra enkelt bruger"
+
+#: awesome-surveys.php:319
+msgid "How To Video"
+msgstr "How to video"
+
+#: awesome-surveys.php:329
+msgid "Debug"
+msgstr "Fejlrettelse"
+
+#: awesome-surveys.php:402
+msgid "Edit Survey Name"
+msgstr "Rediger skema navn"
+
+#: awesome-surveys.php:407
+msgid "Edit this survey"
+msgstr "Rediger spørgeskemaet"
+
+#: awesome-surveys.php:409
+msgid "Clone this survey"
+msgstr "Kopier dette skema"
+
+#: awesome-surveys.php:415
+msgid "Delete"
+msgstr "Slet"
+
+#: awesome-surveys.php:418
+msgid "You can insert this survey with shortcode: "
+msgstr "Du kan indsætte undersøgelsen med følgende kode:"
+
+#: awesome-surveys.php:419
+msgid "This survey has received %d responses"
+msgstr "Denne undersøgelse har modtaget %d svar"
+
+#: awesome-surveys.php:424
+msgid "edit this question"
+msgstr "Rediger spørgsmålet"
+
+#: awesome-surveys.php:424 awesome-surveys.php:454 awesome-surveys.php:455
+msgid "click to edit"
+msgstr "Klik for at redigere"
+
+#: awesome-surveys.php:454
+msgid "Thank You Message:"
+msgstr "Tak for hjælpen meddelelse:"
+
+#: awesome-surveys.php:455
+msgid "Survey Authentication Method:"
+msgstr "Godkendelsemetode for skemaet:"
+
+#: awesome-surveys.php:657
+msgid ""
+"This plugin outputs some very basic structural css. You can enable/disable "
+"this by setting the option below"
+msgstr ""
+"Dette plugin sender nogle meget grundlæggende css detaljer. Du kan "
+"aktivere / deaktivere denne ved at ændre nedenstående valgmulighed"
+
+#: awesome-surveys.php:667
+msgid "Use included css?"
+msgstr "Brug inkluderet css?"
+
+#: awesome-surveys.php:670
+msgid "Save"
+msgstr "Gem"
+
+#: awesome-surveys.php:687
+msgid "Survey Name"
+msgstr "Sprøgeskema navn"
+
+#: awesome-surveys.php:688
+msgid ""
+"This field is a name for your survey and will be displayed before your "
+"survey form"
+msgstr "Dette felt er navnet på dit spørgeskema og vil blive vist over skemaet"
+
+#: awesome-surveys.php:693
+msgid "Field Type"
+msgstr "Felt type"
+
+#: awesome-surveys.php:694
+msgid ""
+"This is the type of form field you would like to add to your form, i.e.: "
+"checkbox, radio, text, email, textarea, etc. Examples:"
+msgstr ""
+"Dette er den felttype du vil tilføje til dit skema f.eks.: checkbox, radio, "
+"text, email, textarea, etc. Eksempler:"
+
+#: awesome-surveys.php:699 awesome-surveys.php:943
+msgid "Field Validation Options"
+msgstr "Felt validerings mulighed"
+
+#: awesome-surveys.php:700
+msgid ""
+"Based upon the type of field option you have selected, you may see different "
+"options for validation. Selecting 'required' will make this part of your "
+"survey a required field. Some fields have a 'Maximum Length' Validation "
+"option where you can specify a character limit. Field type \"number\" can "
+"have a maximum and minimum value added to it. As an example, if your survey "
+"asked a user their age, and you wanted to limit the survey to respondents "
+"who claim that they are 18 or older, you can enter 18 in the 'Min number "
+"allowed' field."
+msgstr ""
+"Alt efter hvilket felttype du vælger, har du forskellige muligheder for "
+"valdering. Hvis du vælger 'krævet' vil feltet skulle udfyldes før "
+"undersøgelsen kan sendes. Nogle felter har 'maximum længde' validering her "
+"kan du sætte det maximale antal bogstaver eller tal der skal kan indtastes. "
+"Felttypen 'tal' kan have en maximum og minimum værdi. Et eksempel, hvis du "
+"spørg din bruger om deres alder og kun vil have svar fra personer der er 18 "
+"år eller ældre, skriver du blot 18 i 'mindste tilladte tal' feltet."
+
+#: awesome-surveys.php:705
+msgid "General Survey Options"
+msgstr "Generelle spørgeskema indstillinger"
+
+#: awesome-surveys.php:706
+msgid ""
+"These are options for your survey, they are not built in to the survey form, "
+"but rather determine behavior of how your survey will work."
+msgstr ""
+"Dette er indstillinger som afgør hvordan dit spørgeskema fungere. De er ikke "
+"en del af selve spørgeskemaet."
+
+#: awesome-surveys.php:711
+msgid "Authentication"
+msgstr "Godkendelse"
+
+#: awesome-surveys.php:712
+msgid ""
+"Choose a method to prevent users from filling out the survey multiple times. "
+"User login is much more reliable, but may not be the best option for your "
+"site if you don't allow registrations. Cookie based authentication is very "
+"easy to circumvent, but will prevent most users from taking the survey "
+"multiple times. Of course, you may prefer to allow users to take the survey "
+"an unlimited number of times in which case you should choose 'None'. Note to "
+"developers: methods can be added via the survey_auth_options filter."
+msgstr ""
+"Vælg hvilken metode du vil anvende for at undgå at brugeren kan udfylde "
+"skemaet mere end en gang. Bruger skal være logget ind, er den mest sikre "
+"metode, men er ikke god hvis man ikke kan oprette sig som bruge på din "
+"hjemmeside. Cookie validering er meget let at omgåes, men vil dog holde de "
+"fleste brugere fra at udfylde skemaet flere gange. Hvis du derimod ønsker, "
+"at brugerne jkan udfylde skemaet et uendeligt antal gange, skal du blot "
+"vælge 'Ingen'. Note til udviklere: Metoden kan tilføjes via "
+"survey_auth_options filter."
+
+#: awesome-surveys.php:717
+msgid "Thank You Message"
+msgstr "Takke meddelelse"
+
+#: awesome-surveys.php:718
+msgid "The message will be displayed to a user who completes the survey."
+msgstr ""
+"Meddelelsen vil blive vist til brugere der har gennemført undersøgelsen."
+
+#: awesome-surveys.php:752
+msgid "Survey Name:"
+msgstr "Undersøgelses navn:"
+
+#: awesome-surveys.php:756
+msgid "Start Building"
+msgstr "Start opsætningen"
+
+#: awesome-surveys.php:764
+msgid "General Survey Options:"
+msgstr "Generelle spørgsskema indstillinger:"
+
+#: awesome-surveys.php:765
+msgid "A Thank You message:"
+msgstr "En takke meddelelse:"
+
+#: awesome-surveys.php:765 awesome-surveys.php:1245
+msgid "Thank you for completing this survey"
+msgstr "Tak fordi du gennemførte denne undersøgelse!"
+
+#: awesome-surveys.php:780
+msgid ""
+"To prevent people from filling the survey out multiple times you may select "
+"one of the options below"
+msgstr ""
+"For at undgå, at folk kan udfylde spørgeskemat mere end en gang - kan du "
+"evt. vælge en af mulighederne nedenfor"
+
+#: awesome-surveys.php:784
+msgid "Add Question"
+msgstr "Tilføj spørgsmål"
+
+#: awesome-surveys.php:803
+msgid "Your Surveys"
+msgstr "Dine undersøgelser"
+
+#: awesome-surveys.php:817
+msgid "Results by User"
+msgstr "Resultat pr bruger"
+
+#: awesome-surveys.php:839
+msgid ""
+"Need help? There are handy tips for some of the options in the help menu. "
+"Click the help tab in the upper right corner of your screen"
+msgstr ""
+"Behov for hjælp? Der er nogel meget brugbare tips til nogel af "
+"indstillingerne i hjælpemenuen. Klik på hjælp i øvertse højre hjørne af din "
+"skærm."
+
+#: awesome-surveys.php:843
+msgid "Dismiss"
+msgstr "Afvis"
+
+#: awesome-surveys.php:866
+msgid "Survey Name cannot be blank"
+msgstr "Spørgeskemanavnet skal være udfyldt"
+
+#: awesome-surveys.php:901
+msgid "Add a question to your survey:"
+msgstr "Tilføj et spørgsmål til dit spørgeskema:"
+
+#: awesome-surveys.php:901
+msgid "Select Field Type:"
+msgstr "Vælg felttype"
+
+#: awesome-surveys.php:941
+msgid "The question you are asking:"
+msgstr "Spørgsmålet du vil stille:"
+
+#: awesome-surveys.php:961
+msgid "Advanced Validation Rules:"
+msgstr "Avanceret validerings regler:"
+
+#: awesome-surveys.php:992
+msgid "Number of answers required?"
+msgstr "Antal svar der er krævet?"
+
+#: awesome-surveys.php:1027
+msgid "required?"
+msgstr "Krævet?"
+
+#: awesome-surveys.php:1053
+msgid "Min number allowed"
+msgstr "Mindste tilladte tal"
+
+#: awesome-surveys.php:1059
+msgid "Max number allowed"
+msgstr "Største tilladte tal"
+
+#: awesome-surveys.php:1081
+msgid "Maximum Length (in number of characters)"
+msgstr "Maksimale længde (i antal karakter)"
+
+#: awesome-surveys.php:1124
+msgid "Answer"
+msgstr "Svar"
+
+#: awesome-surveys.php:1124
+msgid "default?"
+msgstr "Standard?"
+
+#: awesome-surveys.php:1235
+msgid "Delete question"
+msgstr "Slet spørgsmål"
+
+#: awesome-surveys.php:1235
+msgid "Edit question"
+msgstr "Rediger spørgsmål"
+
+#: awesome-surveys.php:1241 awesome-surveys.php:1517
+msgid "None"
+msgstr "Ingen"
+
+#: awesome-surveys.php:1241
+msgid "Cookie Based"
+msgstr "Cookie baseret"
+
+#: awesome-surveys.php:1241 awesome-surveys.php:1517
+msgid "User must be logged in"
+msgstr "Du skal være logget ind"
+
+#: awesome-surveys.php:1243
+msgid "Type of authentication: "
+msgstr "Godkendelses metode:"
+
+#: awesome-surveys.php:1247
+msgid "Thank you message:"
+msgstr "Tak for hjælpen meddelelse:"
+
+#: awesome-surveys.php:1253
+msgid "Reset"
+msgstr "Reset"
+
+#: awesome-surveys.php:1254
+msgid "Save Survey"
+msgstr "Gem undersøgelse"
+
+#: awesome-surveys.php:1396
+msgid "The name already exists"
+msgstr "Navnet eksistere allerede"
+
+#: awesome-surveys.php:1435
+msgid ""
+"A survey that has had responses can not be changed to the \"Logged in\" auth "
+"method"
+msgstr ""
+"Et spørgeskema hvori der er modtaget svar, kan ikke ændres til  \"Logged in"
+"\" godkendelses metode"
+
+#: awesome-surveys.php:1517
+msgid "Cookie based"
+msgstr "Cookie basseret"
+
+#: awesome-surveys.php:1575
+msgid "Fork Me on GitHub"
+msgstr "Fork Me på GitHub"
+
+#: awesome-surveys.php:1575
+msgid "Awesome Surveys on github"
+msgstr "Awesome Surveys på github"
+
+#: awesome-surveys.php:1576
+msgid "Support for Awesome Surveys"
+msgstr "Support til Awesome Surveys"
+
+#: awesome-surveys.php:1577
+msgid "Review the Awesome Surveys Plugin"
+msgstr "Gennemse Awesome Surveys Plugin"
+
+#: awesome-surveys.php:1577 awesome-surveys.php:1598
+msgid "Rate Awesome Surveys"
+msgstr "Rate Awesome Surveys"
+
+#: awesome-surveys.php:1578
+msgid "Shout it From the Rooftops!"
+msgstr "Shout it From the Rooftops!"
+
+#: awesome-surveys.php:1578
+msgid "Tweet this plugin"
+msgstr "Tweet dette plugin"
+
+#: awesome-surveys.php:1579
+msgid "Donate to the development of the Awesome Surveys plugin"
+msgstr "Donner til udviklingen af Awesome Surveys plugin"
+
+#: awesome-surveys.php:1599
+msgid "Awesome Surveys News"
+msgstr "Awesome Surveys nyheder"
+
+#: includes/class.awesome-surveys-frontend.php:79
+msgid "Your response to this survey has already been recorded. Thank you!"
+msgstr "Du har allerede svaret på spørgeskemaet! Tak for hjælpen!"
+
+#: includes/class.awesome-surveys-frontend.php:111
+msgid "make a selection..."
+msgstr "Vælg..."
+
+#: includes/class.awesome-surveys-frontend.php:151
+msgid "Submit Response"
+msgstr "Send dine svar"
+
+#: includes/class.awesome-surveys-frontend.php:317
+msgid "You must be logged in to participate in this survey"
+msgstr "Du skal være logget ind for at kunne besvarer spørgeskemaet"
+
+#. Plugin Name of the plugin/theme
+msgid "Awesome Surveys"
+msgstr "Awesome Surveys"
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com/awesome-surveys"
+msgstr "http://www.willthewebmechanic.com/awesome-surveys"
+
+#. Description of the plugin/theme
+msgid ""
+"Easily create surveys for your WordPress website and publish them with a "
+"simple shortcode"
+msgstr ""
+"Lav let spørgeskemaer til din Wordpress hjemmeside og indsæt dem med en "
+"simpel shortcode"
+
+#. Author of the plugin/theme
+msgid "Will Brubaker"
+msgstr "Will Brubaker"
+
+#. Author URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com"
+msgstr "http://www.willthewebmechanic.com"
