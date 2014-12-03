@@ -18,7 +18,6 @@ class Awesome_Surveys_Frontend {
   add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
   add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
   add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
-  add_filter( 'wwm_filter_survey_answer', array( &$this, 'wwm_filter_survey_answer_filter', ), 10, 2  );
   add_action( 'awesome_surveys_update_cookie', array( &$this, 'awesome_surveys_update_cookie' ), 10, 1 );
  }
 
@@ -211,7 +210,7 @@ class Awesome_Surveys_Frontend {
      $response['answers'][$_POST['question'][$key]][] = $num_responses;
     }
    } else {
-    $response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? apply_filters( 'wwm_filter_survey_answer', $_POST['question'][$key], $form[$key]['type'] ) : null;
+    $response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? $this->wwm_filter_survey_answer_filter( $_POST['question'][$key], $form[$key]['type'] ) : null;
    }
    $responses[$key] = $response;
   }

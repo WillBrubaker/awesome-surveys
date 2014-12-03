@@ -499,6 +499,9 @@ class Awesome_Surveys {
   {
    foreach( $surveys['surveys'] as $survey_key => $survey )
    {
+    if ( empty( $survey ) ) {
+     continue;
+    }
     $form = json_decode( $survey['form'], true );
 
     // First, recreate the survey in the new array with the same key
