@@ -1737,7 +1737,7 @@ class Awesome_Surveys {
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $survey = $surveys['surveys'][ $args[0] ];
 
-  if ( $surveys['enable_wwm_as_emails'] ) {
+  if ( isset( $surveys['enable_wwm_as_emails'] ) && $surveys['enable_wwm_as_emails'] ) {
    $subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
    $to = $surveys['mail_to'];
    $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
@@ -1760,7 +1760,7 @@ class Awesome_Surveys {
    wp_mail( $to, $subject, $message );
   }
 
-  if ( $surveys['enable_wwm_as_respondent_email'] ) {
+  if ( isset( $surveys['enable_wwm_as_respondent_email'] ) && $surveys['enable_wwm_as_respondent_email'] ) {
    $form = json_decode( $survey['form'] );
    foreach ( $form as $key => $value ) {
     if ( 'Element_Email' == $value->type && is_email( $_POST['question'][$key] ) ) {
