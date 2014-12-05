@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.0.1
 
-**Stable tag:** 1.6
+**Stable tag:** 1.6.1
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -22,6 +22,9 @@ Create & publish feature-rich surveys with a few mouse clicks. All data collecte
 This plugin allows you to create surveys with an easy-to-use form builder, publish surveys with a simple shortcode and view survey results in the admin backend. You maintain control of your data. Automatic form validation is included.
 
 ### Features ###
+
+## IMPORTANT ##
+**If you are using a version less than 1.6.1 you need to update NOW**
 
 
 1.	**You maintain ownership of your data** - does not rely on third-party services.
@@ -122,6 +125,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+## v1.6.1 ##
+1. **IMPORTANT** Fixes a security vulernability. UPDATE NOW!!
 
 ### v1.6 - La Barqueta ###
 1. *New Feature* Send emails on completion of surveys - 6 hours dev time, 0 hours of testing.

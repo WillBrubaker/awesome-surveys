@@ -3,13 +3,16 @@ Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 4.0.1
-Stable tag: 1.6
+Stable tag: 1.6.1
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
 Create & publish feature-rich surveys with a few mouse clicks. All data collected remains in your control. Works better than healthcare.gov!
 
 == Description ==
+
+= IMPORTANT =
+**If you are using a version less than 1.6.1 you need to update NOW**
 
 This plugin allows you to create surveys with an easy-to-use form builder, publish surveys with a simple shortcode and view survey results in the admin backend. You maintain control of your data. Automatic form validation is included.
 
@@ -96,6 +99,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 == Changelog ==
+
+= v1.6.1 =
+1. **IMPORTANT** Fixes a security vulernability. UPDATE NOW!!
 
 = v1.6 - La Barqueta =
 1. *New Feature* Send emails on completion of surveys - 6 hours dev time, 0 hours of testing.
@@ -200,6 +206,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Upgrade Notice ==
 
+= v1.6.1 =
+Addresses a potentially harmful vulnerability. Versions prior to 1.6.1 should not be used.
+
 = v1.5.2 =
 If you have the companion CSV export installed and it's at verson 0.3 or earlier, de-activate it prior to updating this plugin or update the exporter plugin to 0.4
 
@@ -209,6 +218,8 @@ fixes a couple of bugs. If you have been experiencing PHP Warnings where the sho
 == Additional Information ==
 
 = Known Issues: =
+
+* Versions prior to 1.6.1 are potentially vulnerable to malicious attacks - please do not use versions prior to 1.6.1
 
 * The Async JS and CSS plugin can cause the javascript for Awesome Surveys to not be loaded. See this [support thread](http://wordpress.org/support/topic/404-error-when-submitting?replies=20) for a workaround.
 * Survey form display hasn't likely been tested with your theme. Styling may break and the form may look horrible. If you experience this, please do contact me with suggestions on how to fix it for your particular theme.
@@ -224,7 +235,6 @@ fixes a couple of bugs. If you have been experiencing PHP Warnings where the sho
 
 = To Do List =
 
-* Send emails upon survey completion.
 * Widget to display surveys?
 * Ability to add classes to survey form elements and add custom css.
 * Ability to export .csv file of the surveys

@@ -197,6 +197,10 @@ class Awesome_Surveys_Frontend {
 
   foreach ( $responses as $key => $response ) {
    if ( 1 == $response['has_options'] ) {
+    if ( '' == $_POST['question'][$key] ) {
+     continue;
+    }
+
     if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
      /**
       * A quirk of PFBC is that checkbox arrays are unkeyed
@@ -204,9 +208,17 @@ class Awesome_Surveys_Frontend {
       */
      $arr = array_values( $_POST['question'][$key] );
      foreach ( $arr as $answerkey ) {
+      if ( ! array_key_exists( $answerkey, $form[ $key ]['value'] ) ) {
+       status_header( 400 );
+       exit;
+      }
       $response['answers'][$answerkey][] = $num_responses;
      }
-    } elseif ( isset( $_POST['question'][$key] ) && '' != $_POST['question'][$key] ) {
+    } elseif ( isset( $_POST['question'][$key] ) ) {
+     if ( ! array_key_exists( $_POST['question'][ $key ], $form[ $key ]['value'] ) ) {
+      status_header( 400 );
+      exit;
+     }
      $response['answers'][$_POST['question'][$key]][] = $num_responses;
     }
    } else {
