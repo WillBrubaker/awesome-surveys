@@ -193,8 +193,6 @@ class Awesome_Surveys_Frontend {
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
   $survey['num_responses'] = $num_responses;
   $form = json_decode( $survey['form'], true );
-  error_log( 'the form is' . "\n" . print_r( $form, true ) );
-  error_log( 'the survey is' . "\n" . print_r( $survey, true ) );
   $original_responses = $responses = $survey['responses'];
 
   foreach ( $responses as $key => $response ) {
@@ -211,10 +209,6 @@ class Awesome_Surveys_Frontend {
      $arr = array_values( $_POST['question'][$key] );
      foreach ( $arr as $answerkey ) {
       if ( ! array_key_exists( $answerkey, $form[ $key ]['value'] ) ) {
-       error_log( 'crashed on ' . __LINE__ );
-       error_log( print_r( $form, true ) );
-       error_log( $key . ' is the key' );
-       error_log( $answerkey . ' is the answer key' );
        status_header( 400 );
        exit;
       }
@@ -222,7 +216,6 @@ class Awesome_Surveys_Frontend {
      }
     } elseif ( isset( $_POST['question'][$key] ) ) {
      if ( ! array_key_exists( $_POST['question'][ $key ], $form[ $key ]['value'] ) ) {
-      error_log( 'crashed on ' . __LINE__ );
       status_header( 400 );
       exit;
      }
