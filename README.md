@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.0.1
 
-**Stable tag:** 1.6.1
+**Stable tag:** 1.6.2
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -125,6 +125,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 
 ## Changelog ##
+
+## v1.6.2 ##
+1. bug fix - survey forms with special characters not properly json_decoded resulting in process response giving a bad request message - dev time 1 hour
 
 ## v1.6.1 ##
 1. **IMPORTANT** Fixes a security vulernability. UPDATE NOW!!
