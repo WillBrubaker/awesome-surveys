@@ -184,12 +184,12 @@ class Awesome_Surveys_Frontend {
   }
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   $survey = $surveys['surveys'][$_POST['survey_id']];
-  do_action( 'wwm_as_before_save_responses', $survey );
-  if ( empty( $survey ) ) {
+  if ( empty( $surveys ) || empty( $survey ) ) {
    $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
    wp_send_json_error( $data );
    exit;
   }
+  do_action( 'wwm_as_before_save_responses', $survey );
   $num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
   $survey['num_responses'] = $num_responses;
   $form = json_decode( $survey['form'], true );
@@ -226,18 +226,24 @@ class Awesome_Surveys_Frontend {
    }
    $responses[$key] = $response;
   }
-  $survey['responses'] = $responses;
-  $survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
-  $surveys['surveys'][$_POST['survey_id']] = $survey;
-  $action_args = array(
-   'survey_id' => $_POST['survey_id'],
-   'survey' => $survey,
-  );
-  do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
-  update_option( 'wwm_awesome_surveys', $surveys );
-  do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
-  $form_id = sanitize_title( stripslashes( $survey['name'] ) );
-  $thank_you = stripslashes( $survey['thank_you'] );
+  if ( ! empty( $responses ) ) {
+   $survey['responses'] = $responses;
+   $survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
+   $surveys['surveys'][$_POST['survey_id']] = $survey;
+   $action_args = array(
+    'survey_id' => $_POST['survey_id'],
+    'survey' => $survey,
+   );
+   do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
+  } else {
+    $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (response array empty?) at ' . date( 'Y-m-d H:i:s' ) );
+    wp_send_json_error( $data );
+  }
+  if ( ! empty( $surveys ) && ! empty( $survey ) ) {
+   update_option( 'wwm_awesome_surveys', $surveys );
+   do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
+   $form_id = sanitize_title( stripslashes( $survey['name'] ) );
+   $thank_you = stripslashes( $survey['thank_you'] );
   /*
    Feature request - 'Can I redirect to some page after survey submission?'
    @see https://gist.github.com/WillBrubaker/57157ee587a9d580ddef
@@ -245,6 +251,10 @@ class Awesome_Surveys_Frontend {
   $url = esc_url( apply_filters( 'after_awesome_survey_response_processed', null, array( 'survey_id' => $_POST['survey_id'], 'survey' => $survey, 'responses' => $_POST['question'], ) ) );
   wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you, 'url' => $url ) );
   exit;
+  } else {
+   $data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
+   wp_send_json_error( $data );
+  }
  }
 
  /**
