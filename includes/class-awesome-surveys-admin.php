@@ -38,7 +38,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
  }
 
  public function survey_builder() {
-  wp_print_scripts( $this->text_domain . '-admin-script' );
+
+  wp_print_scripts( 'awesome-surveys-admin-script' );
   wp_print_styles( $this->text_domain . '-admin-style' );
   include_once( 'views/html-survey-builder.php' );
  }
@@ -72,7 +73,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', 'awesome-surveys' ) . '</p></span>' ) );
      $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
      $form->addElement( new Element_HTML( '</div>' ) );
-     $form->render();
+     echo $form->render( true );
  }
 
  public function save_post( $post_id, $post ) {
@@ -102,10 +103,15 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   * @link http://willthewebmechanic.com
   */
  public function admin_enqueue_scripts() {
-
+  $defaults = array(
+   'num_answers' => 10
+   );
+  $args = apply_filters( 'wwm_as_admin_script_vars', $defaults );
+  $args = wp_parse_args( $args, $defaults );
   $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
   wp_register_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'] );
+  wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
 
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array(), '1.10.13', 'all' );
