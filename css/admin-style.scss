@@ -31,3 +31,50 @@ button {
     width: 43px;
     display: inline-block; }
 }
+
+#form-preview {
+	select {
+		height: auto;
+	}
+}
+#form-preview .button-holder {
+  float: right;
+  width: 50%;
+  max-width: 200px;
+  display: none; }
+  #form-preview .button-holder button {
+    float: left;
+    margin-top: .5em; }
+
+#form-preview .control-group {
+  float: left;
+  max-width: 50%; }
+#form-preview .single-element-edit {
+  padding: .5em; }
+  #form-preview .single-element-edit:hover {
+    border: 1px #c0c0c0 dashed;
+    cursor: move; }
+    #form-preview .single-element-edit:hover .button-holder {
+      display: block; }
+
+#save-survey {
+	fieldset {
+		border: none;
+	}
+}
+
+div#current-element label {
+  float: left;
+  width: 100%; }
+  div#current-element label input {
+    margin-top: .5em; }
+div#current-element fieldset, div#current-element .field-validation > * {
+  padding: .5em 1em; }
+
+#current-element-wrapper, #form-preview-wrapper {
+	display:none;
+}
+.validation {
+  float: left;
+  width: 100%;
+  margin: 1em 0; }

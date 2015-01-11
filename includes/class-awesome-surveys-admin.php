@@ -39,8 +39,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 
  public function survey_builder() {
 
-  wp_print_scripts( 'awesome-surveys-admin-script' );
-  wp_print_styles( $this->text_domain . '-admin-style' );
+  wp_enqueue_script( 'awesome-surveys-admin-script' );
+  wp_enqueue_style( 'awesome-surveys-admin-style' );
   include_once( 'views/html-survey-builder.php' );
  }
 
@@ -104,7 +104,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   */
  public function admin_enqueue_scripts() {
   $defaults = array(
-   'num_answers' => 10
+   'num_answers' => 10,
    );
   $args = apply_filters( 'wwm_as_admin_script_vars', $defaults );
   $args = wp_parse_args( $args, $defaults );
