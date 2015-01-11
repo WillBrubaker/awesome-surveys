@@ -68,7 +68,7 @@ div#current-element label {
   width: 100%; }
   div#current-element label input {
     margin-top: .5em; }
-div#current-element fieldset, div#current-element .field-validation > * {
+div fieldset, div .field-validation > * {
   padding: .5em 1em; }
 
 #current-element-wrapper, #form-preview-wrapper {
@@ -78,3 +78,14 @@ div#current-element fieldset, div#current-element .field-validation > * {
   float: left;
   width: 100%;
   margin: 1em 0; }
+
+span.label, .slider-wrapper, .options-holder, textarea {
+  float: left;
+  width: 100%;
+  margin: 1em 0; }
+  span.label div.control-group, .slider-wrapper div.control-group, .options-holder div.control-group, textarea div.control-group {
+    margin: .5em 0; }
+    span.label div.control-group label, .slider-wrapper div.control-group label, .options-holder div.control-group label, textarea div.control-group label {
+      margin: .25em 0; }
+span.label p {
+  margin: 1em; }

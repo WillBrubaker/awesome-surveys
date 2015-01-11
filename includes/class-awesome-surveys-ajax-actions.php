@@ -352,7 +352,6 @@ class Awesome_Surveys_Ajax {
   $form = new FormOverrides( 'save-survey' );
   $form->configure( array( 'class' => 'save' ) );
   $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
-  $form->addElement( new Element_Hidden( 'post_content', $post_content ) );
   $form->addElement( new Element_HTML( '<hr>' ) );
   $form->addElement( new Element_Button( __( 'Reset', $this->text_domain ), 'button', array( 'class' => 'button-secondary reset-button', 'name' => 'reset' ) ) );
   $save_form = $form->render( true );
@@ -363,7 +362,8 @@ class Awesome_Surveys_Ajax {
   $save_form = str_replace( 'action="admin-ajax.php"', '', $save_form, $count );
   $save_form = str_replace( '<form', '<div', $save_form, $count );
   $save_form = str_replace( 'method="post"', '', $save_form, $count );
-  wp_send_json_success( array( $preview_form . $save_form ) );
+  $data = array( array( $preview_form . $save_form ), array( $post_content ) );
+  wp_send_json_success( $data );
  }
 
  /**

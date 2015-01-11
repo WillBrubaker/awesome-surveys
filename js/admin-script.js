@@ -211,7 +211,9 @@ function getPreview($) {
     if ($('#current-element :input').valid()) {
 
       $.post(ajaxurl, $('#current-element :input').serializeArray(), function(data) {
-        $('#form-preview').empty().append(data.data)
+        $('#form-preview').empty().append(data.data[0])
+        console.log(data)
+        $('#post_content').val(data.data[1])
         $('#form-preview button').button()
         $('#current-element').empty()
         $('#current-element-wrapper').hide()
