@@ -47,19 +47,42 @@ Domain Path: /languages/
 		);
 	$includes = array(
 		'awesome-surveys',
+		'awesome-surveys-ajax-actions',
 		);
+
+		foreach ( $includes as $include_file ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
+		}
 
 		if ( is_admin() ) {
 		foreach ( $admin_includes as $include_file ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
 		}
-	}
-	if ( ! is_admin() ) {
+	} else {
 		foreach ( $frontend_includes as $include_file ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
 		}
 	}
-	foreach ( $includes as $include_file ) {
-		include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
-	}
 
+		if ( ! defined( 'WWM_AWESOME_SURVEYS_URL' ) ) {
+			define( 'WWM_AWESOME_SURVEYS_URL', plugins_url( '', __FILE__ ) );
+		}
+		if ( ! defined( 'WWM_AWESOME_SURVEYS_PATH' ) ) {
+			define( 'WWM_AWESOME_SURVEYS_PATH', plugin_dir_path( __FILE__ ) );
+		}
+
+		$awesome_surveys_ajax = new Awesome_Surveys_Ajax;
+		$awesome_surveys_nopriv_ajax_actions = array(
+
+			);
+		$awesome_surveys_ajax_actions = array(
+			'add-form-element' => 'add_form_element',
+			);
+
+		foreach ( $awesome_surveys_nopriv_ajax_actions as $action => $function ) {
+			add_action( 'wp_ajax_nopriv_' . $action, array( $awesome_surveys_ajax, $function ) );
+			add_action( 'wp_ajax_' . $action, array( $awesome_surveys_ajax, $function ) );
+		}
+		foreach ( $awesome_surveys_ajax_actions as $action => $function ) {
+			add_action( 'wp_ajax_' . $action, array( $awesome_surveys_ajax, $function ) );
+		}

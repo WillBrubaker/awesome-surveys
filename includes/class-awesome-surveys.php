@@ -2,6 +2,12 @@
 
 class Awesome_Surveys {
 
+ protected $wwm_plugin_values = array(
+  'name' => 'Awesome_Surveys',
+  'dbversion' => '1.1',
+  'version' => '1.6.3',
+ );
+
  public function __construct() {
 
   if ( class_exists( 'Awesome_Surveys_Admin' ) ) {
@@ -39,5 +45,3 @@ class Awesome_Surveys {
   register_post_type( 'awesome-surveys', $args );
  }
 }
-
-new Awesome_Surveys;
