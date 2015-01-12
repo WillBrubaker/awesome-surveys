@@ -34,7 +34,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
    'callback' => array( $this, 'survey_builder' ),
    );
   add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
-  add_meta_box( 'general-survey-options', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
+  add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
  }
 
  public function survey_builder() {
@@ -54,7 +54,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
   $thank_you_message = get_post_meta( $post->ID, 'thank_you_message', true );
   $message = ( empty( $thank_you_message ) ) ? __( 'Thank you for completing this survey', 'awesome-surveys' ) : $thank_you_message;
-  //printf( '<textarea name="meta[thank_you_message]" style="width: %s;">%s</textarea>', '100%', $message );
   $form->addElement( new Element_Textarea( __( 'A Thank You message:', 'awesome-surveys' ), 'meta[thank_you_message]', array( 'value' => $message ) ) );
   $options = array();
      /**
@@ -73,15 +72,22 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
      $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', 'awesome-surveys' ) . '</p></span>' ) );
      $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
      $form->addElement( new Element_HTML( '</div>' ) );
-     echo $form->render( true );
+     $html = $form->render( true );
+     $html = str_replace( '<form action="post.php" id="general-survey-options" method="post"', '<div id="general-survey-options"', $html );
+     $html = str_replace( '</form>', '</div>', $html );
+     echo $html;
  }
 
  public function save_post( $post_id, $post ) {
   if ( ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
-   die( 'not authorized' );
+   return;
   }
   if ( isset( $_POST['meta']['thank_you_message'] ) ) {
    update_post_meta( $post_id, 'thank_you_message', sanitize_text_field( $_POST['meta']['thank_you_message'] ) );
+  }
+  if ( isset( $_POST['existing_elements'] ) ) {
+   $existing_elements = $_POST['existing_elements'];
+   update_post_meta( $post_id, 'existing_elements', $existing_elements );
   }
  }
 

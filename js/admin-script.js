@@ -1,5 +1,12 @@
 jQuery('document').ready(function($) {
 
+  $.post(ajaxurl, {
+    action: 'generate-preview',
+    post_id: $('#post_id').val()
+  }, function(data) {
+    $('#form-preview').empty().append(data.data[0])
+    previewReady($)
+  })
   $('#general-survey-options').addClass('pure-form pure-form-stacked')
   $('#survey-elements-buttons button').button().click(function(e) {
     e.preventDefault()
@@ -212,29 +219,8 @@ function getPreview($) {
 
       $.post(ajaxurl, $('#current-element :input').serializeArray(), function(data) {
         $('#form-preview').empty().append(data.data[0])
-        console.log(data)
-        $('#post_content').val(data.data[1])
-        $('#form-preview button').button()
-        $('#current-element').empty()
-        $('#current-element-wrapper').hide()
-        var sortables = $('#form-preview fieldset')
-        sortables.sortable({
-          start: function(event, ui) {
-            surveyElements = $.parseJSON($('#form-preview #save-survey [name="existing_elements"]').val())
-            startingIndex = ui.item.index()
-          },
-          stop: function(event, ui) {
-            endingIndex = ui.item.index()
-            if (startingIndex != endingIndex) {
-              activeElement = surveyElements[startingIndex]
-              surveyElements.splice(startingIndex, 1)
-              surveyElements.splice(endingIndex, 0, activeElement)
-              $('[name="existing_elements"]').val(JSON.stringify(surveyElements))
-              renumberButtons($)
-            }
-          }
-        })
-        $('#form-preview-wrapper').show()
+        $('#post_content').empty().append(data.data[1])
+        previewReady($)
       })
     }
   }
@@ -244,6 +230,30 @@ function renumberButtons($) {
   $('.single-element-edit', parent).each(function() {
     $('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
   })
+}
+
+function previewReady($) {
+  $('#form-preview button').button()
+  $('#current-element').empty()
+  $('#current-element-wrapper').hide()
+  var sortables = $('#form-preview fieldset')
+  sortables.sortable({
+    start: function(event, ui) {
+      surveyElements = $.parseJSON($('#form-preview #save-survey [name="existing_elements"]').val())
+      startingIndex = ui.item.index()
+    },
+    stop: function(event, ui) {
+      endingIndex = ui.item.index()
+      if (startingIndex != endingIndex) {
+        activeElement = surveyElements[startingIndex]
+        surveyElements.splice(startingIndex, 1)
+        surveyElements.splice(endingIndex, 0, activeElement)
+        $('[name="existing_elements"]').val(JSON.stringify(surveyElements))
+        renumberButtons($)
+      }
+    }
+  })
+  $('#form-preview-wrapper').show()
 }
 
 function generateDynamicDialog(obj) {

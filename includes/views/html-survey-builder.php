@@ -11,8 +11,9 @@ $buttons = array(
  );
 ?>
 <div id="survey-elements-buttons">
- <input type="hidden" id="post_id" value="<?php $post->ID; ?>">
- <input type="hidden" id="post_content" value="<?php $post->content; ?>">
+ <input type="hidden" id="post_id" value="<?php echo $post->ID; ?>">
+ <textarea style="display: none;" name="post_content" id="post_content"><?php echo $post->post_content; ?></textarea>
+ <?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
  <h4><?php _e( 'Add a form element to your survey by clicking a button', 'awesome-surveys' ); ?></h4>
  <?php
  foreach ( $buttons as $name => $value ) {

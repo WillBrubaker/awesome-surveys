@@ -268,12 +268,12 @@ class Awesome_Surveys_Ajax {
   * @link http://willthewebmechanic.com
   */
  public function generate_preview() {
-  global $post;
-  $auth_method = get_post_meta( $post->ID, 'auth_method', true );
+
+  $auth_method = get_post_meta( $_POST['post_id'], 'auth_method', true );
   if ( empty( $auth_method ) ) {
    $auth_method = 'none';
   }
-  $form_args = array( 'survey_id' => $post->ID, 'auth_method' => $auth_method );
+  $form_args = array( 'survey_id' => $_POST['post_id'], 'auth_method' => $auth_method );
   $buttons = array(
    'text' => 'Element_Textbox',
    'email' => 'Element_Email',
@@ -295,57 +295,63 @@ class Awesome_Surveys_Ajax {
    * one that wants to be saved to the db, but the radio doesn't. Get rid of
    * the radio via apply_filters( 'awesome_surveys_form_preview' ).
    */
-  $form_elements_array['options'] = apply_filters( 'awesome_surveys_form_preview', $form_elements_array['options'] );
+  $form_elements_array['options'] = ( isset( $form_elements_array['options'] ) ) ? apply_filters( 'awesome_surveys_form_preview', $form_elements_array['options'] ) : array();
   if ( ! class_exists( 'Form' ) ) {
    include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
    include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
   }
-  $nonce = wp_create_nonce( 'create-survey' );
+
+  $saved_elements = get_post_meta( $_POST['post_id'], 'existing_elements', true );
   $form = new FormOverrides();
   $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
   if ( isset( $form_elements_array['existing_elements'] ) ) {
    $element_json = json_decode( stripslashes( $form_elements_array['existing_elements'] ), true );
+  } else if ( empty( $saved_elements ) )  {
+   wp_send_json_error();
+  } else {
+   $element_json = json_decode( $saved_elements, true );
   }
   $required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
   $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $form_elements_array['options'] ) ) : array( $form_elements_array['options'] );
   $elements_count = 0;
+  $existing_elements = array_filter( $existing_elements );
   foreach ( $existing_elements as $element ) {
-   $method = $buttons[ $element['type'] ];
-   $options = $atts = $rules = array();
-   if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
-    foreach ( $element['validation']['rules'] as $key => $value ) {
-     if ( '' != $value && ! is_null( $value ) ) {
-      $rules['data-' . $key] = $value;
+    $method = $buttons[ $element['type'] ];
+    $options = $atts = $rules = array();
+    if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
+     foreach ( $element['validation']['rules'] as $key => $value ) {
+      if ( '' != $value && ! is_null( $value ) ) {
+       $rules['data-' . $key] = $value;
+      }
      }
     }
-   }
-   if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
-     $options = array_merge( $options, $rules );
-   } else {
-    $atts = array_merge( $options, $rules );
-   }
-   if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
-    if ( in_array( $method, $required_is_option ) ) {
-     $options['required'] = 1;
-     $options['class'] = 'required';
+    if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
+      $options = array_merge( $options, $rules );
     } else {
-     $atts['required'] = 1;
-     $atts['class'] = 'required';
+     $atts = array_merge( $options, $rules );
     }
-   }
-   $max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
-   for ( $iterations = 0; $iterations < $max; $iterations++ ) {
-    /**
-     * Since the pfbc is being used, and it has some weird issue with values of '0', but
-     * it will work if you append :pfbc to it...not well documented, but it works!
-     */
-    $options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
-   }
-   $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
-   $form->addElement( new Element_HTML( '<div class="single-element-edit">' ) );
-   $form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
-   $form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', $this->text_domain ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', $this->text_domain ) . '</button></div><div class="clear"></div></div>' ) );
-   $elements_count++;
+    if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
+     if ( in_array( $method, $required_is_option ) ) {
+      $options['required'] = 1;
+      $options['class'] = 'required';
+     } else {
+      $atts['required'] = 1;
+      $atts['class'] = 'required';
+     }
+    }
+    $max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
+    for ( $iterations = 0; $iterations < $max; $iterations++ ) {
+     /**
+      * Since the pfbc is being used, and it has some weird issue with values of '0', but
+      * it will work if you append :pfbc to it...not well documented, but it works!
+      */
+     $options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
+    }
+    $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
+    $form->addElement( new Element_HTML( '<div class="single-element-edit">' ) );
+    $form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
+    $form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button></div><div class="clear"></div></div>' ) );
+    $elements_count++;
   }
   $preview_form = $form->render( true );
   $post_content = awesome_surveys_render_form( $element_json, $form_args );
@@ -353,15 +359,22 @@ class Awesome_Surveys_Ajax {
   $form->configure( array( 'class' => 'save' ) );
   $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
   $form->addElement( new Element_HTML( '<hr>' ) );
-  $form->addElement( new Element_Button( __( 'Reset', $this->text_domain ), 'button', array( 'class' => 'button-secondary reset-button', 'name' => 'reset' ) ) );
+  $form->addElement( new Element_Button( __( 'Reset', 'awesome-surveys' ), 'button', array( 'class' => 'button-secondary reset-button', 'name' => 'reset' ) ) );
   $save_form = $form->render( true );
-  $count = 5;
-  $preview_form = str_replace( 'action="admin-ajax.php"', '', $preview_form, $count );
-  $preview_form = str_replace( 'action="admin-ajax.php"', '', $preview_form, $count );
-  $preview_form = str_replace( 'method="post"', '', $preview_form, $count );
-  $save_form = str_replace( 'action="admin-ajax.php"', '', $save_form, $count );
-  $save_form = str_replace( '<form', '<div', $save_form, $count );
-  $save_form = str_replace( 'method="post"', '', $save_form, $count );
+  error_log( print_r( $save_form, true ) );
+  $pattern = '/<form action="[^"]+"/';
+  $replacement = '<div';
+  $save_form = preg_replace( $pattern, $replacement, $save_form );
+  $preview_form = preg_replace( $pattern, $replacement, $preview_form );
+  $pattern = '/<\/form>/';
+  $replacement = '</div>';
+  $save_form = preg_replace( $pattern, $replacement, $save_form );
+  $preview_form = preg_replace( $pattern, $replacement, $preview_form );
+  $pattern = '/method="post"/';
+  $replacement = '';
+  $save_form = preg_replace( $pattern, $replacement, $save_form );
+  $preview_form = preg_replace( $pattern, $replacement, $preview_form );
+  error_log( print_r( $save_form, true ) );
   $data = array( array( $preview_form . $save_form ), array( $post_content ) );
   wp_send_json_success( $data );
  }

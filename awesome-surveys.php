@@ -79,6 +79,7 @@ Domain Path: /languages/
 			'add-form-element' => 'add_form_element',
    'options-fields' => 'echo_options_fields',
    'generate-preview' => 'generate_preview',
+   'get-preview' => 'get_preview',
    'wwm-as-get-json' => 'wwm_as_get_json',
 			);
 
