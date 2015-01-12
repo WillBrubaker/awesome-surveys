@@ -4,8 +4,10 @@ jQuery('document').ready(function($) {
     action: 'generate-preview',
     post_id: $('#post_id').val()
   }, function(data) {
-    $('#form-preview').empty().append(data.data[0])
-    previewReady($)
+    if ( data.success ) {
+      $('#form-preview').empty().append(data.data[0])
+      previewReady($)
+    }
   })
   $('#general-survey-options').addClass('pure-form pure-form-stacked')
   $('#survey-elements-buttons button').button().click(function(e) {

@@ -10,7 +10,18 @@ class Awesome_Surveys {
 
  public function __construct() {
 
+  $actions = array(
+   'init' => array( 10, 1 ),
+   );
+  foreach ( $actions as $action => $args ) {
+   add_action( $action, array( $this, $action ), $args[0], $args[1] );
+  }
+ }
+
+
+ public function init() {
   if ( class_exists( 'Awesome_Surveys_Admin' ) ) {
+   flush_rewrite_rules();
    $this->register_post_type();
   }
  }
@@ -18,20 +29,21 @@ class Awesome_Surveys {
  private function register_post_type() {
   $awesome_surveys_admin = new Awesome_Surveys_Admin;
   $args = array(
-   'label' => _( 'Awesome Surveys', 'awesome-surveys' ),
+   'label' => __( 'Awesome Surveys', 'awesome-surveys' ),
    'labels' => array(
-    'name' => _( 'Surveys', 'awesome-surveys' ),
-    'singular_name' => _( 'Survey', 'awesome-surveys' ),
-    'menu_name' => _( 'My Surveys', 'awesome-surveys' ),
-    'name_admin_bar' => _( 'Survey', 'awesome-surveys' ),
-    'add_new' => _( 'New Survey', 'awesome-surveys' ),
-    'new_item' => _( 'New Survey', 'awesome-surveys' ),
-    'add_new_item' => _( 'Add New Survey', 'awesome-surveys' ),
+    'name' => __( 'Surveys', 'awesome-surveys' ),
+    'singular_name' => __( 'Survey', 'awesome-surveys' ),
+    'menu_name' => __( 'My Surveys', 'awesome-surveys' ),
+    'name_admin_bar' => __( 'Survey', 'awesome-surveys' ),
+    'add_new' => __( 'New Survey', 'awesome-surveys' ),
+    'new_item' => __( 'New Survey', 'awesome-surveys' ),
+    'add_new_item' => __( 'Add New Survey', 'awesome-surveys' ),
+    'edit_item' => __( 'Build Survey', 'awesome-surveys' ),
     ),
-   'description' => _( 'Surveys for your site', 'awesome-surveys' ),
+   'description' => __( 'Surveys for your site', 'awesome-surveys' ),
    'public' => true,
    'exclude_from_search' => true,
-   'publicly_queryable' => false,
+   'publicly_queryable' => true,
    'show_ui' => true,
    'show_in_nav_menus' => false,
    'show_in_menu' => true,
@@ -40,7 +52,7 @@ class Awesome_Surveys {
     'title',
     ),
    'register_meta_box_cb' => array( $awesome_surveys_admin, 'survey_editor' ),
-   'rewrite' => false,
+   'rewrite' => true,
    );
   register_post_type( 'awesome-surveys', $args );
  }
