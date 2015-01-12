@@ -15,10 +15,10 @@ jQuery('document').ready(function($) {
       element: $(this).attr('name')
     }, function(html) {
       $('#current-element').empty().append(html)
-      existingElements = $('#save-survey input[name="existing_elements"]')
+      existingElements = $('input[name="existing_elements"]')
       if ('undefined' != typeof existingElements && 'undefined' != typeof existingElements.val()) {
         console.log(existingElements.val())
-        $('#current-element input[name="existing_elements"]').val(existingElements.val())
+        $('input[name="existing_elements"]').val(existingElements.val())
       }
       $('#current-element-wrapper').show()
       $('#slider').slider({
@@ -68,7 +68,7 @@ jQuery('document').ready(function($) {
     action = $(this).attr('data-action')
     var index = $(this).data('index')
     var container = $(this).closest('.single-element-edit')
-    var elementsJSON = $.parseJSON($('#save-survey [name="existing_elements"]').val())
+    var elementsJSON = $.parseJSON($('[name="existing_elements"]').val())
     if ('delete' == action) {
       container.remove();
       delete elementsJSON[index]
@@ -87,7 +87,7 @@ jQuery('document').ready(function($) {
         }, {
           text: "Submit",
           click: function(e) {
-            elementsJSON = $.parseJSON($('#save-survey [name="existing_elements"]').val())
+            elementsJSON = $.parseJSON($('[name="existing_elements"]').val())
             e.preventDefault()
             var form = $('form', dynamicDialog);
             var formValues = $('form', dynamicDialog).serializeArray();
@@ -135,7 +135,7 @@ jQuery('document').ready(function($) {
                   }
                   target.empty().append(newHtml)
                 }
-                $('#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+                $('[name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
               }).fail(function(xhr) {
                 alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
               }).always(function() {
@@ -169,10 +169,10 @@ jQuery('document').ready(function($) {
               var radios = $('[type="radio"]', dynamicDialog)
               var selectedIndex = radios.index($('[type="radio"]:checked', dynamicDialog))
               $.post(ajaxurl, {
-                'action': 'options_fields',
+                'action': 'options-fields',
                 'num_options': numOptions
               }, function(data) {
-                $('#edit-answers-holder').empty().append(data);
+                $('#edit-answers-holder').empty().append(data.data[0]);
                 for (key in elementsJSON[index].label) {
                   $('[name="options[label][' + key + ']"]').val(elementsJSON[index].label[key])
                 }
@@ -193,7 +193,7 @@ jQuery('document').ready(function($) {
       })
     }
     elementsJSON = removeNulls(elementsJSON)
-    $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+    $('[name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
   })
 
   $('#form-preview').on('click', 'input[name="reset"]', function(e) {
@@ -214,17 +214,17 @@ jQuery('document').ready(function($) {
 })
 
 function getPreview($) {
-    $('#current-element :input').validate()
-    if ($('#current-element :input').valid()) {
+  $('#current-element :input').validate()
+  if ($('#current-element :input').valid()) {
 
-      $.post(ajaxurl, $('#current-element :input').serializeArray(), function(data) {
-        $('#form-preview').empty().append(data.data[0])
-        $('#post_content').empty().append(data.data[1])
-        previewReady($)
-      })
-    }
+    $.post(ajaxurl, $('#current-element :input').serializeArray(), function(data) {
+      $('#form-preview').empty().append(data.data[0])
+      $('#post_content').empty().append(data.data[1])
+      previewReady($)
+    })
   }
-  //added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
+}
+
 function renumberButtons($) {
   var parent = $('.survey-preview form')
   $('.single-element-edit', parent).each(function() {
@@ -239,7 +239,7 @@ function previewReady($) {
   var sortables = $('#form-preview fieldset')
   sortables.sortable({
     start: function(event, ui) {
-      surveyElements = $.parseJSON($('#form-preview #save-survey [name="existing_elements"]').val())
+      surveyElements = $.parseJSON($('[name="existing_elements"]').val())
       startingIndex = ui.item.index()
     },
     stop: function(event, ui) {
