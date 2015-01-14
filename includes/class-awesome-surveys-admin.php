@@ -2,10 +2,10 @@
 
 class Awesome_Surveys_Admin extends Awesome_Surveys {
 
- public $text_domain;
+
 
  public function __construct() {
-  $this->text_domain = 'awesome-surveys';
+
   $actions = array(
    'admin_menu' => array( 'admin_menu', 10, 1 ),
    'save_post' => array( 'save_post', 10, 2 ),
@@ -22,12 +22,13 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   foreach ( $filters as $key => $filter ) {
    add_filter( $key, array( $this, $filter[0] ), $filter[1], $filter[2] );
   }
+  $this->register_post_type();
  }
 
  public function admin_menu() {
  }
 
- public function survey_editor( $post ) {
+ public function survey_editor() {
   $args = array(
    'id' => 'create_survey',
    'title' => _( 'Create Survey' ),
@@ -38,56 +39,25 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
  }
 
  public function survey_builder() {
-
   wp_enqueue_script( 'awesome-surveys-admin-script' );
   wp_enqueue_style( 'awesome-surveys-admin-style' );
   include_once( 'views/html-survey-builder.php' );
  }
 
  public function general_survey_options() {
-  if ( ! class_exists( 'Form' ) ) {
-   include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
-   include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
-  }
-  global $post;
-  $form = new FormOverrides( 'general-survey-options' );
-  $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
-  $thank_you_message = get_post_meta( $post->ID, 'thank_you_message', true );
-  $message = ( empty( $thank_you_message ) ) ? __( 'Thank you for completing this survey', 'awesome-surveys' ) : $thank_you_message;
-  $form->addElement( new Element_Textarea( __( 'A Thank You message:', 'awesome-surveys' ), 'meta[thank_you_message]', array( 'value' => $message ) ) );
-  $options = array();
-     /**
-      * *!!!IMPORTANT!!!*
-      * If an auth method is added via the survey_auth_options, a filter must also be added
-      * to return a boolean based on whether the auth method passed or not.
-      * The function that outputs the survey form will check for valid authentication via
-      * apply_filters( 'awesome_surveys_auth_method_{$your_method}', false )
-      * If a filter does not exist for your auth method then obviously the return value is false
-      * and the survey form output function will generate a null output.
-      * @see  class.awesome-surveys-frontend.php.
-      * When the survey is submitted, you can use do_action( 'awesome_surveys_update_' . $auth_method );
-      * to do whatever needs to be done i.e. set a cookie, update some database option, etc.
-      */
-     $options = apply_filters( 'survey_auth_options', $options );
-     $form->addElement( new Element_HTML( '<div class="ui-widget-content ui-corner-all validation field-validation"><span class="label"><p>' . __( 'To prevent people from filling the survey out multiple times you may select one of the options below', 'awesome-surveys' ) . '</p></span>' ) );
-     $form->addElement( new Element_Radio( 'Validation/authentication', 'auth', $options, array( 'value' => 'none' ) ) );
-     $form->addElement( new Element_HTML( '</div>' ) );
-     $html = $form->render( true );
-     $html = str_replace( '<form action="post.php" id="general-survey-options" method="post"', '<div id="general-survey-options"', $html );
-     $html = str_replace( '</form>', '</div>', $html );
-     echo $html;
+  include_once( 'views/html-survey-options-general.php' );
  }
 
  public function save_post( $post_id, $post ) {
   if ( ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
    return;
   }
-  if ( isset( $_POST['meta']['thank_you_message'] ) ) {
-   update_post_meta( $post_id, 'thank_you_message', sanitize_text_field( $_POST['meta']['thank_you_message'] ) );
-  }
   if ( isset( $_POST['existing_elements'] ) ) {
    $existing_elements = $_POST['existing_elements'];
    update_post_meta( $post_id, 'existing_elements', $existing_elements );
+  }
+  if ( isset( $_POST['auth'] ) ) {
+   update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['auth'] ) );
   }
  }
 
@@ -116,14 +86,13 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   $args = wp_parse_args( $args, $defaults );
   $suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-  wp_register_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'] );
+  wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
   wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
-
+  _doing_it_wrong( __METHOD__, 'dont load this on every single admin page', '4.1' );
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array(), '1.10.13', 'all' );
   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
-  wp_register_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->wwm_plugin_values['version'], 'all' );
+  wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->wwm_plugin_values['version'], 'all' );
+
  }
 }
-
-$awesome_surveys = new Awesome_Surveys;

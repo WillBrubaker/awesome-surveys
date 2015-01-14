@@ -1,39 +1,36 @@
 <?php
 global $post;
-$buttons = array(
- 'text' => __( 'Text Input', 'awesome-surveys' ),
- 'email' => __( 'Email', 'awesome-surveys' ),
- 'number' => __( 'Number', 'awesome-surveys' ),
- 'dropdown' => __( 'Dropdown Selector', 'awesome-surveys' ),
- 'radio' => __( 'Radio Buttons', 'awesome-surveys' ),
- 'checkbox' => __( 'Checkboxes', 'awesome-surveys' ),
- 'textarea' => __( 'Textarea', 'awesome-surveys' ),
- );
+global $awesome_surveys;
+$existing_elements = get_post_meta( $post->ID, 'existing_elements', true );
+$form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 ?>
-<div id="survey-elements-buttons">
- <input type="hidden" id="post_id" value="<?php echo $post->ID; ?>">
- <textarea style="display: none;" name="post_content" id="post_content"><?php echo $post->post_content; ?></textarea>
- <?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
- <h4><?php _e( 'Add a form element to your survey by clicking a button', 'awesome-surveys' ); ?></h4>
- <?php
- foreach ( $buttons as $name => $value ) {
-  echo '<button name="' . $name . '">' . $value . '</button>' . "\n";
- }
- ?>
-</div>
-<div id="current-element-wrapper">
-<hr>
-<h4><?php _e( 'Configure a survey question', 'awesome-surveys' ); ?></h4>
-<div id="current-element"></div>
-</div>
-<div id="form-preview-wrapper">
-<hr>
-<h4><?php _e( 'Survey Preview', 'awesome-surveys' ); ?></h4>
-<p>
- <?php
- _e( 'You can insert this survey with shortcode: ', 'awesome-surveys' );
- echo '[wwm_survey id="' . $post->ID . '"]';
- ?>
-</p>
-<div id="form-preview"></div>
+<div id="awesome-survey">
+ <input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo $existing_elements; ?>'>
+ <textarea style="display:none;" id="content" name="content"><?php echo $post->post_content; ?></textarea>
+  <?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
+ <input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
+ <div id="survey-elements-buttons">
+  <h4><?php _e( 'Add a form element to your survey by clicking a button', 'awesome-surveys' ); ?></h4>
+  <?php
+  foreach ( $awesome_surveys->buttons as $name => $value ) {
+   echo '<button name="' . $name . '">' . $value['label'] . '</button>' . "\n";
+  }
+  ?>
+ </div>
+ <div id="current-element-wrapper">
+ <hr>
+ <h4><?php _e( 'Configure a survey question', 'awesome-surveys' ); ?></h4>
+ <div id="current-element"></div>
+ </div>
+ <div id="form-preview-wrapper">
+ <hr>
+ <h4><?php _e( 'Survey Preview', 'awesome-surveys' ); ?></h4>
+ <p>
+  <?php
+  _e( 'You can insert this survey with shortcode: ', 'awesome-surveys' );
+  echo '[wwm_survey id="' . $post->ID . '"]';
+  ?>
+ </p>
+ <div id="form-preview"><?php echo $form_preview_html; ?></div>
+ </div>
 </div>

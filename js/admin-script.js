@@ -1,13 +1,10 @@
 jQuery('document').ready(function($) {
 
-  $.post(ajaxurl, {
-    action: 'generate-preview',
-    post_id: $('#post_id').val()
-  }, function(data) {
-    $('#form-preview').empty().append(data.data[0])
+  if ($('#form-preview').html().length > 0) {
     previewReady($)
-  })
+  }
   $('#general-survey-options').addClass('pure-form pure-form-stacked')
+
   $('#survey-elements-buttons button').button().click(function(e) {
     e.preventDefault()
     $.post(ajaxurl, {
@@ -15,10 +12,9 @@ jQuery('document').ready(function($) {
       element: $(this).attr('name')
     }, function(html) {
       $('#current-element').empty().append(html)
-      existingElements = $('#save-survey input[name="existing_elements"]')
+      existingElements = $('#existing_elements')
       if ('undefined' != typeof existingElements && 'undefined' != typeof existingElements.val()) {
-        console.log(existingElements.val())
-        $('#current-element input[name="existing_elements"]').val(existingElements.val())
+        $('#existing_elements').val(existingElements.val())
       }
       $('#current-element-wrapper').show()
       $('#slider').slider({
@@ -68,10 +64,17 @@ jQuery('document').ready(function($) {
     action = $(this).attr('data-action')
     var index = $(this).data('index')
     var container = $(this).closest('.single-element-edit')
-    var elementsJSON = $.parseJSON($('#save-survey [name="existing_elements"]').val())
+    var elementsJSON = $.parseJSON($('#existing_elements').val())
     if ('delete' == action) {
       container.remove();
       delete elementsJSON[index]
+      $.post(ajaxurl, {
+        survey_id: $('#post_ID').val(),
+        existing_elements: $('#existing_elements').val(),
+        action: 'update-post-content'
+      }, function(data) {
+        $('#content').val(data.data)
+      })
     } else {
       label = $('label.control-label', $(this).closest('.single-element-edit'))
       var dynamicDialog = generateDynamicDialog(elementsJSON[index]);
@@ -87,7 +90,7 @@ jQuery('document').ready(function($) {
         }, {
           text: "Submit",
           click: function(e) {
-            elementsJSON = $.parseJSON($('#save-survey [name="existing_elements"]').val())
+            elementsJSON = $.parseJSON($('#existing_elements').val())
             e.preventDefault()
             var form = $('form', dynamicDialog);
             var formValues = $('form', dynamicDialog).serializeArray();
@@ -135,7 +138,7 @@ jQuery('document').ready(function($) {
                   }
                   target.empty().append(newHtml)
                 }
-                $('#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+                $('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
               }).fail(function(xhr) {
                 alert('error status code: ' + xhr.status + ' error message: ' + xhr.statusText)
               }).always(function() {
@@ -193,7 +196,7 @@ jQuery('document').ready(function($) {
       })
     }
     elementsJSON = removeNulls(elementsJSON)
-    $('form#save-survey [name="existing_elements"]').val(JSON.stringify(elementsJSON)).trigger('change')
+    $('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
   })
 
   $('#form-preview').on('click', 'input[name="reset"]', function(e) {
@@ -216,10 +219,10 @@ jQuery('document').ready(function($) {
 function getPreview($) {
     $('#current-element :input').validate()
     if ($('#current-element :input').valid()) {
-
-      $.post(ajaxurl, $('#current-element :input').serializeArray(), function(data) {
+      $.post(ajaxurl, $('#awesome-survey :input').serializeArray(), function(data) {
         $('#form-preview').empty().append(data.data[0])
         $('#post_content').empty().append(data.data[1])
+        $('#existing_elements').val(data.data[2])
         previewReady($)
       })
     }
@@ -239,7 +242,7 @@ function previewReady($) {
   var sortables = $('#form-preview fieldset')
   sortables.sortable({
     start: function(event, ui) {
-      surveyElements = $.parseJSON($('#form-preview #save-survey [name="existing_elements"]').val())
+      surveyElements = $.parseJSON($('#existing_elements').val())
       startingIndex = ui.item.index()
     },
     stop: function(event, ui) {
@@ -248,7 +251,7 @@ function previewReady($) {
         activeElement = surveyElements[startingIndex]
         surveyElements.splice(startingIndex, 1)
         surveyElements.splice(endingIndex, 0, activeElement)
-        $('[name="existing_elements"]').val(JSON.stringify(surveyElements))
+        $('#existing_elements').val(JSON.stringify(surveyElements))
         renumberButtons($)
       }
     }
