@@ -10,7 +10,12 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
    'admin_menu' => array( 'admin_menu', 10, 1 ),
    'save_post' => array( 'save_post', 10, 2 ),
    'admin_enqueue_scripts' => array( 'admin_enqueue_scripts', 10, 1 ),
+   'admin_init' => array( 'init', 10, 0 ),
    );
+
+  foreach ( $actions as $action => $args ) {
+   add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
+  }
 
   $filters = array(
    'survey_auth_options' => array( 'default_auth_methods', 10, 1 ),
@@ -29,11 +34,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
  }
 
  public function survey_editor() {
-  $args = array(
-   'id' => 'create_survey',
-   'title' => _( 'Create Survey' ),
-   'callback' => array( $this, 'survey_builder' ),
-   );
+
   add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
   add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
  }
@@ -49,15 +50,16 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
  }
 
  public function save_post( $post_id, $post ) {
-  if ( ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
+
+  if (  ! isset( $_POST['create_survey_nonce'] ) || ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
    return;
   }
   if ( isset( $_POST['existing_elements'] ) ) {
    $existing_elements = $_POST['existing_elements'];
    update_post_meta( $post_id, 'existing_elements', $existing_elements );
   }
-  if ( isset( $_POST['auth'] ) ) {
-   update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['auth'] ) );
+  if ( isset( $_POST['meta']['survey_auth_method'] ) ) {
+   update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['meta']['survey_auth_method'] ) );
   }
  }
 
@@ -72,7 +74,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   return $options;
  }
 
-  /**
+ /**
   * enqueues the necessary css/js for the admin area
   * @since 1.0
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
@@ -88,7 +90,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
   wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
   wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
   wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
-  _doing_it_wrong( __METHOD__, 'dont load this on every single admin page', '4.1' );
+  _doing_it_wrong( __METHOD__ . ' ' . __LINE__, 'dont load this on every single admin page', '4.1' );
   wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
   wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array(), '1.10.13', 'all' );
   wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );

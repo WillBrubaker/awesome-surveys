@@ -269,7 +269,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
    include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
   }
 
-  $this->existing_elements = array_merge( json_decode( get_post_meta( $_POST['survey_id'], 'existing_elements', true ), true ), array( $form_elements_array['options'], ) );
+  $saved_elements = ( ! empty( $_POST['existing_elements'] ) ) ? stripslashes( $_POST['existing_elements'] ) : get_post_meta( $_POST['survey_id'], 'existing_elements', true );
+  $this->existing_elements = ( ! empty( $saved_elements ) ) ? array_merge( json_decode( $saved_elements, true ), array( $form_elements_array['options'], ) ) : array( $form_elements_array['options'] );
   $form = new FormOverrides();
   $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
   $preview_form = $this->get_form_preview_html( $_POST['survey_id'] );
@@ -311,27 +312,17 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
    $arr['value'][$iterations] = $iterations;
   }
   $arr['name'] = html_entity_decode( stripslashes( sanitize_text_field( htmlentities( $arr['name'] ) ) ) );
-  if ( $arr['label'] ) {
+  if ( isset( $arr['label'] ) ) {
    foreach ( $arr['label'] as $key => $value ) {
-    $arr['label'][$key] = stripslashes( sanitize_text_field( $value ) );
+    $arr['label'][ $key ] = stripslashes( sanitize_text_field( $value ) );
    }
   }
   wp_send_json_success( json_encode( $arr ) );
  }
 
- public function parse_elements() {
-
-  $defaults = array(
-   'required' => false,
-   'rules' => array(),
-  );
-  $_POST['validation'] = wp_parse_args( ( $_POST['validation'] ) ? $_POST['validation'] : array(), $defaults );
-  var_dump( json_encode( $_POST['new_element'] ) );
- }
-
  public function update_post_content() {
   $form_args = array( 'survey_id' => $_POST['survey_id'] );
-  $this->existing_elements = json_decode( $_POST['existing_elements'], true );
+  $this->existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
   $post_content = $this->awesome_surveys_render_form( $form_args );
   wp_send_json_success( array( $post_content ) );
  }

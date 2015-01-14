@@ -3,7 +3,6 @@ jQuery('document').ready(function($) {
   if ($('#form-preview').html().length > 0) {
     previewReady($)
   }
-  $('#general-survey-options').addClass('pure-form pure-form-stacked')
 
   $('#survey-elements-buttons button').button().click(function(e) {
     e.preventDefault()
@@ -68,13 +67,6 @@ jQuery('document').ready(function($) {
     if ('delete' == action) {
       container.remove();
       delete elementsJSON[index]
-      $.post(ajaxurl, {
-        survey_id: $('#post_ID').val(),
-        existing_elements: $('#existing_elements').val(),
-        action: 'update-post-content'
-      }, function(data) {
-        $('#content').val(data.data)
-      })
     } else {
       label = $('label.control-label', $(this).closest('.single-element-edit'))
       var dynamicDialog = generateDynamicDialog(elementsJSON[index]);
@@ -214,25 +206,37 @@ jQuery('document').ready(function($) {
       getPreview($)
     }
   })
+
+  $('#existing_elements').on('change', function() {
+    $.post(ajaxurl, {
+      survey_id: $('#post_ID').val(),
+      existing_elements: $('#existing_elements').val(),
+      action: 'update-post-content'
+    }, function(data) {
+      $('#content').val(data.data)
+    })
+  })
 })
 
 function getPreview($) {
-    $('#current-element :input').validate()
-    if ($('#current-element :input').valid()) {
-      $.post(ajaxurl, $('#awesome-survey :input').serializeArray(), function(data) {
-        $('#form-preview').empty().append(data.data[0])
-        $('#post_content').empty().append(data.data[1])
-        $('#existing_elements').val(data.data[2])
-        previewReady($)
-      })
-    }
+  $('#current-element :input').validate()
+  if ($('#current-element :input').valid()) {
+    $.post(ajaxurl, $('#awesome-survey :input').serializeArray(), function(data) {
+      $('#form-preview').empty().append(data.data[0])
+      $('#content').val(data.data[1])
+      $('#existing_elements').val(data.data[2])
+      previewReady($)
+    })
   }
-  //added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
+}
+
+//added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
 function renumberButtons($) {
   var parent = $('.survey-preview form')
   $('.single-element-edit', parent).each(function() {
     $('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
   })
+  $('#existing_elements').trigger('change')
 }
 
 function previewReady($) {
@@ -256,6 +260,8 @@ function previewReady($) {
       }
     }
   })
+  $('#form-preview input').each(function() {
+    $(this).prop('disabled', true) })
   $('#form-preview-wrapper').show()
 }
 

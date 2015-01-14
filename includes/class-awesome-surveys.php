@@ -14,13 +14,6 @@ class Awesome_Surveys {
  public function __construct() {
   $this->text_domain = 'awesome-surveys';
   $this->buttons = $this->get_buttons();
-
-  $actions = array(
-   'init' => array( 'init', 10, 0 ),
-   );
-  foreach ( $actions as $action => $args ) {
-   add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
-  }
  }
 
  public function init() {
@@ -102,13 +95,13 @@ class Awesome_Surveys {
 
    $this->existing_elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
   }
-
   $required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
   $elements_count = 0;
-  if ( ! isset( $this->buttons ) ) {
+  if ( ! isset( $this->buttons ) || empty( $this->buttons ) ) {
 
    $this->buttons = $this->get_buttons();
   }
+//  error_log( "existing elements\n" . print_r( $this->existing_elements, true ) );
   $form = new FormOverrides();
   $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
 
@@ -190,7 +183,7 @@ class Awesome_Surveys {
   $form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked', 'action' => $_SERVER['REQUEST_URI'], ) );
   $form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
   $questions_count = 0;
-  $existing_elements = json_decode( get_post_meta( $args['survey_id'], 'existing_elements', true ), true );
+  $existing_elements = $this->existing_elements;
   foreach ( $existing_elements as $element ) {
    $method = $this->buttons[ $element['type'] ]['type'];
    $atts = $rules = $options = array();
@@ -234,7 +227,6 @@ class Awesome_Surveys {
   $form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
   $form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
   $form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
-  $form_output->addElement( new Element_Hidden( 'auth_method', $args['auth_method'] ) );
   $form_output->addElement( new Element_Button( __( 'Submit Response', 'awesome-surveys' ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
   return $form_output->render( true );
  }
@@ -255,8 +247,7 @@ class Awesome_Surveys {
    'required' => false,
    'rules' => array(),
   );
-
-  $form_elements_array['validation'] = wp_parse_args( ( $form_elements_array['validation'] ) ? $form_elements_array['validation'] : array(), $defaults );
+  $form_elements_array['validation'] = wp_parse_args( ( isset( $form_elements_array['validation'] ) ) ? $form_elements_array['validation'] : array(), $defaults );
   if ( isset( $form_elements_array['validation']['rules'] ) ) {
    unset( $form_elements_array['validation']['rules']['number_validation_type'] );
    foreach ( $form_elements_array['validation']['rules'] as $key => $value ) {
