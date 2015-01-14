@@ -31,8 +31,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
   * @author Will the Web Mechanic <will@willthewebmechanic.com>
   * @link http://willthewebmechanic.com
   */
- public function wwm_survey( $atts )
- {
+ public function wwm_survey( $atts ) {
 
   load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
   if ( ! isset( $atts['id'] ) ) {
@@ -40,16 +39,9 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
   }
   $atts['id'] = absint( $atts['id'] );
   $survey = get_post( $atts['id'] );
-  var_dump( $survey );
-  return $survey->post_content;
-  $surveys = get_option( 'wwm_awesome_surveys', array() );
-  if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
-   return null;
-  }
-  $auth_method = $surveys['surveys'][$atts['id']]['auth'];
-  $auth_args = array(
-   'survey_id' => $atts['id'],
-  );
+
+
+
   if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
    wp_enqueue_script( 'awesome-surveys-frontend' );
    wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
@@ -81,7 +73,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
    */
    $output = apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
   }
-  return $output;
+  return $survey->post_content;
  }
 
  /**

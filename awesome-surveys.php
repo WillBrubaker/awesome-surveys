@@ -50,7 +50,7 @@ Domain Path: /languages/
 		'awesome-surveys-ajax-actions',
 		);
 
-  global $awesome_surveys;
+		global $awesome_surveys;
 		foreach ( $includes as $include_file ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
 		}
@@ -82,10 +82,9 @@ Domain Path: /languages/
 			'add-form-element' => 'add_form_element',
 			'options-fields' => 'echo_options_fields',
 			'generate-preview' => 'generate_preview',
-			'get-preview' => 'get_preview',
 			'wwm-as-get-json' => 'get_json',
-   'parse-elements' => 'parse_elements',
-   'update-post-content' => 'update_post_content',
+			'parse-elements' => 'parse_elements',
+			'update-post-content' => 'update_post_content',
 			);
 
 		foreach ( $awesome_surveys_nopriv_ajax_actions as $action => $function ) {
@@ -102,10 +101,10 @@ Domain Path: /languages/
 		flush_rewrite_rules();
 	}
 
- $filters = array(
-  'awesome_surveys_form_preview' => array( 10, 1 ),
-  );
+	$filters = array(
+		'awesome_surveys_form_preview' => array( 10, 1 ),
+		);
 
- foreach ( $filters as $filter => $args ) {
-  add_filter( $filter, array( $awesome_surveys, $filter ), $args[0], $args[1] );
- }
+	foreach ( $filters as $filter => $args ) {
+		add_filter( $filter, array( $awesome_surveys, $filter ), $args[0], $args[1] );
+	}
