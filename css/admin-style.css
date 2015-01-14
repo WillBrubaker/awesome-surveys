@@ -4,23 +4,26 @@ button {
 #general-survey-options textarea {
   width: 100%; }
 
-#current-element .slider-wrapper {
+.slider-wrapper {
   padding: 5px;
   margin: 10px 0; }
-#current-element .slider-wrapper #slider, #current-element .slider-wrapper #edit-slider {
-  width: 100%;
-  margin-bottom: 2.5em; }
-#current-element .slider-wrapper #slider label, #current-element .slider-wrapper #edit-slider label {
+
+.slider-wrapper #slider, .slider-wrapper #edit-slider {
+  margin: 0 0.5em 2.5em; }
+
+.slider-wrapper #slider label, .slider-wrapper #edit-slider label {
   position: absolute;
   width: 20px;
   margin-top: 20px;
   margin-left: -10px;
   text-align: center;
   font-size: 1rem; }
-#current-element .slider-legend {
+
+.slider-legend {
   width: 100%;
   margin-top: 1em; }
-#current-element .slider-legend p {
+
+.slider-legend p {
   text-align: center;
   width: 43px;
   display: inline-block; }

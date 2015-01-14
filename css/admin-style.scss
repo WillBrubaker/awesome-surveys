@@ -8,13 +8,11 @@ button {
 	}
 }
 
-#current-element {
 	.slider-wrapper {
   padding: 5px;
   margin: 10px 0; }
   .slider-wrapper #slider, .slider-wrapper #edit-slider {
-    width: 100%;
-    margin-bottom: 2.5em; }
+    margin: 0 0.5em 2.5em; }
     .slider-wrapper #slider label, .slider-wrapper #edit-slider label {
       position: absolute;
       width: 20px;
@@ -30,7 +28,7 @@ button {
     text-align: center;
     width: 43px;
     display: inline-block; }
-}
+
 
 #form-preview {
 	select {

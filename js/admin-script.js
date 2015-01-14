@@ -164,10 +164,10 @@ jQuery('document').ready(function($) {
               var radios = $('[type="radio"]', dynamicDialog)
               var selectedIndex = radios.index($('[type="radio"]:checked', dynamicDialog))
               $.post(ajaxurl, {
-                'action': 'options_fields',
+                'action': 'options-fields',
                 'num_options': numOptions
               }, function(data) {
-                $('#edit-answers-holder').empty().append(data);
+                $('#edit-answers-holder').empty().append(data.data);
                 for (key in elementsJSON[index].label) {
                   $('[name="options[label][' + key + ']"]').val(elementsJSON[index].label[key])
                 }
@@ -195,6 +195,9 @@ jQuery('document').ready(function($) {
     e.preventDefault()
     reset = confirm(commonL10n.warnDelete)
     if (true == reset) {
+      $('#existing_elements').val('')
+      $('#content').val('')
+      $('#form-preview-wrapper').hide()
       $('#form-preview').empty()
     }
   })
@@ -261,7 +264,10 @@ function previewReady($) {
     }
   })
   $('#form-preview input').each(function() {
-    $(this).prop('disabled', true) })
+      if ('button' != $(this).attr('type')) {
+        $(this).prop('disabled', true)
+      }
+  })
   $('#form-preview-wrapper').show()
 }
 
