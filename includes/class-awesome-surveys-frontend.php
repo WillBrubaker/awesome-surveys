@@ -3,7 +3,7 @@
  * @package Awesome_Surveys
  *
  */
-class Awesome_Surveys_Frontend {
+class Awesome_Surveys_Frontend extends Awesome_Surveys {
 
  public $text_domain, $plugin_version;
 
@@ -36,9 +36,12 @@ class Awesome_Surveys_Frontend {
 
   load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
   if ( ! isset( $atts['id'] ) ) {
-   return null;
+   //return null;
   }
   $atts['id'] = absint( $atts['id'] );
+  $survey = get_post( $atts['id'] );
+  var_dump( $survey );
+  return $survey->post_content;
   $surveys = get_option( 'wwm_awesome_surveys', array() );
   if ( empty( $surveys ) || empty( $surveys['surveys'][$atts['id']] ) ) {
    return null;

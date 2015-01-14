@@ -1,6 +1,6 @@
 <?php
 
-class Awesome_Surveys_Ajax {
+class Awesome_Surveys_Ajax extends Awesome_Surveys {
 
  public function __construct() {
 
@@ -20,15 +20,6 @@ class Awesome_Surveys_Ajax {
    status_header( 403 );
    exit;
   }
-  $buttons = array(
-   'text' => 'Element_Textbox',
-   'email' => 'Element_Email',
-   'number' => 'Element_Number',
-   'dropdown' => 'Element_Select',
-   'radio' => 'Element_Radio',
-   'checkbox' => 'Element_Checkbox',
-   'textarea' => 'Element_Textarea',
-  );
 
   $filters = array(
    'wwm_survey_validation_elements' => array( 10, 2),
@@ -52,15 +43,6 @@ class Awesome_Surveys_Ajax {
   */
  private function element_info_inputs( $form_element = 'Element_Textbox' ) {
   $elements = array();
-  $buttons = array(
-   'text' => 'Element_Textbox',
-   'email' => 'Element_Email',
-   'number' => 'Element_Number',
-   'dropdown' => 'Element_Select',
-   'radio' => 'Element_Radio',
-   'checkbox' => 'Element_Checkbox',
-   'textarea' => 'Element_Textarea',
-  );
   /**
    * Filter hook wwm_survey_validation_elements adds elements to the validation elements array
    * $elements is an array with keys that hope to be self-explanatory (see the $defaults array below). The 'tag' key may be
@@ -78,7 +60,6 @@ class Awesome_Surveys_Ajax {
   $validation_elements = apply_filters( 'wwm_survey_validation_elements', $elements, $form_element );
   $html = '<div class="pure-form pure-form-stacked">';
   $html .= '<input type="hidden" name="action" value="generate-preview">';
-  $html .= '<input type="hidden" name="existing_elements" value="">';
   $html .= '<input type="hidden" name="options[type]" value="' . $form_element . '">';
   $html .= '<label>' . __( 'The question you are asking:', 'awesome-surveys' ) . '<br><input type="text" name="options[name]" required></label>';
   if ( ! empty( $validation_elements ) ) {
@@ -141,7 +122,7 @@ class Awesome_Surveys_Ajax {
   return $html;
  }
 
-  /**
+ /**
   * AJAX handler to generate some fields
   * for survey option inputs
   * @since 1.0
@@ -269,20 +250,7 @@ class Awesome_Surveys_Ajax {
   */
  public function generate_preview() {
 
-  $auth_method = get_post_meta( $_POST['post_id'], 'auth_method', true );
-  if ( empty( $auth_method ) ) {
-   $auth_method = 'none';
-  }
-  $form_args = array( 'survey_id' => $_POST['post_id'], 'auth_method' => $auth_method );
-  $buttons = array(
-   'text' => 'Element_Textbox',
-   'email' => 'Element_Email',
-   'number' => 'Element_Number',
-   'dropdown' => 'Element_Select',
-   'radio' => 'Element_Radio',
-   'checkbox' => 'Element_Checkbox',
-   'textarea' => 'Element_Textarea',
-   );
+  $form_args = array( 'survey_id' => $_POST['survey_id'] );
   $form_elements_array = $_POST;
   /**
    * This filter facilitates the modification of form elements
@@ -301,71 +269,19 @@ class Awesome_Surveys_Ajax {
    include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
   }
 
-  $saved_elements = get_post_meta( $_POST['post_id'], 'existing_elements', true );
+  $this->existing_elements = array_merge( json_decode( get_post_meta( $_POST['survey_id'], 'existing_elements', true ), true ), array( $form_elements_array['options'], ) );
   $form = new FormOverrides();
   $form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
-  if ( isset( $form_elements_array['existing_elements'] ) ) {
-   $element_json = json_decode( stripslashes( $form_elements_array['existing_elements'] ), true );
-  } else if ( empty( $saved_elements ) )  {
-   wp_send_json_error();
-  } else {
-   $element_json = json_decode( $saved_elements, true );
-  }
-  $required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
-  $existing_elements = ( isset( $element_json ) ) ? array_merge( $element_json, array( $form_elements_array['options'] ) ) : array( $form_elements_array['options'] );
-  $elements_count = 0;
-  $existing_elements = array_filter( $existing_elements );
-  foreach ( $existing_elements as $element ) {
-    $method = $buttons[ $element['type'] ];
-    $options = $atts = $rules = array();
-    if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
-     foreach ( $element['validation']['rules'] as $key => $value ) {
-      if ( '' != $value && ! is_null( $value ) ) {
-       $rules['data-' . $key] = $value;
-      }
-     }
-    }
-    if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
-      $options = array_merge( $options, $rules );
-    } else {
-     $atts = array_merge( $options, $rules );
-    }
-    if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
-     if ( in_array( $method, $required_is_option ) ) {
-      $options['required'] = 1;
-      $options['class'] = 'required';
-     } else {
-      $atts['required'] = 1;
-      $atts['class'] = 'required';
-     }
-    }
-    $max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
-    for ( $iterations = 0; $iterations < $max; $iterations++ ) {
-     /**
-      * Since the pfbc is being used, and it has some weird issue with values of '0', but
-      * it will work if you append :pfbc to it...not well documented, but it works!
-      */
-     $options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
-    }
-    $atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
-    $form->addElement( new Element_HTML( '<div class="single-element-edit">' ) );
-    $form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
-    $form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button></div><div class="clear"></div></div>' ) );
-    $elements_count++;
-  }
-  $preview_form = $form->render( true );
-  $post_content = awesome_surveys_render_form( $element_json, $form_args );
+  $preview_form = $this->get_form_preview_html( $_POST['survey_id'] );
+  $post_content = $this->awesome_surveys_render_form( $form_args );
   $form = new FormOverrides( 'save-survey' );
   $form->configure( array( 'class' => 'save' ) );
-  $form->addElement( new Element_Hidden( 'existing_elements', json_encode( $existing_elements ) ) );
   $form->addElement( new Element_HTML( '<hr>' ) );
   $form->addElement( new Element_Button( __( 'Reset', 'awesome-surveys' ), 'button', array( 'class' => 'button-secondary reset-button', 'name' => 'reset' ) ) );
   $save_form = $form->render( true );
-  error_log( print_r( $save_form, true ) );
   $pattern = '/<form action="[^"]+"/';
   $replacement = '<div';
   $save_form = preg_replace( $pattern, $replacement, $save_form );
-  $preview_form = preg_replace( $pattern, $replacement, $preview_form );
   $pattern = '/<\/form>/';
   $replacement = '</div>';
   $save_form = preg_replace( $pattern, $replacement, $save_form );
@@ -373,9 +289,7 @@ class Awesome_Surveys_Ajax {
   $pattern = '/method="post"/';
   $replacement = '';
   $save_form = preg_replace( $pattern, $replacement, $save_form );
-  $preview_form = preg_replace( $pattern, $replacement, $preview_form );
-  error_log( print_r( $save_form, true ) );
-  $data = array( array( $preview_form . $save_form ), array( $post_content ) );
+  $data = array( array( $preview_form . $save_form ), array( $post_content ), array( json_encode( $this->existing_elements ) ) );
   wp_send_json_success( $data );
  }
 
@@ -383,7 +297,7 @@ class Awesome_Surveys_Ajax {
   * hooked into 'wp_ajax_wwm_as_get_json' used by dynamic dialog function in admin-script.js
   *
   */
- public function wwm_as_get_json() {
+ public function get_json() {
   $defaults = array(
    'name' => null,
    'validation' => array(
@@ -403,5 +317,22 @@ class Awesome_Surveys_Ajax {
    }
   }
   wp_send_json_success( json_encode( $arr ) );
+ }
+
+ public function parse_elements() {
+
+  $defaults = array(
+   'required' => false,
+   'rules' => array(),
+  );
+  $_POST['validation'] = wp_parse_args( ( $_POST['validation'] ) ? $_POST['validation'] : array(), $defaults );
+  var_dump( json_encode( $_POST['new_element'] ) );
+ }
+
+ public function update_post_content() {
+  $form_args = array( 'survey_id' => $_POST['survey_id'] );
+  $this->existing_elements = json_decode( $_POST['existing_elements'], true );
+  $post_content = $this->awesome_surveys_render_form( $form_args );
+  wp_send_json_success( array( $post_content ) );
  }
 }
