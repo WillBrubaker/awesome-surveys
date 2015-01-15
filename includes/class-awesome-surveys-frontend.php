@@ -5,19 +5,28 @@
 	*/
 class Awesome_Surveys_Frontend extends Awesome_Surveys {
 
-	public $text_domain, $plugin_version;
+	public $text_domain;
 
-	public function __construct( $version = '1.0' ) {
-
-		$this->plugin_version = $version;
-		$this->text_domain = 'awesome-surveys';
+	public function __construct() {
+		$this->plugin_version = $this->get_version();
+		error_log( __METHOD__ . ' has version ' . $this->plugin_version );
 		add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
-		add_action( 'wp_enqueue_scripts', array( &$this, 'register_scripts' ) );
 		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
-		add_filter( 'awesome_surveys_auth_method_login', array( &$this, 'awesome_surveys_auth_method_login' ), 10, 1 );
-		add_action( 'awesome_surveys_auth_method_cookie', array( &$this, 'awesome_surveys_auth_method_cookie' ), 10, 1 );
-		add_filter( 'wwm_awesome_survey_response', array( &$this, 'wwm_awesome_survey_response_filter', ), 10, 2  );
-		add_action( 'awesome_surveys_update_cookie', array( &$this, 'awesome_surveys_update_cookie' ), 10, 1 );
+		$actions = array(
+			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
+			'awesome_surveys_auth_method_cookie' => array( 'awesome_surveys_auth_method_cookie', 10, 1 ),
+			'awesome_surveys_update_cookie' => array( 'awesome_surveys_update_cookie', 10, 1 ),
+			);
+		foreach ( $actions as $action => $args ) {
+			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
+		}
+		$filters = array(
+			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
+			'wwm_awesome_survey_response' => array( 'wwm_awesome_survey_response_filter', 10, 2 ),
+			);
+		foreach ( $filters as $filter => $args ) {
+				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
+		}
 	}
 
 	/**
@@ -34,13 +43,17 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 
 		load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 		if ( ! isset( $atts['id'] ) ) {
-			//return null;
+			return null;
 		}
 		$atts['id'] = absint( $atts['id'] );
 		$survey = get_post( $atts['id'] );
-
-
-
+		if ( is_null( $survey ) ) {
+			return null;
+		}
+		//debug
+		$auth_args = array();
+		$auth_method = 'none';
+		//debug
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 			wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
@@ -51,12 +64,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			if ( $include_css ) {
 				wp_enqueue_style( 'awesome-surveys-frontend-styles' );
 			}
-			$args = array(
-				'survey_id' => $atts['id'],
-				'name' => $surveys['surveys'][$atts['id']]['name'],
-				'auth_method' => $auth_method,
-			);
-			$output = $this->render_form( json_decode( $surveys['surveys'][$atts['id']]['form'], true ), $args );
 			/**
 				* wwm_survey action hook added in v1.4
 				* a hook so that any js/css needed by extensions can be enqueued
@@ -72,7 +79,9 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			*/
 			$output = apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
 		}
-		return $survey->post_content;
+		$nonce = wp_create_nonce( 'answer-survey' );
+		$survey_form = '<h4>' . $survey->post_title . '</h4>' . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
+		return $survey_form;
 	}
 
 	/**
@@ -159,6 +168,10 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.1' );
 		wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script' . $suffix . '.js', array( 'jquery', 'jquery-validation-plugin' ), $this->plugin_version, true );
 		wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style' . $suffix . '.css', array( 'normalize-css', 'pure-forms-css' ), $this->plugin_version, 'all' );
+
+		if ( is_singular( 'awesome-surveys' ) ) {
+			wp_enqueue_style( 'awesome-surveys-frontend-styles' );
+		}
 	}
 
 	/**

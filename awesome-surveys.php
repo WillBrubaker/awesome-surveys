@@ -98,6 +98,7 @@ Domain Path: /languages/
 	register_activation_hook( __FILE__, 'wwm_as_plugin_activation' );
 
 	function wwm_as_plugin_activation() {
+		$awesome_surveys->register_post_type();
 		flush_rewrite_rules();
 	}
 

@@ -6,7 +6,7 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 ?>
 <div id="awesome-survey">
  <input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo $existing_elements; ?>'>
- <textarea id="content" name="content"><?php echo $post->post_content; ?></textarea>
+ <textarea id="content" name="content" style="display:none;"><?php echo $post->post_content; ?></textarea>
   <?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
  <input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
  <div id="survey-elements-buttons">

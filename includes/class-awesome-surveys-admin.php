@@ -5,9 +5,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	public function __construct() {
 
 		$actions = array(
-			'admin_menu' => array( 'admin_menu', 10, 1 ),
+			'admin_menu' => array( 'admin_menu', 10, 0 ),
 			'save_post' => array( 'save_post', 10, 2 ),
-			'admin_enqueue_scripts' => array( 'admin_enqueue_scripts', 10, 1 ),
+			'admin_enqueue_scripts' => array( 'admin_enqueue_scripts', 10, 0 ),
 			'admin_init' => array( 'init', 10, 0 ),
 			);
 
@@ -25,26 +25,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		foreach ( $filters as $key => $filter ) {
 			add_filter( $key, array( $this, $filter[0] ), $filter[1], $filter[2] );
 		}
-		$this->register_post_type();
 	}
 
 	public function admin_menu() {
-	}
-
-	public function survey_editor() {
-
-		add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
-		add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
-	}
-
-	public function survey_builder() {
-		wp_enqueue_script( 'awesome-surveys-admin-script' );
-		wp_enqueue_style( 'awesome-surveys-admin-style' );
-		include_once( 'views/html-survey-builder.php' );
-	}
-
-	public function general_survey_options() {
-		include_once( 'views/html-survey-options-general.php' );
 	}
 
 	public function save_post( $post_id, $post ) {
@@ -86,13 +69,16 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$args = wp_parse_args( $args, $defaults );
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
-		wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
-		wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
-		_doing_it_wrong( __METHOD__ . ' ' . __LINE__, 'dont load this on every single admin page', '4.1' );
+
 		wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
 		wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array(), '1.10.13', 'all' );
 		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
-		wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->wwm_plugin_values['version'], 'all' );
 
+		$screen = get_current_screen();
+		if ( 'awesome-surveys' === $screen->id ) {
+			wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
+			wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
+			wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->wwm_plugin_values['version'], 'all' );
+		}
 	}
 }

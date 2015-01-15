@@ -5,18 +5,26 @@ class Awesome_Surveys {
 	protected $wwm_plugin_values = array(
 		'name' => 'Awesome_Surveys',
 		'dbversion' => '1.1',
-		'version' => '1.6.3',
+		'version' => '2.0-pre',
 	);
 
 	protected $buttons;
-	public $text_domain, $existing_elements;
-
+	public $text_domain, $existing_elements, $plugin_version;
 	public function __construct() {
+		$this->plugin_version = $this->get_version();
 		$this->text_domain = 'awesome-surveys';
 		$this->buttons = $this->get_buttons();
+		$actions = array(
+			'init' => array( 'init', 10, 0 ),
+			);
+		foreach ( $actions as $action => $args ) {
+			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
+		}
+		add_filter( 'the_content', array( $this, 'the_content' ), 10, 1 );
 	}
 
 	public function init() {
+		error_log( __METHOD__ . ' has version ' . $this->plugin_version );
 		$this->register_post_type();
 	}
 
@@ -58,16 +66,18 @@ class Awesome_Surveys {
 		$args = array(
 			'label' => _( 'Awesome Surveys', 'awesome-surveys' ),
 			'labels' => array(
-				'name' => _( 'Surveys', 'awesome-surveys' ),
-				'singular_name' => _( 'Survey', 'awesome-surveys' ),
-				'menu_name' => _( 'My Surveys', 'awesome-surveys' ),
-				'name_admin_bar' => _( 'Survey', 'awesome-surveys' ),
-				'add_new' => _( 'New Survey', 'awesome-surveys' ),
-				'new_item' => _( 'New Survey', 'awesome-surveys' ),
-				'add_new_item' => _( 'Add New Survey', 'awesome-surveys' ),
+				'name' => __( 'Surveys', 'awesome-surveys' ),
+				'singular_name' => __( 'Survey', 'awesome-surveys' ),
+				'menu_name' => __( 'My Surveys', 'awesome-surveys' ),
+				'name_admin_bar' => __( 'Survey', 'awesome-surveys' ),
+				'add_new' => __( 'New Survey', 'awesome-surveys' ),
+				'new_item' => __( 'New Survey', 'awesome-surveys' ),
+				'add_new_item' => __( 'Add New Survey', 'awesome-surveys' ),
+				'edit_item' => __( 'Edit Survey', 'awesome-surveys' ),
 				),
-			'description' => _( 'Surveys for your site', 'awesome-surveys' ),
+			'description' => __( 'Surveys for your site', 'awesome-surveys' ),
 			'public' => true,
+			'capability_type' => 'post',
 			'exclude_from_search' => true,
 			'publicly_queryable' => true,
 			'show_ui' => true,
@@ -78,9 +88,25 @@ class Awesome_Surveys {
 				'title',
 				),
 			'register_meta_box_cb' => array( $this, 'survey_editor' ),
-			'rewrite' => false,
+			'rewrite' => true,
 			);
 		register_post_type( 'awesome-surveys', $args );
+	}
+
+	public function survey_editor() {
+
+		add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
+		add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
+	}
+
+	public function survey_builder() {
+		wp_enqueue_script( 'awesome-surveys-admin-script' );
+		wp_enqueue_style( 'awesome-surveys-admin-style' );
+		include_once( 'views/html-survey-builder.php' );
+	}
+
+	public function general_survey_options() {
+		include_once( 'views/html-survey-options-general.php' );
 	}
 
 	protected function get_form_preview_html( $post_id = 0 ) {
@@ -158,7 +184,7 @@ class Awesome_Surveys {
 		return $output;
 	}
 
-		/**
+	/**
 		* Builds the survey form from the stored options in the database.
 		* @param  array $form an array of form elements - this array was stored in the db when the survey was created
 		* @param  array $args an array of arguments, includes the survey id and the survey name
@@ -176,7 +202,7 @@ class Awesome_Surveys {
 			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
 			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
 		}
-		$nonce = wp_create_nonce( 'answer-survey' );
+		$nonce = 'answer_survey_nonce';
 		$has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
 		$form_output = new FormOverrides();
 		$form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked', 'action' => $_SERVER['REQUEST_URI'], ) );
@@ -256,5 +282,17 @@ class Awesome_Surveys {
 			}
 		}
 		return $form_elements_array;
+	}
+
+	public function the_content( $content ) {
+		if ( is_singular( 'awesome-survey' ) ) {
+			$nonce = wp_create_nonce( 'answer-survey' );
+			$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
+		}
+		return $content;
+	}
+
+	protected function get_version() {
+		return '2.0-pre';
 	}
 }
