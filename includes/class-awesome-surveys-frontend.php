@@ -5,11 +5,8 @@
 	*/
 class Awesome_Surveys_Frontend extends Awesome_Surveys {
 
-	public $text_domain;
-
 	public function __construct() {
-		$this->plugin_version = $this->get_version();
-		error_log( __METHOD__ . ' has version ' . $this->plugin_version );
+		parent::__construct();
 		add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
 		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
 		$actions = array(

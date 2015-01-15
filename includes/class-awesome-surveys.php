@@ -2,17 +2,12 @@
 
 class Awesome_Surveys {
 
-	protected $wwm_plugin_values = array(
-		'name' => 'Awesome_Surveys',
-		'dbversion' => '1.1',
-		'version' => '2.0-pre',
-	);
+	protected $buttons, $text_domain, $existing_elements, $plugin_version, $dbversion;
 
-	protected $buttons;
-	public $text_domain, $existing_elements, $plugin_version;
 	public function __construct() {
-		$this->plugin_version = $this->get_version();
+		$this->plugin_version = '2.0-pre';
 		$this->text_domain = 'awesome-surveys';
+		$this->dbversion = '1.1';
 		$this->buttons = $this->get_buttons();
 		$actions = array(
 			'init' => array( 'init', 10, 0 ),
