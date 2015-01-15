@@ -24,7 +24,6 @@ class Awesome_Surveys {
 	}
 
 	public function init() {
-		error_log( __METHOD__ . ' has version ' . $this->plugin_version );
 		$this->register_post_type();
 	}
 
@@ -82,7 +81,7 @@ class Awesome_Surveys {
 			'publicly_queryable' => true,
 			'show_ui' => true,
 			'show_in_nav_menus' => false,
-			'show_in_menu' => true,
+			'show_in_menu' => false,
 			'show_in_admin_bar' => false,
 			'supports' => array(
 				'title',
