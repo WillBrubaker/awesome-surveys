@@ -76,11 +76,11 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
 
 		wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
-		wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array( 'jquery-ui-lightness' ), '1.10.13', 'all' );
+		wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array( 'wp-admin' ), '1.10.13', 'all' );
 		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
 
-		wp_register_script( $this->text_domain . '-options-script', WWM_AWESOME_SURVEYS_URL . '/js/options' . $suffix . '.js', array( 'postbox' ), $this->plugin_version, true );
-		wp_register_style( $this->text_domain . '-options-style', WWM_AWESOME_SURVEYS_URL . '/css/options' . $suffix . '.css', array(), $this->plugin_version, 'all' );
+		wp_register_script( $this->text_domain . '-options-script', WWM_AWESOME_SURVEYS_URL . '/js/options' . $suffix . '.js', array( 'jquery', 'jquery-ui-accordion', 'postbox' ), $this->plugin_version, true );
+		wp_register_style( $this->text_domain . '-options-style', WWM_AWESOME_SURVEYS_URL . '/css/options' . $suffix . '.css', array( 'pure-forms-css' ), $this->plugin_version, 'all' );
 		$screen = get_current_screen();
 		if ( 'awesome-surveys' === $screen->id ) {
 			wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
@@ -172,13 +172,21 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	public function plugin_options() {
+		include_once( WWM_AWESOME_SURVEYS_PATH . '/options.php' );
 		add_meta_box( 'awesome-surveys-options', __( 'Awesome Surveys Options', 'awesome-surveys' ), array( $this, 'surveys_options' ), $this->page_hook, 'normal', 'core' );
-		echo '<div class="wrap">';
+		add_meta_box( 'awesome-surveys-email-options', __( 'Email Options', 'awesome-surveys' ), array( $this, 'email_options' ), $this->page_hook, 'normal', 'core' );
+		echo '<div id="poststuff" class="wrap">';
+		echo '<form action="' . $_SERVER['REQUEST_URI'] . '" id="surveys-options" method="post" class="form-horizontal">';
 		do_meta_boxes( $this->page_hook, 'normal', $this );
+		echo '</form>';
 		echo '</div>';
 	}
 
 	public function surveys_options() {
 		include_once( 'views/html-surveys-options.php' );
+	}
+
+	public function email_options() {
+		include_once( 'views/html-surveys-options-emails.php' );
 	}
 }
