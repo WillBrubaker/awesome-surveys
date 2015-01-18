@@ -1,6 +1,6 @@
 jQuery('document').ready(function($) {
 
-  if ($('#form-preview').html().length > 0) {
+  if (typeof $('#form-preview').html() != 'undefined' && $('#form-preview').html().length > 0) {
     previewReady($)
   }
 

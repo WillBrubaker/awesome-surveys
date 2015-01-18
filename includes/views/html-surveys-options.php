@@ -16,9 +16,9 @@
     <?php _e( 'Use included css?', 'awesome-surveys' ); ?></label>
    <div class="controls">
     <label class="radio inline">
-     <input id="styling-options-element-1-0" name="general_options[include_css]" value="1" <?php checked( 1 == $include ); ?> type="radio"><?php _e( 'Yes', 'awesome-surveys' ); ?></label>
+     <input id="styling-options-element-1-0" name="options[general_options][include_css]" value="1" <?php checked( 1 == $include ); ?> type="radio"><?php _e( 'Yes', 'awesome-surveys' ); ?></label>
     <label class="radio inline">
-     <input id="styling-options-element-1-1" name="general_options[include_css]" value="0" <?php checked( 0 == $include ); ?> type="radio"><?php _e( 'No', 'awesome-surveys' ); ?></label>
+     <input id="styling-options-element-1-1" name="options[general_options][include_css]" value="0" <?php checked( 0 == $include ); ?> type="radio"><?php _e( 'No', 'awesome-surveys' ); ?></label>
    </div>
   </div>
   <input name="action" value="update_styling_options" id="styling-options-element-2" type="hidden">

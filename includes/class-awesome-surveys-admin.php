@@ -3,9 +3,7 @@
 class Awesome_Surveys_Admin extends Awesome_Surveys {
 
 	protected $page_hook, $page_title, $menu_title, $menu_slug;
-
 	public function __construct() {
-
 		parent::__construct();
 		$this->page_title = __( 'Awesome Surveys Options', 'awesome-surveys' );
 		$this->menu_title = __( 'Survey Options', 'awesome-surveys' );
@@ -24,7 +22,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		}
 
 		$filters = array(
-			'survey_auth_options' => array( 'default_auth_methods', 10, 1 ),
+			//debugi dont think so...'survey_auth_options' => array( 'default_auth_methods', 10, 1 ),
+			'post_row_actions' => array( 'post_row_actions', 10, 2 ),
 			);
 
 		foreach ( $actions as $key => $action ) {
@@ -54,11 +53,11 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		* @param  array  $options associative array of authentication method names
 		* @return array  associative array of authentication method names
 		*/
-	public function default_auth_methods( $options = array() ) {
+	/*debugpublic function default_auth_methods( $options = array() ) {
 
 		$options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
 		return $options;
-	}
+	}*/
 
 	/**
 		* enqueues the necessary css/js for the admin area
@@ -80,12 +79,18 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
 
 		wp_register_script( $this->text_domain . '-options-script', WWM_AWESOME_SURVEYS_URL . '/js/options' . $suffix . '.js', array( 'jquery', 'jquery-ui-accordion', 'postbox' ), $this->plugin_version, true );
+		wp_register_script( $this->text_domain . '-view-results', WWM_AWESOME_SURVEYS_URL . '/js/results' . $suffix . '.js', array( 'jquery', 'postbox', 'jquery-ui-accordion' ), $this->plugin_version, true );
 		wp_register_style( $this->text_domain . '-options-style', WWM_AWESOME_SURVEYS_URL . '/css/options' . $suffix . '.css', array( 'pure-forms-css' ), $this->plugin_version, 'all' );
+		wp_register_style( $this->text_domain . '-results-style', WWM_AWESOME_SURVEYS_URL . '/css/results' . $suffix . '.css', array( 'pure-forms-css' ), $this->plugin_version, 'all' );
 		$screen = get_current_screen();
 		if ( 'awesome-surveys' === $screen->id ) {
-			wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->wwm_plugin_values['version'], true );
+			wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->plugin_version, true );
 			wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
-			wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->wwm_plugin_values['version'], 'all' );
+			wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->plugin_version, 'all' );
+			if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
+				wp_enqueue_script( $this->text_domain . '-view-results' );
+				wp_enqueue_style( $this->text_domain . '-results-style' );
+			}
 		}
 	}
 
@@ -188,5 +193,13 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 
 	public function email_options() {
 		include_once( 'views/html-surveys-options-emails.php' );
+	}
+
+	public function post_row_actions( $actions, $post ) {
+		if ( 'awesome-surveys' === $post->post_type ) {
+			$edit_post_link = get_edit_post_link( $post->ID, true );
+			$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
+		}
+		return $actions;
 	}
 }

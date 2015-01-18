@@ -3,6 +3,7 @@
 class Awesome_Surveys_Ajax extends Awesome_Surveys {
 
 	public function __construct() {
+		parent::__construct();
 
 		$filters = array(
 			'survey_validation_elements' => array( 10, 2 ),
@@ -325,5 +326,113 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$this->existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
 		$post_content = $this->awesome_surveys_render_form( $form_args );
 		wp_send_json_success( array( $post_content ) );
+	}
+
+	/**
+		* Ajax handler to process the survey form
+		* @since 1.0
+		* @author Will the Web Mechanic <will@willthewebmechanic.com>
+		* @link http://willthewebmechanic.com
+		*/
+	public function process_response() {
+
+		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
+			status_header( 403 );
+			exit;
+		}
+		$survey_id = absint( $_POST['survey_id'] );
+		$post = get_post( $survey_id, 'OBJECT', 'display' );
+		$saved_answers = get_post_meta( $survey_id, '_response', false );
+		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
+		$responses = array();
+		//debugerror_log( print_r( $existing_elements, true ) );
+		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
+		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
+			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
+			wp_send_json_error( $data );
+			exit;
+		}
+		do_action( 'wwm_as_before_save_responses', $survey_id );
+		$num_responses = absint( get_post_meta( $survey_id, 'num_responses', true ) ) + 1;
+		//$num_responses = ( empty( $num_responses ) ) ? 1 : absint( $num_responses + 1 );
+		if ( 'login' === $this->auth_methods[ $auth_type ]['name'] ) {
+			$respondent_key = get_current_user_id();
+		} else {
+			$respondent_key = $num_responses;
+		}
+
+		foreach ( $existing_elements as $key => $question ) {
+			$type = $question['type'];
+			if ( 'checkbox' === $type && isset( $_POST['question'][ $key ] ) ) {//the answers are an array
+				$radio_answers = array();
+				foreach ( $_POST['question'][ $key ] as $response ) {
+					$radio_answers[] = absint( $response );
+				}
+				$responses[ $respondent_key ][ $key ][] = $radio_answers;
+			} elseif( isset( $_POST['question'][ $key ] ) ) {
+				$responses[ $respondent_key ][ $key ][] = $this->answer_sanitizer( $_POST['question'][ $key ], $this->buttons[ $question['type'] ]['type'] );
+			}
+		}
+		if ( ! empty( $responses ) ) {
+			add_post_meta( $survey_id, '_response', $responses, false );
+			update_post_meta( $survey_id, 'num_responses', $num_responses );
+		}
+		$data = 'this is a debug success completion notice';
+		wp_send_json_error( array( $data ) );
+
+		//		if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
+					/**
+						* A quirk of PFBC is that checkbox arrays are unkeyed
+						* php doesn't like that so give 'em keys I say
+						*/
+					$arr = array_values( $_POST['question'][$key] );
+					foreach ( $arr as $answerkey ) {
+						if ( ! array_key_exists( $answerkey, $form[ $key ]['value'] ) ) {
+							status_header( 400 );
+							exit;
+						}
+						$response['answers'][$answerkey][] = $num_responses;
+					}
+		//		} elseif ( isset( $_POST['question'][$key] ) ) {
+					if ( ! array_key_exists( $_POST['question'][ $key ], $form[ $key ]['value'] ) ) {
+						status_header( 400 );
+						exit;
+					}
+					$response['answers'][$_POST['question'][$key]][] = $num_responses;
+		//		}
+		//	} else {
+		//		$response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? $this->wwm_filter_survey_answer_filter( $_POST['question'][$key], $form[$key]['type'] ) : null;
+		//	}
+		//	$responses[$key] = $response;
+		//}
+		//if ( ! empty( $responses ) ) {
+		//	$survey['responses'] = $responses;
+		//	$survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
+		//	$surveys['surveys'][$_POST['survey_id']] = $survey;
+		//	$action_args = array(
+		//		'survey_id' => $_POST['survey_id'],
+		//		'survey' => $survey,
+		//	);
+		//	do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
+		//} else {
+				$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (response array empty?) at ' . date( 'Y-m-d H:i:s' ) );
+				wp_send_json_error( $data );
+		//}
+		//if ( ! empty( $surveys ) && ! empty( $survey ) ) {
+		//	update_option( 'wwm_awesome_surveys', $surveys );
+		//	do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
+		//	$form_id = sanitize_title( stripslashes( $survey['name'] ) );
+		//	$thank_you = stripslashes( $survey['thank_you'] );
+		/*
+			Feature request - 'Can I redirect to some page after survey submission?'
+			@see https://gist.github.com/WillBrubaker/57157ee587a9d580ddef
+			*/
+		$url = esc_url( apply_filters( 'after_awesome_survey_response_processed', null, array( 'survey_id' => $_POST['survey_id'], 'survey' => $survey, 'responses' => $_POST['question'], ) ) );
+		wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you, 'url' => $url ) );
+		exit;
+		//} else {
+			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
+			wp_send_json_error( $data );
+	//	}
 	}
 }

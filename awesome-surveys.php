@@ -76,7 +76,7 @@ Domain Path: /languages/
 		}
 
 		$awesome_surveys_nopriv_ajax_actions = array(
-
+				'answer-survey' => 'process_response',
 			);
 		$awesome_surveys_ajax_actions = array(
 			'add-form-element' => 'add_form_element',

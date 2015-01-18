@@ -43,7 +43,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			return null;
 		}
 		$atts['id'] = absint( $atts['id'] );
-		$survey = get_post( $atts['id'] );
+		$survey = get_post( $atts['id'], 'OBJECT', 'display' );
 		if ( is_null( $survey ) ) {
 			return null;
 		}
@@ -53,7 +53,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		//debug
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
-			wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
 			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
 				add_action( 'wp_footer', array( &$this, 'validation_messages' ), 90, 0 );
 			}
@@ -81,75 +80,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		return $survey_form;
 	}
 
-	/**
-		* Builds the survey form from the stored options in the database.
-		* @param  array $form an array of form elements - this array was stored in the db when the survey was created
-		* @param  array $args an array of arguments, includes the survey id and the survey name
-		* @return string an html form
-		* @since  1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		*/
-	private function render_form( $form = array(), $args = array() ) {
-
-		if ( ! class_exists( 'Form' ) ) {
-			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
-			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
-		}
-		$nonce = wp_create_nonce( 'answer-survey' );
-		$has_options = array( 'Element_Select', 'Element_Checkbox', 'Element_Radio' );
-		$form_output = new FormOverrides( sanitize_title( stripslashes( $args['name'] ) ) );
-		$form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked', 'action' => $_SERVER['REQUEST_URI'], ) );
-		$form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
-		$form_output->addElement( new Element_HTML( '<p>' . stripcslashes( stripslashes( $args['name'] ) ) . '</p>' ) );
-		$questions_count = 0;
-		foreach ( $form as $element ) {
-			$method = $element['type'];
-			$atts = $rules = $options = array();
-			if ( 'Element_Select' == $method ) {
-				$options[''] = __( 'make a selection...', $this->text_domain );
-			}
-			if ( isset( $element['validation']['rules'] ) ) {
-				foreach ( $element['validation']['rules'] as $key => $value ) {
-					if ( '' != $value ) {
-						$rules['data-rule-' . $key] = $value;
-					}
-				}
-			}
-			if ( in_array( $method, $has_options ) ) {
-				$atts = array_merge( $atts, $rules );
-				if ( isset( $element['default'] ) ) {
-					$atts['value'] = $element['default'];
-				}
-				if ( isset( $element['validation']['required'] ) && false != $element['validation']['required'] ) {
-					$atts['required'] = 'required';
-				}
-				foreach ( $element['value'] as $key => $value ) {
-					/**
-						* append :pfbc to the key so that pfbc doesn't freak out
-						* about numerically keyed arrays.
-						*/
-					$options[$value . ':pfbc'] = stripslashes( $element['label'][$key] );
-				}
-			} else {
-				$options = array_merge( $options, $rules );
-				if ( isset( $element['default'] ) ) {
-					$options['value'] = $element['default'];
-				}
-				if ( isset( $element['validation']['required'] ) && false != $element['validation']['required'] ) {
-					$options['required'] = 'required';
-				}
-			}
-			$form_output->addElement( new $method( stripslashes( $element['name'] ), 'question[' . $questions_count . ']', $options, $atts ) );
-			$questions_count++;
-		}
-		$form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
-		$form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
-		$form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
-		$form_output->addElement( new Element_Hidden( 'auth_method', $args['auth_method'] ) );
-		$form_output->addElement( new Element_Button( __( 'Submit Response', $this->text_domain ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
-		return $form_output->render( true );
-	}
 
 	/**
 		* registers necessary styles & scripts for later use
@@ -165,96 +95,10 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.1' );
 		wp_register_script( 'awesome-surveys-frontend', WWM_AWESOME_SURVEYS_URL .'/js/script' . $suffix . '.js', array( 'jquery', 'jquery-validation-plugin' ), $this->plugin_version, true );
 		wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style' . $suffix . '.css', array( 'normalize-css', 'pure-forms-css' ), $this->plugin_version, 'all' );
-
+		wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), ) );
 		if ( is_singular( 'awesome-surveys' ) ) {
 			wp_enqueue_style( 'awesome-surveys-frontend-styles' );
-		}
-	}
-
-	/**
-		* Ajax handler to process the survey form
-		* @since 1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		*/
-	public function process_response() {
-
-		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
-			status_header( 403 );
-			exit;
-		}
-		$surveys = get_option( 'wwm_awesome_surveys', array() );
-		$survey = $surveys['surveys'][$_POST['survey_id']];
-		if ( empty( $surveys ) || empty( $survey ) ) {
-			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
-			wp_send_json_error( $data );
-			exit;
-		}
-		do_action( 'wwm_as_before_save_responses', $survey );
-		$num_responses = ( isset( $survey['num_responses'] ) ) ? absint( $survey['num_responses'] + 1 ) : 0;
-		$survey['num_responses'] = $num_responses;
-		$form = json_decode( $survey['form'], true );
-		$original_responses = $responses = $survey['responses'];
-
-		foreach ( $responses as $key => $response ) {
-			if ( 1 == $response['has_options'] ) {
-				if ( '' == $_POST['question'][$key] ) {
-					continue;
-				}
-
-				if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
-					/**
-						* A quirk of PFBC is that checkbox arrays are unkeyed
-						* php doesn't like that so give 'em keys I say
-						*/
-					$arr = array_values( $_POST['question'][$key] );
-					foreach ( $arr as $answerkey ) {
-						if ( ! array_key_exists( $answerkey, $form[ $key ]['value'] ) ) {
-							status_header( 400 );
-							exit;
-						}
-						$response['answers'][$answerkey][] = $num_responses;
-					}
-				} elseif ( isset( $_POST['question'][$key] ) ) {
-					if ( ! array_key_exists( $_POST['question'][ $key ], $form[ $key ]['value'] ) ) {
-						status_header( 400 );
-						exit;
-					}
-					$response['answers'][$_POST['question'][$key]][] = $num_responses;
-				}
-			} else {
-				$response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? $this->wwm_filter_survey_answer_filter( $_POST['question'][$key], $form[$key]['type'] ) : null;
-			}
-			$responses[$key] = $response;
-		}
-		if ( ! empty( $responses ) ) {
-			$survey['responses'] = $responses;
-			$survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
-			$surveys['surveys'][$_POST['survey_id']] = $survey;
-			$action_args = array(
-				'survey_id' => $_POST['survey_id'],
-				'survey' => $survey,
-			);
-			do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
-		} else {
-				$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (response array empty?) at ' . date( 'Y-m-d H:i:s' ) );
-				wp_send_json_error( $data );
-		}
-		if ( ! empty( $surveys ) && ! empty( $survey ) ) {
-			update_option( 'wwm_awesome_surveys', $surveys );
-			do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
-			$form_id = sanitize_title( stripslashes( $survey['name'] ) );
-			$thank_you = stripslashes( $survey['thank_you'] );
-		/*
-			Feature request - 'Can I redirect to some page after survey submission?'
-			@see https://gist.github.com/WillBrubaker/57157ee587a9d580ddef
-			*/
-		$url = esc_url( apply_filters( 'after_awesome_survey_response_processed', null, array( 'survey_id' => $_POST['survey_id'], 'survey' => $survey, 'responses' => $_POST['question'], ) ) );
-		wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you, 'url' => $url ) );
-		exit;
-		} else {
-			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
-			wp_send_json_error( $data );
+			wp_enqueue_script( 'awesome-surveys-frontend' );
 		}
 	}
 
@@ -348,30 +192,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		return $survey;
 	}
 
-	/**
-		* Sanitizes survey form inputs before storing in the database
-		* @since  1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		* @param  mixed $input_value the value that was input into the form field
-		* @param  string $type a descriptor of what type data the form field is expecting (uses PFBC element types)
-		* @return mixed  $input_value sanitized value that aims to be safe for db storage.
-		*/
-	public function wwm_filter_survey_answer_filter( $input_value, $type ) {
-
-		$input_value = ( '' == $input_value ) ? null : $input_value;
-		$has_options = array( 'Element_Checkbox', 'Element_Radio', 'Element_Select' );
-		if ( 'Element_Textbox' == $type || 'Element_Textarea' == $type && ! is_null( $input_value ) ) {
-				$input_value = sanitize_text_field( $input_value );
-		} elseif ( 'Element_Number' == $type && ! is_null( $input_value ) ) {
-			$input_value = intval( $input_value );
-		} elseif ( 'Element_Email' == $type && ! is_null( $input_value ) ) {
-			$input_value = sanitize_email( $input_value );
-		} elseif ( in_array( $type,  $has_options ) ) {//This should cover radio/checkbox & select
-			$input_value = absint( $input_value );
-		}
-		return $input_value;
-	}
 
 	/**
 		* Attempts to output language localized validation messages if the localized

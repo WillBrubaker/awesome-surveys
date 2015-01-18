@@ -1,0 +1,11 @@
+span.italics {
+	font-style: italic;
+}
+
+span.answer, ul.answers {
+	margin-left: .5em;
+	li {
+		margin-left: 1em;
+		list-style: disc;
+	}
+}

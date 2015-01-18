@@ -3,12 +3,15 @@
 class Awesome_Surveys {
 
 	protected $buttons, $text_domain, $existing_elements, $plugin_version, $dbversion;
+	public $options;
 
 	public function __construct() {
 		$this->plugin_version = '2.0-pre';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.1';
 		$this->buttons = $this->get_buttons();
+		$this->options = $this->get_options();
+		$this->auth_methods = $this->auth_methods();
 		$actions = array(
 			'init' => array( 'init', 10, 0 ),
 			);
@@ -88,11 +91,47 @@ class Awesome_Surveys {
 	}
 
 	public function survey_editor() {
-
-		add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
-		add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
+		if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
+			$post_id = absint( $_GET['post'] );
+			remove_post_type_support( 'awesome-surveys', 'title' );
+			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
+			add_meta_box( 'survey-results', __( 'Survey Results For', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
+			$results = get_post_meta( $post_id, '_response', false );
+			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
+			foreach ( $results as $respondent_key => $answers ) {
+				$number = $respondent_key + 1;
+				add_meta_box( 'respondent-' . $respondent_key, __( 'Results for user ', 'awesome-surveys' ) . $number, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
+			}
+		} else {
+			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
+			add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
+		}
 	}
 
+	public function answers_by_respondent( $post, $args = array() ) {
+		$questions = $args['args'][1];
+		$answers = $args['args'][0][ $args['args'][2] ];
+		foreach ( $questions as $key => $question ) {
+			$has_options = array( 'dropdown', 'radio', 'checkbox' );
+			$label = $question['name'];
+			if ( in_array( $question['type'], $has_options ) ) {
+				if ( isset( $answers[ $key ][0] ) && is_array( $answers[ $key ][0] ) ) {
+					$response = '<ul class="answers">' . __( 'Answers', 'awesome-surveys' ) . "\n";
+					foreach ( $answers[ $key ][0] as $answer_key => $answer_value ) {
+						$response .= '<li>' . $question['label'][ $answer_value ] . '</li>' . "\n";
+					}
+					$response .= '</ul>' . "\n";
+				} else {
+					$response = ( isset( $question['label'][ $answers[ $key ][0] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>' : null;
+				}
+			} else {
+				$response = ( isset( $answers[ $key ][0] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ][0] . '</span>' : null;
+			}
+			$response = ( !empty( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
+			echo '<p><span class="italics">' . __( 'Question', 'awesome-surveys' ). ': ' . $label . '</span><br>' . $response . "</p>\n";
+		}
+
+	}
 	public function survey_builder() {
 		wp_enqueue_script( 'awesome-surveys-admin-script' );
 		wp_enqueue_style( 'awesome-surveys-admin-style' );
@@ -101,6 +140,10 @@ class Awesome_Surveys {
 
 	public function general_survey_options() {
 		include_once( 'views/html-survey-options-general.php' );
+	}
+
+	public function survey_results() {
+		include_once( 'views/html-survey-results.php' );
 	}
 
 	protected function get_form_preview_html( $post_id = 0 ) {
@@ -245,7 +288,7 @@ class Awesome_Surveys {
 		}
 		$form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
 		$form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
-		$form_output->addElement( new Element_Hidden( 'action', 'answer_survey' ) );
+		$form_output->addElement( new Element_Hidden( 'action', 'answer-survey' ) );
 		$form_output->addElement( new Element_Button( __( 'Submit Response', 'awesome-surveys' ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
 		return $form_output->render( true );
 	}
@@ -279,14 +322,80 @@ class Awesome_Surveys {
 	}
 
 	public function the_content( $content ) {
-		if ( is_singular( 'awesome-survey' ) ) {
+		global $post;
+		if ( is_singular( 'awesome-surveys' ) ) {
 			$nonce = wp_create_nonce( 'answer-survey' );
 			$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
 		}
 		return $content;
 	}
 
-	protected function get_version() {
-		return '2.0-pre';
+	private function get_options() {
+		return array(
+		'general_options' => array(
+			'include_css' => 1,
+			),
+		'email_options' => array(
+			'enable_emails' => 0,
+			'enable_respondent_email' => 0,
+			'email_subject' => __( 'Thank you for your response', 'awesome-surveys' ),
+			'mail_to' => get_option( 'admin_email', '' ),
+			'respondent_email_message' => __( 'Thank you for your response to a survey', 'awesome-surveys' ),
+			)
+		);
+	}
+
+	/**
+		* provides the default array of survey authentication methods
+		* @return array  indexed array of authentication methods, each of which is an array
+		* with a name and a label.
+		*/
+	public function auth_methods() {
+
+		/*
+		survey_auth_options filter
+		add your own auth method but also know that you will need to
+		add a handler for your auth method as well.
+		 */
+		return apply_filters( 'survey_auth_options', array(
+			array(
+				'name' => 'none',
+				'label' => __( 'None', 'awesome-surveys' ),
+				),
+			array(
+				'name' => 'login',
+				'label' => __( 'User must be logged in', 'awesome-surveys' ),
+				),
+			array(
+				'name' => 'cookie',
+				'label' => __( 'Cookie based', 'awesome-surveys' ),
+				),
+			)
+		);
+	}
+
+	/**
+		* Sanitizes survey form inputs before storing in the database
+		* @since  1.0
+		* @author Will the Web Mechanic <will@willthewebmechanic.com>
+		* @link http://willthewebmechanic.com
+		* @param  mixed $input_value the value that was input into the form field
+		* @param  string $type a descriptor of what type data the form field is expecting (uses PFBC element types)
+		* @return mixed  $input_value sanitized value that aims to be safe for db storage.
+		*/
+	public function answer_sanitizer( $input_value, $type ) {
+
+		$input_value = ( '' == $input_value ) ? null : $input_value;
+		$has_options = array( 'Element_Checkbox', 'Element_Radio', 'Element_Select' );
+		if ( 'Element_Textbox' == $type || 'Element_Textarea' == $type && ! is_null( $input_value ) ) {
+				$input_value = sanitize_text_field( $input_value );
+		} elseif ( 'Element_Number' == $type && ! is_null( $input_value ) ) {
+			$input_value = intval( $input_value );
+		} elseif ( 'Element_Email' == $type && ! is_null( $input_value ) ) {
+			$input_value = sanitize_email( $input_value );
+		} elseif ( in_array( $type,  $has_options ) ) {//This should cover radio/checkbox & select
+			$input_value = absint( $input_value );
+		}
+		return $input_value;
 	}
 }
