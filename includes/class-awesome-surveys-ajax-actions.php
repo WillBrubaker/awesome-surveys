@@ -369,7 +369,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 					$radio_answers[] = absint( $response );
 				}
 				$responses[ $respondent_key ][ $key ][] = $radio_answers;
-			} elseif( isset( $_POST['question'][ $key ] ) ) {
+			} elseif( isset( $_POST['question'][ $key ] ) && '' !== $_POST['question'][ $key ] ) {
 				$responses[ $respondent_key ][ $key ][] = $this->answer_sanitizer( $_POST['question'][ $key ], $this->buttons[ $question['type'] ]['type'] );
 			}
 		}

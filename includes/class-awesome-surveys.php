@@ -112,6 +112,7 @@ class Awesome_Surveys {
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
 		foreach ( $questions as $key => $question ) {
+			$response = null;
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );
 			$label = $question['name'];
 			if ( in_array( $question['type'], $has_options ) ) {
@@ -122,12 +123,13 @@ class Awesome_Surveys {
 					}
 					$response .= '</ul>' . "\n";
 				} else {
-					$response = ( isset( $question['label'][ $answers[ $key ][0] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>' : null;
+					$response = ( isset( $answers[ $key ][0] ) && isset( $question['label'][ $answers[ $key ][0] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>' : null;
+					//$response = '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>';
 				}
 			} else {
-				$response = ( isset( $answers[ $key ][0] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ][0] . '</span>' : null;
+				$response = ( isset( $answers[ $key ][0] ) && ! empty( $answers[ $key ][0] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ][0] . '</span>' : null;
 			}
-			$response = ( !empty( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
+			$response = ( ! is_null( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
 			echo '<p><span class="italics">' . __( 'Question', 'awesome-surveys' ). ': ' . $label . '</span><br>' . $response . "</p>\n";
 		}
 
