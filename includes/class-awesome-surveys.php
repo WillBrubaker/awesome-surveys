@@ -116,24 +116,24 @@ class Awesome_Surveys {
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );
 			$label = $question['name'];
 			if ( in_array( $question['type'], $has_options ) ) {
-				if ( isset( $answers[ $key ][0] ) && is_array( $answers[ $key ][0] ) ) {
+				if ( isset( $answers[ $key ] ) && is_array( $answers[ $key ] ) ) {
 					$response = '<ul class="answers">' . __( 'Answers', 'awesome-surveys' ) . "\n";
-					foreach ( $answers[ $key ][0] as $answer_key => $answer_value ) {
+					foreach ( $answers[ $key ] as $answer_key => $answer_value ) {
 						$response .= '<li>' . $question['label'][ $answer_value ] . '</li>' . "\n";
 					}
 					$response .= '</ul>' . "\n";
 				} else {
-					$response = ( isset( $answers[ $key ][0] ) && isset( $question['label'][ $answers[ $key ][0] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>' : null;
-					//$response = '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>';
+					$response = ( isset( $answers[ $key ] ) && isset( $question['label'][ $answers[ $key ] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ] ] . '</span>' : null;
+					//debug$response = '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>';
 				}
 			} else {
-				$response = ( isset( $answers[ $key ][0] ) && ! empty( $answers[ $key ][0] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ][0] . '</span>' : null;
+				$response = ( isset( $answers[ $key ] ) && ! empty( $answers[ $key ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ] . '</span>' : null;
 			}
 			$response = ( ! is_null( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
 			echo '<p><span class="italics">' . __( 'Question', 'awesome-surveys' ). ': ' . $label . '</span><br>' . $response . "</p>\n";
 		}
-
 	}
+
 	public function survey_builder() {
 		wp_enqueue_script( 'awesome-surveys-admin-script' );
 		wp_enqueue_style( 'awesome-surveys-admin-style' );
