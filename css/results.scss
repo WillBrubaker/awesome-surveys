@@ -10,3 +10,10 @@ span.answer, ul.answers {
 		margin-top: .5em;
 	}
 }
+
+div.options {
+	background-color: blue;
+		span {
+			background-color: red;
+		}
+}

@@ -95,12 +95,12 @@ class Awesome_Surveys {
 			$post_id = absint( $_GET['post'] );
 			remove_post_type_support( 'awesome-surveys', 'title' );
 			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
-			add_meta_box( 'survey-results', __( 'Survey Results For', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
+			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
 			$results = get_post_meta( $post_id, '_response', false );
 			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
 			foreach ( $results as $respondent_key => $answers ) {
 				$number = $respondent_key + 1;
-				add_meta_box( 'respondent-' . $respondent_key, __( 'Results for user ', 'awesome-surveys' ) . $number, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
+				add_meta_box( 'respondent-' . $respondent_key, __( 'Results for respondent ', 'awesome-surveys' ) . $number, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
 			}
 		} else {
 			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );

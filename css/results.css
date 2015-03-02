@@ -7,3 +7,8 @@ span.answer, ul.answers {
     margin-left: 1.5em;
     list-style: disc;
     margin-top: .5em; }
+
+div.options {
+  background-color: blue; }
+  div.options span {
+    background-color: red; }
