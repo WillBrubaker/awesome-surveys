@@ -345,7 +345,12 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
 		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
-		//debugerror_log( print_r( $existing_elements, true ) );
+		error_log( print_r( $existing_elements, true ) );
+		error_log( print_r( $_POST, true ) );
+		//debug
+		//wp_send_json_success( 'debug end' );
+		//exit;
+		//debug
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
@@ -361,12 +366,15 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$respondent_key = $num_responses;
 		}
 
+		$multi_responses = array();
 		foreach ( $existing_elements as $key => $question ) {
 			$type = $question['type'];
 			if ( 'checkbox' === $type && isset( $_POST['question'][ $key ] ) ) {//the answers are an array
 				$radio_answers = array();
-				foreach ( $_POST['question'][ $key ] as $response ) {
-					$radio_answers[] = absint( $response );
+				foreach ( $question['value'] as $multi_response_key => $response ) {
+					if ( isset( $_POST['question'][ $key ][ $multi_response_key ] ) ) {
+						$radio_answers[] = absint( $response );
+					}
 				}
 				$responses[ $respondent_key ][ $key ] = $radio_answers;
 			} elseif( isset( $_POST['question'][ $key ] ) && '' !== $_POST['question'][ $key ] ) {
@@ -376,6 +384,15 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		if ( ! empty( $responses ) ) {
 			add_post_meta( $survey_id, '_response', $responses, false );
 			update_post_meta( $survey_id, 'num_responses', $num_responses );
+		}
+
+		if ( ! empty( $multi_responses ) ) {
+			foreach ( $multi_responses as $key => $value ) {
+				foreach ( $value as $answer_key => $answer_value ) {
+					$count = get_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, true ) + 1;
+					update_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, $count );
+				}
+			}
 		}
 		$data = 'this is a debug success completion notice';
 		wp_send_json_error( array( $data ) );
