@@ -4,5 +4,6 @@ span.italics {
 span.answer, ul.answers {
   margin-left: .5em; }
   span.answer li, ul.answers li {
-    margin-left: 1em;
-    list-style: disc; }
+    margin-left: 1.5em;
+    list-style: disc;
+    margin-top: .5em; }
