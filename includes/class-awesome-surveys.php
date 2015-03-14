@@ -2,8 +2,8 @@
 
 class Awesome_Surveys {
 
-	protected $buttons, $text_domain, $existing_elements, $plugin_version, $dbversion;
-	public $options;
+	protected $text_domain, $existing_elements, $plugin_version, $dbversion;
+	public $buttons, $options;
 
 	public function __construct() {
 		$this->plugin_version = '2.0-pre';
@@ -25,7 +25,7 @@ class Awesome_Surveys {
 		$this->register_post_type();
 	}
 
-	private function get_buttons() {
+	public function get_buttons() {
 		return array(
 			'text' => array(
 				'type' => 'Element_Textbox',

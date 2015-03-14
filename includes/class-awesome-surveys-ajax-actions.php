@@ -345,12 +345,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
 		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
-		error_log( print_r( $existing_elements, true ) );
-		error_log( print_r( $_POST, true ) );
-		//debug
-		//wp_send_json_success( 'debug end' );
-		//exit;
-		//debug
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );

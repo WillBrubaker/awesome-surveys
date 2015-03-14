@@ -20,23 +20,18 @@ foreach ( $results as $response_key => $response_array ) {
 	}
 }
 
-_e( sprintf( '%sThis survey has received a total of %s responses%s', '<p>', count( $results ), '</p>' ), 'awesome-surveys' );
+_e( sprintf( '%s%sThis survey has received a total of %s responses%s', '<p>', count( $results ), '</p>' ), 'awesome-surveys' );
 foreach ( $response_counts as $question_key => $value ) {
+	echo '<div class="answers">';
 	if ( isset( $elements[ $question_key ]['value'] ) ) {
-		_e( '<p class="answers">' . sprintf( '%s received %s responses', $elements[ $question_key ]['name'], $value['totalcount'] ), 'awesome-surveys' );
-		foreach( $value['count'] as $answer_key => $count ) {
-			echo '<div class="options"><span style="width: ' . ( $value['totalcount'] / $count ) * 100 . '%;">' . $elements[ $question_key ]['label'][ $answer_key ] . '</span></div>';
-			//_e( sprintf( '%s%s was selected times %s', '<li>', $elements[ $question_key ]['label'][ $answer_key ], $count, '</li>' ), 'awesome-surveys' );
-		}
+		echo '<p class="answers">';
+		_e( sprintf( '%s received %s responses', $elements[ $question_key ]['name'], $value['totalcount'] ), 'awesome-surveys' );
 		echo '</p>';
+		foreach( $value['count'] as $answer_key => $count ) {
+			echo '<div class="options-container"><span class="options" style="width:' . number_format( ( $count / $value['totalcount'] ) * 100, 2 ).  '%;">' . $elements[ $question_key ]['label'][ $answer_key ] . '</span></div>';
+		}
 	} else {
 		_e( sprintf( '<p class="totalcount survey">%s was answered %s times</p>', $elements[ $question_key ]['name'], $value['totalcount'] ), 'awesome-surveys' );
 	}
+	echo '<div class="clear"></div></div>';
 }
-
-//echo '<pre>';
-//print_r( $response_counts );
-//echo '</pre>';
-//echo '<pre>';
-//print_r( $elements );
-//echo '</pre>';
