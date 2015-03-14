@@ -353,7 +353,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		}
 		do_action( 'wwm_as_before_save_responses', $survey_id );
 		$num_responses = absint( get_post_meta( $survey_id, 'num_responses', true ) ) + 1;
-		//$num_responses = ( empty( $num_responses ) ) ? 1 : absint( $num_responses + 1 );
 		if ( 'login' === $this->auth_methods[ $auth_type ]['name'] ) {
 			$respondent_key = get_current_user_id();
 		} else {
