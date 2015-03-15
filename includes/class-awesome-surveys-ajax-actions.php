@@ -14,6 +14,14 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		foreach ( $filters as $filter => $args ) {
 			add_filter( $filter, array( $this, $filter ), $args[0], $args[1] );
 		}
+
+		$actions = array(
+			'awesome_surveys_update_login' => array( 'update_logged_in_respondents', 10, 1 ),
+			'awesome_surveys_update_cookie' => array( 'set_cookie', 10, 1 ),
+			);
+		foreach ( $actions as $action => $args ) {
+			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
+		}
 	}
 
 	public function add_form_element() {

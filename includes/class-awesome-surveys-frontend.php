@@ -11,14 +11,15 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
 		$actions = array(
 			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
-			'awesome_surveys_auth_method_cookie' => array( 'awesome_surveys_auth_method_cookie', 10, 1 ),
-			'awesome_surveys_update_cookie' => array( 'awesome_surveys_update_cookie', 10, 1 ),
 			);
 		foreach ( $actions as $action => $args ) {
 			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
 		}
 		$filters = array(
 			'wwm_awesome_survey_response' => array( 'wwm_awesome_survey_response_filter', 10, 2 ),
+			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
+			'awesome_surveys_auth_method_cookie' => array( 'awesome_surveys_auth_method_cookie', 10, 1 ),
+			'the_content' => array( 'the_content', 10, 1 ),
 			);
 		foreach ( $filters as $filter => $args ) {
 				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
@@ -52,9 +53,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			);
 		$auth_key = get_post_meta( $atts['id'], 'survey_auth_method', true );
 		$auth_method = $this->auth_methods[ $auth_key ]['name'];
-		//$auth_method = 'none';
-		//debug
-		error_log( "applying filters, sending:\n" . print_r( $auth_args, true ) );
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
@@ -132,11 +130,11 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		* @param  array $args [description]
 		* @since 1.0
 		*/
-	public function awesome_surveys_update_cookie( $args ) {
-
-		$survey_id = $args['survey_id'];
-		setcookie( 'responded_to_survey_' . $survey_id, 'true', time() + YEAR_IN_SECONDS, '/' );
-	}
+//deubg I think this can go away	public function awesome_surveys_update_cookie( $args ) {
+//deubg I think this can go away
+//deubg I think this can go away		$survey_id = $args['survey_id'];
+//deubg I think this can go away		setcookie( 'responded_to_survey_' . $survey_id, 'true', time() + YEAR_IN_SECONDS, '/' );
+//deubg I think this can go away	}
 
 	/**
 		* This filter is conditionally added if the auth method
