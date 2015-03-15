@@ -346,6 +346,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
+		$auth_method = $this->auth_methods[ $auth_type ]['name'];
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
 			wp_send_json_error( $data );
@@ -353,11 +354,13 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		}
 		do_action( 'wwm_as_before_save_responses', $survey_id );
 		$num_responses = absint( get_post_meta( $survey_id, 'num_responses', true ) ) + 1;
-		if ( 'login' === $this->auth_methods[ $auth_type ]['name'] ) {
+		if ( 'login' === $auth_method ) {
 			$respondent_key = get_current_user_id();
 		} else {
 			$respondent_key = $num_responses;
 		}
+		//olddebugstuff $data = array( 'the respondent key is ' . $respondent_key . ' and the auth type is ' . $auth_method );
+		//olddebugstuff wp_send_json_success( $data );
 
 		$multi_responses = array();
 		foreach ( $existing_elements as $key => $question ) {
@@ -387,6 +390,12 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 				}
 			}
 		}
+		$action_args = array(
+			'survey_id' => $survey_id,
+			'responses' => $responses,
+			'respondent_key' => $respondent_key,
+			);
+		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		$data = 'this is a debug success completion notice';
 		wp_send_json_error( array( $data ) );
 

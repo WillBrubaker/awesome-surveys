@@ -54,8 +54,13 @@ Domain Path: /languages/
 		foreach ( $includes as $include_file ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );
 		}
-		$awesome_surveys = new Awesome_Surveys;
-		$awesome_surveys_ajax = new Awesome_Surveys_Ajax;
+		if ( ! isset( $awesome_surveys ) ) {
+			$awesome_surveys = new Awesome_Surveys;
+		}
+		if ( ! isset( $awesome_surveys_ajax ) ) {
+			$awesome_surveys_ajax = new Awesome_Surveys_Ajax;
+		}
+
 		if ( is_admin() ) {
 		foreach ( $admin_includes as $include_file ) {
 			include_once( plugin_dir_path( __FILE__ ) . 'includes/class-' . $include_file . '.php' );

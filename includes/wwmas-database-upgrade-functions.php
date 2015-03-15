@@ -1,6 +1,11 @@
 <?php
-
+/*
+debug: todo - map the old shortcode to the new shortcode
+ */
 function wwmas_do_database_upgrade() {
+
+	global $awesome_surveys;
+
 	$type_map = array(
 		'Element_Textbox' => 'text',
 		'Element_Email' => 'email',
@@ -38,9 +43,17 @@ function wwmas_do_database_upgrade() {
 					'post_content' => $post_content,
 					);
 				wp_update_post( $post );
+				$old_auth_method = $old_surveys['surveys'][ $num_surveys ]['auth'];
+				$auth_method = 0;
+				foreach ( $awesome_surveys->auth_methods as $auth_key => $value ) {
+					if ( $old_auth_method == $value['name'] ) {
+						$auth_method = $auth_key;
+					}
+				}
 				$post_metas = array(
 					'existing_elements' => $elements,
-					'num_responses' => ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] : false,
+					'num_responses' => ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] + 1 : false,
+					'survey_auth_method' => $auth_method,
 					);
 				foreach ( $post_metas as $meta_key => $meta_value ) {
 					update_post_meta( $survey_id, $meta_key, $meta_value );
@@ -172,7 +185,6 @@ function wwmas_process_response( $survey_id, $response, $respondent_key ) {
 			foreach ( $question['value'] as $multi_response_key => $otter_response ) {
 				if ( isset( $response[ $key ][ $multi_response_key ] ) ) {
 					$radio_answers[] = absint( $otter_response );
-					//error_log( print_r( $radio_answers, true ) );
 				}
 			}
 			$responses[ $respondent_key ][ $key ] = $radio_answers;
@@ -181,9 +193,7 @@ function wwmas_process_response( $survey_id, $response, $respondent_key ) {
 		}
 	}
 	if ( ! empty( $responses ) ) {
-		error_log( "setting post meta _response\n" . print_r( $responses, true ) );
 		add_post_meta( $survey_id, '_response', $responses, false );
-		//update_post_meta( $survey_id, 'num_responses', $num_responses );
 	}
 
 	if ( ! empty( $multi_responses ) ) {

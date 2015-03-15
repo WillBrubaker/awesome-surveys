@@ -18,7 +18,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
 		}
 		$filters = array(
-			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
 			'wwm_awesome_survey_response' => array( 'wwm_awesome_survey_response_filter', 10, 2 ),
 			);
 		foreach ( $filters as $filter => $args ) {
@@ -48,9 +47,14 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			return null;
 		}
 		//debug
-		$auth_args = array();
-		$auth_method = 'none';
+		$auth_args = array(
+			'survey_id' => $atts['id'],
+			);
+		$auth_key = get_post_meta( $atts['id'], 'survey_auth_method', true );
+		$auth_method = $this->auth_methods[ $auth_key ]['name'];
+		//$auth_method = 'none';
 		//debug
+		error_log( "applying filters, sending:\n" . print_r( $auth_args, true ) );
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
@@ -73,7 +77,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			* @see awesome_surveys_auth_method_login() which adds a filter if the user is not logged in
 			* @see not_logged_in_message() which is the filter used to customize the message if the user is not logged in.
 			*/
-			$output = apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
+			return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
 		}
 		$nonce = wp_create_nonce( 'answer-survey' );
 		$survey_form = '<h4>' . $survey->post_title . '</h4>' . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
@@ -102,30 +106,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		}
 	}
 
-	/**
-		* Handles the auth type 'login' to determine whether the
-		* survey form should be output or not
-		* @since  1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		* @param  array $args an array of function arguments - most
-		* notably ['survey_id']
-		* @return bool       whether or not the user is authorized to take this survey.
-		*/
-	public function awesome_surveys_auth_method_login( $args ) {
-
-		if ( ! is_user_logged_in() ) {
-			add_filter( 'wwm_survey_no_auth_message', array( &$this, 'not_logged_in_message' ), 10, 1 );
-			return false;
-		}
-		$surveys = get_option( 'wwm_awesome_surveys', array() );
-		$survey = $surveys['surveys'][$args['survey_id']];
-		if ( isset( $survey['respondents'] ) && is_array( $survey['respondents'] ) && in_array( get_current_user_id(), $survey['respondents'] ) ) {
-			return false;
-		}
-
-		return true;
-	}
 
 	/**
 		* Handles the auth type 'cookie', checks to see if the cookie

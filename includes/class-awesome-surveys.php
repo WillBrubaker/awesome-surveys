@@ -14,11 +14,19 @@ class Awesome_Surveys {
 		$this->auth_methods = $this->auth_methods();
 		$actions = array(
 			'init' => array( 'init', 10, 0 ),
+			'awesome_surveys_update_login' => array( 'update_logged_in_respondents', 10, 1 ),
 			);
 		foreach ( $actions as $action => $args ) {
 			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
 		}
-		add_filter( 'the_content', array( $this, 'the_content' ), 10, 1 );
+		$filters = array(
+			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
+			'the_content' => array( 'the_content', 10, 1 ),
+			);
+		foreach ( $filters as $filter => $args ) {
+				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
+		}
+		//add_filter( 'the_content', array( $this, 'the_content' ), 10, 1 );
 	}
 
 	public function init() {
@@ -336,9 +344,21 @@ class Awesome_Surveys {
 
 	public function the_content( $content ) {
 		global $post;
+		error_log( $post->post_type );
 		if ( is_singular( 'awesome-surveys' ) ) {
+			error_log( 'doing the content filter' );
 			$nonce = wp_create_nonce( 'answer-survey' );
-			$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
+			$auth_method = get_post_meta( $post->ID, 'survey_auth_method', true );
+			$auth_type = $this->auth_methods[ $auth_method ]['name'];
+			$auth_args = array(
+				'survey_id' => $post->ID,
+			);
+			error_log( "sending some stuff off to the auth type " . $auth_type . " filter\n" . print_r( $auth_args, true ) );
+			if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_type, $auth_args ) ) {
+				$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
+			} else {
+				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
+			}
 		}
 		return $content;
 	}
@@ -417,10 +437,58 @@ class Awesome_Surveys {
 	 * @param  array $classes the array to filter
 	 * @return array          the filtered array
 	 */
-	function postbox_class( $classes ) {
+	public function postbox_class( $classes ) {
 		if ( ! in_array( 'closed', $classes ) ) {
 			$classes[] = 'closed';
 		}
 		return $classes;
+	}
+
+	/**
+	 * if the login method is 'login' add the logged in user's
+	 * id to the post meta key '_respondents'
+	 * @param  array $action_args an array of arguments
+	 */
+	public function update_logged_in_respondents( $action_args ) {
+
+		extract( $action_args );
+		$respondents_array = get_post_meta( $survey_id, '_respondents', true );
+		$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
+		$respondents[] = $respondent_key;//came from extract
+		if ( ! empty( $respondents ) ) {
+			error_log( 'updating respondents' );
+			update_post_meta( $survey_id, '_respondents', $respondents );
+		}
+	}
+
+		/**
+		* Handles the auth type 'login' to determine whether the
+		* survey form should be output or not
+		* @since  1.0
+		* @author Will the Web Mechanic <will@willthewebmechanic.com>
+		* @link http://willthewebmechanic.com
+		* @param  array $args an array of function arguments - most
+		* notably ['survey_id']
+		* @return bool       whether or not the user is authorized to take this survey.
+		*/
+	public function awesome_surveys_auth_method_login( $args ) {
+
+		error_log( 'firing filter ' . __FUNCTION__ );
+		if ( ! is_array( $args ) ) {
+			return false;
+		}
+		error_log("the args is\n" . print_r( $args, true ) );
+		if ( ! is_user_logged_in() ) {
+			add_filter( 'wwm_survey_no_auth_message', array( $this, 'not_logged_in_message' ), 10, 1 );
+			return false;
+		}
+		extract( $args );
+		$respondents_array = get_post_meta( $survey_id, '_respondents', true );
+		$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
+		if ( in_array( get_current_user_id(), $respondents ) ) {
+			return false;
+		}
+
+		return true;
 	}
 }
