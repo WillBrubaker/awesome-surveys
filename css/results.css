@@ -28,3 +28,6 @@ div.answers .options {
 
 p.answers {
   text-decoration: underline; }
+
+#poststuff #post-body.columns-2 {
+  margin: 0; }

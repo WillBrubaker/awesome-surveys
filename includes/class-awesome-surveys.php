@@ -133,7 +133,6 @@ class Awesome_Surveys {
 
 	public function answers_by_respondent( $post, $args = array() ) {
 
-		$results = get_post_meta( $post->ID, '_response', false );
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
 		foreach ( $questions as $key => $question ) {
@@ -481,7 +480,6 @@ class Awesome_Surveys {
 		extract( $args );
 		$respondents_array = get_post_meta( $survey_id, '_respondents', true );
 		$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
-		error_log( print_r( $respondents, true ) );
 		if ( in_array( get_current_user_id(), $respondents ) ) {
 			return false;
 		}
