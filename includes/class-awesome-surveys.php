@@ -2,8 +2,8 @@
 
 class Awesome_Surveys {
 
-	protected $text_domain, $existing_elements, $plugin_version, $dbversion;
-	public $buttons, $options;
+	protected $existing_elements, $plugin_version, $dbversion;
+	public $text_domain, $buttons, $options;
 
 	public function __construct() {
 		$this->plugin_version = '2.0-pre';
@@ -25,6 +25,11 @@ class Awesome_Surveys {
 		$this->register_post_type();
 	}
 
+	/**
+	 * creates an array of buttons for use in the editor
+	 * as well as mapping values
+	 * @return array an array of button types w/labels
+	 */
 	public function get_buttons() {
 		return array(
 			'text' => array(
@@ -58,6 +63,9 @@ class Awesome_Surveys {
 		);
 	}
 
+	/**
+	 * regsiters the 'awesome-surveys' post type
+	 */
 	public function register_post_type() {
 
 		$args = array(
@@ -100,6 +108,7 @@ class Awesome_Surveys {
 			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
 			foreach ( $results as $respondent_key => $answers ) {
 				$number = $respondent_key + 1;
+				add_filter( 'postbox_classes_awesome-surveys_respondent-' . $respondent_key, array( $this, 'postbox_class' ) );
 				add_meta_box( 'respondent-' . $respondent_key, __( 'Results for respondent ', 'awesome-surveys' ) . $number, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
 			}
 		} else {
@@ -109,6 +118,9 @@ class Awesome_Surveys {
 	}
 
 	public function answers_by_respondent( $post, $args = array() ) {
+		/*
+		debug: this might be wrong??? what if is keyed by respondent id?
+		 */
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
 		foreach ( $questions as $key => $question ) {
@@ -124,7 +136,6 @@ class Awesome_Surveys {
 					$response .= '</ul>' . "\n";
 				} else {
 					$response = ( isset( $answers[ $key ] ) && isset( $question['label'][ $answers[ $key ] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ] ] . '</span>' : null;
-					//debug$response = '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ][0] ] . '</span>';
 				}
 			} else {
 				$response = ( isset( $answers[ $key ] ) && ! empty( $answers[ $key ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ] . '</span>' : null;
@@ -399,5 +410,17 @@ class Awesome_Surveys {
 			$input_value = absint( $input_value );
 		}
 		return $input_value;
+	}
+
+	/**
+	 * adds the closed class to all survey responses postboxes
+	 * @param  array $classes the array to filter
+	 * @return array          the filtered array
+	 */
+	function postbox_class( $classes ) {
+		if ( ! in_array( 'closed', $classes ) ) {
+			$classes[] = 'closed';
+		}
+		return $classes;
 	}
 }

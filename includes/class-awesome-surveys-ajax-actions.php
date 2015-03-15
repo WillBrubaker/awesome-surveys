@@ -390,7 +390,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$data = 'this is a debug success completion notice';
 		wp_send_json_error( array( $data ) );
 
-		//		if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
 					/**
 						* A quirk of PFBC is that checkbox arrays are unkeyed
 						* php doesn't like that so give 'em keys I say

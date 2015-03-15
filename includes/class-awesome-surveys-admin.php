@@ -180,7 +180,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		include_once( WWM_AWESOME_SURVEYS_PATH . '/options.php' );
 		add_meta_box( 'awesome-surveys-options', __( 'Awesome Surveys Options', 'awesome-surveys' ), array( $this, 'surveys_options' ), $this->page_hook, 'normal', 'core' );
 		add_meta_box( 'awesome-surveys-email-options', __( 'Email Options', 'awesome-surveys' ), array( $this, 'email_options' ), $this->page_hook, 'normal', 'core' );
-		add_meta_box( 'awesome-surveys-database-upgrade', __( 'Database Upgrade', 'awesome-surveys' ), array( $this, 'database_upgrade' ), $this->page_hook, 'normal', 'core' );
+		if ( get_option( 'wwm_awesome_surveys' ) && ( 0 == 0 /*debug - do the database version check too*/ ) ) {
+			add_meta_box( 'awesome-surveys-database-upgrade', __( 'Database Upgrade', 'awesome-surveys' ), array( $this, 'database_upgrade' ), $this->page_hook, 'normal', 'core' );
+		}
 		echo '<div id="poststuff" class="wrap">';
 		echo '<form action="' . $_SERVER['REQUEST_URI'] . '" id="surveys-options" method="post" class="form-horizontal">';
 		do_meta_boxes( $this->page_hook, 'normal', $this );
@@ -197,7 +199,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	public function database_upgrade() {
-		$awesome_surveys = $this;
+		include_once( 'wwmas-database-upgrade-functions.php' );
 		include_once( 'views/html-database-upgrade.php' );
 	}
 

@@ -20,7 +20,7 @@ foreach ( $results as $response_key => $response_array ) {
 	}
 }
 
-_e( sprintf( '%s%sThis survey has received a total of %s responses%s', '<p>', count( $results ), '</p>' ), 'awesome-surveys' );
+_e( sprintf( '%sThis survey has received a total of %s responses%s', '<p>', count( $results ), '</p>' ), 'awesome-surveys' );
 foreach ( $response_counts as $question_key => $value ) {
 	echo '<div class="answers">';
 	if ( isset( $elements[ $question_key ]['value'] ) ) {
