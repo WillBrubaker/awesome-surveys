@@ -6,15 +6,6 @@
 class Awesome_Surveys_Frontend extends Awesome_Surveys {
 
 	public function __construct() {
-		parent::__construct();
-		add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
-		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
-		$actions = array(
-			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
-			);
-		foreach ( $actions as $action => $args ) {
-			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
-		}
 		$filters = array(
 			'wwm_awesome_survey_response' => array( 'wwm_awesome_survey_response_filter', 10, 2 ),
 			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
@@ -23,6 +14,15 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			);
 		foreach ( $filters as $filter => $args ) {
 				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
+		}
+		parent::__construct();
+		add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
+		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
+		$actions = array(
+			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
+			);
+		foreach ( $actions as $action => $args ) {
+			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
 		}
 	}
 

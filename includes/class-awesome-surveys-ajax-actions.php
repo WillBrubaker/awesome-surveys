@@ -344,10 +344,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		*/
 	public function process_response() {
 
-		/*
-		to do - bail out if the auth method
-		fails
-		 */
 		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
 			status_header( 403 );
 			exit;
@@ -359,6 +355,20 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$responses = array();
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		$auth_method = $this->auth_methods[ $auth_type ]['name'];
+		$auth_args = array(
+			'survey_id' => $survey_id,
+			);
+		$filters = array(
+			'awesome_surveys_auth_method_login' => array( 'awesome_surveys_auth_method_login', 10, 1 ),
+			'awesome_surveys_auth_method_cookie' => array( 'awesome_surveys_auth_method_cookie', 10, 1 ),
+			);
+		foreach ( $filters as $filter => $args ) {
+			add_filter( $filter, array( $this, $filter ), $args[0], $args[1] );
+		}
+		if ( false === apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
+			$data = array( apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) ) );
+			wp_send_json_error( $data );
+		}
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
 			wp_send_json_error( $data );

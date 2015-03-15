@@ -497,7 +497,6 @@ class Awesome_Surveys {
 		* @return bool       whether or not the user is authorized to take this survey.
 		*/
 	public function awesome_surveys_auth_method_cookie( $args = array() ) {
-
 		/*
 		todo - map the id back to old surveys
 		 */

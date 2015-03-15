@@ -6,6 +6,7 @@ todo: if auth method is 'login' - get the array of respondents
  */
 function wwmas_do_database_upgrade() {
 
+	add_option( 'wwm_as_survey_id_map', array(), '', 'no' );
 	global $awesome_surveys;
 
 	$type_map = array(
@@ -20,6 +21,7 @@ function wwmas_do_database_upgrade() {
 
 
 	$old_surveys = get_option( 'wwm_awesome_surveys', array() );
+	$old_survey_ids = array_keys( $old_surveys['surveys'] );
 	if ( ! empty( $old_surveys ) ) {
 		for ( $num_surveys = 0; $num_surveys < count( $old_surveys['surveys'] ); $num_surveys++ ) {
 			$existing_elements = $elements_to_render = json_decode( $old_surveys['surveys'][ $num_surveys ]['form'], true );
@@ -36,6 +38,10 @@ function wwmas_do_database_upgrade() {
 				'post_status' => 'publish',
 				);
 			$survey_id = wp_insert_post( $post );
+			$old_survey_id = $old_survey_ids[ $num_surveys ];
+			$id_map = get_option( 'wwm_as_survey_id_map', array() );
+			$id_map[ $old_survey_id ] = $survey_id;
+			update_option( 'wwm_as_survey_id_map', $id_map );
 			if ( ! empty( $survey_id ) ) {
 				echo 'updating post ' . $survey_id . '<br>';
 				$args = array( 'survey_id' => $survey_id );
