@@ -105,19 +105,19 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 	}
 
 
-	/**
-		* Handles the auth type 'cookie', checks to see if the cookie
-		* is set
-		* @since  1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		* @param  array $args an array of function arguments, most notably the survey id
-		* @return bool       whether or not the user is authorized to take this survey.
-		*/
-	public function awesome_surveys_auth_method_cookie( $args ) {
-
-		return ( ! isset( $_COOKIE['responded_to_survey_' . $args['survey_id']] ) );
-	}
+//debug dont think I need this	/**
+//debug dont think I need this		* Handles the auth type 'cookie', checks to see if the cookie
+//debug dont think I need this		* is set
+//debug dont think I need this		* @since  1.0
+//debug dont think I need this		* @author Will the Web Mechanic <will@willthewebmechanic.com>
+//debug dont think I need this		* @link http://willthewebmechanic.com
+//debug dont think I need this		* @param  array $args an array of function arguments, most notably the survey id
+//debug dont think I need this		* @return bool       whether or not the user is authorized to take this survey.
+//debug dont think I need this		*/
+//debug dont think I need this	public function awesome_surveys_auth_method_cookie( $args ) {
+//debug dont think I need this
+//debug dont think I need this		return ( ! isset( $_COOKIE['responded_to_survey_' . $args['survey_id']] ) );
+//debug dont think I need this	}
 
 	/**
 		* If the survey authentication method is 'cookie',

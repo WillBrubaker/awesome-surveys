@@ -344,6 +344,10 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		*/
 	public function process_response() {
 
+		/*
+		to do - bail out if the auth method
+		fails
+		 */
 		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
 			status_header( 403 );
 			exit;

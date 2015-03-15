@@ -1,5 +1,8 @@
 <?php
-
+/*
+todo: does the survey have responses? no can edit for you
+todo: if no responses, don't show view responses link
+ */
 class Awesome_Surveys_Admin extends Awesome_Surveys {
 
 	protected $page_hook, $page_title, $menu_title, $menu_slug;
@@ -206,7 +209,10 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	public function post_row_actions( $actions, $post ) {
 		if ( 'awesome-surveys' === $post->post_type ) {
 			$edit_post_link = get_edit_post_link( $post->ID, true );
-			$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
+			$show_link = get_post_meta( $post->ID, '_response', true );
+			if ( ! empty( $show_link ) ) {
+				$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
+			}
 		}
 		return $actions;
 	}

@@ -1,6 +1,8 @@
 <?php
 /*
-debug: todo - map the old shortcode to the new shortcode
+debug: todo - map the old shortcode to the new shortcode - actually,
+just build an array map since it'll be needed for cookie auth also
+todo: if auth method is 'login' - get the array of respondents
  */
 function wwmas_do_database_upgrade() {
 

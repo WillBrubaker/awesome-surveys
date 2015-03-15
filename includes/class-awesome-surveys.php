@@ -100,15 +100,30 @@ class Awesome_Surveys {
 	public function survey_editor() {
 		if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
 			$post_id = absint( $_GET['post'] );
+			$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
+			$auth_type = $this->auth_methods[ $auth_method ]['name'];
 			remove_post_type_support( 'awesome-surveys', 'title' );
 			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
 			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
 			$results = get_post_meta( $post_id, '_response', false );
+			$results_keys = array();
+			foreach ( $results as $key => $value ) {
+				$results_keys[] = array_keys( $value );
+			}
 			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
 			foreach ( $results as $respondent_key => $answers ) {
-				$number = $respondent_key + 1;
+				$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
+				$auth_type = $this->auth_methods[ $auth_method ]['name'];
+				if ( 'login' == $auth_type ) {
+					$number = $results_keys[ $respondent_key ][0];
+					$user_data = get_userdata( $number );
+					$meta_box_title = __( 'Results for ', 'awesome-surveys' ) . $user_data->display_name;
+				} else {
+					$number = $respondent_key + 1;
+					$meta_box_title = __( 'Results for respondent ', 'awesome-surveys' ) . $number;
+				}
 				add_filter( 'postbox_classes_awesome-surveys_respondent-' . $respondent_key, array( $this, 'postbox_class' ) );
-				add_meta_box( 'respondent-' . $respondent_key, __( 'Results for respondent ', 'awesome-surveys' ) . $number, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
+				add_meta_box( 'respondent-' . $respondent_key, $meta_box_title, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
 			}
 		} else {
 			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
@@ -117,9 +132,8 @@ class Awesome_Surveys {
 	}
 
 	public function answers_by_respondent( $post, $args = array() ) {
-		/*
-		debug: this might be wrong??? what if is keyed by respondent id?
-		 */
+
+		$results = get_post_meta( $post->ID, '_response', false );
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
 		foreach ( $questions as $key => $question ) {
@@ -486,6 +500,9 @@ class Awesome_Surveys {
 		*/
 	public function awesome_surveys_auth_method_cookie( $args = array() ) {
 
+		/*
+		todo - map the id back to old surveys
+		 */
 		extract( $args );
 		return ( ! isset( $_COOKIE['responded_to_survey_' . $args['survey_id'] ] ) );
 	}
