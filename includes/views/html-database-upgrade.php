@@ -13,13 +13,13 @@ $type_map = array(
 echo 'I am ur database upgrader<br>';
 $old_surveys = get_option( 'wwm_awesome_surveys', array() );
 echo '<pre>';
-//print_r( json_decode( $old_surveys['surveys'][1]['form'], true ) );
-//print_r( $old_surveys['surveys'][1]['responses'] );
-//print_r( $old_surveys['surveys'][1]['num_responses'] );
+//print_r( json_decode( $old_surveys['surveys'][2]['form'], true ) );
+//print_r( $old_surveys['surveys'][2]['responses'] );
+//print_r( $old_surveys['surveys'][2]['num_responses'] );
 echo '</pre>';
 //return;
 if ( is_array( $old_surveys ) ) {
-	$existing_elements = $elements_to_render = json_decode( $old_surveys['surveys'][1]['form'], true );
+	$existing_elements = $elements_to_render = json_decode( $old_surveys['surveys'][2]['form'], true );
 		//need to map the old type to the new type
 		foreach ( $existing_elements as $element_key => $element_value ) {
 			$existing_elements[ $element_key ]['type'] = $type_map[ $element_value['type'] ];
@@ -27,9 +27,9 @@ if ( is_array( $old_surveys ) ) {
 	$elements = json_encode( $existing_elements );
 	$post = array(
 		'post_content' => '',
-		'post_excerpt' => $old_surveys['surveys'][1]['thank_you'],
+		'post_excerpt' => $old_surveys['surveys'][2]['thank_you'],
 		'post_type' => 'awesome-surveys',
-		'post_title' => $old_surveys['surveys'][1]['name'],
+		'post_title' => $old_surveys['surveys'][2]['name'],
 		'post_status' => 'publish',
 		);
 	$survey_id = wp_insert_post( $post );
@@ -44,25 +44,50 @@ if ( is_array( $old_surveys ) ) {
 		wp_update_post( $post );
 		$post_metas = array(
 			'existing_elements' => $elements,
-			'num_responses' => $old_surveys['surveys'][1]['num_responses'],
+			'num_responses' => $old_surveys['surveys'][2]['num_responses'],
 			);
 		foreach ( $post_metas as $meta_key => $meta_value ) {
 			update_post_meta( $survey_id, $meta_key, $meta_value );
 		}
-		$response_args = array(
-		'survey_id' => $survey_id,
-		'existing_elements' => json_decode( $elements, true ),
-		'answers' => $old_surveys['surveys'][1]['responses'],
-		//'respondent_key' => $some_array_key,
-		//'iterations' => $i + 1,
-		);
-		for ( $iterations = 0; $iterations < 5; $iterations++ ) {
-			$response_args['iterations'] = $iterations + 1;
-			$response_args['respondent_key'] = $iterations + 1;
-			wwmas_database_update_process_response( $response_args );
+		$example = get_post_meta( 1249, '_response', false );
+		error_log( '=========EXAMPLE==========');
+		error_log( print_r( $example, true ) );
+		//error_log( print_r( $old_surveys['surveys'][2]['responses'], true ) );
+		error_log( '=========END EXAMPLE==========');
+		$responses = array();
+		//error_log( 'responses ' . print_r( $old_surveys['surveys'][2]['responses'], true ) );
+		$answers = wp_list_pluck( $old_surveys['surveys'][2]['responses'], 'answers' );
+		//error_log( print_r( $answers, true ) );
+		$responses = array();
+		foreach ( $answers as $question_key => $array ) {
+			foreach ( $array as $respondent_key => $answer ) {
+				if ( is_array( $answer ) ) {
+					//error_log( 'looking for ' . $respondent_key . "\n" . print_r( $old_surveys['surveys'][2]['responses'][ $question_key ]['answers'], true ) );
+				if ( 'checkbox' == $existing_elements[ $question_key ]['type'] ) {
+					//error_log( "checkbox answers for respondent " . $respondent_key . "\n" . print_r( $answer, true ) );
+					$responses[ $respondent_key ][ $question_key ] = $answer;
+				} else {
+						$possible_answers = $old_surveys['surveys'][2]['responses'][ $question_key ]['answers'];
+						//error_log( "possible answers\n" . print_r( $possible_answers, true ) );
+						foreach ( $possible_answers as $possible_answer_key => $possible_answer ) {
+							//error_log( 'looking for ' . $respondent_key );
+							//error_log( print_r( $possible_answer, true ) );
+							if ( in_array( $respondent_key, $possible_answer ) ) {
+								//error_log( 'respondent ' . $respondent_key . ' answered ' . $possible_answer_key . ' to ' . $question_key );
+								$responses[ $respondent_key ][ $question_key ] = $possible_answer_key;
+								continue;
+							}
+						}
+				}
+			} else {
+					//error_log( 'respondent ' . $respondent_key . ' answered ' . $answer );
+					$responses[ $respondent_key ][ $question_key ] = $answer;
+				}
+			}
 		}
 	}
-	//update the respones post meta:
+	error_log( print_r( $responses, true ) );
+	wp_delete_post( $survey_id, true );
 }
 
 function wwmas_post_content_generator( $args = array(), $elements = array() ) {
@@ -153,7 +178,7 @@ function wwmas_database_update_process_response( $args = array() ) {
 			$type = $existing_elements[ $answer_key ]['type'];
 			error_log( $type );
 				if ( 'checkbox' === $type ) {//the answers are an array
-					error_log( 'suck a cock!!' );
+					//error_log( 'suck a cock!!' );
 					$checkbox_answers = array();
 					//error_log( 'checkboxes ' . print_r( $value, true ) );
 				} elseif ( ! is_array( $value['answers'][ $respondent_key ] ) ) {
