@@ -26,7 +26,6 @@ class Awesome_Surveys {
 		foreach ( $filters as $filter => $args ) {
 				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
 		}
-		//add_filter( 'the_content', array( $this, 'the_content' ), 10, 1 );
 	}
 
 	public function init() {
@@ -344,7 +343,6 @@ class Awesome_Surveys {
 
 	public function the_content( $content ) {
 		global $post;
-		error_log( $post->post_type );
 		if ( is_singular( 'awesome-surveys' ) ) {
 			error_log( 'doing the content filter' );
 			$nonce = wp_create_nonce( 'answer-survey' );
@@ -471,24 +469,37 @@ class Awesome_Surveys {
 		* notably ['survey_id']
 		* @return bool       whether or not the user is authorized to take this survey.
 		*/
-	public function awesome_surveys_auth_method_login( $args ) {
+	public function awesome_surveys_auth_method_login( $args = array() ) {
 
-		error_log( 'firing filter ' . __FUNCTION__ );
-		if ( ! is_array( $args ) ) {
-			return false;
-		}
-		error_log("the args is\n" . print_r( $args, true ) );
 		if ( ! is_user_logged_in() ) {
 			add_filter( 'wwm_survey_no_auth_message', array( $this, 'not_logged_in_message' ), 10, 1 );
+			error_log( 'returning on line ' . __LINE__ );
 			return false;
 		}
 		extract( $args );
 		$respondents_array = get_post_meta( $survey_id, '_respondents', true );
 		$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
+
 		if ( in_array( get_current_user_id(), $respondents ) ) {
+			error_log( 'user_id is ' . get_current_user_id() );
+		error_log( "respondents is\n" . print_r( $respondents, true ) );
+			error_log( 'returning on line ' . __LINE__ );
 			return false;
 		}
-
+		error_log( 'returning on line ' . __LINE__ );
 		return true;
 	}
+
+	/**
+  * This filter is conditionally added if the auth method
+  * is login and the user is not logged in.
+  * @since  1.0
+  * @author Will the Web Mechanic <will@willthewebmechanic.com>
+  * @link http://willthewebmechanic.com
+  * @param  string $message a message to display to the user
+  * @return string          the filtered message.
+  */
+ public function not_logged_in_message( $message ) {
+  return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
+ }
 }
