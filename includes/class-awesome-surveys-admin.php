@@ -1,8 +1,5 @@
 <?php
-/*
-todo: does the survey have responses? no can edit for you
-todo: if no responses, don't show view responses link
- */
+
 class Awesome_Surveys_Admin extends Awesome_Surveys {
 
 	protected $page_hook, $page_title, $menu_title, $menu_slug;

@@ -20,7 +20,7 @@ function wwmas_do_database_upgrade() {
 
 
 	$old_surveys = get_option( 'wwm_awesome_surveys', array() );
-	if ( is_array( $old_surveys ) ) {
+	if ( ! empty( $old_surveys ) ) {
 		for ( $num_surveys = 0; $num_surveys < count( $old_surveys['surveys'] ); $num_surveys++ ) {
 			$existing_elements = $elements_to_render = json_decode( $old_surveys['surveys'][ $num_surveys ]['form'], true );
 				//need to map the old type to the new type

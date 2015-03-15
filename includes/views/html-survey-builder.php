@@ -6,6 +6,10 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 ?>
 <div id="awesome-survey">
  <input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo $existing_elements; ?>'>
+ <?php
+ 	$has_responses = get_post_meta( $post->ID, '_response', true );
+ 	if ( empty( $has_responses ) ) :
+ ?>
  <textarea id="content" name="content" style="display:none;"><?php echo $post->post_content; ?></textarea>
   <?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
  <input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
@@ -22,6 +26,9 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
  <h4><?php _e( 'Configure a survey question', 'awesome-surveys' ); ?></h4>
  <div id="current-element"></div>
  </div>
+<?php else : ?>
+	<h3><?php _e( 'This survey has responses and can not be edited', 'awesome-surveys' ); ?></h3>
+<?php endif; ?>
  <div id="form-preview-wrapper">
  <hr>
  <h4><?php _e( 'Survey Preview', 'awesome-surveys' ); ?></h4>
