@@ -11,6 +11,16 @@ $type_map = array(
 	);
 
 echo 'I am ur database upgrader<br>';
+$meta = get_post_meta( 1249, '_response' );
+//echo '<pre>';
+//print_r( $meta );
+//echo '</pre>';
+//echo '=====================================';
+//$meta = get_post_meta( 1398, '_response' );
+//echo '<pre>';
+//print_r( $meta );
+//echo '</pre>';
+//exit;
 $old_surveys = get_option( 'wwm_awesome_surveys', array() );
 echo '<pre>';
 //print_r( json_decode( $old_surveys['surveys'][2]['form'], true ) );
@@ -51,21 +61,33 @@ if ( is_array( $old_surveys ) ) {
 		}
 		$example = get_post_meta( 1249, '_response', false );
 		error_log( '=========EXAMPLE==========');
-		error_log( print_r( $example, true ) );
+		//error_log( print_r( $example, true ) );
 		//error_log( print_r( $old_surveys['surveys'][2]['responses'], true ) );
 		error_log( '=========END EXAMPLE==========');
 		$responses = array();
-		//error_log( 'responses ' . print_r( $old_surveys['surveys'][2]['responses'], true ) );
+		error_log( 'responses ' . print_r( $old_surveys['surveys'][2]['responses'], true ) );
 		$answers = wp_list_pluck( $old_surveys['surveys'][2]['responses'], 'answers' );
 		//error_log( print_r( $answers, true ) );
-		$responses = array();
+		$responses = array(
+			'survey_id' => $survey_id,
+			);
 		foreach ( $answers as $question_key => $array ) {
 			foreach ( $array as $respondent_key => $answer ) {
+				$responses[ $respondent_key ]['mykey'] = $respondent_key;
 				if ( is_array( $answer ) ) {
 					//error_log( 'looking for ' . $respondent_key . "\n" . print_r( $old_surveys['surveys'][2]['responses'][ $question_key ]['answers'], true ) );
 				if ( 'checkbox' == $existing_elements[ $question_key ]['type'] ) {
+					$possible_answers = $old_surveys['surveys'][2]['responses'][ $question_key ]['answers'];
+					//error_log( "these are the possible answers\n" . print_r( $possible_answers, true ) );
 					//error_log( "checkbox answers for respondent " . $respondent_key . "\n" . print_r( $answer, true ) );
-					$responses[ $respondent_key ][ $question_key ] = $answer;
+					$checkbox_answers = array();
+					foreach ( $possible_answers as $checkbox_answer_key => $possible_answer ) {
+						if ( in_array( $respondent_key, $possible_answer ) ) {
+							$checkbox_answers[] = $checkbox_answer_key;
+						}
+					}
+					error_log( "here is what goes in the array\n" . print_r( $checkbox_answers, true ) );
+					$responses[ $respondent_key ][ $question_key ] = $checkbox_answers;
 				} else {
 						$possible_answers = $old_surveys['surveys'][2]['responses'][ $question_key ]['answers'];
 						//error_log( "possible answers\n" . print_r( $possible_answers, true ) );
@@ -85,9 +107,15 @@ if ( is_array( $old_surveys ) ) {
 				}
 			}
 		}
+		//error_log( print_r( $responses, true ) );
 	}
-	error_log( print_r( $responses, true ) );
-	wp_delete_post( $survey_id, true );
+	//error_log( print_r( $responses, true ) );
+	foreach ( $responses as $response ) {
+		$respondent_key = $response['mykey'];
+		unset( $response['mykey'] );
+		process_response( $survey_id, $response, $respondent_key );
+	}
+	//wp_delete_post( $survey_id, true );
 }
 
 function wwmas_post_content_generator( $args = array(), $elements = array() ) {
@@ -149,75 +177,35 @@ function wwmas_post_content_generator( $args = array(), $elements = array() ) {
 		return $form_output->render( true );
 }
 
-function wwmas_database_update_process_response( $args = array() ) {
+	function process_response( $survey_id, $response, $respondent_key ) {
 
-	extract( $args );
-	//error_log( print_r( $existing_elements, true ) );
 		//$survey_id = absint( $_POST['survey_id'] );
-		//$post = get_post( $survey_id, 'OBJECT', 'display' );
-		//$saved_answers = get_post_meta( $survey_id, '_response', false );
-		//$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
+		$post = get_post( $survey_id, 'OBJECT', 'display' );
+		$saved_answers = get_post_meta( $survey_id, '_response', false );
+		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
-		//$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
-			error_log( 'bailing out ' . __LINE__ );
 			return false;
 		}
-		//$num_responses = absint( get_post_meta( $survey_id, 'num_responses', true ) ) + 1;
-		//if ( 'login' === $this->auth_methods[ $auth_type ]['name'] ) {
-		//	$respondent_key = get_current_user_id();
-		//} else {
-		//	$respondent_key = $num_responses;
-		//}
 
 		$multi_responses = array();
-		//error_log( print_r( $answers, true ) );
-		//return;
-		//error_log( print_r( $existing_elements, true ) );
-		foreach ( $answers as $answer_key => $value ) {
-			$type = $existing_elements[ $answer_key ]['type'];
-			error_log( $type );
-				if ( 'checkbox' === $type ) {//the answers are an array
-					//error_log( 'suck a cock!!' );
-					$checkbox_answers = array();
-					//error_log( 'checkboxes ' . print_r( $value, true ) );
-				} elseif ( ! is_array( $value['answers'][ $respondent_key ] ) ) {
-					//error_log( 'the answer? ' . print_r( $value['answers'][ $respondent_key ], true ) );
-					$responses[ $respondent_key ][ $answer_key ] = $value['answers'][ $respondent_key ];
-				}
-		}
-		if ( ! empty( $responses ) ) {
-			add_post_meta( $survey_id, '_response', $responses, false );
-			//update_post_meta( $survey_id, 'num_responses', $num_responses );
-		}
-		if ( ! empty( $multi_responses ) ) {
-			foreach ( $multi_responses as $key => $value ) {
-				foreach ( $value as $answer_key => $answer_value ) {
-					$count = get_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, true ) + 1;
-					update_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, $count );
-				}
-			}
-		}
-		return;
 		foreach ( $existing_elements as $key => $question ) {
-			//error_log( print_r( $question, true ) );
 			$type = $question['type'];
-			if ( 'checkbox' === $type ) {//the answers are an array
+			if ( 'checkbox' === $type && isset( $response[ $key ] ) ) {//the answers are an array
 				$radio_answers = array();
-				foreach ( $question['value'] as $multi_response_key => $response ) {
-					//if ( isset( $_POST['question'][ $key ][ $multi_response_key ] ) ) {
-						$radio_answers[] = absint( $response );
-					//}
+				foreach ( $question['value'] as $multi_response_key => $otter_response ) {
+					if ( isset( $response[ $key ][ $multi_response_key ] ) ) {
+						$radio_answers[] = absint( $otter_response );
+						//error_log( print_r( $radio_answers, true ) );
+					}
 				}
 				$responses[ $respondent_key ][ $key ] = $radio_answers;
-			} else {
-				$responses[ $respondent_key ][ $key ] = $answers[ $respondent_key ]['answers'][ $key ];
+			} elseif( isset( $response[ $key ] ) && '' !== $response[ $key ] ) {
+				$responses[ $respondent_key ][ $key ] = $response[ $key ];
 			}
 		}
-		//error_log( 'responses ' . print_r( $responses, true ) );
-		//error_log( 'multi responses ' . print_r( $multi_responses, true ) );
-		//return;
 		if ( ! empty( $responses ) ) {
+			error_log( "setting post meta _response\n" . print_r( $responses, true ) );
 			add_post_meta( $survey_id, '_response', $responses, false );
 			//update_post_meta( $survey_id, 'num_responses', $num_responses );
 		}
@@ -230,28 +218,60 @@ function wwmas_database_update_process_response( $args = array() ) {
 				}
 			}
 		}
-		//$data = 'this is a debug success completion notice';
-		//wp_send_json_error( array( $data ) );
+return true;
 
 		//		if ( isset( $_POST['question'][$key] ) && is_array( $_POST['question'][$key] ) ) {
 					/**
 						* A quirk of PFBC is that checkbox arrays are unkeyed
 						* php doesn't like that so give 'em keys I say
 						*/
-		//			$arr = array_values( $_POST['question'][$key] );
-		//			foreach ( $arr as $answerkey ) {
-		//				$response['answers'][$answerkey][] = $iterations;
-		//			}
-		//			if ( ! array_key_exists( $_POST['question'][ $key ], $form[ $key ]['value'] ) ) {
-		//				status_header( 400 );
-		//				exit;
-		//			}
-		//			$response['answers'][$_POST['question'][$key]][] = $iterations;
-//
-		//		$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (response array empty?) at ' . date( 'Y-m-d H:i:s' ) );
-		//		wp_send_json_error( $data );
+					$arr = array_values( $_POST['question'][$key] );
+					foreach ( $arr as $answerkey ) {
+						if ( ! array_key_exists( $answerkey, $form[ $key ]['value'] ) ) {
+							status_header( 400 );
+							exit;
+						}
+						$response['answers'][$answerkey][] = $num_responses;
+					}
+		//		} elseif ( isset( $_POST['question'][$key] ) ) {
+					if ( ! array_key_exists( $response[ $key ], $form[ $key ]['value'] ) ) {
+						status_header( 400 );
+						exit;
+					}
+					$response['answers'][$_POST['question'][$key]][] = $num_responses;
+		//		}
+		//	} else {
+		//		$response['answers'][] = ( isset( $_POST['question'][$key] ) ) ? $this->wwm_filter_survey_answer_filter( $_POST['question'][$key], $form[$key]['type'] ) : null;
+		//	}
+		//	$responses[$key] = $response;
+		//}
+		//if ( ! empty( $responses ) ) {
+		//	$survey['responses'] = $responses;
+		//	$survey = apply_filters( 'wwm_awesome_survey_response', $survey, $_POST['auth_method'] );
+		//	$surveys['surveys'][$_POST['survey_id']] = $survey;
+		//	$action_args = array(
+		//		'survey_id' => $_POST['survey_id'],
+		//		'survey' => $survey,
+		//	);
+		//	do_action( 'awesome_surveys_update_' . $_POST['auth_method'], $action_args );
+		//} else {
+				$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (response array empty?) at ' . date( 'Y-m-d H:i:s' ) );
+				wp_send_json_error( $data );
+		//}
+		//if ( ! empty( $surveys ) && ! empty( $survey ) ) {
+		//	update_option( 'wwm_awesome_surveys', $surveys );
+		//	do_action( 'wwm_as_response_saved', array( $_POST['survey_id'], $survey, $responses, $original_responses ) );
+		//	$form_id = sanitize_title( stripslashes( $survey['name'] ) );
+		//	$thank_you = stripslashes( $survey['thank_you'] );
 		/*
 			Feature request - 'Can I redirect to some page after survey submission?'
 			@see https://gist.github.com/WillBrubaker/57157ee587a9d580ddef
 			*/
+		$url = esc_url( apply_filters( 'after_awesome_survey_response_processed', null, array( 'survey_id' => $_POST['survey_id'], 'survey' => $survey, 'responses' => $_POST['question'], ) ) );
+		wp_send_json_success( array( 'form_id' => $form_id, 'thank_you' => $thank_you, 'url' => $url ) );
+		exit;
+		//} else {
+			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
+			wp_send_json_error( $data );
+	//	}
 	}
