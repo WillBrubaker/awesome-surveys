@@ -44,6 +44,17 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		}
 		$atts['id'] = absint( $atts['id'] );
 		$survey = get_post( $atts['id'], 'OBJECT', 'display' );
+		if ( 'awesome-surveys' != $survey->post_type ) {
+			$old_surveys = get_option( 'wwm_as_survey_id_map', array() );
+			if ( in_array( $atts['id'], $old_surveys ) ) {
+				$survey = get_post( $old_surveys[ $atts['id'] ], 'OBJECT', 'display' );
+				if ( 'awesome-surveys' != $survey->post_type ) {//well, we tried...
+					return null;
+				} else {
+					$atts['id'] = $old_surveys[ $atts['id'] ];
+				}
+			}
+		}
 		if ( is_null( $survey ) ) {
 			return null;
 		}
