@@ -22,7 +22,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		}
 
 		$filters = array(
-			//debugi dont think so...'survey_auth_options' => array( 'default_auth_methods', 10, 1 ),
 			'post_row_actions' => array( 'post_row_actions', 10, 2 ),
 			);
 
@@ -47,17 +46,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['meta']['survey_auth_method'] ) );
 		}
 	}
-
-	/**
-		* hooked into 'survey_auth_options' - provides the default array of authentication methods
-		* @param  array  $options associative array of authentication method names
-		* @return array  associative array of authentication method names
-		*/
-	/*debugpublic function default_auth_methods( $options = array() ) {
-
-		$options = array( 'login' => __( 'User must be logged in', $this->text_domain ), 'cookie' => __( 'Cookie based', $this->text_domain ), 'none' => __( 'None' ) );
-		return $options;
-	}*/
 
 	/**
 		* enqueues the necessary css/js for the admin area

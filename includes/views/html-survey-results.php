@@ -1,4 +1,8 @@
 <?php
+/*
+todo:
+this belongs in a function - not here
+ */
 global $post;
 $results = get_post_meta( $post->ID, '_response', false );
 $elements = json_decode( get_post_meta( $post->ID, 'existing_elements', true ), true );

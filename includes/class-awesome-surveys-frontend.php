@@ -58,7 +58,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		if ( is_null( $survey ) ) {
 			return null;
 		}
-		//debug
 		$auth_args = array(
 			'survey_id' => $atts['id'],
 			);
@@ -114,38 +113,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 		}
 	}
-
-
-//debug dont think I need this	/**
-//debug dont think I need this		* Handles the auth type 'cookie', checks to see if the cookie
-//debug dont think I need this		* is set
-//debug dont think I need this		* @since  1.0
-//debug dont think I need this		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-//debug dont think I need this		* @link http://willthewebmechanic.com
-//debug dont think I need this		* @param  array $args an array of function arguments, most notably the survey id
-//debug dont think I need this		* @return bool       whether or not the user is authorized to take this survey.
-//debug dont think I need this		*/
-//debug dont think I need this	public function awesome_surveys_auth_method_cookie( $args ) {
-//debug dont think I need this
-//debug dont think I need this		return ( ! isset( $_COOKIE['responded_to_survey_' . $args['survey_id']] ) );
-//debug dont think I need this	}
-
-	/**
-		* If the survey authentication method is 'cookie',
-		* this method will be called by do_action( 'awesome_surveys_update_cookie' )
-		* and will set a cookie indicating that the user has filled out this
-		* survey ($args['survey_id']).
-		* @since  1.0
-		* @author Will the Web Mechanic <will@willthewebmechanic.com>
-		* @link http://willthewebmechanic.com
-		* @param  array $args [description]
-		* @since 1.0
-		*/
-//deubg I think this can go away	public function awesome_surveys_update_cookie( $args ) {
-//deubg I think this can go away
-//deubg I think this can go away		$survey_id = $args['survey_id'];
-//deubg I think this can go away		setcookie( 'responded_to_survey_' . $survey_id, 'true', time() + YEAR_IN_SECONDS, '/' );
-//deubg I think this can go away	}
 
 	/**
 		* This filter is conditionally added if the auth method

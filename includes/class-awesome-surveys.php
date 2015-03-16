@@ -506,9 +506,6 @@ class Awesome_Surveys {
 		* @return bool       whether or not the user is authorized to take this survey.
 		*/
 	public function awesome_surveys_auth_method_cookie( $args = array() ) {
-		/*
-		todo - map the id back to old surveys
-		 */
 		extract( $args );
 		$old_survey_ids = get_option( 'wwm_as_survey_id_map', array() );
 		if ( array_key_exists( $survey_id, $old_survey_ids ) ) {
