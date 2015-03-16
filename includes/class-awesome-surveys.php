@@ -135,6 +135,7 @@ class Awesome_Surveys {
 
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
+		error_log( print_r( $answers, true ) );
 		foreach ( $questions as $key => $question ) {
 			$response = null;
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );

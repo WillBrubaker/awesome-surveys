@@ -389,9 +389,12 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$type = $question['type'];
 			if ( 'checkbox' === $type && isset( $_POST['question'][ $key ] ) ) {//the answers are an array
 				$radio_answers = array();
+				error_log( "looping through this response array\n" . print_r( $question['value'], true ) );
+				error_log( "posted answers\n" . print_r( $_POST['question'][ $key ], true ) );
 				foreach ( $question['value'] as $multi_response_key => $response ) {
 					if ( isset( $_POST['question'][ $key ][ $multi_response_key ] ) ) {
-						$radio_answers[] = absint( $response );
+						error_log( 'adding this number to the radio answers response ' . $_POST['question'][ $key ][ $multi_response_key ] );
+						$radio_answers[] = absint( $_POST['question'][ $key ][ $multi_response_key ] );
 					}
 				}
 				$responses[ $respondent_key ][ $key ] = $radio_answers;
@@ -400,6 +403,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			}
 		}
 		if ( ! empty( $responses ) ) {
+			error_log( "this here is da meta that im saving\n" . print_r( $responses, true ) );
 			add_post_meta( $survey_id, '_response', $responses, false );
 			update_post_meta( $survey_id, 'num_responses', $num_responses );
 		}
