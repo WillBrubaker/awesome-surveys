@@ -483,6 +483,14 @@ class Awesome_Surveys {
 		if ( in_array( get_current_user_id(), $respondents ) ) {
 			return false;
 		}
+		$old_survey_ids = get_option( 'wwm_as_survey_id_map', array() );
+		if ( array_key_exists( $survey_id, $old_survey_ids['surveys'] ) ) {
+			$old_surveys = get_option( 'wwm_awesome_surveys', array() );
+			$respondents_array = $old_survey_ids['surveys'][ $survey_id ]['respondents'];
+			if ( in_array( get_current_user_id(), $respondents_array ) ) {
+				return false;
+			}
+		}
 		return true;
 	}
 
@@ -501,7 +509,13 @@ class Awesome_Surveys {
 		todo - map the id back to old surveys
 		 */
 		extract( $args );
-		return ( ! isset( $_COOKIE['responded_to_survey_' . $args['survey_id'] ] ) );
+		$old_survey_ids = get_option( 'wwm_as_survey_id_map', array() );
+		if ( array_key_exists( $survey_id, $old_survey_ids ) ) {
+			if ( isset( $_COOKIE['responded_to_survey_' . $old_survey_ids[ $survey_id ] ] ) ) {
+				return false;
+			}
+		}
+		return ( ! isset( $_COOKIE['responded_to_survey_' . $survey_id ] ) );
 	}
 
 	public function set_cookie( $args ) {

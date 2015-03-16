@@ -1,9 +1,5 @@
 <?php
-/*
-debug: todo - map the old shortcode to the new shortcode - actually,
-just build an array map since it'll be needed for cookie auth also
-todo: if auth method is 'login' - get the array of respondents
- */
+
 function wwmas_do_database_upgrade() {
 
 	add_option( 'wwm_as_survey_id_map', array(), '', 'no' );
@@ -177,6 +173,7 @@ function wwmas_post_content_generator( $args = array(), $elements = array() ) {
 
 function wwmas_process_response( $survey_id, $response, $respondent_key ) {
 
+	global $awesome_surveys;
 	$post = get_post( $survey_id, 'OBJECT', 'display' );
 	$saved_answers = get_post_meta( $survey_id, '_response', false );
 	$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
@@ -212,5 +209,16 @@ function wwmas_process_response( $survey_id, $response, $respondent_key ) {
 			}
 		}
 	}
+$auth_method = get_post_meta( $survey_id, 'survey_auth_method', true );
+$auth_methods = $awesome_surveys->auth_methods;
+$auth_type = $auth_methods[ $auth_method ]['name'];
+if ( 'login' == $auth_type ) {
+	$respondents_array = get_post_meta( $survey_id, '_respondents', true );
+	$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
+	$respondents[] = $respondent_key;
+		if ( ! empty( $respondents ) ) {
+			update_post_meta( $survey_id, '_respondents', $respondents );
+		}
+}
 return true;
 }
