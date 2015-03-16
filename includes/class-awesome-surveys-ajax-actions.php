@@ -422,7 +422,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			'respondent_key' => $respondent_key,
 			);
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
-		$data = 'this is a debug success completion notice';
+		$data = $post->post_excerpt;
 		wp_send_json_error( array( $data ) );
 
 					/**

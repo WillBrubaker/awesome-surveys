@@ -33,6 +33,16 @@ Domain Path: /languages/
 	*  the PHP Form Builder class is licensed under the GPL v3. See LICENSE
 	*
 	*/
+	/*
+	todo:
+	update changelog
+	update version numbers
+	move upgrade database from metabox to admin notice
+	provide ability to force database update
+	error handling for database update...what do do if post insertion
+	or meta insertion fails?
+	option to remove data on successful update
+	*/
 
 /**
 	* @package Awesome_Surveys
