@@ -17,6 +17,8 @@ function wwmas_do_database_upgrade() {
 
 
 	$old_surveys = get_option( 'wwm_awesome_surveys', array() );
+	//debug error_log( print_r( $old_surveys, true ) );
+	//debug return;
 	$old_survey_ids = array_keys( $old_surveys['surveys'] );
 	if ( ! empty( $old_surveys ) ) {
 		for ( $num_surveys = 0; $num_surveys < count( $old_surveys['surveys'] ); $num_surveys++ ) {
@@ -52,6 +54,7 @@ function wwmas_do_database_upgrade() {
 				foreach ( $awesome_surveys->auth_methods as $auth_key => $value ) {
 					if ( $old_auth_method == $value['name'] ) {
 						$auth_method = $auth_key;
+						break;
 					}
 				}
 				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
@@ -100,16 +103,27 @@ function wwmas_do_database_upgrade() {
 				}
 			}
 			foreach ( $responses as $response ) {
+
+				if ( ! is_array( $response ) ) {
+					continue;
+				}
 				/*
 				debug: todo (done, needs testing) - what if auth method is 'logged in?'
 				respondent keys are different then and shouldn't be
 				incremented.
 				 */
-				error_log( $auth_type );
+				$respondent_key = $response['mykey'];
 				if ( 'login' == $auth_type ) {
-					$respondent_key = $response['mykey'];
+					error_log( print_r( $response, true ) );
+					$respondent_keys = $old_surveys['surveys'][ $num_surveys ]['respondents'];
+					$respondent_key = $respondent_keys[ $respondent_key ];
+									error_log( $auth_type );
+				error_log( $response['mykey'] );
+				error_log( $respondent_key );
+				error_log( print_r( $respondent_keys, true ) );
+					error_log( 'respondet key is ' . $respondent_key . ' in ' . __FUNCTION__ );
 				} else {
-					$respondent_key = $response['mykey'] + 1;
+					$respondent_key = $respondent_key + 1;
 				}
 				unset( $response['mykey'] );
 				wwmas_process_response( $survey_id, $response, $respondent_key );
@@ -219,6 +233,7 @@ $auth_method = get_post_meta( $survey_id, 'survey_auth_method', true );
 $auth_methods = $awesome_surveys->auth_methods;
 $auth_type = $auth_methods[ $auth_method ]['name'];
 if ( 'login' == $auth_type ) {
+		error_log( 'respondet key is ' . $respondent_key . ' in ' . __FUNCTION__ );
 	$respondents_array = get_post_meta( $survey_id, '_respondents', true );
 	$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
 	$respondents[] = $respondent_key;
