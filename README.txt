@@ -100,6 +100,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 == Changelog ==
 
+= v2.0 Yemaya =
+1. Major rewrite
+2. Surveys are now custom post types
+3. responses are each stored in post meta individually
+4.
+
 = v1.6.3 =
 1. Attempts mitigation of data loss
 2. Updated jQuery ui css

@@ -54,6 +54,7 @@ function wwmas_do_database_upgrade() {
 						$auth_method = $auth_key;
 					}
 				}
+				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
 				$post_metas = array(
 					'existing_elements' => $elements,
 					'num_responses' => ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] + 1 : false,
@@ -100,11 +101,16 @@ function wwmas_do_database_upgrade() {
 			}
 			foreach ( $responses as $response ) {
 				/*
-				debug: todo - what if auth method is 'logged in?'
+				debug: todo (done, needs testing) - what if auth method is 'logged in?'
 				respondent keys are different then and shouldn't be
 				incremented.
 				 */
-				$respondent_key = $response['mykey'] + 1;
+				error_log( $auth_type );
+				if ( 'login' == $auth_type ) {
+					$respondent_key = $response['mykey'];
+				} else {
+					$respondent_key = $response['mykey'] + 1;
+				}
 				unset( $response['mykey'] );
 				wwmas_process_response( $survey_id, $response, $respondent_key );
 			}
