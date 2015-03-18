@@ -191,19 +191,25 @@ $args = array(
 	//error_log( print_r( $responses, true ) );
 	//error_log( print_r( $questions, true ) );
 	//error_log( print_r( $answers, true ) );
+
 	$has_options = array( 'dropdown', 'radio' );
 	foreach ( $responses as $respondent_id => $response ) {
 		foreach ( $response as $question_key => $answer ) {
 			$checked_answers = array();
 			if ( in_array( $questions[ $question_key ]['type'], $has_options ) ) {
-
+				foreach ( $answers[ $question_key ] as $answer_key => $possible_answer ) {
+					if ( in_array( $respondent_id, $possible_answer ) ) {
+						$responses[ $respondent_id ][ $question_key ] = $answer_key;
+						break;
+					}
+				}
 			} elseif ( 'checkbox' == $questions[ $question_key ]['type'] ) {
 				foreach ( $answers[ $question_key ] as $answer_key => $possible_answer ) {
 					if ( in_array( $respondent_id, $possible_answer ) ) {
-						$checkbox_answers[] = $answer_key;
+						$checked_answers[] = $answer_key;
 					}
 				}
-				$responses[ $respondent_id ][ $question_key ] = $checkbox_answers;
+				$responses[ $respondent_id ][ $question_key ] = $checked_answers;
 			} else {
 				$responses[ $respondent_id ][ $question_key ] = $answers[ $question_key ][ $respondent_id ];
 			}
