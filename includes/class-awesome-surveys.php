@@ -507,8 +507,9 @@ class Awesome_Surveys {
 	public function awesome_surveys_auth_method_cookie( $args = array() ) {
 		extract( $args );
 		$old_survey_ids = get_option( 'wwm_as_survey_id_map', array() );
-		if ( array_key_exists( $survey_id, $old_survey_ids ) ) {
-			if ( isset( $_COOKIE['responded_to_survey_' . $old_survey_ids[ $survey_id ] ] ) ) {
+		if ( $array_key = array_search( $survey_id, $old_survey_ids ) ) {
+
+			if ( isset( $_COOKIE['responded_to_survey_' . $array_key ] ) ) {
 				return false;
 			}
 		}
@@ -531,5 +532,62 @@ class Awesome_Surveys {
   */
  public function not_logged_in_message( $message ) {
   return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
+ }
+
+ /**
+  * Hooked into wwm_as_response_saved to send email if set
+  * @param  array $survey the survey that was just completed
+  * @since 1.6
+  */
+ public function send_survey_emails( $args ) {
+ 	error_log( __FUNCTION__ . ' fired' );
+ 	return;
+ 	/*
+ 	todo: needs a complete rewrite
+ 	 */
+  $surveys = get_option( 'wwm_awesome_surveys', array() );
+  $survey = $surveys['surveys'][ $args[0] ];
+
+  if ( isset( $surveys['enable_wwm_as_emails'] ) && $surveys['enable_wwm_as_emails'] ) {
+   $subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
+   $to = $surveys['mail_to'];
+   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
+   $form = json_decode( $survey['form'], true );
+   foreach ( $args[2] as $key => $arr ) {
+    $answer = null;
+    $message .= "\n\nReply to " . stripslashes( $arr['question'] . ":\n" );
+    if ( $arr['has_options'] ) {
+     foreach ( $arr['answers'] as $answer_key => $answer_value ) {
+      if ( count( $args[2][ $key ]['answers'][ $answer_key ]  ) > count( $args[3][ $key ]['answers'][ $answer_key ] ) ) {
+       $answer = stripslashes( $form[ $key ]['label'][ $answer_key ] );
+      }
+     }
+    } else {
+     $answer = stripslashes( end( $args[2][ $key ]['answers'] ) );
+    }
+    $message .= ( ! empty( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
+   }
+   $message = apply_filters( 'wwm_as_admin_email', $message );
+   wp_mail( $to, $subject, $message );
+  }
+
+  if ( isset( $surveys['enable_wwm_as_respondent_email'] ) && $surveys['enable_wwm_as_respondent_email'] ) {
+   $form = json_decode( $survey['form'] );
+   foreach ( $form as $key => $value ) {
+    if ( 'Element_Email' == $value->type && is_email( $_POST['question'][$key] ) ) {
+     $to = $_POST['question'][$key];
+     $subject = sanitize_text_field( $surveys['respondent_email_subject'] );
+     $message = $surveys['respondent_email_message'];
+     $replacements = array(
+      '(\{blogname\})' => get_option( 'blogname' ),
+      '(\{siteurl\})' => get_option( 'siteurl' ),
+      '(\{surveyname\})' => stripslashes( $survey['name'] ),
+       );
+     $message = preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message );
+     wp_mail( $to, $subject, $message );
+     break;
+    }
+   }
+  }
  }
 }

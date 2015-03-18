@@ -17,8 +17,6 @@ function wwmas_do_database_upgrade() {
 
 
 	$old_surveys = get_option( 'wwm_awesome_surveys', array() );
-	//debug error_log( print_r( $old_surveys, true ) );
-	//debug return;
 	$old_survey_ids = array_keys( $old_surveys['surveys'] );
 	if ( ! empty( $old_surveys ) ) {
 		for ( $num_surveys = 0; $num_surveys < count( $old_surveys['surveys'] ); $num_surveys++ ) {
@@ -114,14 +112,8 @@ function wwmas_do_database_upgrade() {
 				 */
 				$respondent_key = $response['mykey'];
 				if ( 'login' == $auth_type ) {
-					error_log( print_r( $response, true ) );
 					$respondent_keys = $old_surveys['surveys'][ $num_surveys ]['respondents'];
 					$respondent_key = $respondent_keys[ $respondent_key ];
-									error_log( $auth_type );
-				error_log( $response['mykey'] );
-				error_log( $respondent_key );
-				error_log( print_r( $respondent_keys, true ) );
-					error_log( 'respondet key is ' . $respondent_key . ' in ' . __FUNCTION__ );
 				} else {
 					$respondent_key = $respondent_key + 1;
 				}
@@ -233,7 +225,6 @@ $auth_method = get_post_meta( $survey_id, 'survey_auth_method', true );
 $auth_methods = $awesome_surveys->auth_methods;
 $auth_type = $auth_methods[ $auth_method ]['name'];
 if ( 'login' == $auth_type ) {
-		error_log( 'respondet key is ' . $respondent_key . ' in ' . __FUNCTION__ );
 	$respondents_array = get_post_meta( $survey_id, '_respondents', true );
 	$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
 	$respondents[] = $respondent_key;

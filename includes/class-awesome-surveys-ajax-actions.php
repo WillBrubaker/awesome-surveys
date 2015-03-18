@@ -18,6 +18,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$actions = array(
 			'awesome_surveys_update_login' => array( 'update_logged_in_respondents', 10, 1 ),
 			'awesome_surveys_update_cookie' => array( 'set_cookie', 10, 1 ),
+			'wwm_as_response_saved' => array( 'send_survey_emails', 10, 1 ),
 			);
 		foreach ( $actions as $action => $args ) {
 			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
@@ -369,6 +370,9 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$data = array( apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) ) );
 			wp_send_json_error( $data );
 		}
+		/*
+		todo: if this fails, try to map the old survey id to the new one and try again.
+		 */
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
 			wp_send_json_error( $data );
@@ -387,11 +391,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$type = $question['type'];
 			if ( 'checkbox' === $type && isset( $_POST['question'][ $key ] ) ) {//the answers are an array
 				$radio_answers = array();
-				error_log( "looping through this response array\n" . print_r( $question['value'], true ) );
-				error_log( "posted answers\n" . print_r( $_POST['question'][ $key ], true ) );
 				foreach ( $question['value'] as $multi_response_key => $response ) {
 					if ( isset( $_POST['question'][ $key ][ $multi_response_key ] ) ) {
-						error_log( 'adding this number to the radio answers response ' . $_POST['question'][ $key ][ $multi_response_key ] );
 						$radio_answers[] = absint( $_POST['question'][ $key ][ $multi_response_key ] );
 					}
 				}
@@ -401,7 +402,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			}
 		}
 		if ( ! empty( $responses ) ) {
-			error_log( "this here is da meta that im saving\n" . print_r( $responses, true ) );
 			add_post_meta( $survey_id, '_response', $responses, false );
 			update_post_meta( $survey_id, 'num_responses', $num_responses );
 		}
@@ -419,6 +419,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			'responses' => $responses,
 			'respondent_key' => $respondent_key,
 			);
+		do_action( 'wwm_as_response_saved', array( $survey_id, $responses ) );
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		$data = $post->post_excerpt;
 		wp_send_json_error( array( $data ) );
