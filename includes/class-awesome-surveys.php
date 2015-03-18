@@ -132,9 +132,13 @@ class Awesome_Surveys {
 	}
 
 	public function answers_by_respondent( $post, $args = array() ) {
-
+		//error_log( print_r( $args['args'], true ) );
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
+		/*
+		todo: on surveys that were imported - follow-on answers are not getting recorded???
+		or at least the array is afu
+		 */
 		foreach ( $questions as $key => $question ) {
 			$response = null;
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );

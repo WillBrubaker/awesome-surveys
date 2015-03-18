@@ -17,6 +17,11 @@ function wwmas_do_database_upgrade() {
 
 
 	$old_surveys = get_option( 'wwm_awesome_surveys', array() );
+					//error_log( print_r( $old_surveys['surveys'], true ) );
+				//$existing_elements = $elements_to_render = json_decode( $old_surveys['surveys'][6]['form'], true );
+				//	error_log( print_r( $old_surveys['surveys'][6], true ) );
+				//	error_log( print_r( $existing_elements, true ) );
+				//return;
 	$old_survey_ids = array_keys( $old_surveys['surveys'] );
 	if ( ! empty( $old_surveys ) ) {
 		for ( $num_surveys = 0; $num_surveys < count( $old_surveys['surveys'] ); $num_surveys++ ) {
@@ -56,9 +61,10 @@ function wwmas_do_database_upgrade() {
 					}
 				}
 				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
+				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] - 1 : false;
 				$post_metas = array(
 					'existing_elements' => $elements,
-					'num_responses' => ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] + 1 : false,
+					'num_responses' => $num_responses,
 					'survey_auth_method' => $auth_method,
 					);
 				foreach ( $post_metas as $meta_key => $meta_value ) {
@@ -67,39 +73,60 @@ function wwmas_do_database_upgrade() {
 				if ( ! isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) {
 					continue;
 				}
+				//build the responses array. its keys are either the respondent keys or
+				//1 - $num_responses +1
+				//it's values are the array keys of questions
+				if ( 'login' == $auth_type ) {
+					$respondent_keys = $old_surveys['surveys'][ $num_surveys ]['respondents'];
+				} else {
+					for ( $responsekey = 0; $responsekey < $num_responses; $responsekey++ ) {
+						$respondent_keys[] = $responsekey;
+					}
+				}
+				$question_keys = array_keys( $existing_elements );
 				$responses = array();
+				foreach ( $respondent_keys as $respondent_key => $value ) {
+					$responses[ $respondent_key ] = $question_keys;
+				}
 				$answers = wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' );
-				$responses = array(
-					'survey_id' => $survey_id,
-					);
+				//error_log( print_r( $answers, true ) );
+				//error_log( print_r( $old_surveys['surveys'][ $num_surveys ]['responses'], true ) );
+				//return;
+				//debug do i need this?$responses = array(
+				//debug do i need this?	'survey_id' => $survey_id,
+				//debug do i need this?	);
 				foreach ( $answers as $question_key => $array ) {
 					foreach ( $array as $respondent_key => $answer ) {
+						$responses[ $respondent_key ][ $question_key ] = $answer;
 						$responses[ $respondent_key ]['mykey'] = $respondent_key;
 						if ( is_array( $answer ) ) {
-						if ( 'checkbox' == $existing_elements[ $question_key ]['type'] ) {
-							$possible_answers = $old_surveys['surveys'][ $num_surveys ]['responses'][ $question_key ]['answers'];
-							$checkbox_answers = array();
-							foreach ( $possible_answers as $checkbox_answer_key => $possible_answer ) {
-								if ( in_array( $respondent_key, $possible_answer ) ) {
-									$checkbox_answers[] = $checkbox_answer_key;
-								}
-							}
-							$responses[ $respondent_key ][ $question_key ] = $checkbox_answers;
-						} else {
+							$responses[ $respondent_key ][ $question_key ] = array();
+							if ( 'checkbox' == $existing_elements[ $question_key ]['type'] ) {
 								$possible_answers = $old_surveys['surveys'][ $num_surveys ]['responses'][ $question_key ]['answers'];
-								foreach ( $possible_answers as $possible_answer_key => $possible_answer ) {
+								$checkbox_answers = array();
+								foreach ( $possible_answers as $checkbox_answer_key => $possible_answer ) {
 									if ( in_array( $respondent_key, $possible_answer ) ) {
-										$responses[ $respondent_key ][ $question_key ] = $possible_answer_key;
-										continue;
+										$checkbox_answers[] = $checkbox_answer_key;
 									}
 								}
-						}
-					} else {
+								$responses[ $respondent_key ][ $question_key ] = $checkbox_answers;
+								} else {
+										$possible_answers = $old_surveys['surveys'][ $num_surveys ]['responses'][ $question_key ]['answers'];
+										foreach ( $possible_answers as $possible_answer_key => $possible_answer ) {
+											if ( in_array( $respondent_key, $possible_answer ) ) {
+												$responses[ $respondent_key ][ $question_key ] = $possible_answer_key;
+												continue;
+											}
+										}
+							}
+						} else {
 							$responses[ $respondent_key ][ $question_key ] = $answer;
 						}
 					}
 				}
 			}
+			//error_log( print_r( $responses, true ) );
+
 			foreach ( $responses as $response ) {
 
 				if ( ! is_array( $response ) ) {
@@ -111,13 +138,14 @@ function wwmas_do_database_upgrade() {
 				incremented.
 				 */
 				$respondent_key = $response['mykey'];
-				if ( 'login' == $auth_type ) {
-					$respondent_keys = $old_surveys['surveys'][ $num_surveys ]['respondents'];
-					$respondent_key = $respondent_keys[ $respondent_key ];
-				} else {
+				if ( 'login' != $auth_type ) {
 					$respondent_key = $respondent_key + 1;
 				}
+				//error_log( 'respondent key ' . $respondent_key );
 				unset( $response['mykey'] );
+				if ( $num_surveys > 4 ) {
+					error_log( print_r( $response, true ) );
+				}
 				wwmas_process_response( $survey_id, $response, $respondent_key );
 			}
 		}
@@ -184,10 +212,9 @@ function wwmas_post_content_generator( $args = array(), $elements = array() ) {
 }
 
 function wwmas_process_response( $survey_id, $response, $respondent_key ) {
-
+	error_log( print_r( $response, true ) );
 	global $awesome_surveys;
 	$post = get_post( $survey_id, 'OBJECT', 'display' );
-	$saved_answers = get_post_meta( $survey_id, '_response', false );
 	$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 	$responses = array();
 	if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
@@ -209,9 +236,9 @@ function wwmas_process_response( $survey_id, $response, $respondent_key ) {
 			$responses[ $respondent_key ][ $key ] = $response[ $key ];
 		}
 	}
-	if ( ! empty( $responses ) ) {
+	//if ( ! empty( $responses ) ) {
 		add_post_meta( $survey_id, '_response', $responses, false );
-	}
+	//}
 
 	if ( ! empty( $multi_responses ) ) {
 		foreach ( $multi_responses as $key => $value ) {

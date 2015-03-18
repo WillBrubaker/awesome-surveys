@@ -5,6 +5,8 @@ this belongs in a function - not here
  */
 global $post;
 $results = get_post_meta( $post->ID, '_response', false );
+//debug error_log( print_r( $results, true ) );
+//debug exit;
 $elements = json_decode( get_post_meta( $post->ID, 'existing_elements', true ), true );
 $response_counts = array();
 foreach ( $results as $response_key => $response_array ) {
