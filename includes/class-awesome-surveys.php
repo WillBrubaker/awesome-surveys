@@ -25,10 +25,10 @@ class Awesome_Surveys {
 	}
 
 	/**
-	 * creates an array of buttons for use in the editor
-	 * as well as mapping values
-	 * @return array an array of button types w/labels
-	 */
+		* creates an array of buttons for use in the editor
+		* as well as mapping values
+		* @return array an array of button types w/labels
+		*/
 	public function get_buttons() {
 		return array(
 			'text' => array(
@@ -63,8 +63,8 @@ class Awesome_Surveys {
 	}
 
 	/**
-	 * regsiters the 'awesome-surveys' post type
-	 */
+		* regsiters the 'awesome-surveys' post type
+		*/
 	public function register_post_type() {
 
 		$args = array(
@@ -390,7 +390,7 @@ class Awesome_Surveys {
 		survey_auth_options filter
 		add your own auth method but also know that you will need to
 		add a handler for your auth method as well.
-		 */
+			*/
 		return apply_filters( 'survey_auth_options', array(
 			array(
 				'name' => 'none',
@@ -434,10 +434,10 @@ class Awesome_Surveys {
 	}
 
 	/**
-	 * adds the closed class to all survey responses postboxes
-	 * @param  array $classes the array to filter
-	 * @return array          the filtered array
-	 */
+		* adds the closed class to all survey responses postboxes
+		* @param  array $classes the array to filter
+		* @return array          the filtered array
+		*/
 	public function postbox_class( $classes ) {
 		if ( ! in_array( 'closed', $classes ) ) {
 			$classes[] = 'closed';
@@ -446,10 +446,10 @@ class Awesome_Surveys {
 	}
 
 	/**
-	 * if the login method is 'login' add the logged in user's
-	 * id to the post meta key '_respondents'
-	 * @param  array $action_args an array of arguments
-	 */
+		* if the login method is 'login' add the logged in user's
+		* id to the post meta key '_respondents'
+		* @param  array $action_args an array of arguments
+		*/
 	public function update_logged_in_respondents( $action_args ) {
 
 		extract( $action_args );
@@ -522,72 +522,71 @@ class Awesome_Surveys {
 	}
 
 	/**
-  * This filter is conditionally added if the auth method
-  * is login and the user is not logged in.
-  * @since  1.0
-  * @author Will the Web Mechanic <will@willthewebmechanic.com>
-  * @link http://willthewebmechanic.com
-  * @param  string $message a message to display to the user
-  * @return string          the filtered message.
-  */
- public function not_logged_in_message( $message ) {
-  return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
- }
+		* This filter is conditionally added if the auth method
+		* is login and the user is not logged in.
+		* @since  1.0
+		* @author Will the Web Mechanic <will@willthewebmechanic.com>
+		* @link http://willthewebmechanic.com
+		* @param  string $message a message to display to the user
+		* @return string          the filtered message.
+		*/
+	public function not_logged_in_message( $message ) {
+		return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
+	}
 
- /**
-  * Hooked into wwm_as_response_saved to send email if set
-  * @param  array $survey the survey that was just completed
-  * @since 1.6
-  */
- public function send_survey_emails( $args ) {
- 	error_log( __FUNCTION__ . ' fired' );
- 	return;
- 	/*
- 	todo: needs a complete rewrite
- 	 */
-  $surveys = get_option( 'wwm_awesome_surveys', array() );
-  $survey = $surveys['surveys'][ $args[0] ];
-
-  if ( isset( $surveys['enable_wwm_as_emails'] ) && $surveys['enable_wwm_as_emails'] ) {
-   $subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
-   $to = $surveys['mail_to'];
-   $message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), $survey['name'] );
-   $form = json_decode( $survey['form'], true );
-   foreach ( $args[2] as $key => $arr ) {
-    $answer = null;
-    $message .= "\n\nReply to " . stripslashes( $arr['question'] . ":\n" );
-    if ( $arr['has_options'] ) {
-     foreach ( $arr['answers'] as $answer_key => $answer_value ) {
-      if ( count( $args[2][ $key ]['answers'][ $answer_key ]  ) > count( $args[3][ $key ]['answers'][ $answer_key ] ) ) {
-       $answer = stripslashes( $form[ $key ]['label'][ $answer_key ] );
-      }
-     }
-    } else {
-     $answer = stripslashes( end( $args[2][ $key ]['answers'] ) );
-    }
-    $message .= ( ! empty( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
-   }
-   $message = apply_filters( 'wwm_as_admin_email', $message );
-   wp_mail( $to, $subject, $message );
-  }
-
-  if ( isset( $surveys['enable_wwm_as_respondent_email'] ) && $surveys['enable_wwm_as_respondent_email'] ) {
-   $form = json_decode( $survey['form'] );
-   foreach ( $form as $key => $value ) {
-    if ( 'Element_Email' == $value->type && is_email( $_POST['question'][$key] ) ) {
-     $to = $_POST['question'][$key];
-     $subject = sanitize_text_field( $surveys['respondent_email_subject'] );
-     $message = $surveys['respondent_email_message'];
-     $replacements = array(
-      '(\{blogname\})' => get_option( 'blogname' ),
-      '(\{siteurl\})' => get_option( 'siteurl' ),
-      '(\{surveyname\})' => stripslashes( $survey['name'] ),
-       );
-     $message = preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message );
-     wp_mail( $to, $subject, $message );
-     break;
-    }
-   }
-  }
- }
+	/**
+		* Hooked into wwm_as_response_saved to send email if set
+		* @param  array $args @see process_response in class-awesome-surveys-ajax-actions.php
+		* @since 1.6
+		*/
+	public function send_survey_emails( $args ) {
+		/*
+		$args = array( $survey_id, $responses, $existing_elements, $respondent_id )
+			*/
+		$form = $args[2];
+		$answers = $args[1][ $args[3] ];
+		$options = get_option( 'wwm_awesome_surveys_options', array() );
+		if ( isset( $options['email_options'] ) && $options['email_options']['enable_emails'] ) {
+			$subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
+			$to = $options['email_options']['mail_to'];
+			$message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), get_the_title( $args[0] ) );
+			$has_options = array( 'radio', 'dropdown' );
+			foreach ( $args[2] as $question_key => $question ) {
+				$answer = null;
+				$message .= "\n\nReply to " . stripslashes( $question['name'] . ":\n" );
+				if ( 'checkbox' == $question['type'] ) {
+					if ( empty( $answers[ $question_key ] ) ) {
+						continue;
+					}
+					foreach ( $answers[ $question_key ] as $answer_key => $answer_value ) {
+						$answer .= $question['label'][ $answer_value ] . "\n";
+					}
+				} elseif ( in_array( $question['type'], $has_options ) ) {
+					$answer = $question['label'][ $answers[ $question_key] ];
+				} else {
+					$answer = $answers[ $question_key ];
+				}
+				$message .= ( ! is_null( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
+			}
+			$message = apply_filters( 'wwm_as_admin_email', $message );
+			wp_mail( $to, $subject, $message );
+		}
+		if ( isset( $options['email_options'] ) && $options['email_options']['enable_respondent_email'] ) {
+			foreach ( $form as $key => $value ) {
+				if ( 'email' == $value['type'] && is_email( $answers[ $key ] ) ) {
+					$to = $answers[ $key ];
+					$subject = sanitize_text_field( $options['email_options']['email_subject'] );
+					$message = $options['email_options']['respondent_email_message'];
+					$replacements = array(
+						'(\{blogname\})' => get_option( 'blogname' ),
+						'(\{siteurl\})' => get_option( 'siteurl' ),
+						'(\{surveyname\})' => stripslashes( get_the_title( $args[0] ) ),
+							);
+					$message = preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message );
+					wp_mail( $to, $subject, $message );
+					break;
+				}
+			}
+		}
+	}
 }

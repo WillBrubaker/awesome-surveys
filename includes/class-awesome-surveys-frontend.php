@@ -62,7 +62,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			'survey_id' => $atts['id'],
 			);
 		$auth_key = get_post_meta( $atts['id'], 'survey_auth_method', true );
-		$auth_method = $this->auth_methods[ $auth_key ]['name'];
+		$auth_method = ( $auth_key ) ? $this->auth_methods[ $auth_key ]['name'] : 'none';
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
