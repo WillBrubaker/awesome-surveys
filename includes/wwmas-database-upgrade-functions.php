@@ -85,6 +85,7 @@ function wwmas_do_database_upgrade() {
 					'respondent_ids' => $respondent_ids,
 					);
 				wwmas_build_response_array( $args );
+				update_option( 'wwm_as_dbversion', $awesome_surveys->dbversion );
 			}
 		}
 	}
