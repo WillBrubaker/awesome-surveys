@@ -59,11 +59,11 @@ function wwmas_do_database_upgrade() {
 					}
 				}
 				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
-				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] : false;
+				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] : 0;
 				$respondent_ids = isset( $old_surveys['surveys'][ $num_surveys ]['respondents'] ) ? $old_surveys['surveys'][ $num_surveys ]['respondents'] : array_fill( 0, $num_responses + 1, null );
 				$post_metas = array(
 					'existing_elements' => $elements,
-					'num_responses' => $num_responses,
+					'num_responses' => $num_responses + 1,
 					'survey_auth_method' => $auth_method,
 					);
 				if ( 'login' == $auth_type ) {
@@ -81,10 +81,9 @@ function wwmas_do_database_upgrade() {
 					'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
 					'questions' => $existing_elements,
 					'auth_type' => $auth_type,
-					'num_responses' => $num_responses + 1,
+					'num_responses' => $num_responses + 2,
 					'respondent_ids' => $respondent_ids,
 					);
-				//debugwp_delete_post( $survey_id, true );
 				wwmas_build_response_array( $args );
 			}
 		}
@@ -162,16 +161,12 @@ $args = array(
 					);
  */
 	extract( $args );
-	//error_log( print_r( $args, true ) );
-	//die();
 	$num_questions = count( $questions );
 	$default_responses = array_fill( 0, $num_questions, null );
-	//error_log( print_r( $respondent_ids, true ) );
 	$responses = array();
 	foreach ( $respondent_ids as $respondent_id => $response ) {
 		$responses[ $respondent_id ] = $default_responses;
 	}
-	//error_log( "default responses array\n" . print_r( $responses, true ) );
 
 	$has_options = array( 'dropdown', 'radio' );
 	foreach ( $responses as $respondent_id => $response ) {
@@ -198,7 +193,7 @@ $args = array(
 	}
 
 	foreach ( $respondent_ids as $respondent_id => $value ) {
-		$user_id = ( 'login' == $auth_type ) ? $respondent_id : $respondent_id + 1;
+		$user_id = ( 'login' == $auth_type ) ? $value : $respondent_id + 1;
 		$response = array( $user_id => array_filter( $responses[ $respondent_id ], 'wwmas_remove_unset_responses' ) );
 		add_post_meta( $survey_id, '_response', $response, false );
 	}
@@ -213,54 +208,4 @@ function wwmas_remove_unset_responses( $value ) {
 		return true;
 	}
 	return ( ! empty( $value ) );
-}
-function wwmas_process_response( $survey_id, $response, $respondent_key ) {
-	//error_log( print_r( $response, true ) );
-	global $awesome_surveys;
-	$post = get_post( $survey_id, 'OBJECT', 'display' );
-	$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
-	$responses = array();
-	if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
-		return false;
-	}
-
-	$multi_responses = array();
-	foreach ( $existing_elements as $key => $question ) {
-		$type = $question['type'];
-		if ( 'checkbox' === $type && isset( $response[ $key ] ) ) {//the answers are an array
-			$radio_answers = array();
-			foreach ( $question['value'] as $multi_response_key => $otter_response ) {
-				if ( isset( $response[ $key ][ $multi_response_key ] ) ) {
-					$radio_answers[] = absint( $otter_response );
-				}
-			}
-			$responses[ $respondent_key ][ $key ] = $radio_answers;
-		} elseif( isset( $response[ $key ] ) && '' !== $response[ $key ] ) {
-			$responses[ $respondent_key ][ $key ] = $response[ $key ];
-		}
-	}
-	//if ( ! empty( $responses ) ) {
-		add_post_meta( $survey_id, '_response', $responses, false );
-	//}
-
-	if ( ! empty( $multi_responses ) ) {
-		foreach ( $multi_responses as $key => $value ) {
-			foreach ( $value as $answer_key => $answer_value ) {
-				$count = get_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, true ) + 1;
-				update_post_meta( $survey_id, '_response_' . $key . '_' . $answer_key, $count );
-			}
-		}
-	}
-	$auth_method = get_post_meta( $survey_id, 'survey_auth_method', true );
-	$auth_methods = $awesome_surveys->auth_methods;
-	$auth_type = $auth_methods[ $auth_method ]['name'];
-	if ( 'login' == $auth_type ) {
-		$respondents_array = get_post_meta( $survey_id, '_respondents', true );
-		$respondents = ( is_array( $respondents_array ) && ( ! empty( $respondents_array ) ) ) ? $respondents_array : array();
-		$respondents[] = $respondent_key;
-			if ( ! empty( $respondents ) ) {
-				update_post_meta( $survey_id, '_respondents', $respondents );
-			}
-	}
-	return true;
 }

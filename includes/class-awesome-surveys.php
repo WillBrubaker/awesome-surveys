@@ -132,13 +132,9 @@ class Awesome_Surveys {
 	}
 
 	public function answers_by_respondent( $post, $args = array() ) {
-		//error_log( print_r( $args['args'], true ) );
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
-		/*
-		todo: on surveys that were imported - follow-on answers are not getting recorded???
-		or at least the array is afu
-		 */
+
 		foreach ( $questions as $key => $question ) {
 			$response = null;
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );
@@ -488,7 +484,7 @@ class Awesome_Surveys {
 			return false;
 		}
 		$old_survey_ids = get_option( 'wwm_as_survey_id_map', array() );
-		if ( array_key_exists( $survey_id, $old_survey_ids['surveys'] ) ) {
+		if ( array_key_exists( $survey_id, $old_survey_ids ) ) {
 			$old_surveys = get_option( 'wwm_awesome_surveys', array() );
 			$respondents_array = $old_survey_ids['surveys'][ $survey_id ]['respondents'];
 			if ( in_array( get_current_user_id(), $respondents_array ) ) {

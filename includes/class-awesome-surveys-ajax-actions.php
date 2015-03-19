@@ -370,9 +370,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$data = array( apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) ) );
 			wp_send_json_error( $data );
 		}
-		/*
-		todo: if this fails, try to map the old survey id to the new one and try again.
-		 */
+
 		if ( empty( $existing_elements ) || is_null( $existing_elements ) ) {
 			$data = array( 'There was a problem in ' . __FILE__ . ' on line ' . ( __LINE__ - 1 ) . ' (bad array?) at ' . date( 'Y-m-d H:i:s' ) );
 			wp_send_json_error( $data );
