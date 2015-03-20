@@ -2,8 +2,8 @@
 
 class Awesome_Surveys {
 
-	protected $existing_elements, $plugin_version, $dbversion;
-	public $text_domain, $buttons, $options;
+	protected $existing_elements;
+	public $text_domain, $buttons, $options, $plugin_version, $dbversion;
 
 	public function __construct() {
 		$this->plugin_version = '2.0-pre';

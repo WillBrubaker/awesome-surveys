@@ -42,7 +42,6 @@ function wwmas_do_database_upgrade() {
 			$id_map[ $old_survey_id ] = $survey_id;
 			update_option( 'wwm_as_survey_id_map', $id_map );
 			if ( ! empty( $survey_id ) ) {
-				echo 'updating post ' . $survey_id . '<br>';
 				$args = array( 'survey_id' => $survey_id );
 				$post_content = wwmas_post_content_generator( $args, $elements_to_render );
 				$post = array(
@@ -85,10 +84,15 @@ function wwmas_do_database_upgrade() {
 					'respondent_ids' => $respondent_ids,
 					);
 				wwmas_build_response_array( $args );
-				update_option( 'wwm_as_dbversion', $awesome_surveys->dbversion );
 			}
 		}
 	}
+	//update_option( 'wwm_as_dbversion', $awesome_surveys->dbversion );
+	$url = add_query_arg( 'updated', 'true', $_SERVER['REQUEST_URI'] );
+	//$url = admin_url( '?page=wwm_plugins' );
+	error_log( $url );
+	wp_redirect( $url, 200 );
+	exit;
 }
 
 function wwmas_post_content_generator( $args = array(), $elements = array() ) {
