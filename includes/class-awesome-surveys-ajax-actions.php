@@ -26,11 +26,18 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	}
 
 	public function add_form_element() {
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_options' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
 			status_header( 403 );
 			exit;
 		}
-
+		/*
+		custom buttons can be added - if they have been,
+		they should have been handled already, but just in case
+		they haven't, exit now
+		 */
+		if ( ! array_key_exists( $_POST['element'], $this->buttons ) ) {
+			exit;
+		}
 		$filters = array(
 			'wwm_survey_validation_elements' => array( 10, 2),
 			);
