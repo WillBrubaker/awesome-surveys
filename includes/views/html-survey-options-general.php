@@ -15,7 +15,7 @@ $thank_you_message = ( ! empty( $post->post_excerpt ) ) ? $post->post_excerpt : 
 <div class="pure-form pure-form-stacked form-horizontal" id="general-survey-options">
 	<fieldset>
 		<div class="control-group">
-			<label for="general-survey-options-element-0" class="control-label"><?php _e( 'A Thank You message', 'awesome-surveys' ); ?>:</label>
+			<label for="general-survey-options-element-0" class="control-label"><?php _e( 'Thank You message', 'awesome-surveys' ); ?>:</label>
 			<div class="controls">
 				<textarea id="excerpt" name="excerpt" cols="40" rows="5"><?php echo $thank_you_message; ?></textarea>
 			</div>
@@ -28,7 +28,7 @@ $thank_you_message = ( ! empty( $post->post_excerpt ) ) ? $post->post_excerpt : 
 				</p>
 			</span>
 			<div class="control-group">
-				<label for="general-survey-options-element-2" class="control-label"><?php _e( 'Validation/authentication', 'awesome-surveys' ); ?></label>
+				<label for="general-survey-options-element-2" class="control-label"><?php _e( 'Survey Authentication Method:', 'awesome-surveys' ); ?></label>
 				<div class="controls">
 					<?php
 					foreach ( $awesome_surveys->auth_methods as $key => $method ) {
