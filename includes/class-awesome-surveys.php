@@ -555,16 +555,15 @@ class Awesome_Surveys {
 				$answer = null;
 				$message .= "\n\nReply to " . stripslashes( $question['name'] . ":\n" );
 				if ( 'checkbox' == $question['type'] ) {
-					if ( empty( $answers[ $question_key ] ) ) {
-						continue;
-					}
-					foreach ( $answers[ $question_key ] as $answer_key => $answer_value ) {
-						$answer .= $question['label'][ $answer_value ] . "\n";
+					if ( ! empty( $answers[ $question_key ] ) ) {
+						foreach ( $answers[ $question_key ] as $answer_key => $answer_value ) {
+							$answer .= $question['label'][ $answer_value ] . "\n";
+						}
 					}
 				} elseif ( in_array( $question['type'], $has_options ) ) {
-					$answer = $question['label'][ $answers[ $question_key] ];
+					$answer = ( isset( $answers[ $question_key] ) && ! is_null( $answers[ $question_key] ) ) ? $question['label'][ $answers[ $question_key] ] : null;
 				} else {
-					$answer = $answers[ $question_key ];
+					$answer = ( isset( $answers[ $question_key ] ) ) ? $answers[ $question_key ] : null;
 				}
 				$message .= ( ! is_null( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
 			}

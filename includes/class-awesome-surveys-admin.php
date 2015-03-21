@@ -65,7 +65,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
 
 		wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
-		wp_register_style( 'jquery-ui-lightness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array( 'wp-admin' ), '1.10.13', 'all' );
+		wp_register_style( 'jquery-ui-smoothness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array( 'wp-admin' ), '1.10.13', 'all' );
 		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
 
 		wp_register_script( $this->text_domain . '-options-script', WWM_AWESOME_SURVEYS_URL . '/js/options' . $suffix . '.js', array( 'jquery', 'jquery-ui-accordion', 'postbox' ), $this->plugin_version, true );
@@ -76,7 +76,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( 'awesome-surveys' === $screen->id ) {
 			wp_enqueue_script( $this->text_domain . '-admin-script', WWM_AWESOME_SURVEYS_URL . '/js/admin-script' . $suffix . '.js', array( 'jquery', 'jquery-ui-tabs', 'jquery-ui-slider', 'jquery-ui-sortable', 'jquery-ui-accordion', 'jquery-validation-plugin', 'jquery-ui-dialog', 'jquery-ui-button', 'postbox' ), $this->plugin_version, true );
 			wp_localize_script( $this->text_domain . '-admin-script', 'wwm_as_admin_script', $args );
-			wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-lightness', 'pure-forms-css' ), $this->plugin_version, 'all' );
+			wp_enqueue_style( $this->text_domain . '-admin-style', WWM_AWESOME_SURVEYS_URL . '/css/admin-style' . $suffix . '.css', array( 'jquery-ui-smoothness', 'pure-forms-css' ), $this->plugin_version, 'all' );
 			if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
 				wp_enqueue_script( $this->text_domain . '-view-results' );
 				wp_enqueue_style( $this->text_domain . '-results-style' );

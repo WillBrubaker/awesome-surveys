@@ -57,13 +57,15 @@ function wwmas_do_database_upgrade() {
 					}
 				}
 				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
-				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] : 0;
+				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] + 1 : 0;
 				$respondent_ids = isset( $old_surveys['surveys'][ $num_surveys ]['respondents'] ) ? $old_surveys['surveys'][ $num_surveys ]['respondents'] : array_fill( 0, $num_responses + 1, null );
 				$post_metas = array(
 					'existing_elements' => $elements,
-					'num_responses' => $num_responses + 1,
 					'survey_auth_method' => $auth_method,
 					);
+				if ( $num_responses ) {
+					$post_metas['num_responses'] = $num_responses;
+				}
 				if ( 'login' == $auth_type ) {
 					$post_metas['_respondents'] = $respondent_ids;
 				}
@@ -79,10 +81,12 @@ function wwmas_do_database_upgrade() {
 					'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
 					'questions' => $existing_elements,
 					'auth_type' => $auth_type,
-					'num_responses' => $num_responses + 2,
+					'num_responses' => $num_responses + 1,
 					'respondent_ids' => $respondent_ids,
 					);
-				wwmas_build_response_array( $args );
+				if ( $num_responses > 0 ) {
+					wwmas_build_response_array( $args );
+				}
 			}
 		}
 	}
@@ -154,7 +158,7 @@ $args = array(
 					'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
 					'questions' => $existing_elements,
 					'auth_type' => $auth_type,
-					'num_responses' => $num_responses + 1,
+					'num_responses' => $num_responses + 2,
 					'respondent_ids' => $respondent_ids,
 					);
  */
