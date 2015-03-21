@@ -36,6 +36,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		they haven't, exit now
 		 */
 		if ( ! array_key_exists( $_POST['element'], $this->buttons ) ) {
+			_doing_it_wrong( __METHOD__, 'your custom button should have halted execution, but it didn\'t.', '2.0' );
+			status_header( 400 );
 			exit;
 		}
 		$filters = array(
