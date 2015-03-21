@@ -568,6 +568,7 @@ class Awesome_Surveys {
 				}
 				$message .= ( ! is_null( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
 			}
+
 			$message = apply_filters( 'wwm_as_admin_email', $message );
 			wp_mail( $to, $subject, $message );
 		}
@@ -577,11 +578,12 @@ class Awesome_Surveys {
 					$to = $answers[ $key ];
 					$subject = sanitize_text_field( $options['email_options']['email_subject'] );
 					$message = $options['email_options']['respondent_email_message'];
-					$replacements = array(
+					$replacements = apply_filters( 'wwm_as_template_replacements', array(
 						'(\{blogname\})' => get_option( 'blogname' ),
 						'(\{siteurl\})' => get_option( 'siteurl' ),
 						'(\{surveyname\})' => stripslashes( get_the_title( $args[0] ) ),
-							);
+							)
+					);
 					$message = preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message );
 					wp_mail( $to, $subject, $message );
 					break;
