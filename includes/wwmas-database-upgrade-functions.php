@@ -87,12 +87,7 @@ function wwmas_do_database_upgrade() {
 			}
 		}
 	}
-	//update_option( 'wwm_as_dbversion', $awesome_surveys->dbversion );
-	$url = add_query_arg( 'updated', 'true', $_SERVER['REQUEST_URI'] );
-	//$url = admin_url( '?page=wwm_plugins' );
-	error_log( $url );
-	wp_redirect( $url, 200 );
-	exit;
+	update_option( 'wwm_as_dbversion', $awesome_surveys->dbversion );
 }
 
 function wwmas_post_content_generator( $args = array(), $elements = array() ) {

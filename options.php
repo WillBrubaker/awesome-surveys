@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( isset( $_POST ) && ! empty( $_POST ) ) {
-	if ( ! current_user_can( 'manage_options' ) || ! wp_verify_nonce( $_POST['_nonce'], 'awesome-surveys-update-options' ) ) {
+	if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_nonce'], 'awesome-surveys-update-options' ) ) {
 		wp_die( __( 'Cheatin&#8217; uh?', 'wordpress' ), 403 );
 	}
 	global $awesome_surveys;

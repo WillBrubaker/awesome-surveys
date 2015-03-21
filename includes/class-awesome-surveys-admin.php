@@ -15,6 +15,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			'save_post' => array( 'save_post', 10, 2 ),
 			'admin_enqueue_scripts' => array( 'admin_enqueue_scripts', 10, 0 ),
 			'admin_init' => array( 'init', 10, 0 ),
+			'admin_init' => array( 'admin_init', 1, 0 ),
 			'admin_notices' => array( 'admin_notices', 10, 0 ),
 			);
 
@@ -98,7 +99,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		* @link http://willthewebmechanic.com
 		*/
 	public function admin_menu() {
-
 		global $_wwm_plugins_page;
 		/**
 			* If, in the future, there is an enhancement or improvement,
@@ -108,14 +108,14 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$plugin_panel_version = 1;
 		add_filter( 'wwm_plugin_links', array( &$this, 'this_plugin_link' ) );
 		if ( empty( $_wwm_plugins_page ) || ( is_array( $_wwm_plugins_page ) && $plugin_panel_version > $_wwm_plugins_page[1] ) ) {
-			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'manage_options', 'wwm_plugins', array( &$this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '60.9' );
+			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'edit_others_posts', 'wwm_plugins', array( &$this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '60.9' );
 			$_wwm_plugins_page[1] = $plugin_panel_version;
 		}
-		$this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'manage_options', $this->menu_slug, array( &$this, 'plugin_options' ) );
-		add_submenu_page( 'wwm_plugins', '', __( 'My Surveys', 'awesome-surveys' ), 'manage_options', 'edit.php?post_type=awesome-surveys' );
-		add_submenu_page( 'wwm_plugins', '', __( 'New Survey', 'awesome-surveys' ), 'manage_options', 'post-new.php?post_type=awesome-surveys' );
-		add_action( 'admin_print_scripts-' . $this->page_hook, array( &$this, 'admin_print_scripts' ) );
-		add_action( 'admin_print_styles-' . $this->page_hook, array( &$this, 'admin_print_styles' ) );
+		$this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'edit_others_posts', $this->menu_slug, array( &$this, 'plugin_options' ) );
+		add_submenu_page( 'wwm_plugins', '', __( 'My Surveys', 'awesome-surveys' ), 'edit_others_posts', 'edit.php?post_type=awesome-surveys' );
+		add_submenu_page( 'wwm_plugins', '', __( 'New Survey', 'awesome-surveys' ), 'edit_others_posts', 'post-new.php?post_type=awesome-surveys' );
+		add_action( 'admin_print_scripts-' . $this->page_hook, array( $this, 'admin_print_scripts' ) );
+		add_action( 'admin_print_styles-' . $this->page_hook, array( $this, 'admin_print_styles' ) );
 	}
 
 	/**
@@ -210,12 +210,26 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			if ( ! $old_surveys ) {
 				return;
 			}
+			if ( isset( $_GET['database_upgraded'] ) && 'true' == $_GET['database_upgraded'] ) {
+				echo '<div class="updated"><p>' . __( 'Surveys updated', 'awesome-surveys' ) . '</p></div>';
+				return;
+			}
 			$dbversion = get_option( 'wwm_as_dbversion', '1.1' );
 				if ( version_compare( $this->dbversion, $dbversion, '==' ) && ! isset( $_GET['force_upgrade'] ) ) {
 					return;
 				}
-			include_once( 'wwmas-database-upgrade-functions.php' );
 			include_once( 'views/html-database-upgrade.php' );
+		}
+	}
+
+	public function admin_init() {
+		if ( isset( $_POST['wwm_do_db_upgrade'] ) && wp_verify_nonce( $_POST['wwm_as_db_upgrade'], 'wwm-as-add-element' ) ) {
+			require_once( 'wwmas-database-upgrade-functions.php' );
+			wwmas_do_database_upgrade();
+			ob_start();
+			$url = admin_url( 'edit.php?post_type=awesome-surveys&database_upgraded=true' );
+			wp_redirect( $url );
+			exit;
 		}
 	}
 }

@@ -26,7 +26,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	}
 
 	public function add_form_element() {
-		if ( ! current_user_can( 'manage_options' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
+		if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
 			status_header( 403 );
 			exit;
 		}
