@@ -36,7 +36,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	public function save_post( $post_id, $post ) {
-
+		error_log( print_r( $_POST, true ) );
 		if (  ! isset( $_POST['create_survey_nonce'] ) || ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
 			return;
 		}
@@ -223,7 +223,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	public function admin_init() {
-		if ( isset( $_POST['wwm_do_db_upgrade'] ) && wp_verify_nonce( $_POST['wwm_as_db_upgrade'], 'wwm-as-add-element' ) ) {
+		if ( isset( $_POST['wwm_do_db_upgrade'] ) && wp_verify_nonce( $_POST['wwm_as_db_upgrade'], 'wwm-as-database-upgrade' ) ) {
 			require_once( 'wwmas-database-upgrade-functions.php' );
 			wwmas_do_database_upgrade();
 			ob_start();

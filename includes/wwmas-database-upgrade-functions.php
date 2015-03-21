@@ -1,7 +1,6 @@
 <?php
 
 function wwmas_do_database_upgrade() {
-
 	add_option( 'wwm_as_survey_id_map', array(), '', 'no' );
 	global $awesome_surveys;
 
@@ -91,7 +90,6 @@ function wwmas_do_database_upgrade() {
 }
 
 function wwmas_post_content_generator( $args = array(), $elements = array() ) {
-
 		if ( ! class_exists( 'Form' ) ) {
 			include_once( WWM_AWESOME_SURVEYS_PATH . 'includes/PFBC/Form.php' );
 			include_once( WWM_AWESOME_SURVEYS_PATH . 'includes/PFBC/Overrides.php' );
