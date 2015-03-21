@@ -147,7 +147,7 @@ function wwmas_post_content_generator( $args = array(), $elements = array() ) {
 		$form_output->addElement( new Element_Hidden( 'answer_survey_nonce', $nonce ) );
 		$form_output->addElement( new Element_Hidden( 'survey_id', '', array( 'value' => $args['survey_id'], ) ) );
 		$form_output->addElement( new Element_Hidden( 'action', 'answer-survey' ) );
-		$form_output->addElement( new Element_Button( __( 'Submit Response', 'awesome-surveys' ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
+		$form_output->addElement( new Element_Button( apply_filters( 'wwm_as_submit_button_text', __( 'Submit Response', 'awesome-surveys' ) ), 'submit', array( 'class' => 'button-primary', 'disabled' => 'disabled' ) ) );
 		return $form_output->render( true );
 }
 
