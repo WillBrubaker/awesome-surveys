@@ -11,7 +11,7 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 		$has_responses = get_post_meta( $post->ID, '_response', true );
 		if ( empty( $has_responses ) ) :
 	?>
-	<textarea id="content" name="content" style="display:none;"><?php echo $post->post_content; ?></textarea>
+	<input type="hidden" id="content" name="content" value="<?php echo esc_html( $post->post_content ); ?>">
 		<?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
 	<input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
 	<div id="survey-elements-buttons">

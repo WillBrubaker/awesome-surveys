@@ -17,6 +17,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			'admin_init' => array( 'init', 10, 0 ),
 			'admin_init' => array( 'admin_init', 1, 0 ),
 			'admin_notices' => array( 'admin_notices', 10, 0 ),
+			'wp_insert_post_data' => array( 'insert_post_data', 10, 2 ),
 			);
 
 		foreach ( $actions as $action => $args ) {
@@ -36,7 +37,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	public function save_post( $post_id, $post ) {
-		error_log( print_r( $_POST, true ) );
 		if (  ! isset( $_POST['create_survey_nonce'] ) || ! wp_verify_nonce( $_POST['create_survey_nonce'], 'create-survey' ) ) {
 			return;
 		}
@@ -231,5 +231,12 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			wp_redirect( $url );
 			exit;
 		}
+	}
+
+	public function insert_post_data( $data, $postarr ) {
+		if ( 'awesome-surveys' == $data['post_type'] && isset( $data['post_content'] ) ) {
+			$data['post_content'] = htmlspecialchars_decode( $data['post_content'], ENT_QUOTES );
+		}
+		return $data;
 	}
 }

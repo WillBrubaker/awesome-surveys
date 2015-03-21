@@ -309,7 +309,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$pattern = '/method="post"/';
 		$replacement = '';
 		$save_form = preg_replace( $pattern, $replacement, $save_form );
-		$data = array( array( $preview_form . $save_form ), array( $post_content ), array( json_encode( $this->existing_elements ) ) );
+		$data = array( array( $preview_form . $save_form ), array( esc_html( $post_content ) ), array( json_encode( $this->existing_elements ) ) );
 		wp_send_json_success( $data );
 	}
 
