@@ -2,8 +2,8 @@
 Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
-Tested up to: 4.0.1
-Stable tag: 1.6.3
+Tested up to: 4.1.1
+Stable tag: 2.0
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -22,11 +22,10 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 2. Allows the creation of any number of surveys to collect data from visitors to your site.
 3. Build your survey forms with the powerful built-in form builder.
 4. Optionally require login or cookie authentication in order for a user to take the survey.
-5. Publish your surveys on pages or posts by including a shortcode.
+5. Publish your surveys on pages or posts by including a shortcode **new** or link directly to them.
 6. Advanced form field validation is included.
 7. View results of your surveys in the admin area of your WordPress site.
-8. Contextual help available for many of the survey builder options
-9. Extendable through action/filter hooks.
+8. Extendable through action/filter hooks.
 
 == Installation ==
 
@@ -54,23 +53,23 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 = How can I edit a survey? =
 
-* Under the 'Your Survey Results' tab, certain parts of your survey are editable. For instance you can click on the survey name or survey questions/answers. This will display a pop-up dialog box where you can edit the text in these fields.
+* Through the WordPress post editor for post type "awesome-surveys"
 
 = How do I delete a survey? =
 
-* Each existing survey under the 'Your Survey Results' tab has a 'delete' button. Simply press this button, confirm your desired action and the survey will be nuked from the planet!
+* Surveys are custom post types and deleting is done the same way you delete a post of page
 
 = How do I create a survey? =
 
-* This can be done by using the powerful survey form builder located in the plugin configuration screen.
+* This can be done by using the powerful survey form builder in the post editor for post type awesome survey
 
 = How do I publish a survey? =
 
-* Surveys can be published in your blog posts or pages using a simple shortcode. After you have built a survey, its details are available in the plugin configuration screen under the 'Your Surveys' tab. The shortcode for each of your surveys is displayed there.
+* Navigate to WTWM Plugins -> New Survey and build your survey. Once done, press the publish button. You can also embed your surveys via a simple shortcode that is displayed in the survey builder
 
 = Is there a howto video? =
 
-* Yes!
+* There was one for an earlier version - this is not current, but the functionality is similar.
 
 [youtube https://www.youtube.com/watch?v=YIta2rDE-QU]
 
@@ -104,7 +103,8 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 1. Major rewrite
 2. Surveys are now custom post types
 3. responses are each stored in post meta individually
-4.
+4. backward compatible to versions < 2.0, i.e. you can migrate older surveys to
+the new version and you old shortcodes will still work - authentication methods map back to the old survey ids
 
 = v1.6.3 =
 1. Attempts mitigation of data loss

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0-pre\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-03-21 19:52:23+00:00\n"
+"POT-Creation-Date: 2015-03-22 02:53:52+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: includes/class-awesome-surveys-admin.php:8
-#: includes/class-awesome-surveys-admin.php:170
+#: includes/class-awesome-surveys-admin.php:173
 msgid "Awesome Surveys Options"
 msgstr ""
 
@@ -38,19 +38,19 @@ msgstr ""
 msgid "New Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:171
+#: includes/class-awesome-surveys-admin.php:174
 msgid "Email Options"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:192
+#: includes/class-awesome-surveys-admin.php:208
 msgid "View Survey Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:192
+#: includes/class-awesome-surveys-admin.php:208
 msgid "Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:206
+#: includes/class-awesome-surveys-admin.php:222
 msgid "Surveys updated"
 msgstr ""
 
@@ -75,8 +75,8 @@ msgid "Add Question"
 msgstr ""
 
 #: includes/class-awesome-surveys-ajax-actions.php:161
-#: includes/class-awesome-surveys.php:150
-#: includes/class-awesome-surveys.php:153
+#: includes/class-awesome-surveys.php:159
+#: includes/class-awesome-surveys.php:162
 msgid "Answer"
 msgstr ""
 
@@ -106,12 +106,12 @@ msgstr ""
 
 #: includes/class-awesome-surveys-ajax-actions.php:379
 #: includes/class-awesome-surveys-frontend.php:89
-#: includes/class-awesome-surveys.php:361
+#: includes/class-awesome-surveys.php:385
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr ""
 
 #: includes/class-awesome-surveys-frontend.php:133
-#: includes/class-awesome-surveys.php:534
+#: includes/class-awesome-surveys.php:558
 msgid "You must be logged in to participate in this survey"
 msgstr ""
 
@@ -163,87 +163,87 @@ msgstr ""
 msgid "Surveys for your site"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:107
+#: includes/class-awesome-surveys.php:111
 msgid "Survey Results For:"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:120
+#: includes/class-awesome-surveys.php:124
 msgid "Results for "
 msgstr ""
 
-#: includes/class-awesome-surveys.php:123
+#: includes/class-awesome-surveys.php:127
 msgid "Results for respondent "
 msgstr ""
 
-#: includes/class-awesome-surveys.php:129
+#: includes/class-awesome-surveys.php:133
 msgid "Create Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:130
+#: includes/class-awesome-surveys.php:134
 msgid "General Survey Options"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:144
+#: includes/class-awesome-surveys.php:153
 msgid "Answers"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:155
+#: includes/class-awesome-surveys.php:164
 msgid "No response given"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:156
+#: includes/class-awesome-surveys.php:165
 msgid "Question"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:231
+#: includes/class-awesome-surveys.php:246
 msgid "Delete question"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:231
+#: includes/class-awesome-surveys.php:246
 msgid "Edit question"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:278
+#: includes/class-awesome-surveys.php:293
 #: includes/wwmas-database-upgrade-functions.php:111
 msgid "make a selection..."
 msgstr ""
 
-#: includes/class-awesome-surveys.php:317
+#: includes/class-awesome-surveys.php:332
 #: includes/wwmas-database-upgrade-functions.php:150
 msgid "Submit Response"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:375
+#: includes/class-awesome-surveys.php:399
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:377
+#: includes/class-awesome-surveys.php:401
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:397
+#: includes/class-awesome-surveys.php:421
 msgid "None"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:401
+#: includes/class-awesome-surveys.php:425
 msgid "User must be logged in"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:405
+#: includes/class-awesome-surveys.php:429
 msgid "Cookie based"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:550
+#: includes/class-awesome-surveys.php:574
 msgid "Survey Completed"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:552
+#: includes/class-awesome-surveys.php:576
 msgid "A survey on your site named %s has been completed"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:568
+#: includes/class-awesome-surveys.php:592
 msgid "No Answer Given"
 msgstr ""
 
