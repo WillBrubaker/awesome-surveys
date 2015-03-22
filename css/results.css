@@ -1,0 +1,33 @@
+span.italics {
+  font-style: italic; }
+
+span.answer, ul.answers {
+  margin-left: .5em; }
+  span.answer li, ul.answers li {
+    margin-left: 1.5em;
+    list-style: disc;
+    margin-top: .5em; }
+
+div.answers .options-container {
+  background-color: #e1f4ff;
+  border: 1px solid black;
+  margin: 1em 0;
+  padding: 20px 0;
+  position: relative;
+  float: left;
+  width: 100%; }
+
+div.answers .options {
+  background-color: #e1455d;
+  height: 100%;
+  left: 0;
+  line-height: 3em;
+  position: absolute;
+  text-indent: 10px;
+  top: 0; }
+
+p.answers {
+  text-decoration: underline; }
+
+#poststuff #post-body.columns-2 {
+  margin: 0; }

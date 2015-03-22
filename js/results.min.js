@@ -1,0 +1,1 @@
+jQuery(document).ready(function(a){a("#side-sortables").parent().remove();a(".wrap h2:first").remove()});

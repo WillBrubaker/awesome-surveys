@@ -1,0 +1,18 @@
+input[type="email"], input[type="text"], textarea {
+	width: 100%;
+	max-width: 300px;
+}
+
+.control-group {
+	margin: 1em 0;
+	label {
+		font-size: 110%;
+	}
+	div.controls {
+		margin: 1em 0;
+	}
+}
+
+p.italics {
+	font-style: italic;
+}
