@@ -110,7 +110,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 == Changelog ==
 
-= v2.0 Yemaya =
+= v2.0 - Yemaya =
 1. Major rewrite
 2. Surveys are now custom post types
 3. responses are each stored in post meta individually
