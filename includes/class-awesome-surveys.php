@@ -97,6 +97,10 @@ class Awesome_Surveys {
 		register_post_type( 'awesome-surveys', $args );
 	}
 
+	/**
+	 * outputs appropriate content for each of the screens
+	 *
+	 */
 	public function survey_editor() {
 		if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
 			$post_id = absint( $_GET['post'] );
@@ -131,6 +135,11 @@ class Awesome_Surveys {
 		}
 	}
 
+	/**
+	 * populates the meta boxes with individual survey respondents
+	 * @param  object $post the wp $post object
+	 * @param  array  $args questions and answers
+	 */
 	public function answers_by_respondent( $post, $args = array() ) {
 		$questions = $args['args'][1];
 		$answers = $args['args'][0][ $args['args'][2] ];
@@ -157,12 +166,18 @@ class Awesome_Surveys {
 		}
 	}
 
+	/**
+	 * loads scripts and html for the survey builder
+	 */
 	public function survey_builder() {
 		wp_enqueue_script( 'awesome-surveys-admin-script' );
 		wp_enqueue_style( 'awesome-surveys-admin-style' );
 		include_once( 'views/html-survey-builder.php' );
 	}
 
+	/**
+	 * gets the html for the options form
+	 */
 	public function general_survey_options() {
 		include_once( 'views/html-survey-options-general.php' );
 	}
@@ -346,6 +361,15 @@ class Awesome_Surveys {
 		return $form_elements_array;
 	}
 
+	/**
+	 * hooked into WordPress filter 'the_content'
+	 * replaces the nonce placeholder with an actual nonce
+	 * as well as conditionally checking the auth method to see
+	 * if the current viewer is allowed to take this particular survey.
+	 * If not, outputs a message
+	 * @param   $content string - the WordPress post content
+	 * @return string  the filtered content
+	 */
 	public function the_content( $content ) {
 		global $post;
 		if ( is_singular( 'awesome-surveys' ) ) {

@@ -105,10 +105,10 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			* allow other plugins to overwrite the panel by using
 			* a higher number version.
 			*/
-		$plugin_panel_version = 1;
-		add_filter( 'wwm_plugin_links', array( &$this, 'this_plugin_link' ) );
+		$plugin_panel_version = 2;
+		add_filter( 'wwm_plugin_links', array( $this, 'this_plugin_link' ) );
 		if ( empty( $_wwm_plugins_page ) || ( is_array( $_wwm_plugins_page ) && $plugin_panel_version > $_wwm_plugins_page[1] ) ) {
-			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'edit_others_posts', 'wwm_plugins', array( &$this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '60.9' );
+			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'edit_others_posts', 'wwm_plugins', array( $this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '90' );
 			$_wwm_plugins_page[1] = $plugin_panel_version;
 		}
 		$this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'edit_others_posts', $this->menu_slug, array( &$this, 'plugin_options' ) );
@@ -165,6 +165,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		echo '</div>' . "\n";
 	}
 
+	/**
+	 * outputs the plugin option metaboxes
+	 */
 	public function plugin_options() {
 		include_once( WWM_AWESOME_SURVEYS_PATH . '/options.php' );
 		add_meta_box( 'awesome-surveys-options', __( 'Awesome Surveys Options', 'awesome-surveys' ), array( $this, 'surveys_options' ), $this->page_hook, 'normal', 'core' );
@@ -176,14 +179,27 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		echo '</div>';
 	}
 
+	/**
+	 * gets the surveys options html
+	 */
 	public function surveys_options() {
 		include_once( 'views/html-surveys-options.php' );
 	}
 
+	/**
+	 * gets the email options html
+	 */
 	public function email_options() {
 		include_once( 'views/html-surveys-options-emails.php' );
 	}
 
+	/**
+	 * conditinally outputsa 'view results' link in the
+	 * 'all posts' screen
+	 * @param  array $actions
+	 * @param  oject $post    the wp post object
+	 * @return array          the filtered array of links
+	 */
 	public function post_row_actions( $actions, $post ) {
 		if ( 'awesome-surveys' === $post->post_type ) {
 			$edit_post_link = get_edit_post_link( $post->ID, true );
