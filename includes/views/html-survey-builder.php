@@ -21,11 +21,13 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 			echo '<button name="' . $name . '" data-nonce="' . $nonce . '">' . $value['label'] . '</button>' . "\n";
 		}
 		/*
-		add custom buttons here but ensure that their name isn't
-		one of the array keys in $awesome_surveys->buttons
-		but you need to add a custom ajax action to also handle that button and it
-		needs to happen earlier than default, check for your custom button name
-		output what it needs to output and then exit.
+
+		The idea here is that custom buttons can be added e.g. a pre-configured "states"
+		dropdown. Ensure that their name isn't one of the array keys
+		in $awesome_surveys->buttons. You also need to add a custom ajax action to
+		handle your button type and it needs to happen earlier than default, check for
+		your custom button name, output what it needs to output and then exit.
+
 		for example:
 		add_action( 'wp_ajax_add-form-element', 'my_handler_function', 5 );
 
@@ -41,6 +43,8 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 				exit;//halt the ajax action execution
 			}//element wasn't my custom one - do nothing and let the default handler take care of it
 		}
+
+		Whatever is added, however, needs to work with the PFBC methods
 		 */
 		do_action( 'after_wwm_as_output_buttons' );
 		?>

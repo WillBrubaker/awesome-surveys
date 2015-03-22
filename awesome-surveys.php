@@ -48,6 +48,7 @@ Domain Path: /languages/
 	* @package Awesome_Surveys
 	*
 	*/
+load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
 	$admin_includes = array(
 		'awesome-surveys-admin'

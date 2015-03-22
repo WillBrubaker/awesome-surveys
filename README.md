@@ -19,6 +19,8 @@ Create & publish feature-rich surveys with a few mouse clicks. All data collecte
 
 ## Description ##
 
+Version 2.0 is a major rewrite to address the issues of data loss that some users have been experiencing. Surveys are now custom post types and leverage the WordPress post editor. Individual responses are stored as post meta - each response is represented by one row in the post meta table for the survey.
+
 This plugin allows you to create surveys with an easy-to-use form builder, publish surveys with a simple shortcode and view survey results in the admin backend. You maintain control of your data. Automatic form validation is included.
 
 ### Features ###
@@ -35,6 +37,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 6. 	Advanced form field validation is included.
 7. 	View results of your surveys in the admin area of your WordPress site.
 8. 	Extendable through action/filter hooks.
+
+## Known issues/limitations ##
+
+1. At this time, it is not possible to edit survey questions if the survey has responses. In the future I plan to re-implement this but only so much as to allow for the editing of text - You will not be able to add questions to a survey which has responses. You will not be able to add answers to questions if the survey has respones.
+
+2. On the "view results" screen all responses are output at once. This will likely have a negative impact in certain cases where the survey has a lot of responses - also a large number of responses is unwieldy to view.
 
 ## Installation ##
 
@@ -55,7 +63,9 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ### After Installation: ###
 
-* Once activated, your admin menu will have an item labeld "WtWM Plugins", that item has 3 submenus that should be self-explanatory
+* Once activated, your admin menu will have an item labeld "WtWM Plugins", that item has a submenu item called "Awesome Survyes", this is where you can configure build your surveys & view their results.
+
+* Rejoice in how amazingly easy it is to create and publish surveys.
 
 ## Frequently Asked Questions ##
 
@@ -124,6 +134,12 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 ## Changelog ##
 
+## v2.0 - Yemaya ##
+1. Major rewrite
+2. Surveys are now custom post types
+3. responses are each stored in post meta individually
+4. backward compatible to versions < 2.0, i.e. you can migrate older surveys to
+the new version and you old shortcodes will still work - authentication methods map back to the old survey ids
 ## v1.6.3 ##
 1. Attempts mitigation of data loss
 2. Updated jQuery ui css

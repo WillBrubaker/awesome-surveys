@@ -38,7 +38,6 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		*/
 	public function wwm_survey( $atts ) {
 
-		load_plugin_textdomain( $this->text_domain, false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 		if ( ! isset( $atts['id'] ) ) {
 			return null;
 		}
@@ -89,7 +88,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
 		}
 		$nonce = wp_create_nonce( 'answer-survey' );
-		$survey_form = '<h4>' . $survey->post_title . '</h4>' . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
+		$survey_form = sprintf( '<%1$s %3$s>%2$s</%1$s>', apply_filters( 'wwm_survey_title_tag', 'h4' ), $survey->post_title, apply_filters( 'wwm_survey_title_atts', '' ) ) . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
 		return $survey_form;
 	}
 

@@ -250,6 +250,14 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 				exit;
 			}
 		}
+		if ( isset( $_GET['translate-surveys'] ) && 'true' == $_GET['translate-surveys'] ) {
+			ob_start();
+			require_once( WWM_AWESOME_SURVEYS_PATH . '/includes/wwmas-database-upgrade-functions.php' );
+			wwmas_translate_post_content();
+			$url = admin_url( 'admin.php?page=awesome-surveys.php' );
+			wp_redirect( $url );
+			exit;
+		}
 	}
 
 	public function insert_post_data( $data, $postarr ) {

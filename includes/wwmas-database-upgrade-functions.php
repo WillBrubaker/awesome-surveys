@@ -152,16 +152,16 @@ function wwmas_post_content_generator( $args = array(), $elements = array() ) {
 }
 
 function wwmas_build_response_array( $args ) {
-/*
-$args = array(
-					'survey_id' => $survey_id,
-					'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
-					'questions' => $existing_elements,
-					'auth_type' => $auth_type,
-					'num_responses' => $num_responses + 2,
-					'respondent_ids' => $respondent_ids,
-					);
- */
+	/*
+	$args = array(
+						'survey_id' => $survey_id,
+						'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
+						'questions' => $existing_elements,
+						'auth_type' => $auth_type,
+						'num_responses' => $num_responses + 2,
+						'respondent_ids' => $respondent_ids,
+						);
+	 */
 	extract( $args );
 	$num_questions = count( $questions );
 	$default_responses = array_fill( 0, $num_questions, null );
@@ -210,4 +210,39 @@ function wwmas_remove_unset_responses( $value ) {
 		return true;
 	}
 	return ( ! empty( $value ) );
+}
+
+function wwmas_translate_post_content() {
+	if ( ! current_user_can( 'edit_others_posts' ) ) {
+		die( 'not authorized' );
+	}
+	$query_args = array(
+		'post_type' => 'awesome-surveys',
+		'post_status' => 'publish',
+		);
+	$surveys = new WP_Query( $query_args );
+	if ( $surveys->have_posts() ) {
+		while ( $surveys->have_posts() ) {
+			$surveys->the_post();
+			$survey_id = get_the_ID();
+			$args = array(
+			'survey_id' => $survey_id,
+			);
+			$elements = wwmas_convert_elements( json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true ) );
+			$content = wwmas_post_content_generator( $args, $elements );
+			$postarr = array(
+		'ID' => $survey_id,
+		'post_content' => $content,
+		);
+		wp_update_post( $postarr );
+		}
+	}
+}
+
+function wwmas_convert_elements( $elements = array() ) {
+	global $awesome_surveys;
+	foreach ( $elements as $element_key => $element ) {
+		$elements[ $element_key ]['type'] = $awesome_surveys->buttons[ $element['type'] ]['type'];
+	}
+	return $elements;
 }
