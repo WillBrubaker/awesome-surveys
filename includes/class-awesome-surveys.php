@@ -247,9 +247,10 @@ class Awesome_Surveys {
 					}
 					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
 					if ( empty( $has_responses ) ) {
-						$form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button></div></div>' ) );
+						$form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button></div><div class="clear"></div></div>' ) );
+					} else {
+						$form->addElement( new Element_HTML( '<div class="clear"></div>' ) );
 					}
-					$form->addElement( new Element_HTML( '<div class="clear"></div>' ) );
 					$elements_count++;
 			}
 			$output = $form->render( true );
