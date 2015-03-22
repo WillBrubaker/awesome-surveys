@@ -143,6 +143,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 3. responses are each stored in post meta individually
 4. backward compatible to versions < 2.0, i.e. you can migrate older surveys to
 the new version and you old shortcodes will still work - authentication methods map back to the old survey ids
+
 ## v1.6.3 ##
 1. Attempts mitigation of data loss
 2. Updated jQuery ui css
