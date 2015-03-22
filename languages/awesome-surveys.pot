@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-03-22 13:42:41+00:00\n"
+"POT-Creation-Date: 2015-03-22 14:58:21+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -42,16 +42,28 @@ msgstr ""
 msgid "Email Options"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:208
+#: includes/class-awesome-surveys-admin.php:210
 msgid "View Survey Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:208
+#: includes/class-awesome-surveys-admin.php:210
 msgid "Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:222
+#: includes/class-awesome-surveys-admin.php:212
+msgid "Create a copy of this survey"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:212
+msgid "Duplicate"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:225
 msgid "Surveys updated"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:277
+msgid "Copy"
 msgstr ""
 
 #: includes/class-awesome-surveys-ajax-actions.php:83

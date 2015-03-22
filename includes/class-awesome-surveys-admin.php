@@ -202,11 +202,14 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	 */
 	public function post_row_actions( $actions, $post ) {
 		if ( 'awesome-surveys' === $post->post_type ) {
+			$nonce = wp_create_nonce( 'wwm-duplicate-survey' );
 			$edit_post_link = get_edit_post_link( $post->ID, true );
+			$duplicate_url = admin_url( 'post.php?post=' . $post->ID . '&action=duplicate&duplicate_survey_nonce=' . $nonce );
 			$show_link = get_post_meta( $post->ID, '_response', true );
 			if ( ! empty( $show_link ) ) {
 				$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
 			}
+			$actions['duplicate'] = '<a href="' . $duplicate_url . '" title="' . __( 'Create a copy of this survey', 'awesome-surveys' ) . '">' . __( 'Duplicate', 'awesome-surveys' ) . '</a>';
 		}
 		return $actions;
 	}
@@ -239,6 +242,14 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			wp_redirect( $url );
 			exit;
 		}
+		if ( isset( $_GET['action'] ) && 'duplicate' == $_GET['action'] && wp_verify_nonce( $_GET['duplicate_survey_nonce'], 'wwm-duplicate-survey' ) ) {
+			$new_survey = $this->duplicate_survey( $_GET['post'] );
+			if ( $new_survey > 0 ) {
+				$url = admin_url( 'post.php?post=' . $new_survey . '&action=edit' );
+				wp_redirect( $url );
+				exit;
+			}
+		}
 	}
 
 	public function insert_post_data( $data, $postarr ) {
@@ -246,5 +257,31 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			$data['post_content'] = htmlspecialchars_decode( $data['post_content'], ENT_QUOTES );
 		}
 		return $data;
+	}
+
+	/**
+	 * duplicates a survey
+	 * @param  int $post_id the post id that is being duplicated
+	 */
+	private function duplicate_survey( $post_id ) {
+		$post = get_post( $post_id );
+		$post_metas = array(
+					'existing_elements',
+					'survey_auth_method',
+					);
+		$new_post_data = array(
+			'post_content' => $post->post_content,
+			'post_excerpt' => $post->post_excerpt,
+			'post_type' => 'awesome-surveys',
+			'post_status' => 'draft',
+			'post_title' => $post->post_title . ' (' . __( 'Copy', 'awesome-surveys' ) . ')',
+			);
+		$new_survey = wp_insert_post( $new_post_data );
+		if ( $new_survey ) {
+			foreach( $post_metas as $meta_key )
+				$meta_value = get_post_meta( $post_id, $meta_key, true );
+				update_post_meta( $new_survey, $meta_key, $meta_value );
+		}
+		return $new_survey;
 	}
 }
