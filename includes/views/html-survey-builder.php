@@ -7,13 +7,13 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 ?>
 <div id="awesome-survey">
 	<input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo $existing_elements; ?>'>
+	<input type="hidden" id="content" name="content" value="<?php echo esc_html( $post->post_content ); ?>">
+		<?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
+	<input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
 	<?php
 		$has_responses = get_post_meta( $post->ID, '_response', true );
 		if ( empty( $has_responses ) ) :
 	?>
-	<input type="hidden" id="content" name="content" value="<?php echo esc_html( $post->post_content ); ?>">
-		<?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
-	<input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
 	<div id="survey-elements-buttons">
 		<h4><?php _e( 'Add a form element to your survey by clicking a button', 'awesome-surveys' ); ?></h4>
 		<?php
@@ -51,7 +51,7 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 	<div id="current-element"></div>
 	</div>
 <?php else : ?>
-	<h3><?php _e( 'This survey has responses and can not be edited', 'awesome-surveys' ); ?></h3>
+	<h3><?php _e( 'This survey has responses. Questions can not be edited', 'awesome-surveys' ); ?></h3>
 <?php endif; ?>
 	<div id="form-preview-wrapper">
 	<hr>

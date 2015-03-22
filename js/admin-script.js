@@ -102,24 +102,19 @@ jQuery('document').ready(function($) {
 																		label.prepend('<span class="required">* </span>')
 																}
 																elementsJSON = removeNulls(elementsJSON)
-																var types = {
-																		Element_Radio: "radio",
-																		Element_Checkbox: "checkbox"
-																}
 																if ('undefined' != typeof elementsJSON[index].label) {
 																		var target
 																		newHtml = ''
-																		type = (elementsJSON[index].type in types) ? types[elementsJSON[index].type] : 'option'
-																		if ('option' == type) {
-																				target = $('select', container)
-																				for (key in elementsJSON[index].value) {
-																						newHtml += '<option value="' + key + '"'
-																						if (key == elementsJSON[index]['default']) {
-																								newHtml += ' selected="selected"'
-																						}
-																						newHtml += '>' + formValues.label[key] + '</option>'
-																				}
-
+																		type = elementsJSON[index].type
+																		if ('dropdown' == type) {
+																			target = $('select', container)
+																			for (key in elementsJSON[index].value) {
+																					newHtml += '<option value="' + key + '"'
+																					if (key == elementsJSON[index]['default']) {
+																							newHtml += ' selected="selected"'
+																					}
+																					newHtml += '>' + formValues.label[key] + '</option>'
+																			}
 																		} else {
 																				target = $('.controls', container)
 																				setName = $('[type="' + type + '"]:first', target).attr('name');
