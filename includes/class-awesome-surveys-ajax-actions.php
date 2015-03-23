@@ -289,8 +289,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
 		}
 
-		$saved_elements = ( ! empty( $_POST['existing_elements'] ) ) ? stripslashes( $_POST['existing_elements'] ) : get_post_meta( $_POST['survey_id'], 'existing_elements', true );
-		$this->existing_elements = ( ! empty( $saved_elements ) ) ? array_merge( json_decode( $saved_elements, true ), array( $form_elements_array['options'], ) ) : array( $form_elements_array['options'] );
+		$saved_elements = ( ! empty( $_POST['existing_elements'] ) && 'null' != $_POST['existing_elements'] ) ? stripslashes( $_POST['existing_elements'] ) : get_post_meta( $_POST['survey_id'], 'existing_elements', true );
+		$this->existing_elements = ( ! empty( $saved_elements ) && 'null' != $saved_elements ) ? array_merge( json_decode( $saved_elements, true ), array( $form_elements_array['options'], ) ) : array( $form_elements_array['options'] );
 		$form = new FormOverrides();
 		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
 		$preview_form = $this->get_form_preview_html( $_POST['survey_id'] );

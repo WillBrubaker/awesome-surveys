@@ -292,7 +292,7 @@ class Awesome_Surveys {
 		$form_output->configure( array( 'class' => 'answer-survey pure-form pure-form-stacked', 'action' => $_SERVER['REQUEST_URI'], ) );
 		$form_output->addElement( new Element_HTML( '<div class="overlay"><span class="preloader"></span></div>') );
 		$questions_count = 0;
-		$existing_elements = $this->existing_elements;
+		$existing_elements = ( is_array( $this->existing_elements ) ) ? $this->existing_elements : array();
 		foreach ( $existing_elements as $element ) {
 			$method = $this->buttons[ $element['type'] ]['type'];
 			$atts = $rules = $options = array();
