@@ -26,6 +26,11 @@ function wwmas_do_database_upgrade() {
 				//need to map the old type to the new type
 				foreach ( $existing_elements as $element_key => $element_value ) {
 					$existing_elements[ $element_key ]['type'] = $type_map[ $element_value['type'] ];
+					if ( in_array( $type_map[ $element_value['type'] ], array( 'radio', 'dropdown', 'checkbox' ) ) ) {
+						$atts = ( isset( $element_value['atts'] ) ) ? $element_value['atts'] : array();
+						$atts['can_add_options'] = 'yes';
+						$existing_elements[ $element_key ]['atts'] = $atts;
+					}
 				}
 			$elements = json_encode( $existing_elements );
 			$post = array(
@@ -189,7 +194,7 @@ function wwmas_build_response_array( $args ) {
 				}
 				$responses[ $respondent_id ][ $question_key ] = $checked_answers;
 			} else {
-				$responses[ $respondent_id ][ $question_key ] = $answers[ $question_key ][ $respondent_id ];
+				$responses[ $respondent_id ][ $question_key ] = ( isset( $answers[ $question_key ][ $respondent_id ] ) ) ? $answers[ $question_key ][ $respondent_id ] : null;
 			}
 		}
 	}

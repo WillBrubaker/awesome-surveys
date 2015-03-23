@@ -277,9 +277,10 @@ function generateDynamicDialog(obj) {
 		}
 		html += '>'
 		if ('undefined' != typeof obj.label) {
-				html += '<div class="slider-wrapper"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
-				html += '<p>answers:</p>'
-				html += '<div id="edit-answers-holder">'
+				display = ( 'undefined' != typeof obj.atts && 'undefined' != typeof obj.atts.can_add_options && 'yes' == obj.atts.can_add_options ) ? 'block' : 'none'
+				html += '<div class="slider-wrapper" style="display:' + display + ';"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
+				html += '<p style="display:' + display + ';">answers:</p>'
+				html += '<div id="edit-answers-holder" style="display:' + display + ';">'
 				for (key in obj.label) {
 						count = Number(key) + 1
 						html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="" required="required">'

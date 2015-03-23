@@ -131,6 +131,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		}
 		$needs_options = array( 'radio', 'checkbox', 'dropdown' );
 		if ( in_array( $form_element, $needs_options ) ) {
+			$html .= '<input type="hidden" name="options[atts][can_add_options]" value="yes">';
 			$html .= '<span class="label">' . __( 'Number of answers required?', 'awesome-surveys' ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
 			$html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
 			$html .= '</div>';
