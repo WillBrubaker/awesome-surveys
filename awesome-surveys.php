@@ -35,13 +35,6 @@ Domain Path: /languages/
 	*/
 	/*
 	todo:
-	update changelog
-	update version numbers
-	move upgrade database from metabox to admin notice
-	provide ability to force database update
-	error handling for database update...what do do if post insertion
-	or meta insertion fails?
-	option to remove data on successful update
 	*/
 
 /**
