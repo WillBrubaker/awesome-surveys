@@ -63,7 +63,10 @@ function wwmas_do_database_upgrade() {
 				}
 				$auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
 				$num_responses = ( isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) ? $old_surveys['surveys'][ $num_surveys ]['num_responses'] + 1 : 0;
-				$respondent_ids = isset( $old_surveys['surveys'][ $num_surveys ]['respondents'] ) ? $old_surveys['surveys'][ $num_surveys ]['respondents'] : array_fill( 0, $num_responses + 1, null );
+				$respondent_ids = isset( $old_surveys['surveys'][ $num_surveys ]['respondents'] ) ? $old_surveys['surveys'][ $num_surveys ]['respondents'] : array();
+				if ( empty( $respondent_ids ) && $num_responses > 0 ) {
+					$respondent_ids = array_fill( 0, $num_responses, null );
+				}
 				$post_metas = array(
 					'existing_elements' => $elements,
 					'survey_auth_method' => $auth_method,
@@ -80,7 +83,6 @@ function wwmas_do_database_upgrade() {
 				if ( ! isset( $old_surveys['surveys'][ $num_surveys ]['num_responses'] ) ) {
 					continue;
 				}
-				$respondent_ids = isset( $old_surveys['surveys'][ $num_surveys ]['respondents'] ) ? $old_surveys['surveys'][ $num_surveys ]['respondents'] : array_fill( 0, $num_responses + 1, null );
 				$args = array(
 					'survey_id' => $survey_id,
 					'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
@@ -163,7 +165,7 @@ function wwmas_build_response_array( $args ) {
 						'answers' => wp_list_pluck( $old_surveys['surveys'][ $num_surveys ]['responses'], 'answers' ),
 						'questions' => $existing_elements,
 						'auth_type' => $auth_type,
-						'num_responses' => $num_responses + 2,
+						'num_responses' => $num_responses + 1,
 						'respondent_ids' => $respondent_ids,
 						);
 	 */
