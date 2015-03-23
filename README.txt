@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 4.1.1
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -109,6 +109,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 
 == Changelog ==
+
+= v2.0.2 =
+1. yet another bugfix
 
 = v2.0.1 =
 1. bugfix

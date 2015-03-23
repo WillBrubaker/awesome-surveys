@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.1.1
 
-**Stable tag:** 2.0.1
+**Stable tag:** 2.0.2
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -136,6 +136,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 
 ## Changelog ##
+
+## v2.0.1 ##
+1. yet another bugfix
 
 ## v2.0.1 ##
 1. bugfix
