@@ -580,7 +580,7 @@ class Awesome_Surveys {
 		if ( isset( $options['email_options'] ) && $options['email_options']['enable_emails'] ) {
 			$subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
 			$to = $options['email_options']['mail_to'];
-			$message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), get_the_title( $args[0] ) );
+			$message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), html_entity_decode( get_the_title( $args[0] ) ) );
 			$has_options = array( 'radio', 'dropdown' );
 			foreach ( $args[2] as $question_key => $question ) {
 				$answer = null;
@@ -614,7 +614,7 @@ class Awesome_Surveys {
 						'(\{surveyname\})' => stripslashes( get_the_title( $args[0] ) ),
 							)
 					);
-					$message = preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message );
+					$message = html_entity_decode( preg_replace( array_keys( $replacements ), array_values( $replacements ),  $message ) );
 					wp_mail( $to, $subject, $message );
 					break;
 				}

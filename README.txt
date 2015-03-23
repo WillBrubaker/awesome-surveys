@@ -112,6 +112,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 = v2.0.3 =
 1. fix for undefined offset when deciding whether to send email
+2. decode html entities in outgoing emails
 
 = v2.0.2 =
 1. yet another bugfix
