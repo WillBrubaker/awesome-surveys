@@ -6,7 +6,7 @@ class Awesome_Surveys {
 	public $text_domain, $buttons, $options, $plugin_version, $dbversion;
 
 	public function __construct() {
-		$this->plugin_version = '2.0';
+		$this->plugin_version = '2.0.1';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.2';
 		$this->buttons = $this->get_buttons();
@@ -68,7 +68,7 @@ class Awesome_Surveys {
 	public function register_post_type() {
 
 		$args = array(
-			'label' => _( 'Awesome Surveys', 'awesome-surveys' ),
+			'label' => __( 'Awesome Surveys', 'awesome-surveys' ),
 			'labels' => array(
 				'name' => __( 'Surveys', 'awesome-surveys' ),
 				'singular_name' => __( 'Survey', 'awesome-surveys' ),
