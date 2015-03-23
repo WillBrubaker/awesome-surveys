@@ -5,24 +5,24 @@ msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
 "POT-Creation-Date: 2015-03-22 16:48:16+00:00\n"
-"PO-Revision-Date: 2015-03-22 11:53-0500\n"
-"Last-Translator: Naim Khalifa <n.khalifa@gmail.com>\n"
+"PO-Revision-Date: 2015-03-23 12:03+0100\n"
+"Last-Translator: Naïm Khalifa <n.khalifa@gmail.com>\n"
 "Language-Team: \n"
 "Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.5.4\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: includes/class-awesome-surveys-admin.php:8
 #: includes/class-awesome-surveys-admin.php:173
 msgid "Awesome Surveys Options"
-msgstr ""
+msgstr "Option d'Awesome Surveys"
 
 #: includes/class-awesome-surveys-admin.php:9
 msgid "Survey Options"
-msgstr ""
+msgstr "Option du sondage"
 
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:11
@@ -33,40 +33,40 @@ msgstr "Awesome Surveys"
 #: includes/class-awesome-surveys-admin.php:115
 #: includes/class-awesome-surveys.php:76
 msgid "My Surveys"
-msgstr ""
+msgstr "Mes sondages"
 
 #: includes/class-awesome-surveys-admin.php:116
 #: includes/class-awesome-surveys.php:78 includes/class-awesome-surveys.php:79
 msgid "New Survey"
-msgstr ""
+msgstr "Nouveau sondage"
 
 #: includes/class-awesome-surveys-admin.php:174
 msgid "Email Options"
-msgstr ""
+msgstr "Options d'email"
 
 #: includes/class-awesome-surveys-admin.php:210
 msgid "View Survey Results"
-msgstr ""
+msgstr "Voir les résultats du sondage"
 
 #: includes/class-awesome-surveys-admin.php:210
 msgid "Results"
-msgstr ""
+msgstr "Résultats"
 
 #: includes/class-awesome-surveys-admin.php:212
 msgid "Create a copy of this survey"
-msgstr ""
+msgstr "Créer un copie de ce sondage"
 
 #: includes/class-awesome-surveys-admin.php:212
 msgid "Duplicate"
-msgstr ""
+msgstr "Dupliquer"
 
 #: includes/class-awesome-surveys-admin.php:225
 msgid "Surveys updated"
-msgstr ""
+msgstr "Sondages mis à jour"
 
 #: includes/class-awesome-surveys-admin.php:277
 msgid "Copy"
-msgstr ""
+msgstr "Copier"
 
 #: includes/class-awesome-surveys-ajax-actions.php:83
 msgid "The question you are asking:"
@@ -89,7 +89,8 @@ msgid "Add Question"
 msgstr "Ajouter une question"
 
 #: includes/class-awesome-surveys-ajax-actions.php:161
-#: includes/class-awesome-surveys.php:160 includes/class-awesome-surveys.php:163
+#: includes/class-awesome-surveys.php:160
+#: includes/class-awesome-surveys.php:163
 msgid "Answer"
 msgstr "Réponse"
 
@@ -130,67 +131,67 @@ msgstr "Vous devez être connecté pour participer à ce sondage"
 
 #: includes/class-awesome-surveys.php:37
 msgid "Text Input"
-msgstr ""
+msgstr "Input texte"
 
 #: includes/class-awesome-surveys.php:41
 msgid "Email"
-msgstr ""
+msgstr "Email"
 
 #: includes/class-awesome-surveys.php:45
 msgid "Number"
-msgstr ""
+msgstr "Nombre"
 
 #: includes/class-awesome-surveys.php:49
 msgid "Dropdown Selector"
-msgstr ""
+msgstr "Sélecteur déroulant"
 
 #: includes/class-awesome-surveys.php:53
 msgid "Radio Buttons"
-msgstr ""
+msgstr "Boutons radio"
 
 #: includes/class-awesome-surveys.php:57
 msgid "Checkboxes"
-msgstr ""
+msgstr "Cases à cocher"
 
 #: includes/class-awesome-surveys.php:61
 msgid "Textarea"
-msgstr ""
+msgstr "Textarea"
 
 #: includes/class-awesome-surveys.php:74
 msgid "Surveys"
-msgstr ""
+msgstr "Sondages"
 
 #: includes/class-awesome-surveys.php:75 includes/class-awesome-surveys.php:77
 msgid "Survey"
-msgstr ""
+msgstr "Sondage"
 
 #: includes/class-awesome-surveys.php:80
 msgid "Add New Survey"
-msgstr ""
+msgstr "Ajouter un nouveau sondage"
 
 #: includes/class-awesome-surveys.php:81
 msgid "Edit Survey"
-msgstr ""
+msgstr "Editer le sondage"
 
 #: includes/class-awesome-surveys.php:83
 msgid "Surveys for your site"
-msgstr ""
+msgstr "Les sondages pour votre site"
 
 #: includes/class-awesome-surveys.php:112
 msgid "Survey Results For:"
-msgstr ""
+msgstr "Résultats du sondage pour:"
 
 #: includes/class-awesome-surveys.php:125
 msgid "Results for "
-msgstr ""
+msgstr "Résultats pour"
 
 #: includes/class-awesome-surveys.php:128
 msgid "Results for respondent "
-msgstr ""
+msgstr "Résultats pour le sondé"
 
 #: includes/class-awesome-surveys.php:134
 msgid "Create Survey"
-msgstr ""
+msgstr "Créer un sondage"
 
 #: includes/class-awesome-surveys.php:135
 msgid "General Survey Options"
@@ -198,15 +199,15 @@ msgstr "Options générales du sondage"
 
 #: includes/class-awesome-surveys.php:154
 msgid "Answers"
-msgstr ""
+msgstr "Réponses"
 
 #: includes/class-awesome-surveys.php:165
 msgid "No response given"
-msgstr ""
+msgstr "Pas de réponse donnée"
 
 #: includes/class-awesome-surveys.php:166
 msgid "Question"
-msgstr ""
+msgstr "Question"
 
 #: includes/class-awesome-surveys.php:251
 msgid "Delete question"
@@ -221,7 +222,8 @@ msgstr "Editer la question"
 msgid "make a selection..."
 msgstr "Faire un choix"
 
-#: includes/class-awesome-surveys.php:339 includes/class-awesome-surveys.php:391
+#: includes/class-awesome-surveys.php:339
+#: includes/class-awesome-surveys.php:391
 #: includes/wwmas-database-upgrade-functions.php:150
 msgid "Submit Response"
 msgstr "Envoyer"
@@ -229,12 +231,12 @@ msgstr "Envoyer"
 #: includes/class-awesome-surveys.php:407
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
-msgstr ""
+msgstr "Merci pour votre réponse"
 
 #: includes/class-awesome-surveys.php:409
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
-msgstr ""
+msgstr "Merci pour votre réponse à un sondage"
 
 #: includes/class-awesome-surveys.php:429
 msgid "None"
@@ -250,39 +252,42 @@ msgstr "Cookie"
 
 #: includes/class-awesome-surveys.php:582
 msgid "Survey Completed"
-msgstr ""
+msgstr "Sondage terminé"
 
 #: includes/class-awesome-surveys.php:584
 msgid "A survey on your site named %s has been completed"
-msgstr ""
+msgstr "Un sondage sur votre site %s a été complété"
 
 #: includes/class-awesome-surveys.php:600
 msgid "No Answer Given"
-msgstr ""
+msgstr "Pas de réponse donnée"
 
 #: includes/views/html-database-upgrade.php:2
 msgid "Press the button below to migrate your surveys to the newest version"
 msgstr ""
+"Pressez le bouton ci-dessous pour migrer vos sondages vers la nouvelle "
+"version"
 
 #: includes/views/html-database-upgrade.php:5
 msgid "upgrade database"
-msgstr ""
+msgstr "Mettre à niveau la base de données"
 
 #: includes/views/html-survey-builder.php:18
 msgid "Add a form element to your survey by clicking a button"
 msgstr ""
+"Ajouter un élément de formulaire à votre sondage en cliquant sur un bouton"
 
 #: includes/views/html-survey-builder.php:50
 msgid "Configure a survey question"
-msgstr ""
+msgstr "Configurer une question de sondage"
 
 #: includes/views/html-survey-builder.php:54
 msgid "This survey has responses. Questions can not be edited"
-msgstr ""
+msgstr "Ce sondage a des réponses. Les questions ne peuvent être éditées"
 
 #: includes/views/html-survey-builder.php:58
 msgid "Survey Preview"
-msgstr ""
+msgstr "Prévisualisation du sondage"
 
 #: includes/views/html-survey-builder.php:61
 msgid "You can insert this survey with shortcode: "
@@ -294,7 +299,7 @@ msgstr "Merci d'avoir complété ce sondage/"
 
 #: includes/views/html-survey-options-general.php:18
 msgid "Thank You message"
-msgstr ""
+msgstr "Message de remerciement"
 
 #: includes/views/html-survey-options-general.php:27
 msgid ""
@@ -310,55 +315,56 @@ msgstr "Méthode d'authentification du sondage"
 
 #: includes/views/html-survey-options-general.php:50
 msgid "Auth method can not be edited"
-msgstr ""
+msgstr "La méthode d'authentification ne peut être éditée"
 
 #: includes/views/html-surveys-options-emails.php:9
 msgid "Notification Emails"
-msgstr ""
+msgstr "Emails de notification"
 
 #: includes/views/html-surveys-options-emails.php:13
 msgid "Enable emails on survey completion?"
-msgstr ""
+msgstr "Activer les emails lorsqu'un sondage est complété?"
 
 #: includes/views/html-surveys-options-emails.php:16
 #: includes/views/html-surveys-options-emails.php:30
 #: includes/views/html-surveys-options.php:19
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: includes/views/html-surveys-options-emails.php:18
 #: includes/views/html-surveys-options-emails.php:32
 #: includes/views/html-surveys-options.php:21
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: includes/views/html-surveys-options-emails.php:22
 msgid "Send Notifications for all survey completions to"
-msgstr ""
+msgstr "Envoyer des notifications pour tous les sondages complétés à "
 
 #: includes/views/html-surveys-options-emails.php:27
 msgid "Send email to survey respondent?"
-msgstr ""
+msgstr "Envoyer un email au sondés?"
 
 #: includes/views/html-surveys-options-emails.php:36
 msgid "For this to work, the survey must have an element of type \"email\""
 msgstr ""
+"Pour que ceci fonctionne, le sondage doit avoir un élément de type \"email\""
 
 #: includes/views/html-surveys-options-emails.php:39
 msgid "Respondent email subject"
-msgstr ""
+msgstr "Sujet de l'email envoyé au sondé"
 
 #: includes/views/html-surveys-options-emails.php:44
 msgid "Respondent email message"
-msgstr ""
+msgstr "Message de l'email envoyé au sondé"
 
 #: includes/views/html-surveys-options-emails.php:51
 msgid "The following template tags are available"
-msgstr ""
+msgstr "Les tags de template suivants sont disponibles"
 
 #: includes/views/html-surveys-options-emails.php:53
 msgid "HTML is not supported"
-msgstr ""
+msgstr "Le HTML n'est pas supporté"
 
 #: includes/views/html-surveys-options-emails.php:55
 #: includes/views/html-surveys-options.php:28
@@ -384,7 +390,7 @@ msgstr "Utiliser le css inclut"
 # Uses the wordpress text domain - no need to translate
 #: options.php:8
 msgid "Cheatin&#8217; uh?"
-msgstr ""
+msgstr "On triche, hein?"
 
 #: strings.php:9
 msgid "Donate to the future development of this plugin:"
@@ -447,8 +453,8 @@ msgid ""
 "Easily create surveys for your WordPress website and publish them with a "
 "simple shortcode"
 msgstr ""
-"Créez facilement des sondages pour votre site WordPress et publiez les avec un "
-"simple shortcode"
+"Créez facilement des sondages pour votre site WordPress et publiez les avec "
+"un simple shortcode"
 
 #. Author of the plugin/theme
 msgid "Will Brubaker"
@@ -457,172 +463,3 @@ msgstr "Will Brubaker"
 #. Author URI of the plugin/theme
 msgid "http://www.willthewebmechanic.com"
 msgstr "http://www.willthewebmechanic.com"
-
-#~ msgid "Build Survey Form"
-#~ msgstr "Créer le formulaire de sondage"
-
-#~ msgid "Your Survey Results"
-#~ msgstr "Résultats de votre sondage"
-
-#~ msgid "Survey Results by User"
-#~ msgstr "Résultats du sondage par utilisateur"
-
-#~ msgid "Edit Survey Name"
-#~ msgstr "Editer le nom du sondage"
-
-#~ msgid "Edit this survey"
-#~ msgstr "Editer ce sondage"
-
-#~ msgid "This survey has received %d responses"
-#~ msgstr "Ce sondage a reçu %d réponses"
-
-#~ msgid "edit this question"
-#~ msgstr "Editer cette question"
-
-#~ msgid "click to edit"
-#~ msgstr "Cliquez pour éditer"
-
-#~ msgid "Thank You Message:"
-#~ msgstr "Message de remerciement:"
-
-#~ msgid "Survey Name"
-#~ msgstr "Nom du sondage"
-
-#~ msgid ""
-#~ "This field is a name for your survey and will be displayed before your "
-#~ "survey form"
-#~ msgstr ""
-#~ "Ce champ contient un nom pour votre sondage et sera affiché au-dessus de "
-#~ "votre formulaire de sondage"
-
-#~ msgid "Field Type"
-#~ msgstr "Type de champ"
-
-#~ msgid ""
-#~ "This is the type of form field you would like to add to your form, i.e.: "
-#~ "checkbox, radio, text, email, textarea, etc. Examples:"
-#~ msgstr ""
-#~ "Ceci est le type de champ de formulaire que vous voudriez ajouter à votre "
-#~ "formulaire (ex: checkbox, radio, text, email, textarea, etc.)Exemples:"
-
-#~ msgid ""
-#~ "Based upon the type of field option you have selected, you may see "
-#~ "different options for validation. Selecting 'required' will make this part "
-#~ "of your survey a required field. Some fields have a 'Maximum Length' "
-#~ "Validation option where you can specify a character limit. Field type "
-#~ "\"number\" can have a maximum and minimum value added to it. As an example, "
-#~ "if your survey asked a user their age, and you wanted to limit the survey "
-#~ "to respondents who claim that they are 18 or older, you can enter 18 in the "
-#~ "'Min number allowed' field."
-#~ msgstr ""
-#~ "En fonction du type d'option de champ que vous avez sélectionné, vous "
-#~ "pourriez voir différentes options de validation. Sélectionner 'requis' fera "
-#~ "de ce champ un champ requis. Certains champs ont une option de validation "
-#~ "'Longueur maximale' avec laquelle vous pouvez spécifier une limite de "
-#~ "nombre de caractères. Les champs de type \"number\" peuvent avoir des "
-#~ "valeurs maximum et minimum requises. Par exemple, si votre sondage demande "
-#~ "à votre utilisateur son âge, si vous souhaitez limiter votre sondage aux "
-#~ "participant déclarant être âgés de plus de 18 ans, vous pouvez entrer '18' "
-#~ "dans le champ 'Nombre min autorisé'. "
-
-#~ msgid ""
-#~ "These are options for your survey, they are not built in to the survey "
-#~ "form, but rather determine behavior of how your survey will work."
-#~ msgstr ""
-#~ "Ce sont les options pour votre sondage. Elles ne sont pas incluses dans le "
-#~ "formulaire de sondage, mais déterminent plutôt la manière dont le sondage "
-#~ "fonctionnera."
-
-#~ msgid "Authentication"
-#~ msgstr "Authentification"
-
-#~ msgid ""
-#~ "Choose a method to prevent users from filling out the survey multiple "
-#~ "times. User login is much more reliable, but may not be the best option for "
-#~ "your site if you don't allow registrations. Cookie based authentication is "
-#~ "very easy to circumvent, but will prevent most users from taking the survey "
-#~ "multiple times. Of course, you may prefer to allow users to take the survey "
-#~ "an unlimited number of times in which case you should choose 'None'. Note "
-#~ "to developers: methods can be added via the survey_auth_options filter."
-#~ msgstr ""
-#~ "Choisissez une méthode pour empêcher vos utilisateurs de remplir plusieurs "
-#~ "fois le sondage. L'authentification utilisateur est bien plus fiable, mais "
-#~ "pourrait ne pas être la solution adaptée pour votre site si vous "
-#~ "n'autorisez pas l'enregistrement utilisateur. L'authentification basée sur "
-#~ "le Cookie est très facile à contourner, mais empêchera la plupart des "
-#~ "utilisateurs de soumettre plusieurs fois leur réponses à un sondage. Bien-"
-#~ "sûr, vous pouvez également autoriser vos utilisateurs à répondre à un "
-#~ "sondage un nombre illimité de fois. Dans ce cas, vous devrez choisir "
-#~ "l'option 'Aucune'. Note aux développeurs: des méthodes peuvent être "
-#~ "ajoutées via le fitre 'survey_auth_option'."
-
-#~ msgid "Thank You Message"
-#~ msgstr "Merci"
-
-#~ msgid "The message will be displayed to a user who completes the survey."
-#~ msgstr ""
-#~ "Le message sera affiché à chaque utilisateur allant jusqu'au bout du "
-#~ "sondage. "
-
-#~ msgid "Survey Name:"
-#~ msgstr "Nom du sondage:"
-
-#~ msgid "Start Building"
-#~ msgstr "Commencer à construire"
-
-#~ msgid "General Survey Options:"
-#~ msgstr "Options générales du sondage:"
-
-#~ msgid "A Thank You message:"
-#~ msgstr "Un message de remerciement:"
-
-#~ msgid "Your Surveys"
-#~ msgstr "Vos sondages"
-
-#~ msgid "Results by User"
-#~ msgstr "Résultats pas utilisateur"
-
-#~ msgid ""
-#~ "Need help? There are handy tips for some of the options in the help menu. "
-#~ "Click the help tab in the upper right corner of your screen"
-#~ msgstr ""
-#~ "Besoin d'aide? Vous trouverez dans le menu d'aide des astuces utiles "
-#~ "concernant certaines options . Cliquez sur l'onglet d'aide dans le coin "
-#~ "supérieur droit de votre écran."
-
-#~ msgid "Dismiss"
-#~ msgstr "Ne plus afficher"
-
-#~ msgid "Survey Name cannot be blank"
-#~ msgstr "Le nom du sondage ne peut pas être vide"
-
-#~ msgid "Add a question to your survey:"
-#~ msgstr "Ajouter une question à votre sondage:"
-
-#~ msgid "Select Field Type:"
-#~ msgstr "Sélectionner le type de champ:"
-
-#~ msgid "Cookie Based"
-#~ msgstr "Cookie"
-
-#~ msgid "Type of authentication: "
-#~ msgstr "Type d'authentification:"
-
-#~ msgid "Thank you message:"
-#~ msgstr "Message de remerciement:"
-
-#~ msgid "Save Survey"
-#~ msgstr "Sauver le sondage"
-
-#~ msgid "The name already exists"
-#~ msgstr "Le nom existe déjà"
-
-#~ msgid ""
-#~ "A survey that has had responses can not be changed to the \"Logged in\" "
-#~ "auth method"
-#~ msgstr ""
-#~ "Un sondage pour lequel il y a déjà eu des réponses ne peut être modifié "
-#~ "avec la méthode d'authentification \"Authentifié\""
-
-#~ msgid "Donate to the development of the Awesome Surveys plugin"
-#~ msgstr "Faites un don pour le développement du module Awesome Survey"
