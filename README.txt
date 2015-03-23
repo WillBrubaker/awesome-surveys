@@ -110,6 +110,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 == Changelog ==
 
+= v2.0.3 =
+1. fix for undefined offset when deciding whether to send email
+
 = v2.0.2 =
 1. yet another bugfix
 

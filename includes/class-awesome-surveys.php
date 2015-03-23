@@ -6,7 +6,7 @@ class Awesome_Surveys {
 	public $text_domain, $buttons, $options, $plugin_version, $dbversion;
 
 	public function __construct() {
-		$this->plugin_version = '2.0.2';
+		$this->plugin_version = '2.0.3';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.2';
 		$this->buttons = $this->get_buttons();
@@ -604,7 +604,7 @@ class Awesome_Surveys {
 		}
 		if ( isset( $options['email_options'] ) && $options['email_options']['enable_respondent_email'] ) {
 			foreach ( $form as $key => $value ) {
-				if ( 'email' == $value['type'] && is_email( $answers[ $key ] ) ) {
+				if ( 'email' == $value['type'] && isset( $answers[ $key ] ) && is_email( $answers[ $key ] ) ) {
 					$to = $answers[ $key ];
 					$subject = sanitize_text_field( $options['email_options']['email_subject'] );
 					$message = $options['email_options']['respondent_email_message'];
