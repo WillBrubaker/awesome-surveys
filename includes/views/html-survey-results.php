@@ -32,7 +32,29 @@ foreach ( $response_counts as $question_key => $value ) {
 		_e( sprintf( '%s received %s responses', $elements[ $question_key ]['name'], $value['totalcount'] ), 'awesome-surveys' );
 		echo '</p>';
 		foreach( $value['count'] as $answer_key => $count ) {
-			echo '<div class="options-container"><span class="options" style="width:' . number_format( ( $count / $value['totalcount'] ) * 100, 2 ).  '%;">' . $elements[ $question_key ]['label'][ $answer_key ] . '</span></div>';
+
+			$percentage = number_format( ( $count / $value['totalcount'] ) * 100, 2 );
+			$totalCount = $value['totalcount'];
+			
+			if (intval($percentage) == 100) {
+				echo '<div class="options-container">'
+						.'<div class="options" style="width:' . $percentage . '%;">' 
+							. $elements[ $question_key ]['label'][ $answer_key ] 
+							. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $totalCount . ')</span>'
+						. '</div>'
+						. '<p>&nbsp;</p>'
+					. '</div>';
+			}
+			else {
+				echo '<div class="options-container">'
+					.'<span class="options" style="width:' . $percentage . '%;">' 
+						. $elements[ $question_key ]['label'][ $answer_key ] 
+					. '</span>'
+					. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $totalCount . ')</p>'
+				. '</div>';
+			}
+
+			
 		}
 	} else {
 		_e( sprintf( '<p class="totalcount survey">%s was answered %s times</p>', $elements[ $question_key ]['name'], $value['totalcount'] ), 'awesome-surveys' );
