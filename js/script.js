@@ -41,7 +41,7 @@ jQuery(document).ready(function($) {
 	$('form.answer-survey textarea').each(function() {
 		maxLength = $(this).data('rule-maxlength')
 		if ('undefined' != typeof maxLength) {
-			$('<div class="countdown"><span class="remaining-chars">' + maxLength + '</span> Characters Remaining</div>').insertAfter($(this))
+			$('<div class="countdown"><span class="remaining-chars">' + maxLength + '</span> ' + wwm_awesome_surveys.countDownMessage + '</div>').insertAfter($(this))
 		}
 	}).keyup(function() {
 		maxLength = $(this).data('rule-maxlength')

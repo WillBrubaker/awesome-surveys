@@ -128,7 +128,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 					}
 				}
 				if ( 'textarea' == $form_element ) {
-					$html .= '<label>' . __( 'Display number of characters remaining?', 'awesome-surveys' ) . '<br><input id="add-countdown" type="checkbox" name="options[atts][add_countdown]"></label>';
+					$html .= '<label>' . __( 'Display number of characters remaining?', 'awesome-surveys' ) . '<br><input id="add-countdown" type="checkbox" name="options[add_countdown]"></label>';
 				}
 			$html .= '</div>';
 		}
