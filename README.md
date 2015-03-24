@@ -137,10 +137,10 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 ## Changelog ##
 
-## v2.0.3 ##
+## v??.?? ##
 1. fix for undefined offset when deciding whether to send email
 2. decode html entities in outgoing emails
-
+3. answer metrics have returned - thanks to github user naimkhalifa
 
 ## v2.0.2 ##
 1. yet another bugfix
