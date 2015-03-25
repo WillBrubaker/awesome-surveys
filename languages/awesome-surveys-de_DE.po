@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
 "POT-Creation-Date: 2015-03-25 12:29:26+00:00\n"
-"PO-Revision-Date: 2015-03-25 07:31-0500\n"
+"PO-Revision-Date: 2015-03-25 14:37+0100\n"
 "Last-Translator: Tobias Perschon <office@bitconnect.at>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -18,11 +18,11 @@ msgstr ""
 #: includes/class-awesome-surveys-admin.php:8
 #: includes/class-awesome-surveys-admin.php:173
 msgid "Awesome Surveys Options"
-msgstr ""
+msgstr "Awesome Surveys Einstellungen"
 
 #: includes/class-awesome-surveys-admin.php:9
 msgid "Survey Options"
-msgstr ""
+msgstr "Umfrage Optionen"
 
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:11
@@ -33,40 +33,40 @@ msgstr "Awesome Surveys"
 #: includes/class-awesome-surveys-admin.php:115
 #: includes/class-awesome-surveys.php:75
 msgid "My Surveys"
-msgstr ""
+msgstr "Meine Umfragen"
 
 #: includes/class-awesome-surveys-admin.php:116
 #: includes/class-awesome-surveys.php:77 includes/class-awesome-surveys.php:78
 msgid "New Survey"
-msgstr ""
+msgstr "Neue Umfrage"
 
 #: includes/class-awesome-surveys-admin.php:174
 msgid "Email Options"
-msgstr ""
+msgstr "E-Mail Einstellungen"
 
 #: includes/class-awesome-surveys-admin.php:210
 msgid "View Survey Results"
-msgstr ""
+msgstr "Zeige Umfrageergebnisse an"
 
 #: includes/class-awesome-surveys-admin.php:210
 msgid "Results"
-msgstr ""
+msgstr "Ergebnisse"
 
 #: includes/class-awesome-surveys-admin.php:212
 msgid "Create a copy of this survey"
-msgstr ""
+msgstr "Erstelle eine Kopie dieser Umfrage"
 
 #: includes/class-awesome-surveys-admin.php:212
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplizieren"
 
 #: includes/class-awesome-surveys-admin.php:225
 msgid "Surveys updated"
-msgstr ""
+msgstr "Umfragen aktualisiert"
 
 #: includes/class-awesome-surveys-admin.php:285
 msgid "Copy"
-msgstr ""
+msgstr "Kopieren"
 
 #: includes/class-awesome-surveys-ajax-actions.php:83
 msgid "The question you are asking:"
@@ -82,7 +82,7 @@ msgstr "Erweiterte Validierungsregeln:"
 
 #: includes/class-awesome-surveys-ajax-actions.php:131
 msgid "Display number of characters remaining?"
-msgstr ""
+msgstr "Zeige Anzahl der verbleibenden Zeichen?"
 
 #: includes/class-awesome-surveys-ajax-actions.php:138
 msgid "Number of answers required?"
@@ -129,7 +129,7 @@ msgstr "Deine Antworten zu dieser Umfrage wurden bereits gespeichtert. Danke!"
 
 #: includes/class-awesome-surveys-frontend.php:110
 msgid "Characters remaining"
-msgstr ""
+msgstr "verbleibende Zeichen"
 
 #: includes/class-awesome-surveys-frontend.php:132
 #: includes/class-awesome-surveys.php:568
@@ -138,67 +138,67 @@ msgstr "Du musst eingeloggt sein um an dieser Umfrage teilnehmen zu können"
 
 #: includes/class-awesome-surveys.php:36
 msgid "Text Input"
-msgstr ""
+msgstr "Texteingabe"
 
 #: includes/class-awesome-surveys.php:40
 msgid "Email"
-msgstr ""
+msgstr "E-Mail"
 
 #: includes/class-awesome-surveys.php:44
 msgid "Number"
-msgstr ""
+msgstr "Nummer"
 
 #: includes/class-awesome-surveys.php:48
 msgid "Dropdown Selector"
-msgstr ""
+msgstr "Dropdownliste"
 
 #: includes/class-awesome-surveys.php:52
 msgid "Radio Buttons"
-msgstr ""
+msgstr "Radiobuttons"
 
 #: includes/class-awesome-surveys.php:56
 msgid "Checkboxes"
-msgstr ""
+msgstr "Checkboxen"
 
 #: includes/class-awesome-surveys.php:60
 msgid "Textarea"
-msgstr ""
+msgstr "Textfeld"
 
 #: includes/class-awesome-surveys.php:73
 msgid "Surveys"
-msgstr ""
+msgstr "Umfragen"
 
 #: includes/class-awesome-surveys.php:74 includes/class-awesome-surveys.php:76
 msgid "Survey"
-msgstr ""
+msgstr "Umfrage"
 
 #: includes/class-awesome-surveys.php:79
 msgid "Add New Survey"
-msgstr ""
+msgstr "Neue Umfrage hinzufügen"
 
 #: includes/class-awesome-surveys.php:80
 msgid "Edit Survey"
-msgstr ""
+msgstr "Umfrage bearbeiten"
 
 #: includes/class-awesome-surveys.php:82
 msgid "Surveys for your site"
-msgstr ""
+msgstr "Umfragen für diese Website"
 
 #: includes/class-awesome-surveys.php:111
 msgid "Survey Results For:"
-msgstr ""
+msgstr "Umfrageergebnisse für:"
 
 #: includes/class-awesome-surveys.php:124
 msgid "Results for "
-msgstr ""
+msgstr "Eingaben für:"
 
 #: includes/class-awesome-surveys.php:127
 msgid "Results for respondent "
-msgstr ""
+msgstr "Eingaben des/der Befragten:"
 
 #: includes/class-awesome-surveys.php:133
 msgid "Create Survey"
-msgstr ""
+msgstr "Umfrage erstellen"
 
 #: includes/class-awesome-surveys.php:134
 msgid "General Survey Options"
@@ -206,15 +206,15 @@ msgstr "Allgemeine Umfrage Einstellungen"
 
 #: includes/class-awesome-surveys.php:153
 msgid "Answers"
-msgstr ""
+msgstr "Antworten"
 
 #: includes/class-awesome-surveys.php:164
 msgid "No response given"
-msgstr ""
+msgstr "Keine Antwort abgegeben"
 
 #: includes/class-awesome-surveys.php:165
 msgid "Question"
-msgstr ""
+msgstr "Frage"
 
 #: includes/class-awesome-surveys.php:250
 msgid "Delete question"
@@ -237,12 +237,12 @@ msgstr "Antwort abschicken"
 #: includes/class-awesome-surveys.php:409
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
-msgstr ""
+msgstr "Danke für Ihre Teilnahme"
 
 #: includes/class-awesome-surveys.php:411
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
-msgstr ""
+msgstr "Danke für Ihre Teilnahme an der Umfrage"
 
 #: includes/class-awesome-surveys.php:431
 msgid "None"
@@ -258,39 +258,44 @@ msgstr "Cookie basierend"
 
 #: includes/class-awesome-surveys.php:584
 msgid "Survey Completed"
-msgstr ""
+msgstr "Umfrage abgeschlossen"
 
 #: includes/class-awesome-surveys.php:586
 msgid "A survey on your site named %s has been completed"
-msgstr ""
+msgstr "Auf der Seite \"%s\" wurde eine Umfrage ausgefüllt"
 
 #: includes/class-awesome-surveys.php:602
 msgid "No Answer Given"
-msgstr ""
+msgstr "Keine Antwort abgegeben"
 
 #: includes/views/html-database-upgrade.php:2
 msgid "Press the button below to migrate your surveys to the newest version"
 msgstr ""
+"Drücke auf den Button unten, um die Umfragen auf die aktuelle Version zu "
+"migrieren."
 
 #: includes/views/html-database-upgrade.php:5
 msgid "upgrade database"
-msgstr ""
+msgstr "Datenbank aktualisieren"
 
 #: includes/views/html-survey-builder.php:18
 msgid "Add a form element to your survey by clicking a button"
 msgstr ""
+"Füge der Umfrage ein Element hinzu, indem du auf die Schaltfläche klickst"
 
 #: includes/views/html-survey-builder.php:54
 msgid "Configure a survey question"
-msgstr ""
+msgstr "Einstellungen für diese Frage"
 
 #: includes/views/html-survey-builder.php:58
 msgid "This survey has responses. Questions can not be edited"
 msgstr ""
+"Diese Umfrage wurde bereits beantwortet. Daher können die Fragen nichtmehr "
+"bearbeitet warden."
 
 #: includes/views/html-survey-builder.php:62
 msgid "Survey Preview"
-msgstr ""
+msgstr "Vorschau der Umfrage"
 
 #: includes/views/html-survey-builder.php:65
 msgid "You can insert this survey with shortcode: "
@@ -302,7 +307,7 @@ msgstr "Danke, dass Sie an dieser Umfrage teilgenommen haben."
 
 #: includes/views/html-survey-options-general.php:18
 msgid "Thank You message"
-msgstr ""
+msgstr "\"Danke\" Nachricht"
 
 #: includes/views/html-survey-options-general.php:27
 msgid ""
@@ -318,55 +323,56 @@ msgstr "Umfrage Authentifizierungsmethode:"
 
 #: includes/views/html-survey-options-general.php:50
 msgid "Auth method can not be edited"
-msgstr ""
+msgstr "Authentifizierungsmethode kann nicht bearbeitet werden."
 
 #: includes/views/html-surveys-options-emails.php:9
 msgid "Notification Emails"
-msgstr ""
+msgstr "Benachrichtigungs E-Mail"
 
 #: includes/views/html-surveys-options-emails.php:13
 msgid "Enable emails on survey completion?"
-msgstr ""
+msgstr "E-Mail Benachrichtung bei ausgefüllter Umfrage?"
 
 #: includes/views/html-surveys-options-emails.php:16
 #: includes/views/html-surveys-options-emails.php:30
 #: includes/views/html-surveys-options.php:19
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: includes/views/html-surveys-options-emails.php:18
 #: includes/views/html-surveys-options-emails.php:32
 #: includes/views/html-surveys-options.php:21
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: includes/views/html-surveys-options-emails.php:22
 msgid "Send Notifications for all survey completions to"
-msgstr ""
+msgstr "Sende eine Benachrichtigung für alle ausgefüllten Umfragen an"
 
 #: includes/views/html-surveys-options-emails.php:27
 msgid "Send email to survey respondent?"
-msgstr ""
+msgstr "Schicke ein E-Mail an die Befragten?"
 
 #: includes/views/html-surveys-options-emails.php:36
 msgid "For this to work, the survey must have an element of type \"email\""
 msgstr ""
+"Damit das funktioniert benötigt die Umfrage ein Element vom Typ \"E-Mail\""
 
 #: includes/views/html-surveys-options-emails.php:39
 msgid "Respondent email subject"
-msgstr ""
+msgstr "Betreff der E-Mail an die Befragten"
 
 #: includes/views/html-surveys-options-emails.php:44
 msgid "Respondent email message"
-msgstr ""
+msgstr "E-Mail Nachricht an die Befragten"
 
 #: includes/views/html-surveys-options-emails.php:51
 msgid "The following template tags are available"
-msgstr ""
+msgstr "Folgende Template-Tags sind verfügbar"
 
 #: includes/views/html-surveys-options-emails.php:53
 msgid "HTML is not supported"
-msgstr ""
+msgstr "HTML wird nicht unterstützt"
 
 #: includes/views/html-surveys-options-emails.php:55
 #: includes/views/html-surveys-options.php:28
@@ -392,7 +398,7 @@ msgstr "Eingebautes CSS verwenden?"
 # Uses the wordpress text domain - no need to translate
 #: options.php:8
 msgid "Cheatin&#8217; uh?"
-msgstr ""
+msgstr "Wird hier geschummelt?"
 
 #: strings.php:9
 msgid "Donate to the future development of this plugin:"
@@ -448,7 +454,7 @@ msgstr "Awesome Surveys Aktuelles"
 
 #. Plugin URI of the plugin/theme
 msgid "http://www.willthewebmechanic.com/awesome-surveys"
-msgstr "http://www.willthewebmechanic.com/awesome-surveys"
+msgstr ""
 
 #. Description of the plugin/theme
 msgid ""
@@ -460,11 +466,11 @@ msgstr ""
 
 #. Author of the plugin/theme
 msgid "Will Brubaker"
-msgstr "Will Brubaker"
+msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "http://www.willthewebmechanic.com"
-msgstr "http://www.willthewebmechanic.com"
+msgstr ""
 
 #~ msgid "Build Survey Form"
 #~ msgstr "Umfrage Forumlar generieren"
