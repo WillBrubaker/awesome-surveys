@@ -330,6 +330,9 @@ class Awesome_Surveys {
 					$options['required'] = 'required';
 				}
 			}
+			if ( isset( $element['add_countdown'] ) ) {
+				$options['data-add_countdown'] = true;
+			}
 			$form_output->addElement( new $method( stripslashes( $element['name'] ), 'question[' . $questions_count . ']', $options, $atts ) );
 			$questions_count++;
 		}

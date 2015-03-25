@@ -38,7 +38,7 @@ jQuery(document).ready(function($) {
 			}
 		});
 	});
-	$('form.answer-survey textarea').each(function() {
+	$('form.answer-survey textarea[data-rule-maxlength][data-add_countdown]').each(function() {
 		maxLength = $(this).data('rule-maxlength')
 		if ('undefined' != typeof maxLength) {
 			$('<div class="countdown"><span class="remaining-chars">' + maxLength + '</span> ' + wwm_awesome_surveys.countDownMessage + '</div>').insertAfter($(this))
@@ -49,6 +49,4 @@ jQuery(document).ready(function($) {
 		remaining = maxLength - curLength
 		$('.remaining-chars', $(this).parent()).empty().append(remaining)
 	})
-
-
 });

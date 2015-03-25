@@ -114,6 +114,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 1. fix for undefined offset when deciding whether to send email
 2. decode html entities in outgoing emails
 3. answer metrics have returned - thanks to github user naimkhalifa
+4. adds a 'countdown' option to textareas
 
 = v2.0.2 =
 1. yet another bugfix
