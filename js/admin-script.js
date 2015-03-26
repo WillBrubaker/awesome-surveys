@@ -208,7 +208,7 @@ jQuery('document').ready(function($) {
 				}
 		})
 
-		$('#existing_elements').on('change', function() {
+		$('#existing_elements').on('blur', function() {
 				$.post(ajaxurl, {
 						survey_id: $('#post_ID').val(),
 						existing_elements: $('#existing_elements').val(),
@@ -216,6 +216,9 @@ jQuery('document').ready(function($) {
 				}, function(data) {
 						$('#content').val(data.data)
 				})
+		})
+		$('textarea, input[type="email"], input[type="number"], input[type="text"] ', '#form-preview-wrapper').on('keyup', function(){
+			$(this).val('')
 		})
 })
 
@@ -261,10 +264,9 @@ function previewReady($) {
 						}
 				}
 		})
-		$('#form-preview input').each(function() {
-						if ('button' != $(this).attr('type')) {
-								$(this).prop('disabled', true)
-						}
+		$('textarea, input', '#form-preview-wrapper').each(function(){
+			$(this).prop('required', false);
+			$(this).removeClass('required');
 		})
 		$('#form-preview-wrapper').show()
 }
