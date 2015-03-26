@@ -143,6 +143,8 @@ as 'post_content'. This means that if WordPress was in English when you built th
 3. answer metrics have returned - thanks to github user naimkhalifa
 4. adds a 'countdown' option to textareas
 5. bugfix for 'duplicate not working'
+6. bugfix for 'required' textarea was breaking the form editor
+
 
 ## v2.0.2 ##
 1. yet another bugfix
