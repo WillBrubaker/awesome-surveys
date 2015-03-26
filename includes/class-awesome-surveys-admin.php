@@ -286,9 +286,10 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			);
 		$new_survey = wp_insert_post( $new_post_data );
 		if ( $new_survey ) {
-			foreach( $post_metas as $meta_key )
+			foreach( $post_metas as $meta_key ) {
 				$meta_value = get_post_meta( $post_id, $meta_key, true );
 				update_post_meta( $new_survey, $meta_key, $meta_value );
+			}
 		}
 		return $new_survey;
 	}

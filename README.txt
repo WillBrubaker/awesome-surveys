@@ -115,6 +115,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 2. decode html entities in outgoing emails
 3. answer metrics have returned - thanks to github user naimkhalifa
 4. adds a 'countdown' option to textareas
+5. bugfix for 'duplicate not working'
 
 = v2.0.2 =
 1. yet another bugfix
