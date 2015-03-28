@@ -242,15 +242,16 @@ class Awesome_Surveys {
 					}
 					$atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
 					$has_responses = get_post_meta( $post_id, '_response', true );
-					if ( empty( $has_responses ) ) {
-						$form->addElement( new Element_HTML( '<div class="single-element-edit">' ) );
-					}
+					$class = ( empty( $has_responses ) ) ? 'single-element-edit' : 'label-edit';
+					$form->addElement( new Element_HTML( '<div class="' . $class . '">' ) );
 					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
-					if ( empty( $has_responses ) ) {
-						$form->addElement( new Element_HTML( '<div class="button-holder"><button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button></div><div class="clear"></div></div>' ) );
-					} else {
-						$form->addElement( new Element_HTML( '<div class="clear"></div>' ) );
-					}
+						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
+						if ( empty( $has_responses ) ) {
+							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						} else {
+							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						}
+						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
 					$elements_count++;
 			}
 			$output = $form->render( true );
