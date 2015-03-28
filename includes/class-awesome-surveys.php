@@ -109,7 +109,7 @@ class Awesome_Surveys {
 			remove_post_type_support( 'awesome-surveys', 'title' );
 			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
 			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
-			$results = get_post_meta( $post_id, '_response', false );
+			$results = $this->get_results( $post_id );
 			$results_keys = array();
 			foreach ( $results as $key => $value ) {
 				$results_keys[] = array_keys( $value );
@@ -249,7 +249,7 @@ class Awesome_Surveys {
 						if ( empty( $has_responses ) ) {
 							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
 						} else {
-							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+							$form->addElement( new Element_HTML( '<button class="element-label-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
 						}
 						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
 					$elements_count++;
@@ -624,5 +624,20 @@ class Awesome_Surveys {
 				}
 			}
 		}
+	}
+
+	private function get_results( $post_id ) {
+		global $wpdb;
+		$screen = get_current_screen();
+		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 10;
+		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
+		//error_log( print_r( $screen, true ) );
+		//error_log( $wpdb->prefix );
+		//SELECT `meta_value` FROM `wp_postmeta` WHERE `post_id` = 2288 AND `meta_key` = '_response'
+		$my_query = $wpdb->prepare( "SELECT `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id` = %d AND `meta_key` = '_response'  ORDER BY `meta_id` ASC LIMIT %d OFFSET %d", $post_id, $limit, $offset );
+		$responses = $wpdb->get_results( $my_query );
+
+		error_log( print_r( $responses, true ) );
+		return get_post_meta( $post_id, '_response', false );
 	}
 }
