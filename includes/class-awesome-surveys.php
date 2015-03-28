@@ -12,12 +12,6 @@ class Awesome_Surveys {
 		$this->buttons = $this->get_buttons();
 		$this->options = $this->get_options();
 		$this->auth_methods = $this->auth_methods();
-		$actions = array(
-			'init' => array( 'init', 10, 0 ),
-			);
-		foreach ( $actions as $action => $args ) {
-			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );
-		}
 	}
 
 	public function init() {
@@ -94,46 +88,13 @@ class Awesome_Surveys {
 			'register_meta_box_cb' => array( $this, 'survey_editor' ),
 			'rewrite' => true,
 			);
+		if ( is_admin() ) {
+			$args['register_meta_box_cb'] = array( $this, 'survey_editor' );
+		}
 		register_post_type( 'awesome-surveys', $args );
 	}
 
-	/**
-	 * outputs appropriate content for each of the screens
-	 *
-	 */
-	public function survey_editor() {
-		if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
-			$post_id = absint( $_GET['post'] );
-			$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
-			$auth_type = $this->auth_methods[ $auth_method ]['name'];
-			remove_post_type_support( 'awesome-surveys', 'title' );
-			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
-			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
-			$results = $this->get_results( $post_id );
-			$results_keys = array();
-			foreach ( $results as $key => $value ) {
-				$results_keys[] = array_keys( $value );
-			}
-			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
-			foreach ( $results as $respondent_key => $answers ) {
-				$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
-				$auth_type = $this->auth_methods[ $auth_method ]['name'];
-				if ( 'login' == $auth_type ) {
-					$number = $results_keys[ $respondent_key ][0];
-					$user_data = get_userdata( $number );
-					$meta_box_title = __( 'Results for ', 'awesome-surveys' ) . $user_data->display_name;
-				} else {
-					$number = $respondent_key + 1;
-					$meta_box_title = __( 'Results for respondent ', 'awesome-surveys' ) . $number;
-				}
-				add_filter( 'postbox_classes_awesome-surveys_respondent-' . $respondent_key, array( $this, 'postbox_class' ) );
-				add_meta_box( 'respondent-' . $respondent_key, $meta_box_title, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
-			}
-		} else {
-			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
-			add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
-		}
-	}
+
 
 	/**
 	 * populates the meta boxes with individual survey respondents
@@ -624,20 +585,5 @@ class Awesome_Surveys {
 				}
 			}
 		}
-	}
-
-	private function get_results( $post_id ) {
-		global $wpdb;
-		$screen = get_current_screen();
-		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 10;
-		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
-		//error_log( print_r( $screen, true ) );
-		//error_log( $wpdb->prefix );
-		//SELECT `meta_value` FROM `wp_postmeta` WHERE `post_id` = 2288 AND `meta_key` = '_response'
-		$my_query = $wpdb->prepare( "SELECT `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id` = %d AND `meta_key` = '_response'  ORDER BY `meta_id` ASC LIMIT %d OFFSET %d", $post_id, $limit, $offset );
-		$responses = $wpdb->get_results( $my_query );
-
-		error_log( print_r( $responses, true ) );
-		return get_post_meta( $post_id, '_response', false );
 	}
 }

@@ -20,6 +20,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
 		$actions = array(
 			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
+			'init' => array( 'init', 10, 0 ),
 			);
 		foreach ( $actions as $action => $args ) {
 			add_action( $action, array( $this, $args[0] ), $args[1], $args[2] );

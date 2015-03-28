@@ -14,7 +14,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			'admin_menu' => array( 'admin_menu', 10, 0 ),
 			'save_post' => array( 'save_post', 10, 2 ),
 			'admin_enqueue_scripts' => array( 'admin_enqueue_scripts', 10, 0 ),
-			'admin_init' => array( 'init', 10, 0 ),
+			'init' => array( 'init', 10, 0 ),
 			'admin_init' => array( 'admin_init', 1, 0 ),
 			'admin_notices' => array( 'admin_notices', 10, 0 ),
 			'wp_insert_post_data' => array( 'insert_post_data', 10, 2 ),
@@ -292,5 +292,72 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			}
 		}
 		return $new_survey;
+	}
+
+	public function results_pagination_links() {
+		$post_id = absint( $_GET['post'] );
+		$num_results = count( get_post_meta( $post_id, '_response', false ) );
+		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 5;
+		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
+		if ( $num_results > $limit ) {
+			echo '<div class="wrap">' . $num_results . '</div>';
+		}
+	}
+
+		/**
+	 * outputs appropriate content for each of the screens
+	 *
+	 */
+	public function survey_editor() {
+		if ( isset( $_GET['view'] ) && 'results' === $_GET['view'] ) {
+			$post_id = absint( $_GET['post'] );
+			add_action( 'edit_form_after_title', array( $this, 'results_pagination_links' ) );
+			add_action( 'edit_form_advanced', array( $this, 'results_pagination_links' ) );
+			$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
+			$auth_type = $this->auth_methods[ $auth_method ]['name'];
+			remove_post_type_support( 'awesome-surveys', 'title' );
+			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
+			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
+
+			$results = $this->get_results( $post_id );
+			$results_keys = array();
+			foreach ( $results as $key => $value ) {
+				$results_keys[] = array_keys( $value );
+			}
+			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
+			foreach ( $results as $respondent_key => $answers ) {
+				$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
+				$auth_type = $this->auth_methods[ $auth_method ]['name'];
+				if ( 'login' == $auth_type ) {
+					$number = $results_keys[ $respondent_key ][0];
+					$user_data = get_userdata( $number );
+					$meta_box_title = __( 'Results for ', 'awesome-surveys' ) . $user_data->display_name;
+				} else {
+					$number = $respondent_key + 1;
+					$meta_box_title = __( 'Results for respondent ', 'awesome-surveys' ) . $number;
+				}
+				add_filter( 'postbox_classes_awesome-surveys_respondent-' . $respondent_key, array( $this, 'postbox_class' ) );
+				add_meta_box( 'respondent-' . $respondent_key, $meta_box_title, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
+			}
+		} else {
+			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
+			add_meta_box( 'general-survey-options-metabox', __( 'General Survey Options', 'awesome-surveys' ), array( $this, 'general_survey_options' ), 'awesome-surveys', 'normal', 'core' );
+		}
+	}
+
+
+	private function get_results( $post_id ) {
+		global $wpdb;
+		$screen = get_current_screen();
+		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 10;
+		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
+		//error_log( print_r( $screen, true ) );
+		//error_log( $wpdb->prefix );
+		//SELECT `meta_value` FROM `wp_postmeta` WHERE `post_id` = 2288 AND `meta_key` = '_response'
+		$my_query = $wpdb->prepare( "SELECT `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id` = %d AND `meta_key` = '_response'  ORDER BY `meta_id` ASC LIMIT %d OFFSET %d", $post_id, $limit, $offset );
+		$responses = $wpdb->get_results( $my_query );
+
+		error_log( print_r( $responses, true ) );
+		return get_post_meta( $post_id, '_response', false );
 	}
 }
