@@ -86,7 +86,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			* @see awesome_surveys_auth_method_login() which adds a filter if the user is not logged in
 			* @see not_logged_in_message() which is the filter used to customize the message if the user is not logged in.
 			*/
-			return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
+			return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 		}
 		$nonce = wp_create_nonce( 'answer-survey' );
 		$survey_form = sprintf( '<%1$s %3$s>%2$s</%1$s>', apply_filters( 'wwm_survey_title_tag', 'h4' ), $survey->post_title, apply_filters( 'wwm_survey_title_atts', '' ) ) . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
@@ -130,7 +130,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		*/
 	public function not_logged_in_message( $message ) {
 
-		return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
+		return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', 'awesome-surveys' ) );
 	}
 
 	/**

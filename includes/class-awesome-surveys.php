@@ -122,7 +122,7 @@ class Awesome_Surveys {
 			$method = $this->buttons[ $element['type'] ]['type'];
 			$atts = $rules = $options = array();
 			if ( 'Element_Select' == $method ) {
-				$options[''] = __( 'make a selection...', $this->text_domain );
+				$options[''] = __( 'make a selection...', 'awesome-surveys' );
 			}
 			if ( isset( $element['validation']['rules'] ) ) {
 				foreach ( $element['validation']['rules'] as $key => $value ) {
@@ -217,7 +217,7 @@ class Awesome_Surveys {
 			if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_type, $auth_args ) ) {
 				$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
 			} else {
-				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', $this->text_domain ) ) );
+				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 			}
 		}
 		return $content;
@@ -363,7 +363,7 @@ class Awesome_Surveys {
 		* @return string          the filtered message.
 		*/
 	public function not_logged_in_message( $message ) {
-		return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', $this->text_domain ) );
+		return sprintf( '<p>%s</p>', __( 'You must be logged in to participate in this survey', 'awesome-surveys' ) );
 	}
 
 	/**
@@ -379,9 +379,9 @@ class Awesome_Surveys {
 		$answers = $args[1][ $args[3] ];
 		$options = get_option( 'wwm_awesome_surveys_options', array() );
 		if ( isset( $options['email_options'] ) && $options['email_options']['enable_emails'] ) {
-			$subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', $this->text_domain ) );
+			$subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', 'awesome-surveys' ) );
 			$to = $options['email_options']['mail_to'];
-			$message = sprintf( __( 'A survey on your site named %s has been completed', $this->text_domain ), html_entity_decode( get_the_title( $args[0] ) ) );
+			$message = sprintf( __( 'A survey on your site named %s has been completed', 'awesome-surveys' ), html_entity_decode( get_the_title( $args[0] ) ) );
 			$has_options = array( 'radio', 'dropdown' );
 			foreach ( $args[2] as $question_key => $question ) {
 				$answer = null;
@@ -397,7 +397,7 @@ class Awesome_Surveys {
 				} else {
 					$answer = ( isset( $answers[ $question_key ] ) ) ? $answers[ $question_key ] : null;
 				}
-				$message .= ( ! is_null( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', $this->text_domain ) );
+				$message .= ( ! is_null( $answer ) ) ? $answer : sprintf( __( 'No Answer Given', 'awesome-surveys' ) );
 			}
 
 			$message = apply_filters( 'wwm_as_admin_email', $message );
