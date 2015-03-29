@@ -3,14 +3,13 @@
 class Awesome_Surveys {
 
 	protected $existing_elements;
-	public $text_domain, $buttons, $options, $plugin_version, $dbversion;
+	public $text_domain, $buttons, $plugin_version, $dbversion;
 
 	public function __construct() {
 		$this->plugin_version = '2.0.3';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.2';
 		$this->buttons = $this->get_buttons();
-		$this->options = $this->get_options();
 		$this->auth_methods = $this->auth_methods();
 	}
 
@@ -92,142 +91,6 @@ class Awesome_Surveys {
 			$args['register_meta_box_cb'] = array( $this, 'survey_editor' );
 		}
 		register_post_type( 'awesome-surveys', $args );
-	}
-
-
-
-	/**
-	 * populates the meta boxes with individual survey respondents
-	 * @param  object $post the wp $post object
-	 * @param  array  $args questions and answers
-	 */
-	public function answers_by_respondent( $post, $args = array() ) {
-		$questions = $args['args'][1];
-		$answers = $args['args'][0][ $args['args'][2] ];
-
-		foreach ( $questions as $key => $question ) {
-			$response = null;
-			$has_options = array( 'dropdown', 'radio', 'checkbox' );
-			$label = $question['name'];
-			if ( in_array( $question['type'], $has_options ) ) {
-				if ( isset( $answers[ $key ] ) && is_array( $answers[ $key ] ) ) {
-					$response = '<ul class="answers">' . __( 'Answers', 'awesome-surveys' ) . "\n";
-					foreach ( $answers[ $key ] as $answer_key => $answer_value ) {
-						$response .= '<li>' . $question['label'][ $answer_value ] . '</li>' . "\n";
-					}
-					$response .= '</ul>' . "\n";
-				} else {
-					$response = ( isset( $answers[ $key ] ) && isset( $question['label'][ $answers[ $key ] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ] ] . '</span>' : null;
-				}
-			} else {
-				$response = ( isset( $answers[ $key ] ) && ! empty( $answers[ $key ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ] . '</span>' : null;
-			}
-			$response = ( ! is_null( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
-			echo '<p><span class="italics">' . __( 'Question', 'awesome-surveys' ). ': ' . $label . '</span><br>' . $response . "</p>\n";
-		}
-	}
-
-	/**
-	 * loads scripts and html for the survey builder
-	 */
-	public function survey_builder() {
-		wp_enqueue_script( 'awesome-surveys-admin-script' );
-		wp_enqueue_style( 'awesome-surveys-admin-style' );
-		include_once( 'views/html-survey-builder.php' );
-	}
-
-	/**
-	 * gets the html for the options form
-	 */
-	public function general_survey_options() {
-		include_once( 'views/html-survey-options-general.php' );
-	}
-
-	public function survey_results() {
-		include_once( 'views/html-survey-results.php' );
-	}
-
-	protected function get_form_preview_html( $post_id = 0 ) {
-
-		$output = null;
-		if ( ! class_exists( 'Form' ) ) {
-			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
-			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
-		}
-
-		if ( ! isset( $this->existing_elements ) ) {
-
-			$this->existing_elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
-		}
-		$required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
-		$elements_count = 0;
-		if ( ! isset( $this->buttons ) || empty( $this->buttons ) ) {
-
-			$this->buttons = $this->get_buttons();
-		}
-		$form = new FormOverrides();
-		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
-
-		if ( isset( $this->existing_elements ) && ! empty( $this->existing_elements ) ) {
-			foreach ( $this->existing_elements as $element ) {
-					$method = $this->buttons[ $element['type'] ]['type'];
-					$options = $atts = $rules = array();
-					if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
-						foreach ( $element['validation']['rules'] as $key => $value ) {
-							if ( '' != $value && ! is_null( $value ) ) {
-								$rules['data-' . $key] = $value;
-							}
-						}
-					}
-					if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
-							$options = array_merge( $options, $rules );
-					} else {
-						$atts = array_merge( $options, $rules );
-					}
-					if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
-						if ( in_array( $method, $required_is_option ) ) {
-							$options['required'] = 1;
-							$options['class'] = 'required';
-						} else {
-							$atts['required'] = 1;
-							$atts['class'] = 'required';
-						}
-					}
-					$max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
-					for ( $iterations = 0; $iterations < $max; $iterations++ ) {
-						/**
-							* Since the pfbc is being used, and it has some weird issue with values of '0', but
-							* it will work if you append :pfbc to it...not well documented, but it works!
-							*/
-						$options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
-					}
-					$atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
-					$has_responses = get_post_meta( $post_id, '_response', true );
-					$class = ( empty( $has_responses ) ) ? 'single-element-edit' : 'label-edit';
-					$form->addElement( new Element_HTML( '<div class="' . $class . '">' ) );
-					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
-						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
-						if ( empty( $has_responses ) ) {
-							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
-						} else {
-							$form->addElement( new Element_HTML( '<button class="element-label-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
-						}
-						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
-					$elements_count++;
-			}
-			$output = $form->render( true );
-		}
-
-		$pattern = '/<form action="[^"]+"/';
-		$replacement = '<div';
-		$output = preg_replace( $pattern, $replacement, $output );
-		$pattern = '/method="post"/';
-		$replacement = '';
-		$output = preg_replace( $pattern, $replacement, $output );
-		$pattern = '/<\/form/';
-		$replacement = '</div';
-		$output = preg_replace( $pattern, $replacement, $output );
-		return $output;
 	}
 
 	/**
@@ -360,21 +223,6 @@ class Awesome_Surveys {
 		return $content;
 	}
 
-	private function get_options() {
-		return array(
-		'general_options' => array(
-			'include_css' => 1,
-			),
-		'email_options' => array(
-			'enable_emails' => 0,
-			'enable_respondent_email' => 0,
-			'email_subject' => __( 'Thank you for your response', 'awesome-surveys' ),
-			'mail_to' => get_option( 'admin_email', '' ),
-			'respondent_email_message' => __( 'Thank you for your response to a survey', 'awesome-surveys' ),
-			)
-		);
-	}
-
 	/**
 		* provides the default array of survey authentication methods
 		* @return array  indexed array of authentication methods, each of which is an array
@@ -427,18 +275,6 @@ class Awesome_Surveys {
 			$input_value = absint( $input_value );
 		}
 		return $input_value;
-	}
-
-	/**
-		* adds the closed class to all survey responses postboxes
-		* @param  array $classes the array to filter
-		* @return array          the filtered array
-		*/
-	public function postbox_class( $classes ) {
-		if ( ! in_array( 'closed', $classes ) ) {
-			$classes[] = 'closed';
-		}
-		return $classes;
 	}
 
 	/**

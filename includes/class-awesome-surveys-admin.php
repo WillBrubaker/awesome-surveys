@@ -3,6 +3,7 @@
 class Awesome_Surveys_Admin extends Awesome_Surveys {
 
 	protected $page_hook, $page_title, $menu_title, $menu_slug;
+	public static $options;
 	public function __construct() {
 		parent::__construct();
 		$this->page_title = __( 'Awesome Surveys Options', 'awesome-surveys' );
@@ -10,6 +11,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$this->menu_slug = 'awesome-surveys.php';
 		$this->menu_link_text = __( 'Awesome Surveys', 'awesome-surveys' );
 		$this->text_domain = 'awesome-surveys';
+		Awesome_Surveys_Admin::$options = $this->get_options();
 		$actions = array(
 			'admin_menu' => array( 'admin_menu', 10, 0 ),
 			'save_post' => array( 'save_post', 10, 2 ),
@@ -194,7 +196,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 	/**
-	 * conditinally outputsa 'view results' link in the
+	 * conditinally outputs a 'view results' link in the
 	 * 'all posts' screen
 	 * @param  array $actions
 	 * @param  oject $post    the wp post object
@@ -294,13 +296,46 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		return $new_survey;
 	}
 
+	/**
+	 * outputs pagination links on the results screen
+	 *
+	 */
 	public function results_pagination_links() {
 		$post_id = absint( $_GET['post'] );
 		$num_results = count( get_post_meta( $post_id, '_response', false ) );
-		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 5;
-		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
+		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 10;
+		$offset = 0;
+		$cur_page_num = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) : 0;
 		if ( $num_results > $limit ) {
-			echo '<div class="wrap">' . $num_results . '</div>';
+			$num_pages = ceil( $num_results / $limit );
+			for ( $iterations = 0; $iterations < $num_pages; $iterations++ ) {
+				if ( 0 == $iterations ) {
+					if ( $cur_page_num > ( ( $iterations + 1 ) * $limit ) ) {
+						echo '&nbsp;<a href="post.php?post=' . $post_id . '&action=edit&view=results&results=' . $limit . '&offset=0">&nbsp;&laquo;&nbsp;</a>&nbsp;';
+					}
+					if ( $cur_page_num > 0 ) {
+						echo '&nbsp;<a href="post.php?post=' . $post_id . '&action=edit&view=results&results=' . $limit . '&offset=' . ( $cur_page_num - $limit ) . '">&nbsp;&lsaquo;&nbsp;</a>&nbsp;';
+					}
+
+				}
+				echo '&nbsp;';
+				if ( $offset != $cur_page_num ) {
+						echo '<a href="post.php?post=' . $post_id . '&action=edit&view=results&results=' . $limit . '&offset=' . $offset . '">';
+					}
+					echo ( $iterations + 1 ) . '&nbsp;';
+					if ( $offset != $cur_page_num ) {
+						echo '</a>';
+					}
+					if ( $iterations == $num_pages - 1 ) {
+						if ( $cur_page_num < ( ( $num_pages - 1 ) * $limit ) ) {
+							echo '&nbsp;<a href="post.php?post=' . $post_id . '&action=edit&view=results&results=' . $limit . '&offset=' . ( $cur_page_num + $limit ) . '">&nbsp;&rsaquo;&nbsp;</a>&nbsp;';
+						}
+						if ( $cur_page_num < ( ( $num_pages - 2 ) * $limit ) ) {
+							echo '&nbsp;<a href="post.php?post=' . $post_id . '&action=edit&view=results&results=' . $limit . '&offset=' . ( ( $num_pages - 1 ) * $limit ) . '">&nbsp;&raquo;&nbsp;</a>';
+						}
+					}
+				$offset += $limit;
+			}
 		}
 	}
 
@@ -318,8 +353,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			remove_post_type_support( 'awesome-surveys', 'title' );
 			remove_meta_box( 'submitdiv', 'awesome-surveys', 'side' );
 			add_meta_box( 'survey-results', __( 'Survey Results For:', 'awesome-surveys' ) . ' ' . get_the_title( $post_id ), array( $this, 'survey_results' ), 'awesome-surveys', 'normal', 'core' );
-
 			$results = $this->get_results( $post_id );
+			$offset = ( isset( $_GET['offset'] ) ) ? absint( $_GET['offset'] ) : 0;
 			$results_keys = array();
 			foreach ( $results as $key => $value ) {
 				$results_keys[] = array_keys( $value );
@@ -329,15 +364,14 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 				$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
 				$auth_type = $this->auth_methods[ $auth_method ]['name'];
 				if ( 'login' == $auth_type ) {
-					$number = $results_keys[ $respondent_key ][0];
-					$user_data = get_userdata( $number );
+					$user_data = get_userdata( $results_keys[ $respondent_key ][0] );
 					$meta_box_title = __( 'Results for ', 'awesome-surveys' ) . $user_data->display_name;
 				} else {
-					$number = $respondent_key + 1;
-					$meta_box_title = __( 'Results for respondent ', 'awesome-surveys' ) . $number;
+					$meta_box_title = __( 'Results for respondent ', 'awesome-surveys' ) . ( $respondent_key + 1 + $offset );
+					$number = ( isset( $_GET['offset'] ) ) ? absint( $_GET['offset'] ) : 0;
 				}
-				add_filter( 'postbox_classes_awesome-surveys_respondent-' . $respondent_key, array( $this, 'postbox_class' ) );
-				add_meta_box( 'respondent-' . $respondent_key, $meta_box_title, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $answers, $elements, $number ) );
+				add_filter( 'postbox_classes_awesome-surveys_respondent-' . ( $respondent_key + 1 ), array( $this, 'postbox_class' ) );
+				add_meta_box( 'respondent-' . $respondent_key, $meta_box_title, array( $this, 'answers_by_respondent' ), 'awesome-surveys', 'normal', 'core', array( $results, $elements, $respondent_key ) );
 			}
 		} else {
 			add_meta_box( 'create_survey', __( 'Create Survey', 'awesome-surveys' ), array( $this, 'survey_builder' ), 'awesome-surveys', 'normal', 'core' );
@@ -350,14 +384,174 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		global $wpdb;
 		$screen = get_current_screen();
 		$limit = ( isset( $_GET['results'] ) ) ? intval( $_GET['results'] ) : 10;
-		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) * $limit : 0;
-		//error_log( print_r( $screen, true ) );
-		//error_log( $wpdb->prefix );
-		//SELECT `meta_value` FROM `wp_postmeta` WHERE `post_id` = 2288 AND `meta_key` = '_response'
+		$offset = ( isset( $_GET['offset'] ) ) ? intval( $_GET['offset'] ) : 0;
 		$my_query = $wpdb->prepare( "SELECT `meta_value` FROM `" . $wpdb->postmeta . "` WHERE `post_id` = %d AND `meta_key` = '_response'  ORDER BY `meta_id` ASC LIMIT %d OFFSET %d", $post_id, $limit, $offset );
 		$responses = $wpdb->get_results( $my_query );
+		$return = array();
+		foreach ( $responses as $response ) {
+			$answers = unserialize( $response->meta_value );
+			$return[] = $answers;
+ 		}
+		return $return;
+	}
 
-		error_log( print_r( $responses, true ) );
-		return get_post_meta( $post_id, '_response', false );
+		/**
+	 * populates the meta boxes with individual survey respondents
+	 * @param  object $post the wp $post object
+	 * @param  array  $args questions and answers
+	 */
+	public function answers_by_respondent( $post, $args = array() ) {
+		$questions = $args['args'][1];
+		$answers = reset( $args['args'][0][ $args['args'][2] ] );
+		foreach ( $questions as $key => $question ) {
+			$response = null;
+			$has_options = array( 'dropdown', 'radio', 'checkbox' );
+			$label = $question['name'];
+			if ( in_array( $question['type'], $has_options ) ) {
+				if ( isset( $answers[ $key ] ) && is_array( $answers[ $key ] ) ) {
+					$response = '<ul class="answers">' . __( 'Answers', 'awesome-surveys' ) . "\n";
+					foreach ( $answers[ $key ] as $answer_key => $answer_value ) {
+						$response .= '<li>' . $question['label'][ $answer_value ] . '</li>' . "\n";
+					}
+					$response .= '</ul>' . "\n";
+				} else {
+					$response = ( isset( $answers[ $key ] ) && isset( $question['label'][ $answers[ $key ] ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $question['label'][ $answers[ $key ] ] . '</span>' : null;
+				}
+			} else {
+				$response = ( isset( $answers[ $key ] ) && ! empty( $answers[ $key ] ) ) ? '<span class="answer">' . __( 'Answer', 'awesome-surveys' ) . ': ' . $answers[ $key ] . '</span>' : null;
+			}
+			$response = ( ! is_null( $response ) ) ? $response : '<span class="answer italics">' . __( 'No response given', 'awesome-surveys' ) . '</span>';
+			echo '<p><span class="italics">' . __( 'Question', 'awesome-surveys' ). ': ' . $label . '</span><br>' . $response . "</p>\n";
+		}
+	}
+
+	/**
+	 * loads scripts and html for the survey builder
+	 */
+	public function survey_builder() {
+		wp_enqueue_script( 'awesome-surveys-admin-script' );
+		wp_enqueue_style( 'awesome-surveys-admin-style' );
+		include_once( 'views/html-survey-builder.php' );
+	}
+
+	/**
+	 * gets the html for the options form
+	 */
+	public function general_survey_options() {
+		include_once( 'views/html-survey-options-general.php' );
+	}
+
+	public function survey_results() {
+		include_once( 'views/html-survey-results.php' );
+	}
+
+	protected function get_form_preview_html( $post_id = 0 ) {
+
+		$output = null;
+		if ( ! class_exists( 'Form' ) ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
+			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
+		}
+
+		if ( ! isset( $this->existing_elements ) ) {
+
+			$this->existing_elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
+		}
+		$required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
+		$elements_count = 0;
+		if ( ! isset( $this->buttons ) || empty( $this->buttons ) ) {
+
+			$this->buttons = $this->get_buttons();
+		}
+		$form = new FormOverrides();
+		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
+
+		if ( isset( $this->existing_elements ) && ! empty( $this->existing_elements ) ) {
+			foreach ( $this->existing_elements as $element ) {
+					$method = $this->buttons[ $element['type'] ]['type'];
+					$options = $atts = $rules = array();
+					if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
+						foreach ( $element['validation']['rules'] as $key => $value ) {
+							if ( '' != $value && ! is_null( $value ) ) {
+								$rules['data-' . $key] = $value;
+							}
+						}
+					}
+					if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
+							$options = array_merge( $options, $rules );
+					} else {
+						$atts = array_merge( $options, $rules );
+					}
+					if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
+						if ( in_array( $method, $required_is_option ) ) {
+							$options['required'] = 1;
+							$options['class'] = 'required';
+						} else {
+							$atts['required'] = 1;
+							$atts['class'] = 'required';
+						}
+					}
+					$max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
+					for ( $iterations = 0; $iterations < $max; $iterations++ ) {
+						/**
+							* Since the pfbc is being used, and it has some weird issue with values of '0', but
+							* it will work if you append :pfbc to it...not well documented, but it works!
+							*/
+						$options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
+					}
+					$atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
+					$has_responses = get_post_meta( $post_id, '_response', true );
+					$class = ( empty( $has_responses ) ) ? 'single-element-edit' : 'label-edit';
+					$form->addElement( new Element_HTML( '<div class="' . $class . '">' ) );
+					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
+						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
+						if ( empty( $has_responses ) ) {
+							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						} else {
+							$form->addElement( new Element_HTML( '<button class="element-label-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						}
+						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
+					$elements_count++;
+			}
+			$output = $form->render( true );
+		}
+
+		$pattern = '/<form action="[^"]+"/';
+		$replacement = '<div';
+		$output = preg_replace( $pattern, $replacement, $output );
+		$pattern = '/method="post"/';
+		$replacement = '';
+		$output = preg_replace( $pattern, $replacement, $output );
+		$pattern = '/<\/form/';
+		$replacement = '</div';
+		$output = preg_replace( $pattern, $replacement, $output );
+		return $output;
+	}
+
+	/**
+	* adds the closed class to all survey responses postboxes
+	* @param  array $classes the array to filter
+	* @return array          the filtered array
+	*/
+	public function postbox_class( $classes ) {
+		if ( ! in_array( 'closed', $classes ) ) {
+			$classes[] = 'closed';
+		}
+		return $classes;
+	}
+
+		private function get_options() {
+		return array(
+		'general_options' => array(
+			'include_css' => 1,
+			),
+		'email_options' => array(
+			'enable_emails' => 0,
+			'enable_respondent_email' => 0,
+			'email_subject' => __( 'Thank you for your response', 'awesome-surveys' ),
+			'mail_to' => get_option( 'admin_email', '' ),
+			'respondent_email_message' => __( 'Thank you for your response to a survey', 'awesome-surveys' ),
+			)
+		);
 	}
 }

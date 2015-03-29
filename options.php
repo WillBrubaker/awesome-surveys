@@ -7,8 +7,7 @@ if ( isset( $_POST ) && ! empty( $_POST ) ) {
 	if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_nonce'], 'awesome-surveys-update-options' ) ) {
 		wp_die( __( 'Cheatin&#8217; uh?', 'wordpress' ), 403 );
 	}
-	global $awesome_surveys;
-	$plugin_options = $awesome_surveys->options;
+	$plugin_options = Awesome_Surveys_Admin::$options;
 	$posted_options = $_POST['options'];
 	$options_to_save = wp_parse_args( $_POST['options'], $plugin_options );
 	/*
