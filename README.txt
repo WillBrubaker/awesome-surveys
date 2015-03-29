@@ -33,9 +33,7 @@ This plugin allows you to create surveys with an easy-to-use form builder, publi
 
 1. At this time, it is not possible to edit survey questions if the survey has responses. In the future I plan to re-implement this but only so much as to allow for the editing of text - You will not be able to add questions to a survey which has responses. You will not be able to add answers to questions if the survey has respones.
 
-2. On the "view results" screen all responses are output at once. This will likely have a negative impact in certain cases where the survey has a lot of responses - also a large number of responses is unwieldy to view.
-
-3. Since the surveys are now custom post types, the actual survey form is saved
+2. Since the surveys are now custom post types, the actual survey form is saved
 as 'post_content'. This means that if WordPress was in English when you built the survey, but your site wants to be in another language, the English strings will still be output, i.e. 'Submit Response' & 'make a selection...'. Likewise, even if your WordPress site was in your language but you didn't have the translations available, those strings will be output in English. As a workaround, you can append some parameters to your url e.g. when on the general survey options screen, your url would look like this: "wp-admin/admin.php?page=awesome-surveys.php" add this to the url: "&translate-surveys=true" to force translation of all of your surveys. The translation strings for your language must be present in order for this to work. As another alternative, I would suggest implementing the WordPress '`the_content`' filter to change the strings to whatever you need them to be.
 
 == Installation ==

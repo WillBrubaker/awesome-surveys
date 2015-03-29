@@ -422,4 +422,87 @@ class Awesome_Surveys {
 			}
 		}
 	}
+
+		protected function get_form_preview_html( $post_id = 0 ) {
+
+		$output = null;
+		if ( ! class_exists( 'Form' ) ) {
+			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Form.php' );
+			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
+		}
+
+		if ( ! isset( $this->existing_elements ) ) {
+
+			$this->existing_elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
+		}
+		$required_is_option = array( 'Element_Textbox', 'Element_Textarea', 'Element_Email', 'Element_Number' );
+		$elements_count = 0;
+		if ( ! isset( $this->buttons ) || empty( $this->buttons ) ) {
+
+			$this->buttons = $this->get_buttons();
+		}
+		$form = new FormOverrides();
+		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
+
+		if ( isset( $this->existing_elements ) && ! empty( $this->existing_elements ) ) {
+			foreach ( $this->existing_elements as $element ) {
+					$method = $this->buttons[ $element['type'] ]['type'];
+					$options = $atts = $rules = array();
+					if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
+						foreach ( $element['validation']['rules'] as $key => $value ) {
+							if ( '' != $value && ! is_null( $value ) ) {
+								$rules['data-' . $key] = $value;
+							}
+						}
+					}
+					if ( in_array( $method, $required_is_option ) && ! empty( $rules ) ) {
+							$options = array_merge( $options, $rules );
+					} else {
+						$atts = array_merge( $options, $rules );
+					}
+					if ( ! empty( $element['validation']['required'] ) && 'false' != $element['validation']['required'] ) {
+						if ( in_array( $method, $required_is_option ) ) {
+							$options['required'] = 1;
+							$options['class'] = 'required';
+						} else {
+							$atts['required'] = 1;
+							$atts['class'] = 'required';
+						}
+					}
+					$max = ( isset( $element['label'] ) ) ? count( $element['label'] ) : 0;
+					for ( $iterations = 0; $iterations < $max; $iterations++ ) {
+						/**
+							* Since the pfbc is being used, and it has some weird issue with values of '0', but
+							* it will work if you append :pfbc to it...not well documented, but it works!
+							*/
+						$options[$element['value'][$iterations] . ':pfbc'] = htmlentities( stripslashes( $element['label'][$iterations] ) );
+					}
+					$atts['value'] = ( isset( $element['default'] ) ) ? $element['default']  : null;
+					$has_responses = get_post_meta( $post_id, '_response', true );
+					$class = ( empty( $has_responses ) ) ? 'single-element-edit' : 'label-edit';
+					$form->addElement( new Element_HTML( '<div class="' . $class . '">' ) );
+					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
+						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
+						if ( empty( $has_responses ) ) {
+							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						} else {
+							$form->addElement( new Element_HTML( '<button class="element-label-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+						}
+						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
+					$elements_count++;
+			}
+			$output = $form->render( true );
+		}
+
+		$pattern = '/<form action="[^"]+"/';
+		$replacement = '<div';
+		$output = preg_replace( $pattern, $replacement, $output );
+		$pattern = '/method="post"/';
+		$replacement = '';
+		$output = preg_replace( $pattern, $replacement, $output );
+		$pattern = '/<\/form/';
+		$replacement = '</div';
+		$output = preg_replace( $pattern, $replacement, $output );
+		return $output;
+	}
 }
