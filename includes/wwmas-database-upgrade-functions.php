@@ -223,7 +223,6 @@ function wwmas_translate_post_content() {
 	if ( ! current_user_can( 'edit_others_posts' ) ) {
 		die( 'not authorized' );
 	}
-	error_log( __FUNCTION__ . ' line ' . __LINE__ );
 	$query_args = array(
 		'post_type' => 'awesome-surveys',
 		'post_status' => 'publish',
@@ -242,7 +241,6 @@ function wwmas_translate_post_content() {
 				'ID' => $survey_id,
 				'post_content' => $content,
 				);
-			error_log( $content );
 			wp_update_post( $postarr );
 		}
 	}
