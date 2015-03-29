@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-03-25 12:29:26+00:00\n"
+"POT-Creation-Date: 2015-03-29 13:14:55+00:00\n"
 "PO-Revision-Date: 2015-03-25 14:37+0100\n"
 "Last-Translator: Tobias Perschon <office@bitconnect.at>\n"
 "Language-Team: \n"
@@ -15,58 +15,115 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: includes/class-awesome-surveys-admin.php:8
-#: includes/class-awesome-surveys-admin.php:173
+#: includes/class-awesome-surveys-admin.php:9
+#: includes/class-awesome-surveys-admin.php:175
 msgid "Awesome Surveys Options"
 msgstr "Awesome Surveys Einstellungen"
 
-#: includes/class-awesome-surveys-admin.php:9
+#: includes/class-awesome-surveys-admin.php:10
 msgid "Survey Options"
 msgstr "Umfrage Optionen"
 
 #. Plugin Name of the plugin/theme
-#: includes/class-awesome-surveys-admin.php:11
-#: includes/class-awesome-surveys.php:71
+#: includes/class-awesome-surveys-admin.php:12
+#: includes/class-awesome-surveys.php:64
 msgid "Awesome Surveys"
 msgstr "Awesome Surveys"
 
-#: includes/class-awesome-surveys-admin.php:115
-#: includes/class-awesome-surveys.php:75
+#: includes/class-awesome-surveys-admin.php:117
+#: includes/class-awesome-surveys.php:68
 msgid "My Surveys"
 msgstr "Meine Umfragen"
 
-#: includes/class-awesome-surveys-admin.php:116
-#: includes/class-awesome-surveys.php:77 includes/class-awesome-surveys.php:78
+#: includes/class-awesome-surveys-admin.php:118
+#: includes/class-awesome-surveys.php:70 includes/class-awesome-surveys.php:71
 msgid "New Survey"
 msgstr "Neue Umfrage"
 
-#: includes/class-awesome-surveys-admin.php:174
+#: includes/class-awesome-surveys-admin.php:176
 msgid "Email Options"
 msgstr "E-Mail Einstellungen"
 
-#: includes/class-awesome-surveys-admin.php:210
+#: includes/class-awesome-surveys-admin.php:212
 msgid "View Survey Results"
 msgstr "Zeige Umfrageergebnisse an"
 
-#: includes/class-awesome-surveys-admin.php:210
+#: includes/class-awesome-surveys-admin.php:212
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "Create a copy of this survey"
 msgstr "Erstelle eine Kopie dieser Umfrage"
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: includes/class-awesome-surveys-admin.php:225
+#: includes/class-awesome-surveys-admin.php:227
 msgid "Surveys updated"
 msgstr "Umfragen aktualisiert"
 
-#: includes/class-awesome-surveys-admin.php:285
+#: includes/class-awesome-surveys-admin.php:287
 msgid "Copy"
 msgstr "Kopieren"
+
+#: includes/class-awesome-surveys-admin.php:355
+msgid "Survey Results For:"
+msgstr "Umfrageergebnisse für:"
+
+#: includes/class-awesome-surveys-admin.php:368
+msgid "Results for "
+msgstr "Eingaben für:"
+
+#: includes/class-awesome-surveys-admin.php:370
+msgid "Results for respondent "
+msgstr "Eingaben des/der Befragten:"
+
+#: includes/class-awesome-surveys-admin.php:377
+msgid "Create Survey"
+msgstr "Umfrage erstellen"
+
+#: includes/class-awesome-surveys-admin.php:378
+msgid "General Survey Options"
+msgstr "Allgemeine Umfrage Einstellungen"
+
+#: includes/class-awesome-surveys-admin.php:412
+msgid "Answers"
+msgstr "Antworten"
+
+#: includes/class-awesome-surveys-admin.php:418
+#: includes/class-awesome-surveys-admin.php:421
+#: includes/class-awesome-surveys-ajax-actions.php:165
+msgid "Answer"
+msgstr "Antwort"
+
+#: includes/class-awesome-surveys-admin.php:423
+msgid "No response given"
+msgstr "Keine Antwort abgegeben"
+
+#: includes/class-awesome-surveys-admin.php:424
+msgid "Question"
+msgstr "Frage"
+
+#: includes/class-awesome-surveys-admin.php:509
+msgid "Delete question"
+msgstr "Frage löschen"
+
+#: includes/class-awesome-surveys-admin.php:509
+#: includes/class-awesome-surveys-admin.php:511
+msgid "Edit question"
+msgstr "Frage bearbeiten"
+
+#: includes/class-awesome-surveys-admin.php:551
+#: includes/views/html-surveys-options-emails.php:5
+msgid "Thank you for your response"
+msgstr "Danke für Ihre Teilnahme"
+
+#: includes/class-awesome-surveys-admin.php:553
+#: includes/views/html-surveys-options-emails.php:7
+msgid "Thank you for your response to a survey"
+msgstr "Danke für Ihre Teilnahme an der Umfrage"
 
 #: includes/class-awesome-surveys-ajax-actions.php:83
 msgid "The question you are asking:"
@@ -93,11 +150,6 @@ msgid "Add Question"
 msgstr "Frage hinzufügen"
 
 #: includes/class-awesome-surveys-ajax-actions.php:165
-#: includes/class-awesome-surveys.php:159 includes/class-awesome-surveys.php:162
-msgid "Answer"
-msgstr "Antwort"
-
-#: includes/class-awesome-surveys-ajax-actions.php:165
 msgid "default?"
 msgstr "als standard?"
 
@@ -122,149 +174,99 @@ msgid "Reset"
 msgstr "zurücksetzen"
 
 #: includes/class-awesome-surveys-ajax-actions.php:383
-#: includes/class-awesome-surveys-frontend.php:88
-#: includes/class-awesome-surveys.php:395
+#: includes/class-awesome-surveys-frontend.php:89
+#: includes/class-awesome-surveys.php:220
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr "Deine Antworten zu dieser Umfrage wurden bereits gespeichtert. Danke!"
 
-#: includes/class-awesome-surveys-frontend.php:110
+#: includes/class-awesome-surveys-frontend.php:111
 msgid "Characters remaining"
 msgstr "verbleibende Zeichen"
 
-#: includes/class-awesome-surveys-frontend.php:132
-#: includes/class-awesome-surveys.php:568
+#: includes/class-awesome-surveys-frontend.php:133
+#: includes/class-awesome-surveys.php:366
 msgid "You must be logged in to participate in this survey"
 msgstr "Du musst eingeloggt sein um an dieser Umfrage teilnehmen zu können"
 
-#: includes/class-awesome-surveys.php:36
+#: includes/class-awesome-surveys.php:29
 msgid "Text Input"
 msgstr "Texteingabe"
 
-#: includes/class-awesome-surveys.php:40
+#: includes/class-awesome-surveys.php:33
 msgid "Email"
 msgstr "E-Mail"
 
-#: includes/class-awesome-surveys.php:44
+#: includes/class-awesome-surveys.php:37
 msgid "Number"
 msgstr "Nummer"
 
-#: includes/class-awesome-surveys.php:48
+#: includes/class-awesome-surveys.php:41
 msgid "Dropdown Selector"
 msgstr "Dropdownliste"
 
-#: includes/class-awesome-surveys.php:52
+#: includes/class-awesome-surveys.php:45
 msgid "Radio Buttons"
 msgstr "Radiobuttons"
 
-#: includes/class-awesome-surveys.php:56
+#: includes/class-awesome-surveys.php:49
 msgid "Checkboxes"
 msgstr "Checkboxen"
 
-#: includes/class-awesome-surveys.php:60
+#: includes/class-awesome-surveys.php:53
 msgid "Textarea"
 msgstr "Textfeld"
 
-#: includes/class-awesome-surveys.php:73
+#: includes/class-awesome-surveys.php:66
 msgid "Surveys"
 msgstr "Umfragen"
 
-#: includes/class-awesome-surveys.php:74 includes/class-awesome-surveys.php:76
+#: includes/class-awesome-surveys.php:67 includes/class-awesome-surveys.php:69
 msgid "Survey"
 msgstr "Umfrage"
 
-#: includes/class-awesome-surveys.php:79
+#: includes/class-awesome-surveys.php:72
 msgid "Add New Survey"
 msgstr "Neue Umfrage hinzufügen"
 
-#: includes/class-awesome-surveys.php:80
+#: includes/class-awesome-surveys.php:73
 msgid "Edit Survey"
 msgstr "Umfrage bearbeiten"
 
-#: includes/class-awesome-surveys.php:82
+#: includes/class-awesome-surveys.php:75
 msgid "Surveys for your site"
 msgstr "Umfragen für diese Website"
 
-#: includes/class-awesome-surveys.php:111
-msgid "Survey Results For:"
-msgstr "Umfrageergebnisse für:"
-
-#: includes/class-awesome-surveys.php:124
-msgid "Results for "
-msgstr "Eingaben für:"
-
-#: includes/class-awesome-surveys.php:127
-msgid "Results for respondent "
-msgstr "Eingaben des/der Befragten:"
-
-#: includes/class-awesome-surveys.php:133
-msgid "Create Survey"
-msgstr "Umfrage erstellen"
-
-#: includes/class-awesome-surveys.php:134
-msgid "General Survey Options"
-msgstr "Allgemeine Umfrage Einstellungen"
-
-#: includes/class-awesome-surveys.php:153
-msgid "Answers"
-msgstr "Antworten"
-
-#: includes/class-awesome-surveys.php:164
-msgid "No response given"
-msgstr "Keine Antwort abgegeben"
-
-#: includes/class-awesome-surveys.php:165
-msgid "Question"
-msgstr "Frage"
-
-#: includes/class-awesome-surveys.php:250
-msgid "Delete question"
-msgstr "Frage löschen"
-
-#: includes/class-awesome-surveys.php:250
-msgid "Edit question"
-msgstr "Frage bearbeiten"
-
-#: includes/class-awesome-surveys.php:300
+#: includes/class-awesome-surveys.php:125
 #: includes/wwmas-database-upgrade-functions.php:118
 msgid "make a selection..."
 msgstr "Treffe eine Auswahl..."
 
-#: includes/class-awesome-surveys.php:342
+#: includes/class-awesome-surveys.php:167
 #: includes/wwmas-database-upgrade-functions.php:157
 msgid "Submit Response"
 msgstr "Antwort abschicken"
 
-#: includes/class-awesome-surveys.php:409
-#: includes/views/html-surveys-options-emails.php:5
-msgid "Thank you for your response"
-msgstr "Danke für Ihre Teilnahme"
-
-#: includes/class-awesome-surveys.php:411
-#: includes/views/html-surveys-options-emails.php:7
-msgid "Thank you for your response to a survey"
-msgstr "Danke für Ihre Teilnahme an der Umfrage"
-
-#: includes/class-awesome-surveys.php:431
+#: includes/class-awesome-surveys.php:241
 msgid "None"
 msgstr "Keine"
 
-#: includes/class-awesome-surveys.php:435
+#: includes/class-awesome-surveys.php:245
 msgid "User must be logged in"
 msgstr "Benutzer muss eingeloggt sein"
 
-#: includes/class-awesome-surveys.php:439
+#: includes/class-awesome-surveys.php:249
 msgid "Cookie based"
 msgstr "Cookie basierend"
 
-#: includes/class-awesome-surveys.php:584
+#: includes/class-awesome-surveys.php:382
 msgid "Survey Completed"
 msgstr "Umfrage abgeschlossen"
 
-#: includes/class-awesome-surveys.php:586
+#: includes/class-awesome-surveys.php:384
 msgid "A survey on your site named %s has been completed"
 msgstr "Auf der Seite \"%s\" wurde eine Umfrage ausgefüllt"
 
-#: includes/class-awesome-surveys.php:602
+#: includes/class-awesome-surveys.php:400
 msgid "No Answer Given"
 msgstr "Keine Antwort abgegeben"
 
@@ -314,8 +316,8 @@ msgid ""
 "To prevent people from filling the survey out multiple times you may select "
 "one of the options below"
 msgstr ""
-"Um zu verhindern, dass Besucher die Umfrage mehrmals ausfüllen, kannst du eine "
-"der folgenden Optionen wählen"
+"Um zu verhindern, dass Besucher die Umfrage mehrmals ausfüllen, kannst du "
+"eine der folgenden Optionen wählen"
 
 #: includes/views/html-survey-options-general.php:31
 msgid "Survey Authentication Method:"
@@ -324,6 +326,20 @@ msgstr "Umfrage Authentifizierungsmethode:"
 #: includes/views/html-survey-options-general.php:50
 msgid "Auth method can not be edited"
 msgstr "Authentifizierungsmethode kann nicht bearbeitet werden."
+
+#: includes/views/html-survey-results.php:32
+#, fuzzy
+msgid "This survey has received a total of %d responses"
+msgstr "Die Umfrage wurde %d ausgefüllt"
+
+#: includes/views/html-survey-results.php:38
+#, fuzzy
+msgid "%s received %d responses"
+msgstr "Die Umfrage wurde %d ausgefüllt"
+
+#: includes/views/html-survey-results.php:69
+msgid "was answered %d times"
+msgstr ""
 
 #: includes/views/html-surveys-options-emails.php:9
 msgid "Notification Emails"
@@ -388,8 +404,8 @@ msgid ""
 "This plugin outputs some very basic structural css. You can enable/disable "
 "this by setting the option below"
 msgstr ""
-"Das Plugin verfügt über ein rudimentäres CSS um die Umfrage zu strukturieren. "
-"Mit dieser Option kann man es de- bzw. aktivieren."
+"Das Plugin verfügt über ein rudimentäres CSS um die Umfrage zu "
+"strukturieren. Mit dieser Option kann man es de- bzw. aktivieren."
 
 #: includes/views/html-surveys-options.php:16
 msgid "Use included css?"
@@ -461,8 +477,8 @@ msgid ""
 "Easily create surveys for your WordPress website and publish them with a "
 "simple shortcode"
 msgstr ""
-"Erstelle einfach Umfragen für deine WordPress Website und binde sie mit einem "
-"einfachen Shortcode ein."
+"Erstelle einfach Umfragen für deine WordPress Website und binde sie mit "
+"einem einfachen Shortcode ein."
 
 #. Author of the plugin/theme
 msgid "Will Brubaker"
@@ -487,9 +503,6 @@ msgstr ""
 #~ msgid "Edit this survey"
 #~ msgstr "Umfrage bearbeiten"
 
-#~ msgid "This survey has received %d responses"
-#~ msgstr "Die Umfrage wurde %d ausgefüllt"
-
 #~ msgid "edit this question"
 #~ msgstr "Frage bearbeiten"
 
@@ -506,7 +519,8 @@ msgstr ""
 #~ "This field is a name for your survey and will be displayed before your "
 #~ "survey form"
 #~ msgstr ""
-#~ "Dies ist der Name deiner Umfrage, er wird vor dem Umfrageformular angezeigt."
+#~ "Dies ist der Name deiner Umfrage, er wird vor dem Umfrageformular "
+#~ "angezeigt."
 
 #~ msgid "Field Type"
 #~ msgstr "Feld Typ"
@@ -520,22 +534,22 @@ msgstr ""
 
 #~ msgid ""
 #~ "Based upon the type of field option you have selected, you may see "
-#~ "different options for validation. Selecting 'required' will make this part "
-#~ "of your survey a required field. Some fields have a 'Maximum Length' "
+#~ "different options for validation. Selecting 'required' will make this "
+#~ "part of your survey a required field. Some fields have a 'Maximum Length' "
 #~ "Validation option where you can specify a character limit. Field type "
-#~ "\"number\" can have a maximum and minimum value added to it. As an example, "
-#~ "if your survey asked a user their age, and you wanted to limit the survey "
-#~ "to respondents who claim that they are 18 or older, you can enter 18 in the "
-#~ "'Min number allowed' field."
+#~ "\"number\" can have a maximum and minimum value added to it. As an "
+#~ "example, if your survey asked a user their age, and you wanted to limit "
+#~ "the survey to respondents who claim that they are 18 or older, you can "
+#~ "enter 18 in the 'Min number allowed' field."
 #~ msgstr ""
 #~ "Je nachdem welches Feld du ausgewählt hast gibt es verschiedene optionen "
 #~ "für die Validierung. Als \"Pflichtfeld\" warden Felder markiert die "
-#~ "ausgefüllt warden müssen bevor die Umfrage abgeschickt warden kann. Manche "
-#~ "Felder haben die eine Option für die maximale Anzahl der möglichen Zeichen. "
-#~ "Das Nummern Feld hat die möglichkeit einen Minimal bzw. Maximalwert "
-#~ "anzugeben. Wenn die Umfrage z.B. das Alter abfragt und man soll die Umfrage "
-#~ "nur abschicken können wenn man mindestens 18 Jahre alt ist so könnte man "
-#~ "die  \"Kleinste erlaubte Nummer\" Option auf 18 setzen."
+#~ "ausgefüllt warden müssen bevor die Umfrage abgeschickt warden kann. "
+#~ "Manche Felder haben die eine Option für die maximale Anzahl der möglichen "
+#~ "Zeichen. Das Nummern Feld hat die möglichkeit einen Minimal bzw. "
+#~ "Maximalwert anzugeben. Wenn die Umfrage z.B. das Alter abfragt und man "
+#~ "soll die Umfrage nur abschicken können wenn man mindestens 18 Jahre alt "
+#~ "ist so könnte man die  \"Kleinste erlaubte Nummer\" Option auf 18 setzen."
 
 #~ msgid ""
 #~ "These are options for your survey, they are not built in to the survey "
@@ -548,22 +562,24 @@ msgstr ""
 
 #~ msgid ""
 #~ "Choose a method to prevent users from filling out the survey multiple "
-#~ "times. User login is much more reliable, but may not be the best option for "
-#~ "your site if you don't allow registrations. Cookie based authentication is "
-#~ "very easy to circumvent, but will prevent most users from taking the survey "
-#~ "multiple times. Of course, you may prefer to allow users to take the survey "
-#~ "an unlimited number of times in which case you should choose 'None'. Note "
-#~ "to developers: methods can be added via the survey_auth_options filter."
+#~ "times. User login is much more reliable, but may not be the best option "
+#~ "for your site if you don't allow registrations. Cookie based "
+#~ "authentication is very easy to circumvent, but will prevent most users "
+#~ "from taking the survey multiple times. Of course, you may prefer to allow "
+#~ "users to take the survey an unlimited number of times in which case you "
+#~ "should choose 'None'. Note to developers: methods can be added via the "
+#~ "survey_auth_options filter."
 #~ msgstr ""
-#~ "Wähle eine Methode aus um zu verhindern, dass Besucher die Umfrage mehr als "
-#~ "einmal ausfüllen können. Benutzerlogin ist am zuverlässigsten kann aber in "
-#~ "bestimmten Szenarien nicht sinnvoll sein (z.B. wenn eine Registrierung "
-#~ "garnicht erlaubt ist). Cookie basierene Authentifizierung ist eine einfache "
-#~ "Art um zu verhindern, dass eine Umfrage mehrmals vom selben Besucher "
-#~ "(Computer) ausgefüllt wird. Es ist natürlich ebenso möglich, dass Benutzer "
-#~ "die Umfrage beliebiebig oft ausfüllen dürfen. In diesem Fall ist \"keine\" "
-#~ "auzuwählen. Hinweis an Entwickler: Weitere Methoden können über den "
-#~ "\"survey_auth_options\" Filter hinzugefügt warden."
+#~ "Wähle eine Methode aus um zu verhindern, dass Besucher die Umfrage mehr "
+#~ "als einmal ausfüllen können. Benutzerlogin ist am zuverlässigsten kann "
+#~ "aber in bestimmten Szenarien nicht sinnvoll sein (z.B. wenn eine "
+#~ "Registrierung garnicht erlaubt ist). Cookie basierene Authentifizierung "
+#~ "ist eine einfache Art um zu verhindern, dass eine Umfrage mehrmals vom "
+#~ "selben Besucher (Computer) ausgefüllt wird. Es ist natürlich ebenso "
+#~ "möglich, dass Benutzer die Umfrage beliebiebig oft ausfüllen dürfen. In "
+#~ "diesem Fall ist \"keine\" auzuwählen. Hinweis an Entwickler: Weitere "
+#~ "Methoden können über den \"survey_auth_options\" Filter hinzugefügt "
+#~ "warden."
 
 #~ msgid "Thank You Message"
 #~ msgstr "\"Danke\" Nachricht"

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-03-25 12:29:26+00:00\n"
+"POT-Creation-Date: 2015-03-29 13:14:55+00:00\n"
 "PO-Revision-Date: 2015-03-25 07:32-0500\n"
 "Last-Translator: Henrik Karmark <henrik@karmark.com>\n"
 "Language-Team: \n"
@@ -15,57 +15,114 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: includes/class-awesome-surveys-admin.php:8
-#: includes/class-awesome-surveys-admin.php:173
+#: includes/class-awesome-surveys-admin.php:9
+#: includes/class-awesome-surveys-admin.php:175
 msgid "Awesome Surveys Options"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:9
+#: includes/class-awesome-surveys-admin.php:10
 msgid "Survey Options"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
-#: includes/class-awesome-surveys-admin.php:11
-#: includes/class-awesome-surveys.php:71
+#: includes/class-awesome-surveys-admin.php:12
+#: includes/class-awesome-surveys.php:64
 msgid "Awesome Surveys"
 msgstr "Awesome Surveys"
 
-#: includes/class-awesome-surveys-admin.php:115
-#: includes/class-awesome-surveys.php:75
+#: includes/class-awesome-surveys-admin.php:117
+#: includes/class-awesome-surveys.php:68
 msgid "My Surveys"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:116
-#: includes/class-awesome-surveys.php:77 includes/class-awesome-surveys.php:78
+#: includes/class-awesome-surveys-admin.php:118
+#: includes/class-awesome-surveys.php:70 includes/class-awesome-surveys.php:71
 msgid "New Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:174
+#: includes/class-awesome-surveys-admin.php:176
 msgid "Email Options"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:210
+#: includes/class-awesome-surveys-admin.php:212
 msgid "View Survey Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:210
+#: includes/class-awesome-surveys-admin.php:212
 msgid "Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "Create a copy of this survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "Duplicate"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:225
+#: includes/class-awesome-surveys-admin.php:227
 msgid "Surveys updated"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:285
+#: includes/class-awesome-surveys-admin.php:287
 msgid "Copy"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:355
+msgid "Survey Results For:"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:368
+msgid "Results for "
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:370
+msgid "Results for respondent "
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:377
+msgid "Create Survey"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:378
+msgid "General Survey Options"
+msgstr "Generelle spørgeskema indstillinger"
+
+#: includes/class-awesome-surveys-admin.php:412
+msgid "Answers"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:418
+#: includes/class-awesome-surveys-admin.php:421
+#: includes/class-awesome-surveys-ajax-actions.php:165
+msgid "Answer"
+msgstr "Svar"
+
+#: includes/class-awesome-surveys-admin.php:423
+msgid "No response given"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:424
+msgid "Question"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:509
+msgid "Delete question"
+msgstr "Slet spørgsmål"
+
+#: includes/class-awesome-surveys-admin.php:509
+#: includes/class-awesome-surveys-admin.php:511
+msgid "Edit question"
+msgstr "Rediger spørgsmål"
+
+#: includes/class-awesome-surveys-admin.php:551
+#: includes/views/html-surveys-options-emails.php:5
+msgid "Thank you for your response"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:553
+#: includes/views/html-surveys-options-emails.php:7
+msgid "Thank you for your response to a survey"
 msgstr ""
 
 #: includes/class-awesome-surveys-ajax-actions.php:83
@@ -93,11 +150,6 @@ msgid "Add Question"
 msgstr "Tilføj spørgsmål"
 
 #: includes/class-awesome-surveys-ajax-actions.php:165
-#: includes/class-awesome-surveys.php:159 includes/class-awesome-surveys.php:162
-msgid "Answer"
-msgstr "Svar"
-
-#: includes/class-awesome-surveys-ajax-actions.php:165
 msgid "default?"
 msgstr "Standard?"
 
@@ -122,149 +174,99 @@ msgid "Reset"
 msgstr "Reset"
 
 #: includes/class-awesome-surveys-ajax-actions.php:383
-#: includes/class-awesome-surveys-frontend.php:88
-#: includes/class-awesome-surveys.php:395
+#: includes/class-awesome-surveys-frontend.php:89
+#: includes/class-awesome-surveys.php:220
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr "Du har allerede svaret på spørgeskemaet! Tak for hjælpen!"
 
-#: includes/class-awesome-surveys-frontend.php:110
+#: includes/class-awesome-surveys-frontend.php:111
 msgid "Characters remaining"
 msgstr ""
 
-#: includes/class-awesome-surveys-frontend.php:132
-#: includes/class-awesome-surveys.php:568
+#: includes/class-awesome-surveys-frontend.php:133
+#: includes/class-awesome-surveys.php:366
 msgid "You must be logged in to participate in this survey"
 msgstr "Du skal være logget ind for at kunne besvarer spørgeskemaet"
 
-#: includes/class-awesome-surveys.php:36
+#: includes/class-awesome-surveys.php:29
 msgid "Text Input"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:40
+#: includes/class-awesome-surveys.php:33
 msgid "Email"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:44
+#: includes/class-awesome-surveys.php:37
 msgid "Number"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:48
+#: includes/class-awesome-surveys.php:41
 msgid "Dropdown Selector"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:52
+#: includes/class-awesome-surveys.php:45
 msgid "Radio Buttons"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:56
+#: includes/class-awesome-surveys.php:49
 msgid "Checkboxes"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:60
+#: includes/class-awesome-surveys.php:53
 msgid "Textarea"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:73
+#: includes/class-awesome-surveys.php:66
 msgid "Surveys"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:74 includes/class-awesome-surveys.php:76
+#: includes/class-awesome-surveys.php:67 includes/class-awesome-surveys.php:69
 msgid "Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:79
+#: includes/class-awesome-surveys.php:72
 msgid "Add New Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:80
+#: includes/class-awesome-surveys.php:73
 msgid "Edit Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:82
+#: includes/class-awesome-surveys.php:75
 msgid "Surveys for your site"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:111
-msgid "Survey Results For:"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:124
-msgid "Results for "
-msgstr ""
-
-#: includes/class-awesome-surveys.php:127
-msgid "Results for respondent "
-msgstr ""
-
-#: includes/class-awesome-surveys.php:133
-msgid "Create Survey"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:134
-msgid "General Survey Options"
-msgstr "Generelle spørgeskema indstillinger"
-
-#: includes/class-awesome-surveys.php:153
-msgid "Answers"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:164
-msgid "No response given"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:165
-msgid "Question"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:250
-msgid "Delete question"
-msgstr "Slet spørgsmål"
-
-#: includes/class-awesome-surveys.php:250
-msgid "Edit question"
-msgstr "Rediger spørgsmål"
-
-#: includes/class-awesome-surveys.php:300
+#: includes/class-awesome-surveys.php:125
 #: includes/wwmas-database-upgrade-functions.php:118
 msgid "make a selection..."
 msgstr "Vælg..."
 
-#: includes/class-awesome-surveys.php:342
+#: includes/class-awesome-surveys.php:167
 #: includes/wwmas-database-upgrade-functions.php:157
 msgid "Submit Response"
 msgstr "Send dine svar"
 
-#: includes/class-awesome-surveys.php:409
-#: includes/views/html-surveys-options-emails.php:5
-msgid "Thank you for your response"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:411
-#: includes/views/html-surveys-options-emails.php:7
-msgid "Thank you for your response to a survey"
-msgstr ""
-
-#: includes/class-awesome-surveys.php:431
+#: includes/class-awesome-surveys.php:241
 msgid "None"
 msgstr "Ingen"
 
-#: includes/class-awesome-surveys.php:435
+#: includes/class-awesome-surveys.php:245
 msgid "User must be logged in"
 msgstr "Du skal være logget ind"
 
-#: includes/class-awesome-surveys.php:439
+#: includes/class-awesome-surveys.php:249
 msgid "Cookie based"
 msgstr "Cookie basseret"
 
-#: includes/class-awesome-surveys.php:584
+#: includes/class-awesome-surveys.php:382
 msgid "Survey Completed"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:586
+#: includes/class-awesome-surveys.php:384
 msgid "A survey on your site named %s has been completed"
 msgstr ""
 
-#: includes/class-awesome-surveys.php:602
+#: includes/class-awesome-surveys.php:400
 msgid "No Answer Given"
 msgstr ""
 
@@ -309,8 +311,8 @@ msgid ""
 "To prevent people from filling the survey out multiple times you may select "
 "one of the options below"
 msgstr ""
-"For at undgå, at folk kan udfylde spørgeskemat mere end en gang - kan du evt. "
-"vælge en af mulighederne nedenfor"
+"For at undgå, at folk kan udfylde spørgeskemat mere end en gang - kan du "
+"evt. vælge en af mulighederne nedenfor"
 
 #: includes/views/html-survey-options-general.php:31
 msgid "Survey Authentication Method:"
@@ -318,6 +320,20 @@ msgstr "Godkendelsemetode for skemaet:"
 
 #: includes/views/html-survey-options-general.php:50
 msgid "Auth method can not be edited"
+msgstr ""
+
+#: includes/views/html-survey-results.php:32
+#, fuzzy
+msgid "This survey has received a total of %d responses"
+msgstr "Denne undersøgelse har modtaget %d svar"
+
+#: includes/views/html-survey-results.php:38
+#, fuzzy
+msgid "%s received %d responses"
+msgstr "Denne undersøgelse har modtaget %d svar"
+
+#: includes/views/html-survey-results.php:69
+msgid "was answered %d times"
 msgstr ""
 
 #: includes/views/html-surveys-options-emails.php:9
@@ -382,8 +398,8 @@ msgid ""
 "This plugin outputs some very basic structural css. You can enable/disable "
 "this by setting the option below"
 msgstr ""
-"Dette plugin sender nogle meget grundlæggende css detaljer. Du kan aktivere / "
-"deaktivere denne ved at ændre nedenstående valgmulighed"
+"Dette plugin sender nogle meget grundlæggende css detaljer. Du kan "
+"aktivere / deaktivere denne ved at ændre nedenstående valgmulighed"
 
 #: includes/views/html-surveys-options.php:16
 msgid "Use included css?"
@@ -455,8 +471,8 @@ msgid ""
 "Easily create surveys for your WordPress website and publish them with a "
 "simple shortcode"
 msgstr ""
-"Lav let spørgeskemaer til din Wordpress hjemmeside og indsæt dem med en simpel "
-"shortcode"
+"Lav let spørgeskemaer til din Wordpress hjemmeside og indsæt dem med en "
+"simpel shortcode"
 
 #. Author of the plugin/theme
 msgid "Will Brubaker"
@@ -480,9 +496,6 @@ msgstr "http://www.willthewebmechanic.com"
 
 #~ msgid "Edit this survey"
 #~ msgstr "Rediger spørgeskemaet"
-
-#~ msgid "This survey has received %d responses"
-#~ msgstr "Denne undersøgelse har modtaget %d svar"
 
 #~ msgid "edit this question"
 #~ msgstr "Rediger spørgsmålet"
@@ -509,26 +522,27 @@ msgstr "http://www.willthewebmechanic.com"
 #~ "This is the type of form field you would like to add to your form, i.e.: "
 #~ "checkbox, radio, text, email, textarea, etc. Examples:"
 #~ msgstr ""
-#~ "Dette er den felttype du vil tilføje til dit skema f.eks.: checkbox, radio, "
-#~ "text, email, textarea, etc. Eksempler:"
+#~ "Dette er den felttype du vil tilføje til dit skema f.eks.: checkbox, "
+#~ "radio, text, email, textarea, etc. Eksempler:"
 
 #~ msgid ""
 #~ "Based upon the type of field option you have selected, you may see "
-#~ "different options for validation. Selecting 'required' will make this part "
-#~ "of your survey a required field. Some fields have a 'Maximum Length' "
+#~ "different options for validation. Selecting 'required' will make this "
+#~ "part of your survey a required field. Some fields have a 'Maximum Length' "
 #~ "Validation option where you can specify a character limit. Field type "
-#~ "\"number\" can have a maximum and minimum value added to it. As an example, "
-#~ "if your survey asked a user their age, and you wanted to limit the survey "
-#~ "to respondents who claim that they are 18 or older, you can enter 18 in the "
-#~ "'Min number allowed' field."
+#~ "\"number\" can have a maximum and minimum value added to it. As an "
+#~ "example, if your survey asked a user their age, and you wanted to limit "
+#~ "the survey to respondents who claim that they are 18 or older, you can "
+#~ "enter 18 in the 'Min number allowed' field."
 #~ msgstr ""
 #~ "Alt efter hvilket felttype du vælger, har du forskellige muligheder for "
 #~ "valdering. Hvis du vælger 'krævet' vil feltet skulle udfyldes før "
-#~ "undersøgelsen kan sendes. Nogle felter har 'maximum længde' validering her "
-#~ "kan du sætte det maximale antal bogstaver eller tal der skal kan indtastes. "
-#~ "Felttypen 'tal' kan have en maximum og minimum værdi. Et eksempel, hvis du "
-#~ "spørg din bruger om deres alder og kun vil have svar fra personer der er 18 "
-#~ "år eller ældre, skriver du blot 18 i 'mindste tilladte tal' feltet."
+#~ "undersøgelsen kan sendes. Nogle felter har 'maximum længde' validering "
+#~ "her kan du sætte det maximale antal bogstaver eller tal der skal kan "
+#~ "indtastes. Felttypen 'tal' kan have en maximum og minimum værdi. Et "
+#~ "eksempel, hvis du spørg din bruger om deres alder og kun vil have svar "
+#~ "fra personer der er 18 år eller ældre, skriver du blot 18 i 'mindste "
+#~ "tilladte tal' feltet."
 
 #~ msgid ""
 #~ "These are options for your survey, they are not built in to the survey "
@@ -542,20 +556,21 @@ msgstr "http://www.willthewebmechanic.com"
 
 #~ msgid ""
 #~ "Choose a method to prevent users from filling out the survey multiple "
-#~ "times. User login is much more reliable, but may not be the best option for "
-#~ "your site if you don't allow registrations. Cookie based authentication is "
-#~ "very easy to circumvent, but will prevent most users from taking the survey "
-#~ "multiple times. Of course, you may prefer to allow users to take the survey "
-#~ "an unlimited number of times in which case you should choose 'None'. Note "
-#~ "to developers: methods can be added via the survey_auth_options filter."
+#~ "times. User login is much more reliable, but may not be the best option "
+#~ "for your site if you don't allow registrations. Cookie based "
+#~ "authentication is very easy to circumvent, but will prevent most users "
+#~ "from taking the survey multiple times. Of course, you may prefer to allow "
+#~ "users to take the survey an unlimited number of times in which case you "
+#~ "should choose 'None'. Note to developers: methods can be added via the "
+#~ "survey_auth_options filter."
 #~ msgstr ""
 #~ "Vælg hvilken metode du vil anvende for at undgå at brugeren kan udfylde "
 #~ "skemaet mere end en gang. Bruger skal være logget ind, er den mest sikre "
 #~ "metode, men er ikke god hvis man ikke kan oprette sig som bruge på din "
-#~ "hjemmeside. Cookie validering er meget let at omgåes, men vil dog holde de "
-#~ "fleste brugere fra at udfylde skemaet flere gange. Hvis du derimod ønsker, "
-#~ "at brugerne jkan udfylde skemaet et uendeligt antal gange, skal du blot "
-#~ "vælge 'Ingen'. Note til udviklere: Metoden kan tilføjes via "
+#~ "hjemmeside. Cookie validering er meget let at omgåes, men vil dog holde "
+#~ "de fleste brugere fra at udfylde skemaet flere gange. Hvis du derimod "
+#~ "ønsker, at brugerne jkan udfylde skemaet et uendeligt antal gange, skal "
+#~ "du blot vælge 'Ingen'. Note til udviklere: Metoden kan tilføjes via "
 #~ "survey_auth_options filter."
 
 #~ msgid "Thank You Message"
@@ -588,8 +603,8 @@ msgstr "http://www.willthewebmechanic.com"
 #~ "Click the help tab in the upper right corner of your screen"
 #~ msgstr ""
 #~ "Behov for hjælp? Der er nogel meget brugbare tips til nogel af "
-#~ "indstillingerne i hjælpemenuen. Klik på hjælp i øvertse højre hjørne af din "
-#~ "skærm."
+#~ "indstillingerne i hjælpemenuen. Klik på hjælp i øvertse højre hjørne af "
+#~ "din skærm."
 
 #~ msgid "Dismiss"
 #~ msgstr "Afvis"
@@ -622,8 +637,8 @@ msgstr "http://www.willthewebmechanic.com"
 #~ "A survey that has had responses can not be changed to the \"Logged in\" "
 #~ "auth method"
 #~ msgstr ""
-#~ "Et spørgeskema hvori der er modtaget svar, kan ikke ændres til  \"Logged in"
-#~ "\" godkendelses metode"
+#~ "Et spørgeskema hvori der er modtaget svar, kan ikke ændres til  \"Logged "
+#~ "in\" godkendelses metode"
 
 #~ msgid "Donate to the development of the Awesome Surveys plugin"
 #~ msgstr "Donner til udviklingen af Awesome Surveys plugin"
