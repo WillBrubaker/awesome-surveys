@@ -226,6 +226,7 @@ function wwmas_translate_post_content() {
 	$query_args = array(
 		'post_type' => 'awesome-surveys',
 		'post_status' => 'publish',
+		'posts_per_page' => -1,
 		);
 	$surveys = new WP_Query( $query_args );
 	if ( $surveys->have_posts() ) {
