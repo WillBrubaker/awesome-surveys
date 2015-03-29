@@ -193,7 +193,7 @@ jQuery('document').ready(function($) {
 				e.preventDefault()
 				reset = confirm(commonL10n.warnDelete)
 				if (true == reset) {
-						$('#existing_elements').val('')
+						$('#existing_elements').val('').trigger('change')
 						$('#content').val('')
 						$('#form-preview-wrapper').hide()
 						$('#form-preview').empty()
@@ -208,7 +208,7 @@ jQuery('document').ready(function($) {
 				}
 		})
 
-		$('#existing_elements').on('blur', function() {
+		$('#existing_elements').on('change', function() {
 				$.post(ajaxurl, {
 						survey_id: $('#post_ID').val(),
 						existing_elements: $('#existing_elements').val(),
@@ -228,7 +228,7 @@ function getPreview($) {
 				$.post(ajaxurl, $('#awesome-survey :input').serializeArray(), function(data) {
 						$('#form-preview').empty().append(data.data[0])
 						$('#content').val(data.data[1])
-						$('#existing_elements').val(data.data[2])
+						$('#existing_elements').val(data.data[2]).trigger('change')
 						previewReady($)
 				})
 		}

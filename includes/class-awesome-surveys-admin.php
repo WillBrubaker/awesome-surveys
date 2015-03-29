@@ -11,7 +11,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$this->menu_slug = 'awesome-surveys.php';
 		$this->menu_link_text = __( 'Awesome Surveys', 'awesome-surveys' );
 		$this->text_domain = 'awesome-surveys';
-		Awesome_Surveys_Admin::$options = $this->get_options();
+		self::$options = $this->get_options();
 		$actions = array(
 			'admin_menu' => array( 'admin_menu', 10, 0 ),
 			'save_post' => array( 'save_post', 10, 2 ),
@@ -45,6 +45,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		}
 		if ( isset( $_POST['existing_elements'] ) ) {
 			$existing_elements = $_POST['existing_elements'];
+			$this->existing_elements = $existing_elements;
 			update_post_meta( $post_id, 'existing_elements', $existing_elements );
 		}
 		if ( isset( $_POST['meta']['survey_auth_method'] ) ) {
