@@ -460,17 +460,17 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	}
 
 		private function get_options() {
-		return array(
-		'general_options' => array(
-			'include_css' => 1,
-			),
-		'email_options' => array(
-			'enable_emails' => 0,
-			'enable_respondent_email' => 0,
-			'email_subject' => __( 'Thank you for your response', 'awesome-surveys' ),
-			'mail_to' => get_option( 'admin_email', '' ),
-			'respondent_email_message' => __( 'Thank you for your response to a survey', 'awesome-surveys' ),
-			)
-		);
+			return array(
+			'general_options' => array(
+				'include_css' => 1,
+				),
+			'email_options' => array(
+				'enable_emails' => 0,
+				'enable_respondent_email' => 0,
+				'email_subject' => __( 'Thank you for your response', 'awesome-surveys' ),
+				'mail_to' => get_option( 'admin_email', '' ),
+				'respondent_email_message' => __( 'Thank you for your response to a survey', 'awesome-surveys' ),
+				)
+			);
 	}
 }
