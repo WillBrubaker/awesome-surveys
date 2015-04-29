@@ -6,9 +6,6 @@ make the strings translatable the right way
  */
 global $post;
 $results = get_post_meta( $post->ID, '_response', false );
-//debug output echo '<pre>';
-//debug output print_r( $results );
-//debug output echo '</pre>';
 $elements = json_decode( get_post_meta( $post->ID, 'existing_elements', true ), true );
 $response_counts = array();
 foreach ( $results as $response_key => $response_array ) {
@@ -29,13 +26,13 @@ foreach ( $results as $response_key => $response_array ) {
 }
 
 	echo '<p>';
-	printf( __( 'This survey has received a total of <b>%d</b> responses', 'awesome-surveys' ), count( $results ) );
+	printf( __( 'This survey has received a total of %s%d%s responses', 'awesome-surveys' ), count( $results ), '<b>', '</b>' );
 	echo '</p>';
 	foreach ( $response_counts as $question_key => $value ) {
 		echo '<div class="answers">';
 		if ( isset( $elements[ $question_key ]['value'] ) ) {
 			echo '<p class="answers">';
-			printf( __( '%s received <b>%d</b> responses', 'awesome-surveys' ), $elements[ $question_key ]['name'], $value['totalcount'] );
+			printf( __( '%s received %s%d%s responses', 'awesome-surveys' ), $elements[ $question_key ]['name'], $value['totalcount'], '<b>', '</b>' );
 			echo '</p>';
 			foreach( $value['count'] as $answer_key => $count ) {
 
@@ -60,9 +57,6 @@ foreach ( $results as $response_key => $response_array ) {
 				}
 			}
 		} else {
-			//debug outputecho '<pre>';
-			//debug outputprint_r( $elements[ $question_key ] );
-			//debug outputecho '</pre>';
 			//future todo echo '<a href="#" data-question-key="' . $question_key . '">';
 			echo '<p class="totalcount survey">';
 			echo $elements[ $question_key ]['name'] . ' ';
