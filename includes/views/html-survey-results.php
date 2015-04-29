@@ -29,13 +29,13 @@ foreach ( $results as $response_key => $response_array ) {
 }
 
 	echo '<p>';
-	printf( __( 'This survey has received a total of %d responses', 'awesome-surveys' ), count( $results ) );
+	printf( __( 'This survey has received a total of <b>%d</b> responses', 'awesome-surveys' ), count( $results ) );
 	echo '</p>';
 	foreach ( $response_counts as $question_key => $value ) {
 		echo '<div class="answers">';
 		if ( isset( $elements[ $question_key ]['value'] ) ) {
 			echo '<p class="answers">';
-			printf( __( '%s received %d responses', 'awesome-surveys' ), $elements[ $question_key ]['name'], $value['totalcount'] );
+			printf( __( '%s received <b>%d</b> responses', 'awesome-surveys' ), $elements[ $question_key ]['name'], $value['totalcount'] );
 			echo '</p>';
 			foreach( $value['count'] as $answer_key => $count ) {
 
@@ -45,7 +45,7 @@ foreach ( $results as $response_key => $response_array ) {
 				if ( 100 == intval( $percentage ) ) {
 					echo '<div class="options-container">'
 							.'<div class="options" style="width:' . $percentage . '%;">'
-								. $elements[ $question_key ]['label'][ $answer_key ]
+								. $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)'
 								. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $total_count . ')</span>'
 							. '</div>'
 							. '<p>&nbsp;</p>'
@@ -53,7 +53,7 @@ foreach ( $results as $response_key => $response_array ) {
 				} else {
 					echo '<div class="options-container">'
 						.'<span class="options" style="width:' . $percentage . '%;">'
-							. $elements[ $question_key ]['label'][ $answer_key ]
+							. $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)'
 						. '</span>'
 						. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $total_count . ')</p>'
 					. '</div>';
