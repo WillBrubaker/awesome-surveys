@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-03-29 13:14:55+00:00\n"
+"POT-Creation-Date: 2015-05-03 12:23:44+00:00\n"
 "PO-Revision-Date: 2015-03-25 07:32-0500\n"
 "Last-Translator: Henrik Karmark <henrik@karmark.com>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: includes/class-awesome-surveys-admin.php:9
-#: includes/class-awesome-surveys-admin.php:175
+#: includes/class-awesome-surveys-admin.php:177
 msgid "Awesome Surveys Options"
 msgstr ""
 
@@ -24,103 +24,95 @@ msgstr ""
 msgid "Survey Options"
 msgstr ""
 
+#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.3)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:12
 #: includes/class-awesome-surveys.php:64
 msgid "Awesome Surveys"
 msgstr "Awesome Surveys"
 
-#: includes/class-awesome-surveys-admin.php:117
+#: includes/class-awesome-surveys-admin.php:119
 #: includes/class-awesome-surveys.php:68
 msgid "My Surveys"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:118
+#: includes/class-awesome-surveys-admin.php:120
 #: includes/class-awesome-surveys.php:70 includes/class-awesome-surveys.php:71
 msgid "New Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:176
+#: includes/class-awesome-surveys-admin.php:178
 msgid "Email Options"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "View Survey Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:212
+#: includes/class-awesome-surveys-admin.php:214
 msgid "Results"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:214
+#: includes/class-awesome-surveys-admin.php:216
 msgid "Create a copy of this survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:214
+#: includes/class-awesome-surveys-admin.php:216
 msgid "Duplicate"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:227
+#: includes/class-awesome-surveys-admin.php:229
 msgid "Surveys updated"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:287
+#: includes/class-awesome-surveys-admin.php:289
 msgid "Copy"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:355
+#: includes/class-awesome-surveys-admin.php:357
 msgid "Survey Results For:"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:368
+#: includes/class-awesome-surveys-admin.php:370
 msgid "Results for "
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:370
+#: includes/class-awesome-surveys-admin.php:372
 msgid "Results for respondent "
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:377
+#: includes/class-awesome-surveys-admin.php:379
 msgid "Create Survey"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:378
+#: includes/class-awesome-surveys-admin.php:380
 msgid "General Survey Options"
 msgstr "Generelle spørgeskema indstillinger"
 
-#: includes/class-awesome-surveys-admin.php:412
+#: includes/class-awesome-surveys-admin.php:414
 msgid "Answers"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:418
-#: includes/class-awesome-surveys-admin.php:421
+#: includes/class-awesome-surveys-admin.php:420
+#: includes/class-awesome-surveys-admin.php:423
 #: includes/class-awesome-surveys-ajax-actions.php:165
 msgid "Answer"
 msgstr "Svar"
 
-#: includes/class-awesome-surveys-admin.php:423
+#: includes/class-awesome-surveys-admin.php:425
 msgid "No response given"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:424
+#: includes/class-awesome-surveys-admin.php:426
 msgid "Question"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:509
-msgid "Delete question"
-msgstr "Slet spørgsmål"
-
-#: includes/class-awesome-surveys-admin.php:509
-#: includes/class-awesome-surveys-admin.php:511
-msgid "Edit question"
-msgstr "Rediger spørgsmål"
-
-#: includes/class-awesome-surveys-admin.php:551
+#: includes/class-awesome-surveys-admin.php:470
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
 msgstr ""
 
-#: includes/class-awesome-surveys-admin.php:553
+#: includes/class-awesome-surveys-admin.php:472
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
 msgstr ""
@@ -270,6 +262,15 @@ msgstr ""
 msgid "No Answer Given"
 msgstr ""
 
+#: includes/class-awesome-surveys.php:487
+msgid "Delete question"
+msgstr "Slet spørgsmål"
+
+#: includes/class-awesome-surveys.php:487
+#: includes/class-awesome-surveys.php:489
+msgid "Edit question"
+msgstr "Rediger spørgsmål"
+
 #: includes/views/html-database-upgrade.php:2
 msgid "Press the button below to migrate your surveys to the newest version"
 msgstr ""
@@ -322,17 +323,17 @@ msgstr "Godkendelsemetode for skemaet:"
 msgid "Auth method can not be edited"
 msgstr ""
 
-#: includes/views/html-survey-results.php:32
+#: includes/views/html-survey-results.php:29
 #, fuzzy
-msgid "This survey has received a total of %d responses"
+msgid "This survey has received a total of %s%d%s responses"
 msgstr "Denne undersøgelse har modtaget %d svar"
 
-#: includes/views/html-survey-results.php:38
+#: includes/views/html-survey-results.php:35
 #, fuzzy
-msgid "%s received %d responses"
+msgid "%s received %s%d%s responses"
 msgstr "Denne undersøgelse har modtaget %d svar"
 
-#: includes/views/html-survey-results.php:69
+#: includes/views/html-survey-results.php:63
 msgid "was answered %d times"
 msgstr ""
 
