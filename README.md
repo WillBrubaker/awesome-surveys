@@ -7,9 +7,9 @@
 
 **Requires at least:** 3.9.1
 
-**Tested up to:** 4.1.1
+**Tested up to:** 4.2.2
 
-**Stable tag:** 2.0.2
+**Stable tag:** 2.0.4
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -134,6 +134,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 
 ## Changelog ##
+
+## v2.0.4 ##
+1. Survey builder is now blocked by default and unblocked by JavaScript when loaded - this is an attempt to mitigate the "...bad array..." messages that are being reported
 
 ## v2.0.3 ##
 1. fix for undefined offset when deciding whether to send email

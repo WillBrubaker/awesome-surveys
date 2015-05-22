@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-05-03 12:23:44+00:00\n"
+"POT-Creation-Date: 2015-05-22 11:27:52+00:00\n"
 "PO-Revision-Date: 2015-03-25 14:37+0100\n"
 "Last-Translator: Tobias Perschon <office@bitconnect.at>\n"
 "Language-Team: \n"
@@ -24,7 +24,7 @@ msgstr "Awesome Surveys Einstellungen"
 msgid "Survey Options"
 msgstr "Umfrage Optionen"
 
-#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.3)  #-#-#-#-#
+#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.4)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:12
 #: includes/class-awesome-surveys.php:64
@@ -168,6 +168,7 @@ msgstr "zurücksetzen"
 #: includes/class-awesome-surveys-ajax-actions.php:383
 #: includes/class-awesome-surveys-frontend.php:89
 #: includes/class-awesome-surveys.php:220
+#: includes/class.awesome-surveys-frontend.php:79
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr "Deine Antworten zu dieser Umfrage wurden bereits gespeichtert. Danke!"
 
@@ -177,6 +178,7 @@ msgstr "verbleibende Zeichen"
 
 #: includes/class-awesome-surveys-frontend.php:133
 #: includes/class-awesome-surveys.php:366
+#: includes/class.awesome-surveys-frontend.php:321
 msgid "You must be logged in to participate in this survey"
 msgstr "Du musst eingeloggt sein um an dieser Umfrage teilnehmen zu können"
 
@@ -229,11 +231,13 @@ msgid "Surveys for your site"
 msgstr "Umfragen für diese Website"
 
 #: includes/class-awesome-surveys.php:125
+#: includes/class.awesome-surveys-frontend.php:111
 #: includes/wwmas-database-upgrade-functions.php:118
 msgid "make a selection..."
 msgstr "Treffe eine Auswahl..."
 
 #: includes/class-awesome-surveys.php:167
+#: includes/class.awesome-surveys-frontend.php:151
 #: includes/wwmas-database-upgrade-functions.php:157
 msgid "Submit Response"
 msgstr "Antwort abschicken"
@@ -281,26 +285,30 @@ msgstr ""
 msgid "upgrade database"
 msgstr "Datenbank aktualisieren"
 
-#: includes/views/html-survey-builder.php:18
+#: includes/views/html-survey-builder.php:9
+msgid "JavaScript Loading..."
+msgstr ""
+
+#: includes/views/html-survey-builder.php:19
 msgid "Add a form element to your survey by clicking a button"
 msgstr ""
 "Füge der Umfrage ein Element hinzu, indem du auf die Schaltfläche klickst"
 
-#: includes/views/html-survey-builder.php:54
+#: includes/views/html-survey-builder.php:55
 msgid "Configure a survey question"
 msgstr "Einstellungen für diese Frage"
 
-#: includes/views/html-survey-builder.php:58
+#: includes/views/html-survey-builder.php:59
 msgid "This survey has responses. Questions can not be edited"
 msgstr ""
 "Diese Umfrage wurde bereits beantwortet. Daher können die Fragen nichtmehr "
 "bearbeitet warden."
 
-#: includes/views/html-survey-builder.php:62
+#: includes/views/html-survey-builder.php:63
 msgid "Survey Preview"
 msgstr "Vorschau der Umfrage"
 
-#: includes/views/html-survey-builder.php:65
+#: includes/views/html-survey-builder.php:66
 msgid "You can insert this survey with shortcode: "
 msgstr "Du kannst die Umfrage mit folgendem Kürzel anzeigen lassen:"
 

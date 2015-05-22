@@ -89,3 +89,22 @@ span.label div.control-group label, .slider-wrapper div.control-group label, .op
 
 span.label p {
   margin: 1em; }
+
+.overlay {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #FFF;
+  opacity: 0.45;
+  -moz-opacity: 0.45;
+  filter: alpha(opacity=45); }
+  .overlay .preloader {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -20px;
+    margin-left: -20px; }

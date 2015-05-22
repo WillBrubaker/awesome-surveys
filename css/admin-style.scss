@@ -87,3 +87,24 @@ span.label, .slider-wrapper, .options-holder, textarea {
       margin: .25em 0; }
 span.label p {
   margin: 1em; }
+
+.overlay {
+  z-index: 1000;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #FFF;
+  opacity: 0.45;
+  -moz-opacity: 0.45;
+  filter: alpha(opacity=45);
+  .preloader {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-top: -20px;
+  margin-left: -20px;
+  }
+ }

@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-05-03 12:23:44+00:00\n"
+"POT-Creation-Date: 2015-05-22 11:27:52+00:00\n"
 "PO-Revision-Date: 2015-03-25 07:31-0500\n"
 "Last-Translator: Naïm Khalifa <n.khalifa@gmail.com>\n"
 "Language-Team: \n"
@@ -24,7 +24,7 @@ msgstr "Option d'Awesome Surveys"
 msgid "Survey Options"
 msgstr "Option du sondage"
 
-#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.3)  #-#-#-#-#
+#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.4)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:12
 #: includes/class-awesome-surveys.php:64
@@ -168,6 +168,7 @@ msgstr "Réinitialiser"
 #: includes/class-awesome-surveys-ajax-actions.php:383
 #: includes/class-awesome-surveys-frontend.php:89
 #: includes/class-awesome-surveys.php:220
+#: includes/class.awesome-surveys-frontend.php:79
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr "Votre réponse à ce sondage a déjà été enregistrée. Merci!"
 
@@ -177,6 +178,7 @@ msgstr ""
 
 #: includes/class-awesome-surveys-frontend.php:133
 #: includes/class-awesome-surveys.php:366
+#: includes/class.awesome-surveys-frontend.php:321
 msgid "You must be logged in to participate in this survey"
 msgstr "Vous devez être connecté pour participer à ce sondage"
 
@@ -229,11 +231,13 @@ msgid "Surveys for your site"
 msgstr "Les sondages pour votre site"
 
 #: includes/class-awesome-surveys.php:125
+#: includes/class.awesome-surveys-frontend.php:111
 #: includes/wwmas-database-upgrade-functions.php:118
 msgid "make a selection..."
 msgstr "Faire un choix"
 
 #: includes/class-awesome-surveys.php:167
+#: includes/class.awesome-surveys-frontend.php:151
 #: includes/wwmas-database-upgrade-functions.php:157
 msgid "Submit Response"
 msgstr "Envoyer"
@@ -281,24 +285,28 @@ msgstr ""
 msgid "upgrade database"
 msgstr "Mettre à niveau la base de données"
 
-#: includes/views/html-survey-builder.php:18
+#: includes/views/html-survey-builder.php:9
+msgid "JavaScript Loading..."
+msgstr ""
+
+#: includes/views/html-survey-builder.php:19
 msgid "Add a form element to your survey by clicking a button"
 msgstr ""
 "Ajouter un élément de formulaire à votre sondage en cliquant sur un bouton"
 
-#: includes/views/html-survey-builder.php:54
+#: includes/views/html-survey-builder.php:55
 msgid "Configure a survey question"
 msgstr "Configurer une question de sondage"
 
-#: includes/views/html-survey-builder.php:58
+#: includes/views/html-survey-builder.php:59
 msgid "This survey has responses. Questions can not be edited"
 msgstr "Ce sondage a des réponses. Les questions ne peuvent être éditées"
 
-#: includes/views/html-survey-builder.php:62
+#: includes/views/html-survey-builder.php:63
 msgid "Survey Preview"
 msgstr "Prévisualisation du sondage"
 
-#: includes/views/html-survey-builder.php:65
+#: includes/views/html-survey-builder.php:66
 msgid "You can insert this survey with shortcode: "
 msgstr "Vous pouvez insérer ce sondage avec ce shortcode:"
 

@@ -1,5 +1,6 @@
 jQuery('document').ready(function($) {
 
+		$("#awesome-survey .overlay").hide()
 		if (typeof $('#form-preview').html() != 'undefined' && $('#form-preview').html().length > 0) {
 				previewReady($)
 		}
