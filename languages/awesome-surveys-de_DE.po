@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-05-22 11:27:52+00:00\n"
+"POT-Creation-Date: 2015-06-20 20:23:57+00:00\n"
 "PO-Revision-Date: 2015-03-25 14:37+0100\n"
 "Last-Translator: Tobias Perschon <office@bitconnect.at>\n"
 "Language-Team: \n"
@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: includes/class-awesome-surveys-admin.php:9
-#: includes/class-awesome-surveys-admin.php:177
+#: includes/class-awesome-surveys-admin.php:179
 msgid "Awesome Surveys Options"
 msgstr "Awesome Surveys Einstellungen"
 
@@ -24,95 +24,95 @@ msgstr "Awesome Surveys Einstellungen"
 msgid "Survey Options"
 msgstr "Umfrage Optionen"
 
-#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.4)  #-#-#-#-#
+#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.5)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:12
 #: includes/class-awesome-surveys.php:64
 msgid "Awesome Surveys"
 msgstr "Awesome Surveys"
 
-#: includes/class-awesome-surveys-admin.php:119
+#: includes/class-awesome-surveys-admin.php:121
 #: includes/class-awesome-surveys.php:68
 msgid "My Surveys"
 msgstr "Meine Umfragen"
 
-#: includes/class-awesome-surveys-admin.php:120
+#: includes/class-awesome-surveys-admin.php:122
 #: includes/class-awesome-surveys.php:70 includes/class-awesome-surveys.php:71
 msgid "New Survey"
 msgstr "Neue Umfrage"
 
-#: includes/class-awesome-surveys-admin.php:178
+#: includes/class-awesome-surveys-admin.php:180
 msgid "Email Options"
 msgstr "E-Mail Einstellungen"
 
-#: includes/class-awesome-surveys-admin.php:214
+#: includes/class-awesome-surveys-admin.php:216
 msgid "View Survey Results"
 msgstr "Zeige Umfrageergebnisse an"
 
-#: includes/class-awesome-surveys-admin.php:214
+#: includes/class-awesome-surveys-admin.php:216
 msgid "Results"
 msgstr "Ergebnisse"
 
-#: includes/class-awesome-surveys-admin.php:216
+#: includes/class-awesome-surveys-admin.php:218
 msgid "Create a copy of this survey"
 msgstr "Erstelle eine Kopie dieser Umfrage"
 
-#: includes/class-awesome-surveys-admin.php:216
+#: includes/class-awesome-surveys-admin.php:218
 msgid "Duplicate"
 msgstr "Duplizieren"
 
-#: includes/class-awesome-surveys-admin.php:229
+#: includes/class-awesome-surveys-admin.php:231
 msgid "Surveys updated"
 msgstr "Umfragen aktualisiert"
 
-#: includes/class-awesome-surveys-admin.php:289
+#: includes/class-awesome-surveys-admin.php:291
 msgid "Copy"
 msgstr "Kopieren"
 
-#: includes/class-awesome-surveys-admin.php:357
+#: includes/class-awesome-surveys-admin.php:359
 msgid "Survey Results For:"
 msgstr "Umfrageergebnisse für:"
 
-#: includes/class-awesome-surveys-admin.php:370
+#: includes/class-awesome-surveys-admin.php:372
 msgid "Results for "
 msgstr "Eingaben für:"
 
-#: includes/class-awesome-surveys-admin.php:372
+#: includes/class-awesome-surveys-admin.php:374
 msgid "Results for respondent "
 msgstr "Eingaben des/der Befragten:"
 
-#: includes/class-awesome-surveys-admin.php:379
+#: includes/class-awesome-surveys-admin.php:381
 msgid "Create Survey"
 msgstr "Umfrage erstellen"
 
-#: includes/class-awesome-surveys-admin.php:380
+#: includes/class-awesome-surveys-admin.php:382
 msgid "General Survey Options"
 msgstr "Allgemeine Umfrage Einstellungen"
 
-#: includes/class-awesome-surveys-admin.php:414
+#: includes/class-awesome-surveys-admin.php:416
 msgid "Answers"
 msgstr "Antworten"
 
-#: includes/class-awesome-surveys-admin.php:420
-#: includes/class-awesome-surveys-admin.php:423
+#: includes/class-awesome-surveys-admin.php:422
+#: includes/class-awesome-surveys-admin.php:425
 #: includes/class-awesome-surveys-ajax-actions.php:165
 msgid "Answer"
 msgstr "Antwort"
 
-#: includes/class-awesome-surveys-admin.php:425
+#: includes/class-awesome-surveys-admin.php:427
 msgid "No response given"
 msgstr "Keine Antwort abgegeben"
 
-#: includes/class-awesome-surveys-admin.php:426
+#: includes/class-awesome-surveys-admin.php:428
 msgid "Question"
 msgstr "Frage"
 
-#: includes/class-awesome-surveys-admin.php:470
+#: includes/class-awesome-surveys-admin.php:472
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
 msgstr "Danke für Ihre Teilnahme"
 
-#: includes/class-awesome-surveys-admin.php:472
+#: includes/class-awesome-surveys-admin.php:474
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
 msgstr "Danke für Ihre Teilnahme an der Umfrage"
@@ -165,7 +165,15 @@ msgstr "Maximale Länge (Anzahl der Zeichen)"
 msgid "Reset"
 msgstr "zurücksetzen"
 
-#: includes/class-awesome-surveys-ajax-actions.php:383
+#: includes/class-awesome-surveys-ajax-actions.php:350
+msgid "There was an error on line "
+msgstr ""
+
+#: includes/class-awesome-surveys-ajax-actions.php:371
+msgid "Answers not saved. Survey in draft status."
+msgstr ""
+
+#: includes/class-awesome-surveys-ajax-actions.php:390
 #: includes/class-awesome-surveys-frontend.php:89
 #: includes/class-awesome-surveys.php:220
 #: includes/class.awesome-surveys-frontend.php:79

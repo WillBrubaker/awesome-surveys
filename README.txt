@@ -108,10 +108,10 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 == Changelog ==
 = v2.0.5 =
-Don't process survey response if survey is not published
-Don't save post meta "existing_elements" if json_decode of same fails
-Block user interface when adding survey questions
-Menu position has more precision in an attempt to avoid clashes
+1. Don't process survey response if survey is not published
+2. Don't save post meta "existing_elements" if json_decode of same fails
+3. Block user interface when adding survey questions
+4. Menu position has more precision in an attempt to avoid clashes
 
 = v2.0.4 =
 1. Survey builder is now blocked by default and unblocked by JavaScript when loaded - this is an attempt to mitigate the "...bad array..." messages that are being reported
