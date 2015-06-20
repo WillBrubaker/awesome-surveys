@@ -9,7 +9,7 @@
 
 **Tested up to:** 4.2.2
 
-**Stable tag:** 2.0.4
+**Stable tag:** 2.0.5
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
