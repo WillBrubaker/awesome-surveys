@@ -346,6 +346,9 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	public function update_post_content() {
 		$form_args = array( 'survey_id' => $_POST['survey_id'] );
 		$this->existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
+		if ( ! $this->existing_elements ) {
+			wp_send_json_error( array( sprintf( '%s %s of %s', __( 'There was an error on line ', 'awesome-surveys' ), __LINE__, __FILE__ ) ) );
+		}
 		$post_content = $this->awesome_surveys_render_form( $form_args );
 		wp_send_json_success( array( $post_content ) );
 	}
@@ -364,6 +367,10 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		}
 		$survey_id = absint( $_POST['survey_id'] );
 		$post = get_post( $survey_id, 'OBJECT', 'display' );
+		if ( 'publish' != $post->post_status ) {
+			$data = array( __( 'Answers not saved. Survey in draft status.', 'awesome-surveys' ) );
+			wp_send_json_error( $data );
+		}
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
 		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();

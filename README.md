@@ -136,6 +136,8 @@ as 'post_content'. This means that if WordPress was in English when you built th
 ## Changelog ##
 
 ## v2.0.5 ##
+Don't process survey response if survey is not published
+Don't save post meta "existing_elements" if json_decode of same fails
 Block user interface when adding survey questions
 Menu position has more precision in an attempt to avoid clashes
 

@@ -46,7 +46,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( isset( $_POST['existing_elements'] ) ) {
 			$existing_elements = $_POST['existing_elements'];
 			$this->existing_elements = $existing_elements;
-			update_post_meta( $post_id, 'existing_elements', $existing_elements );
+			if ( json_decode( stripslashes( $existing_elements ) ) ) {
+				update_post_meta( $post_id, 'existing_elements', $existing_elements );
+			}
 		}
 		if ( isset( $_POST['meta']['survey_auth_method'] ) ) {
 			update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['meta']['survey_auth_method'] ) );

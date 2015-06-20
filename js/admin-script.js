@@ -70,8 +70,10 @@ jQuery('document').ready(function($) {
 		var container = $(this).closest('.single-element-edit')
 		var elementsJSON = $.parseJSON($('#existing_elements').val())
 		if ('delete' == action) {
-			container.remove();
+			$('#awesome-survey .overlay').show()
+			container.remove()
 			delete elementsJSON[index]
+			$('#awesome-survey .overlay').hide()
 		} else {
 			label = $('label.control-label', $(this).closest('.single-element-edit'))
 			var dynamicDialog = generateDynamicDialog(elementsJSON[index]);
@@ -87,6 +89,7 @@ jQuery('document').ready(function($) {
 				}, {
 					text: "Submit",
 					click: function(e) {
+						$('#awesome-survey .overlay').show()
 						elementsJSON = $.parseJSON($('#existing_elements').val())
 						e.preventDefault()
 						var form = $('form', dynamicDialog);
@@ -136,6 +139,7 @@ jQuery('document').ready(function($) {
 							}).always(function() {
 								dynamicDialog.dialog('destroy')
 								$('#edit-slider').slider('destroy')
+								$('#awesome-survey .overlay').hide()
 							});
 						}
 					}
@@ -189,6 +193,7 @@ jQuery('document').ready(function($) {
 		}
 		elementsJSON = removeNulls(elementsJSON)
 		$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
+
 	})
 
 	$('#form-preview').on('click', 'input[name="reset"]', function(e) {
@@ -216,7 +221,11 @@ jQuery('document').ready(function($) {
 			existing_elements: $('#existing_elements').val(),
 			action: 'update-post-content'
 		}, function(data) {
-			$('#content').val(data.data)
+			if ( data.success ) {
+				$('#content').val(data.data)
+			} else {
+				alert(data.data);
+			}
 		})
 	})
 	$('textarea, input[type="email"], input[type="number"], input[type="text"] ', '#form-preview-wrapper').on('keyup', function() {
@@ -243,6 +252,7 @@ function renumberButtons($) {
 		$('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
 	})
 	$('#existing_elements').trigger('change')
+	$('#awesome-survey .overlay').hide()
 }
 
 function previewReady($) {
@@ -256,6 +266,7 @@ function previewReady($) {
 			startingIndex = ui.item.index()
 		},
 		stop: function(event, ui) {
+			$('#awesome-survey .overlay').show()
 			endingIndex = ui.item.index()
 			if (startingIndex != endingIndex) {
 				activeElement = surveyElements[startingIndex]
