@@ -1,0 +1,501 @@
+# Copyright (C) 2015 Awesome Surveys
+# This file is distributed under the same license as the Awesome Surveys package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Awesome Surveys 2.0.5\n"
+"Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
+"POT-Creation-Date: 2015-06-23 10:00+0200\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-06-23 10:57+0200\n"
+"Last-Translator: Matti Mäkelä <matti.makela@sedu.fi>\n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: fi_FI\n"
+
+#: includes/class-awesome-surveys-admin.php:9
+#: includes/class-awesome-surveys-admin.php:179
+msgid "Awesome Surveys Options"
+msgstr "Awesome Surveysin asetukset"
+
+#: includes/class-awesome-surveys-admin.php:10
+msgid "Survey Options"
+msgstr "Kyselyn asetukset"
+
+#. Plugin Name of the plugin/theme
+#: includes/class-awesome-surveys-admin.php:12
+#: includes/class-awesome-surveys.php:64
+msgid "Awesome Surveys"
+msgstr ""
+
+#: includes/class-awesome-surveys-admin.php:121
+#: includes/class-awesome-surveys.php:68
+msgid "My Surveys"
+msgstr "Omat kyselyni"
+
+#: includes/class-awesome-surveys-admin.php:122
+#: includes/class-awesome-surveys.php:70
+#: includes/class-awesome-surveys.php:71
+msgid "New Survey"
+msgstr "Uusi kysely"
+
+#: includes/class-awesome-surveys-admin.php:180
+msgid "Email Options"
+msgstr "Sähköpostin asetukset"
+
+#: includes/class-awesome-surveys-admin.php:216
+msgid "View Survey Results"
+msgstr "Näytä kyselyn  tulokset"
+
+#: includes/class-awesome-surveys-admin.php:216
+msgid "Results"
+msgstr "Tulokset"
+
+#: includes/class-awesome-surveys-admin.php:218
+msgid "Create a copy of this survey"
+msgstr "Kopioi tämä kysely"
+
+#: includes/class-awesome-surveys-admin.php:218
+msgid "Duplicate"
+msgstr "Monista"
+
+#: includes/class-awesome-surveys-admin.php:231
+msgid "Surveys updated"
+msgstr "Kyselyt päivitetty"
+
+#: includes/class-awesome-surveys-admin.php:291
+msgid "Copy"
+msgstr "Kopioi"
+
+#: includes/class-awesome-surveys-admin.php:359
+msgid "Survey Results For:"
+msgstr "Kyselyn tulokset ovat:"
+
+#: includes/class-awesome-surveys-admin.php:372
+msgid "Results for "
+msgstr "Tulokset ovat "
+
+#: includes/class-awesome-surveys-admin.php:374
+msgid "Results for respondent "
+msgstr "Vastauksen tulokset"
+
+#: includes/class-awesome-surveys-admin.php:381
+msgid "Create Survey"
+msgstr "Tee kysely"
+
+#: includes/class-awesome-surveys-admin.php:382
+msgid "General Survey Options"
+msgstr "Kyselyn yleiset asetukset"
+
+#: includes/class-awesome-surveys-admin.php:416
+msgid "Answers"
+msgstr "Vastaukset"
+
+#: includes/class-awesome-surveys-admin.php:422
+#: includes/class-awesome-surveys-admin.php:425
+#: includes/class-awesome-surveys-ajax-actions.php:165
+msgid "Answer"
+msgstr "Vastaus"
+
+#: includes/class-awesome-surveys-admin.php:427
+msgid "No response given"
+msgstr "Ei vastauksia"
+
+#: includes/class-awesome-surveys-admin.php:428
+msgid "Question"
+msgstr "Kysymys"
+
+#: includes/class-awesome-surveys-admin.php:472
+#: includes/views/html-surveys-options-emails.php:5
+msgid "Thank you for your response"
+msgstr "Kiitos vastaamisestasi"
+
+#: includes/class-awesome-surveys-admin.php:474
+#: includes/views/html-surveys-options-emails.php:7
+msgid "Thank you for your response to a survey"
+msgstr "Kiitos kyselyyn vastaamisestasi"
+
+#: includes/class-awesome-surveys-ajax-actions.php:83
+msgid "The question you are asking:"
+msgstr "Kysymys jota kysyt:"
+
+#: includes/class-awesome-surveys-ajax-actions.php:85
+msgid "Field Validation Options"
+msgstr "Kentän vahvistamisasetukset"
+
+#: includes/class-awesome-surveys-ajax-actions.php:103
+msgid "Advanced Validation Rules:"
+msgstr "Edistyneemmät vahvistamissäännöt:"
+
+#: includes/class-awesome-surveys-ajax-actions.php:131
+msgid "Display number of characters remaining?"
+msgstr "Näytä jäljellä olevien merkkien määrä?"
+
+#: includes/class-awesome-surveys-ajax-actions.php:138
+msgid "Number of answers required?"
+msgstr "Vastauksia vaaditaan (lukumäärä)?"
+
+#: includes/class-awesome-surveys-ajax-actions.php:143
+msgid "Add Question"
+msgstr "Lisää kysymys"
+
+#: includes/class-awesome-surveys-ajax-actions.php:165
+msgid "default?"
+msgstr "Oletus?"
+
+#: includes/class-awesome-surveys-ajax-actions.php:192
+msgid "required?"
+msgstr "Vaadittu?"
+
+#: includes/class-awesome-surveys-ajax-actions.php:217
+msgid "Min number allowed"
+msgstr "Pienin sallittu määrä"
+
+#: includes/class-awesome-surveys-ajax-actions.php:223
+msgid "Max number allowed"
+msgstr "Suurin sallittu määrä"
+
+#: includes/class-awesome-surveys-ajax-actions.php:244
+msgid "Maximum Length (in number of characters)"
+msgstr "Maksimipituus (yhteismerkkimäärä)"
+
+#: includes/class-awesome-surveys-ajax-actions.php:304
+msgid "Reset"
+msgstr "Resetoi"
+
+#: includes/class-awesome-surveys-ajax-actions.php:350
+msgid "There was an error on line "
+msgstr "Kentästä löytyi virhe "
+
+#: includes/class-awesome-surveys-ajax-actions.php:371
+msgid "Answers not saved. Survey in draft status."
+msgstr "Vastauksia ei ole tallennettu. Kysely on luonnostilassa."
+
+#: includes/class-awesome-surveys-ajax-actions.php:390
+#: includes/class-awesome-surveys-frontend.php:89
+#: includes/class-awesome-surveys.php:220
+#: includes/class.awesome-surveys-frontend.php:79
+msgid "Your response to this survey has already been recorded. Thank you!"
+msgstr "Tähän kyselyyn liittyvä vastauksesi on jo tallennettu. Kiitos!"
+
+#: includes/class-awesome-surveys-frontend.php:111
+msgid "Characters remaining"
+msgstr "Merkkiä jäljellä"
+
+#: includes/class-awesome-surveys-frontend.php:133
+#: includes/class-awesome-surveys.php:366
+#: includes/class.awesome-surveys-frontend.php:321
+msgid "You must be logged in to participate in this survey"
+msgstr "Sinun täytyy kirjautua sisään osallistuaksesi tähän kyselyyn"
+
+#: includes/class-awesome-surveys.php:29
+msgid "Text Input"
+msgstr "Teksti"
+
+#: includes/class-awesome-surveys.php:33
+msgid "Email"
+msgstr "Sähköposti"
+
+#: includes/class-awesome-surveys.php:37
+msgid "Number"
+msgstr "Numero"
+
+#: includes/class-awesome-surveys.php:41
+msgid "Dropdown Selector"
+msgstr "Alasvetovalikko"
+
+#: includes/class-awesome-surveys.php:45
+msgid "Radio Buttons"
+msgstr "Valintapainikkeet"
+
+#: includes/class-awesome-surveys.php:49
+msgid "Checkboxes"
+msgstr "Tarkistuslaatikot"
+
+#: includes/class-awesome-surveys.php:53
+msgid "Textarea"
+msgstr "Tekstikenttä"
+
+#: includes/class-awesome-surveys.php:66
+msgid "Surveys"
+msgstr "Kyselyt"
+
+#: includes/class-awesome-surveys.php:67
+#: includes/class-awesome-surveys.php:69
+msgid "Survey"
+msgstr "Kysely"
+
+#: includes/class-awesome-surveys.php:72
+msgid "Add New Survey"
+msgstr "Lisää uusi kysely"
+
+#: includes/class-awesome-surveys.php:73
+msgid "Edit Survey"
+msgstr "Muokkaa kyselyä"
+
+#: includes/class-awesome-surveys.php:75
+msgid "Surveys for your site"
+msgstr "Sivustoon liittyvät kyselyt"
+
+#: includes/class-awesome-surveys.php:125
+#: includes/class.awesome-surveys-frontend.php:111
+#: includes/wwmas-database-upgrade-functions.php:118
+msgid "make a selection..."
+msgstr "tee valinta..."
+
+#: includes/class-awesome-surveys.php:167
+#: includes/class.awesome-surveys-frontend.php:151
+#: includes/wwmas-database-upgrade-functions.php:157
+msgid "Submit Response"
+msgstr "Lähetä"
+
+#: includes/class-awesome-surveys.php:241
+msgid "None"
+msgstr "Tyhjä"
+
+#: includes/class-awesome-surveys.php:245
+msgid "User must be logged in"
+msgstr "Käyttäjän tulee olla kirjautuneena sisään"
+
+#: includes/class-awesome-surveys.php:249
+msgid "Cookie based"
+msgstr "Kekseihin perustuva"
+
+#: includes/class-awesome-surveys.php:382
+msgid "Survey Completed"
+msgstr "Kysely suoritettu"
+
+#: includes/class-awesome-surveys.php:384
+msgid "A survey on your site named %s has been completed"
+msgstr "Sivustollasi oleva kysely: %s, on suoritettu onnistuneesti"
+
+#: includes/class-awesome-surveys.php:400
+msgid "No Answer Given"
+msgstr "Vastausta ei ole annettu"
+
+#: includes/class-awesome-surveys.php:487
+msgid "Delete question"
+msgstr "Poista kysymys"
+
+#: includes/class-awesome-surveys.php:487
+#: includes/class-awesome-surveys.php:489
+msgid "Edit question"
+msgstr "Muokkaa kysymystä"
+
+#: includes/views/html-database-upgrade.php:2
+msgid "Press the button below to migrate your surveys to the newest version"
+msgstr ""
+"Paina alla olevaa painiketta muuntaaksesi kyselysi uusimman version "
+"mukaiseen muotoon"
+
+#: includes/views/html-database-upgrade.php:5
+msgid "upgrade database"
+msgstr "päivitä tietokanta"
+
+#: includes/views/html-survey-builder.php:9
+msgid "JavaScript Loading..."
+msgstr "JavaScript latautuu..."
+
+#: includes/views/html-survey-builder.php:19
+msgid "Add a form element to your survey by clicking a button"
+msgstr "Lisää lomake-elementti kyselyysi klikkaamalla painiketta"
+
+#: includes/views/html-survey-builder.php:55
+msgid "Configure a survey question"
+msgstr "Muokkaa tämän kyselyn kysymystä"
+
+#: includes/views/html-survey-builder.php:59
+msgid "This survey has responses. Questions can not be edited"
+msgstr "Tämä kysely sisältää vastauksia. Kysymyksiä ei voi enää muokata"
+
+#: includes/views/html-survey-builder.php:63
+msgid "Survey Preview"
+msgstr "Kyselyn esikatselu"
+
+#: includes/views/html-survey-builder.php:66
+msgid "You can insert this survey with shortcode: "
+msgstr "Voit liittää tämän kyselyn tunnisteella: "
+
+#: includes/views/html-survey-options-general.php:12
+msgid "Thank you for completing this survey"
+msgstr "Kiitos kyselyyn vastaamisesta"
+
+#: includes/views/html-survey-options-general.php:18
+msgid "Thank You message"
+msgstr "Kiitos-viesti"
+
+#: includes/views/html-survey-options-general.php:27
+msgid ""
+"To prevent people from filling the survey out multiple times you may select "
+"one of the options below"
+msgstr ""
+"Mikäli haluat estää samoja henkilöitä täyttämästä kyselyn monta kertaa, "
+"valitse jokin alla olevista vaihtoehdoista"
+
+#: includes/views/html-survey-options-general.php:31
+msgid "Survey Authentication Method:"
+msgstr "Kyselyn todentamismenetelmä:"
+
+#: includes/views/html-survey-options-general.php:50
+msgid "Auth method can not be edited"
+msgstr "Todentamismenetelmää ei voida muokata"
+
+#: includes/views/html-survey-results.php:29
+msgid "This survey has received a total of %s%d%s responses"
+msgstr "Tähän kyselyyn on saatu yhteensä %s%d%s vastausta"
+
+#: includes/views/html-survey-results.php:35
+msgid "%s received %s%d%s responses"
+msgstr "%s sai %s%d%s vastausta"
+
+#: includes/views/html-survey-results.php:63
+msgid "was answered %d times"
+msgstr "vastasi %d kertaa"
+
+#: includes/views/html-surveys-options-emails.php:9
+msgid "Notification Emails"
+msgstr "Ilmoitussähköpostit"
+
+#: includes/views/html-surveys-options-emails.php:13
+msgid "Enable emails on survey completion?"
+msgstr "Ilmoita kyselyyn saatavista vastauksista sähköpostiin"
+
+#: includes/views/html-surveys-options-emails.php:16
+#: includes/views/html-surveys-options-emails.php:30
+#: includes/views/html-surveys-options.php:19
+msgid "Yes"
+msgstr "Kyllä"
+
+#: includes/views/html-surveys-options-emails.php:18
+#: includes/views/html-surveys-options-emails.php:32
+#: includes/views/html-surveys-options.php:21
+msgid "No"
+msgstr "Ei"
+
+#: includes/views/html-surveys-options-emails.php:22
+msgid "Send Notifications for all survey completions to"
+msgstr "Lähetä kaikista kyselyistä ilmoitus osoitteeseen"
+
+#: includes/views/html-surveys-options-emails.php:27
+msgid "Send email to survey respondent?"
+msgstr "Lähetä sähköposteja kyselyn vastauksista?"
+
+#: includes/views/html-surveys-options-emails.php:36
+msgid "For this to work, the survey must have an element of type \"email\""
+msgstr ""
+"Saadaksesi tämän toimimaan, kyselyn on sisällettävä kysymys muotoa "
+"\"sähköposti\""
+
+#: includes/views/html-surveys-options-emails.php:39
+msgid "Respondent email subject"
+msgstr "Vastaajan sähköpostin aihe"
+
+#: includes/views/html-surveys-options-emails.php:44
+msgid "Respondent email message"
+msgstr "Vastaajan sähköpostin viesti"
+
+#: includes/views/html-surveys-options-emails.php:51
+msgid "The following template tags are available"
+msgstr "Sivupohjan seuraavat tunnisteet ovat käytettävissä"
+
+#: includes/views/html-surveys-options-emails.php:53
+msgid "HTML is not supported"
+msgstr "HTML ei ole sallittu"
+
+#: includes/views/html-surveys-options-emails.php:55
+#: includes/views/html-surveys-options.php:28
+msgid "Save"
+msgstr "Tallenna"
+
+#: includes/views/html-surveys-options.php:6
+msgid "Survey Styling Options"
+msgstr "Kyselyn ulkoasun asetukset"
+
+#: includes/views/html-surveys-options.php:8
+msgid ""
+"This plugin outputs some very basic structural css. You can enable/disable "
+"this by setting the option below"
+msgstr ""
+"Tämä vimpain tukee jotain todella yksinkertaisia css-tyylittelyjä. Voit "
+"ottaa ne käyttöön tai pois käytöstä muuttamalla alla olevia asetuksia"
+
+#: includes/views/html-surveys-options.php:16
+msgid "Use included css?"
+msgstr "Käytä sisällytettyä css:ää?"
+
+#: options.php:8
+msgid "Cheatin&#8217; uh?"
+msgstr ""
+
+#: strings.php:9
+msgid "Donate to the future development of this plugin:"
+msgstr "Tue tämän vimpaimen jatkokehittämistä:"
+
+#: strings.php:10
+msgid "How To Video"
+msgstr ""
+
+#: strings.php:11
+msgid "Debug"
+msgstr "Testaa"
+
+#: strings.php:12
+msgid "Clone this survey"
+msgstr "Kloonaa tämä kysely"
+
+#: strings.php:13
+msgid "Delete"
+msgstr "Poista"
+
+#: strings.php:14 strings.php:18
+msgid "Review the Awesome Surveys Plugin"
+msgstr "Arvostele Awesome Surveys -vimpain"
+
+#: strings.php:15
+msgid "Fork Me on GitHub"
+msgstr ""
+
+#: strings.php:16
+msgid "Awesome Surveys on github"
+msgstr ""
+
+#: strings.php:17
+msgid "Support for Awesome Surveys"
+msgstr "Avusta Awesome Surveysiä"
+
+#: strings.php:19
+msgid "Rate Awesome Surveys"
+msgstr "Luokittele Awesome Surveys"
+
+#: strings.php:20
+msgid "Shout it From the Rooftops!"
+msgstr ""
+
+#: strings.php:21
+msgid "Tweet this plugin"
+msgstr "Tweettaa tästä vimpaimesta"
+
+#: strings.php:22
+msgid "Awesome Surveys News"
+msgstr "Awesome Surveysin uutiset"
+
+#. Plugin URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com/awesome-surveys"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Easily create surveys for your WordPress website and publish them with a "
+"simple shortcode"
+msgstr ""
+"Tee kyselyitä WordPressillä ja julkaise ne yksinkertaisella tunnisteella"
+
+#. Author of the plugin/theme
+msgid "Will Brubaker"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://www.willthewebmechanic.com"
+msgstr ""
