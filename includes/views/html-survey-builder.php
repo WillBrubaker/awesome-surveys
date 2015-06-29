@@ -7,8 +7,8 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 ?>
 <div id="awesome-survey">
 	<div class="overlay"><span class="preloader"><?php _e( 'JavaScript Loading...', 'awesome-surveys' ); ?></span></div>
-	<input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo $existing_elements; ?>'>
-	<input type="hidden" id="content" name="content" value="<?php echo esc_html( $post->post_content ); ?>">
+	<input type="hidden" name="existing_elements" id="existing_elements" value='<?php echo esc_attr( $existing_elements ); ?>'>
+	<input type="hidden" id="content" name="content" value="<?php echo esc_attr( $post->post_content ); ?>">
 		<?php wp_nonce_field( 'create-survey', 'create_survey_nonce', false, true ); ?>
 	<input type="hidden" name="survey_id" value="<?php echo $post->ID; ?>">
 	<?php
