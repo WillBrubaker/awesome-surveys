@@ -437,8 +437,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			'responses' => $responses,
 			'respondent_key' => $respondent_key,
 			);
-		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
+		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
 		$data = $post->post_excerpt;
 		wp_send_json_error( array( $data ) );
 	}
