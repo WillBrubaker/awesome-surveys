@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Awesome Surveys 2.0\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/support/plugin/awesome-surveys\n"
-"POT-Creation-Date: 2015-06-20 20:23:57+00:00\n"
+"POT-Creation-Date: 2015-07-18 13:01:40+00:00\n"
 "PO-Revision-Date: 2015-03-25 14:37+0100\n"
 "Last-Translator: Tobias Perschon <office@bitconnect.at>\n"
 "Language-Team: \n"
@@ -24,7 +24,7 @@ msgstr "Awesome Surveys Einstellungen"
 msgid "Survey Options"
 msgstr "Umfrage Optionen"
 
-#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.5)  #-#-#-#-#
+#. #-#-#-#-#  awesome-surveys.pot (Awesome Surveys 2.0.7)  #-#-#-#-#
 #. Plugin Name of the plugin/theme
 #: includes/class-awesome-surveys-admin.php:12
 #: includes/class-awesome-surveys.php:64
@@ -69,50 +69,50 @@ msgstr "Umfragen aktualisiert"
 msgid "Copy"
 msgstr "Kopieren"
 
-#: includes/class-awesome-surveys-admin.php:359
+#: includes/class-awesome-surveys-admin.php:364
 msgid "Survey Results For:"
 msgstr "Umfrageergebnisse für:"
 
-#: includes/class-awesome-surveys-admin.php:372
+#: includes/class-awesome-surveys-admin.php:377
 msgid "Results for "
 msgstr "Eingaben für:"
 
-#: includes/class-awesome-surveys-admin.php:374
+#: includes/class-awesome-surveys-admin.php:379
 msgid "Results for respondent "
 msgstr "Eingaben des/der Befragten:"
 
-#: includes/class-awesome-surveys-admin.php:381
+#: includes/class-awesome-surveys-admin.php:386
 msgid "Create Survey"
 msgstr "Umfrage erstellen"
 
-#: includes/class-awesome-surveys-admin.php:382
+#: includes/class-awesome-surveys-admin.php:387
 msgid "General Survey Options"
 msgstr "Allgemeine Umfrage Einstellungen"
 
-#: includes/class-awesome-surveys-admin.php:416
+#: includes/class-awesome-surveys-admin.php:421
 msgid "Answers"
 msgstr "Antworten"
 
-#: includes/class-awesome-surveys-admin.php:422
-#: includes/class-awesome-surveys-admin.php:425
+#: includes/class-awesome-surveys-admin.php:427
+#: includes/class-awesome-surveys-admin.php:430
 #: includes/class-awesome-surveys-ajax-actions.php:165
 msgid "Answer"
 msgstr "Antwort"
 
-#: includes/class-awesome-surveys-admin.php:427
+#: includes/class-awesome-surveys-admin.php:432
 msgid "No response given"
 msgstr "Keine Antwort abgegeben"
 
-#: includes/class-awesome-surveys-admin.php:428
+#: includes/class-awesome-surveys-admin.php:433
 msgid "Question"
 msgstr "Frage"
 
-#: includes/class-awesome-surveys-admin.php:472
+#: includes/class-awesome-surveys-admin.php:477
 #: includes/views/html-surveys-options-emails.php:5
 msgid "Thank you for your response"
 msgstr "Danke für Ihre Teilnahme"
 
-#: includes/class-awesome-surveys-admin.php:474
+#: includes/class-awesome-surveys-admin.php:479
 #: includes/views/html-surveys-options-emails.php:7
 msgid "Thank you for your response to a survey"
 msgstr "Danke für Ihre Teilnahme an der Umfrage"
@@ -176,7 +176,6 @@ msgstr ""
 #: includes/class-awesome-surveys-ajax-actions.php:390
 #: includes/class-awesome-surveys-frontend.php:89
 #: includes/class-awesome-surveys.php:220
-#: includes/class.awesome-surveys-frontend.php:79
 msgid "Your response to this survey has already been recorded. Thank you!"
 msgstr "Deine Antworten zu dieser Umfrage wurden bereits gespeichtert. Danke!"
 
@@ -186,7 +185,6 @@ msgstr "verbleibende Zeichen"
 
 #: includes/class-awesome-surveys-frontend.php:133
 #: includes/class-awesome-surveys.php:366
-#: includes/class.awesome-surveys-frontend.php:321
 msgid "You must be logged in to participate in this survey"
 msgstr "Du musst eingeloggt sein um an dieser Umfrage teilnehmen zu können"
 
@@ -239,13 +237,11 @@ msgid "Surveys for your site"
 msgstr "Umfragen für diese Website"
 
 #: includes/class-awesome-surveys.php:125
-#: includes/class.awesome-surveys-frontend.php:111
 #: includes/wwmas-database-upgrade-functions.php:118
 msgid "make a selection..."
 msgstr "Treffe eine Auswahl..."
 
 #: includes/class-awesome-surveys.php:167
-#: includes/class.awesome-surveys-frontend.php:151
 #: includes/wwmas-database-upgrade-functions.php:157
 msgid "Submit Response"
 msgstr "Antwort abschicken"

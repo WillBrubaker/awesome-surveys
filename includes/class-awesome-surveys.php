@@ -6,7 +6,7 @@ class Awesome_Surveys {
 	public $text_domain, $buttons, $plugin_version, $dbversion;
 
 	public function __construct() {
-		$this->plugin_version = '2.0.6';
+		$this->plugin_version = '2.0.7';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.2';
 		$this->buttons = $this->get_buttons();
