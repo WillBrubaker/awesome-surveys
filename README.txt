@@ -3,7 +3,7 @@ Contributors: WilltheWebMechanic, tobyhawkins, tofuSCHNITZEL
 License: GPLv3.0+
 Requires at least: 3.9.1
 Tested up to: 4.2.2
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 Tags: survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 Donate Link: http://www.willthewebmechanic.com/awesome-surveys/
 
@@ -107,6 +107,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 
 == Changelog ==
+= v2.0.8 =
+1. *FIX* - in cases where values are escaped when json encoding - unescape those before json decoding
+
 = v2.0.7 =
 1. Duplicate survey functionality was retaining the survey id of the survey that it was duplicated from resulting in less than desirable results. This has been fixed by updating the post content to ensure that the new old survey id is replaced with the new survey id in the form field
 

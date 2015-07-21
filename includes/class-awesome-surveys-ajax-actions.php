@@ -372,7 +372,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			wp_send_json_error( $data );
 		}
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
-		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
+		$existing_elements = json_decode( stripslashes( get_post_meta( $survey_id, 'existing_elements', true ) ), true );
 		$responses = array();
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		$auth_method = $this->auth_methods[ $auth_type ]['name'];
