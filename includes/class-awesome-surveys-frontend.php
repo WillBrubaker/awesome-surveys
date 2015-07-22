@@ -16,7 +16,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 				add_filter( $filter, array( $this, $args[0] ), $args[1], $args[2] );
 		}
 		parent::__construct();
-		add_shortcode( 'wwm_survey', array( &$this, 'wwm_survey' ) );
+		add_shortcode( 'wwm_survey', array( $this, 'wwm_survey' ) );
 		add_filter( 'awesome_surveys_auth_method_none', '__return_true' );
 		$actions = array(
 			'wp_enqueue_scripts' => array( 'register_scripts', 10, 0 ),
@@ -66,7 +66,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_method, $auth_args ) ) {
 			wp_enqueue_script( 'awesome-surveys-frontend' );
 			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
-				add_action( 'wp_footer', array( &$this, 'validation_messages' ), 90, 0 );
+				add_action( 'wp_footer', array( $this, 'validation_messages' ), 90, 0 );
 			}
 			$options = get_option( 'wwm_awesome_surveys_options', array() );
 			$include_css = ( isset( $options['general_options']['include_css'] ) ) ? absint( $options['general_options']['include_css'] ) : 1;
@@ -116,6 +116,9 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 				wp_enqueue_style( 'awesome-surveys-frontend-styles' );
 			}
 			wp_enqueue_script( 'awesome-surveys-frontend' );
+			if ( defined( 'WPLANG' ) || false != get_option( 'WPLANG', false ) ) {
+				add_action( 'wp_footer', array( $this, 'validation_messages' ), 90, 0 );
+			}
 		}
 	}
 
