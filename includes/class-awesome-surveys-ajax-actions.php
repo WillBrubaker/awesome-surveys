@@ -292,7 +292,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
 		}
 
-		$saved_elements = ( ! empty( $_POST['existing_elements'] ) && 'null' != $_POST['existing_elements'] ) ? wp_unslash( $_POST['existing_elements'] ) : wp_unslash( get_post_meta( $_POST['survey_id'], 'existing_elements', true ) );
+		$saved_elements = stripslashes( ( ! empty( $_POST['existing_elements'] ) && 'null' != $_POST['existing_elements'] ) ? $_POST['existing_elements'] : get_post_meta( $_POST['survey_id'], 'existing_elements', true ) );
 		$this->existing_elements = ( ! empty( $saved_elements ) && 'null' != $saved_elements ) ? array_merge( json_decode( $saved_elements, true ), array( wp_unslash( $form_elements_array['options'] ), ) ) : array( wp_unslash( $form_elements_array['options'] ) );
 		$form = new FormOverrides();
 		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
@@ -313,7 +313,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		$pattern = '/method="post"/';
 		$replacement = '';
 		$save_form = preg_replace( $pattern, $replacement, $save_form );
-		$data = array( array( $preview_form . $save_form ), array( esc_html( $post_content ) ), array( wp_unslash( json_encode( $this->existing_elements ) ) ) );
+		$data = array( array( $preview_form . $save_form ), array( esc_html( $post_content ) ), array( json_encode( $this->existing_elements ) ) );
 		wp_send_json_success( $data );
 	}
 
@@ -345,7 +345,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 
 	public function update_post_content() {
 		$form_args = array( 'survey_id' => $_POST['survey_id'] );
-		$this->existing_elements = json_decode( wp_unslash( $_POST['existing_elements'] ), true );
+		$this->existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
 		if ( ! $this->existing_elements ) {
 			wp_send_json_error( array( sprintf( '%s %s of %s', __( 'There was an error on line ', 'awesome-surveys' ), __LINE__, __FILE__ ) ) );
 		}
@@ -372,7 +372,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			wp_send_json_error( $data );
 		}
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
-		$existing_elements = json_decode( wp_unslash( get_post_meta( $survey_id, 'existing_elements', true ) ), true );
+		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		$auth_method = $this->auth_methods[ $auth_type ]['name'];
