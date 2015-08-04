@@ -46,7 +46,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( isset( $_POST['existing_elements'] ) ) {
 			$existing_elements = $_POST['existing_elements'];
 			$this->existing_elements = $existing_elements;
-			if ( json_decode( wp_unslash( $existing_elements ) ) ) {
+			if ( json_decode( stripslashes( $existing_elements ) ) ) {
 				update_post_meta( $post_id, 'existing_elements', $existing_elements );
 			}
 		}
@@ -368,7 +368,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			foreach ( $results as $key => $value ) {
 				$results_keys[] = array_keys( $value );
 			}
-			$elements = json_decode( stripslashes( get_post_meta( $post_id, 'existing_elements', true ) ), true );
+			$elements = json_decode( get_post_meta( $post_id, 'existing_elements', true ), true );
 			foreach ( $results as $respondent_key => $answers ) {
 				$auth_method = get_post_meta( $post_id, 'survey_auth_method', true );
 				$auth_type = $this->auth_methods[ $auth_method ]['name'];
