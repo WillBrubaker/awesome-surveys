@@ -441,6 +441,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
 		$data = $post->post_excerpt;
-		wp_send_json_error( array( $data ) );
+		$redirect_url_after_answer = get_post_meta( $survey_id, 'redirect_url_after_answer', true );
+		$redirect_timeout_after_answer = get_post_meta( $survey_id, 'redirect_timeout_after_answer', true );
+		wp_send_json_success( array( 'thank_you' => $data, 'url' => $redirect_url_after_answer, 'urltimeout' => $redirect_timeout_after_answer ) );
 	}
 }

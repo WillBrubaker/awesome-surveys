@@ -5,6 +5,14 @@ $auth_method = get_post_meta( $post->ID, 'survey_auth_method', true );
 if ( empty( $auth_method ) ) {
 	$auth_method = 0;
 }
+$redirect_url_after_answer = get_post_meta( $post->ID, 'redirect_url_after_answer', true );
+if ( empty( $redirect_url_after_answer ) ) {
+        $redirect_url_after_answer = '';
+}
+$redirect_timeout_after_answer = get_post_meta( $post->ID, 'redirect_timeout_after_answer', true );
+if ( empty( $redirect_timeout_after_answer ) ) {
+        $redirect_timeout_after_answer = 0;
+}
 $auth_type = $awesome_surveys->auth_methods[ $auth_method ]['name'];
 $responses = get_post_meta( $post->ID, '_response', true );
 $has_responses = ( empty( $responses ) ) ? false : true;
@@ -19,6 +27,18 @@ $thank_you_message = ( ! empty( $post->post_excerpt ) ) ? $post->post_excerpt : 
 			<div class="controls">
 				<textarea id="excerpt" name="excerpt" cols="40" rows="5"><?php echo $thank_you_message; ?></textarea>
 			</div>
+		</div>
+		<div class="control-group">
+				<label for="general-survey-options-element-3" class="control-label"><?php _e( 'How many seconds to show the Thank You message before browser redirection:', 'awesome-surveys' ); ?></label>
+				<div class="controls">
+						<input type="text" value="<?php echo $redirect_timeout_after_answer; ?>" name="meta[redirect_timeout_after_answer]" id="general-survey-options-element-3">
+				</div>
+		</div>
+		<div class="control-group">
+				<label for="general-survey-options-element-3" class="control-label"><?php _e( 'Redirect URL after survey answer (leave empty to disable redirection):', 'awesome-surveys'); ?></label>
+				<div class="controls">
+						<input type="text" value="<?php echo $redirect_url_after_answer; ?>" name="meta[redirect_url_after_answer]" id="general-survey-options-element-3">
+				</div>
 		</div>
 		<?php if ( ! $auth_locked ) { ?>
 		<div class="ui-widget-content ui-corner-all validation field-validation">
