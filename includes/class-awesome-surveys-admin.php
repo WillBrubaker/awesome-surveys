@@ -70,9 +70,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		wp_register_script( 'jquery-validation-plugin', WWM_AWESOME_SURVEYS_URL . '/js/jquery.validate.min.js', array( 'jquery' ), '1.13.0' );
 
-		wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize.min.css' );
+		wp_register_style( 'normalize-css', WWM_AWESOME_SURVEYS_URL . '/css/normalize' . $suffix . '.css' );
 		wp_register_style( 'jquery-ui-smoothness', WWM_AWESOME_SURVEYS_URL . '/css/jquery-ui.min.css', array( 'wp-admin' ), '1.10.13', 'all' );
-		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms.min.css', array( 'normalize-css' ) );
+		wp_register_style( 'pure-forms-css', WWM_AWESOME_SURVEYS_URL . '/css/forms' . $suffix . '.css', array( 'normalize-css' ) );
 
 		wp_register_script( $this->text_domain . '-options-script', WWM_AWESOME_SURVEYS_URL . '/js/options' . $suffix . '.js', array( 'jquery', 'jquery-ui-accordion', 'postbox' ), $this->plugin_version, true );
 		wp_register_script( $this->text_domain . '-view-results', WWM_AWESOME_SURVEYS_URL . '/js/results' . $suffix . '.js', array( 'jquery', 'postbox', 'jquery-ui-accordion' ), $this->plugin_version, true );
