@@ -138,6 +138,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$html .= '<span class="label">' . __( 'Number of answers required?', 'awesome-surveys' ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
 			$html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
 			$html .= '</div>';
+			$html .= '<p><button class="button-primary" name="options-default-none">' . __( 'Clear default', 'awesome-surveys' ) . '</button></p>';
 		}
 
 		$html .= '<p><button class="button-primary">' . __( 'Add Question', 'awesome-surveys' ) . '</button></p>';

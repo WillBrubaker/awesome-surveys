@@ -53,6 +53,11 @@ jQuery('document').ready(function($) {
 				}
 			})
 			$('#current-element button').button()
+			$('#current-element').on('click', 'button[name=options-default-none]', function(e) {
+					$('input[name="options[default]"]').prop('checked', false)
+					e.preventDefault()
+					e.stopImmediatePropagation()
+			})
 			$('#current-element').on('click', 'button', function(e) {
 				$('#awesome-survey .overlay').show()
 				e.preventDefault()
@@ -190,6 +195,9 @@ jQuery('document').ready(function($) {
 					})
 				}
 			})
+			$('.dyn-diag').on('click', 'input[name=options-default-none]', function() {
+					$('input[name="options[default]"]').prop('checked', false)
+			})
 		}
 		elementsJSON = removeNulls(elementsJSON)
 		$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
@@ -306,6 +314,8 @@ function generateDynamicDialog(obj) {
 			}
 			html += '>'
 		}
+		html += '<p>other:</p>'
+		html += '<input type="button" name="options-default-none" value="Clear default" />'
 		html += '</div>'
 	}
 	if ('undefined' != typeof obj.validation && 'undefined' != typeof obj.validation.rules) {
@@ -313,6 +323,10 @@ function generateDynamicDialog(obj) {
 			html += '<input type="hidden" name="options[validation][rules][' + index + ']" value="' + obj.validation.rules[index] + '">'
 		}
 	}
+
+	//dirty hack because originally added atts.can_add_options won't get saved and reloaded so editing gets impossible
+	html += '<input type="hidden" name="options[atts][can_add_options]" value="yes">'
+
 	html += '<input type="hidden" name="action" value="wwm-as-get-json">'
 	html += '</form></div>'
 	return jQuery(html)
