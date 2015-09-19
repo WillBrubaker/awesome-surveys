@@ -56,11 +56,11 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( isset( $_POST['meta']['redirect_url_after_answer'] ) ) {
 			$url = trim($_POST['meta']['redirect_url_after_answer']);
 			if ( empty($url) || filter_var($url, FILTER_VALIDATE_URL ) !== false) {
-					update_post_meta( $post_id, 'redirect_url_after_answer', $url );
+				update_post_meta( $post_id, 'redirect_url_after_answer', $url );
 			}
 		}
 		if ( isset( $_POST['meta']['redirect_timeout_after_answer'] ) ) {
-				update_post_meta( $post_id, 'redirect_timeout_after_answer', absint( $_POST['meta']['redirect_timeout_after_answer'] ) );
+			update_post_meta( $post_id, 'redirect_timeout_after_answer', absint( $_POST['meta']['redirect_timeout_after_answer'] ) );
 		}
 	}
 
