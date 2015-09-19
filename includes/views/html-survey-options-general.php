@@ -6,9 +6,6 @@ if ( empty( $auth_method ) ) {
 	$auth_method = 0;
 }
 $redirect_url_after_answer = get_post_meta( $post->ID, 'redirect_url_after_answer', true );
-if ( empty( $redirect_url_after_answer ) ) {
-        $redirect_url_after_answer = '';
-}
 $redirect_timeout_after_answer = get_post_meta( $post->ID, 'redirect_timeout_after_answer', true );
 if ( empty( $redirect_timeout_after_answer ) ) {
         $redirect_timeout_after_answer = 0;
@@ -35,9 +32,9 @@ $thank_you_message = ( ! empty( $post->post_excerpt ) ) ? $post->post_excerpt : 
 				</div>
 		</div>
 		<div class="control-group">
-				<label for="general-survey-options-element-3" class="control-label"><?php _e( 'Redirect URL after survey answer (leave empty to disable redirection):', 'awesome-surveys'); ?></label>
+				<label for="general-survey-options-element-4" class="control-label"><?php _e( 'Redirect URL after survey answer (leave empty to disable redirection):', 'awesome-surveys'); ?></label>
 				<div class="controls">
-						<input type="text" value="<?php echo $redirect_url_after_answer; ?>" name="meta[redirect_url_after_answer]" id="general-survey-options-element-3">
+						<input type="text" value="<?php echo $redirect_url_after_answer; ?>" name="meta[redirect_url_after_answer]" id="general-survey-options-element-4">
 				</div>
 		</div>
 		<?php if ( ! $auth_locked ) { ?>
