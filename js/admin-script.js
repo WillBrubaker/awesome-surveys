@@ -54,9 +54,9 @@ jQuery('document').ready(function($) {
 			})
 			$('#current-element button').button()
 			$('#current-element').on('click', 'button[name=options-default-none]', function(e) {
-					$('input[name="options[default]"]').prop('checked', false)
-					e.preventDefault()
-					e.stopImmediatePropagation()
+				$('input[name="options[default]"]').prop('checked', false)
+				e.preventDefault()
+				e.stopImmediatePropagation()
 			})
 			$('#current-element').on('click', 'button', function(e) {
 				$('#awesome-survey .overlay').show()
@@ -196,7 +196,7 @@ jQuery('document').ready(function($) {
 				}
 			})
 			$('.dyn-diag').on('click', 'input[name=options-default-none]', function() {
-					$('input[name="options[default]"]').prop('checked', false)
+				$('input[name="options[default]"]').prop('checked', false)
 			})
 		}
 		elementsJSON = removeNulls(elementsJSON)
