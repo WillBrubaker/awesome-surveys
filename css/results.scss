@@ -13,7 +13,7 @@ span.answer, ul.answers {
 
 div.answers .options-container {
 	background-color: #e1f4ff;
-	border-bottom:3px solid #e5e5e5
+	border-bottom:3px solid #e5e5e5;
 	margin: 1em 0;
 	position: relative;
 	float: left;
@@ -21,7 +21,7 @@ div.answers .options-container {
 }
 
 div.answers .options {
-	background-color: #e1455d;
+	background-color: #ffd200;
 	height: 100%;
 	left: 0;
 	line-height: 3.2em;
@@ -47,3 +47,9 @@ p.percentage {
 #poststuff #post-body.columns-2 {
 	margin: 0;
 }
+
+.question-text {
+ 	position: relative;
+ 	z-index: 10;
+ 	margin-left: .8em;
+ }

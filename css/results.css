@@ -10,7 +10,7 @@ span.answer, ul.answers {
 
 div.answers .options-container {
   background-color: #e1f4ff;
-  border-bottom:3px solid #e5e5e5;
+  border-bottom: 3px solid #e5e5e5;
   margin: 1em 0;
   position: relative;
   float: left;
@@ -25,9 +25,8 @@ div.answers .options {
   text-indent: 10px;
   top: 0; }
 
-.options p .percentage{
-  color: #fff;
-}
+.options p .percentage {
+  color: #fff; }
 
 p.answers {
   text-decoration: underline; }
@@ -35,9 +34,12 @@ p.answers {
 p.percentage {
   float: right;
   padding-right: 10px;
-  font-weight: bold;
-  color: #777;
-}
+  font-weight: bold; }
 
 #poststuff #post-body.columns-2 {
   margin: 0; }
+
+.question-text {
+  position: relative;
+  z-index: 10;
+  margin-left: .8em; }

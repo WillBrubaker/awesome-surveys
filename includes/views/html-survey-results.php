@@ -41,17 +41,16 @@ foreach ( $results as $response_key => $response_array ) {
 
 				if ( 100 == intval( $percentage ) ) {
 					echo '<div class="options-container">'
-							.'<div class="options" style="width:' . $percentage . '%;">'
-								. $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)'
-								. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $total_count . ')</span>'
+							. '<span class="question-text">' . $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)</span>'
+							. '<div class="options" style="width:' . $percentage . '%;">'
+								. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $total_count . ')'
 							. '</div>'
 							. '<p>&nbsp;</p>'
 						. '</div>';
 				} else {
 					echo '<div class="options-container">'
-						.'<span class="options" style="width:' . $percentage . '%;">'
-							. $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)'
-						. '</span>'
+						. '<span class="question-text">' . $elements[ $question_key ]['label'][ $answer_key ] . ' (<b>' . $count . '</b>)</span>'
+						.'<span class="options" style="width:' . $percentage . '%;">&nbsp;</span>'
 						. '<p class="percentage">' . $percentage . '% (' . $count . '/' . $total_count . ')</p>'
 					. '</div>';
 				}
