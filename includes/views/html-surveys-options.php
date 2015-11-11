@@ -3,9 +3,11 @@
 	$include = ( isset( $options['general_options'] ) && isset( $options['general_options']['include_css'] ) ) ? absint( $options['general_options']['include_css'] ) : 1;
 	?>
 <h4>
-	<?php __( 'Survey Styling Options', 'awesome-surveys' ); ?></h4>
+	<?php __( 'Survey Styling Options', 'awesome-surveys' ); ?>
+</h4>
 <p>
-	<?php _e( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', 'awesome-surveys' ); ?></p>
+	<?php _e( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', 'awesome-surveys' ); ?>
+</p>
 <div id="general-surveys-options">
 	<fieldset>
 		<div class="overlay">
@@ -30,4 +32,18 @@
 			</p>
 		</div>
 	</fieldset>
+</div>
+<h4>
+	<?php _e( 'Translate', 'awesome-surveys' ); ?>
+</h4>
+<p>
+	<?php _e( 'Press the button below to translate your surveys to the current site language', 'awesome-surveys' ); ?>
+</p>
+<div id="translate-surveys">
+	<!--fieldset-->
+			<div class="overlay">
+				<span class="preloader"></span>
+			</div>
+			<a href="<?php echo $_SERVER['REQUEST_URI'] . '&translate-surveys=true'; ?>" class="button-primary btn btn-primary" id="translate-surveys"><?php _e( 'Translate', 'awesome-surveys' ); ?></a>
+	<!--/fieldset-->
 </div>

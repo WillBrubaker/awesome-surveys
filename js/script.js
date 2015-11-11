@@ -20,11 +20,12 @@ jQuery(document).ready(function($) {
 				var overlay = $('.overlay', form);
 				overlay.show();
 				$.post(wwm_awesome_surveys.ajaxurl, $(form).serializeArray(), function(data) {
+					console.log(data);
 					if (null == data) {
 						$(form).empty().append('<p class="error">An unknown error occured (data object is null)</p>');
 						return null;
 					}
-					msg = ('undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' + data.data + '</span>';
+					msg = ('undefined' != typeof data.data && 'undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' + data.data + '</span>';
 					$(form).empty().append('<p>' + msg + '</p>');
 					if (null != data.data.url) {
 						window.location = data.data.url;

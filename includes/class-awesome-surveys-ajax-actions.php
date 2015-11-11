@@ -360,7 +360,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		* @link http://willthewebmechanic.com
 		*/
 	public function process_response() {
-
+		error_log( print_r( __FUNCTION__, true ) );
 		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
 			status_header( 403 );
 			exit;
@@ -371,6 +371,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$data = array( __( 'Answers not saved. Survey in draft status.', 'awesome-surveys' ) );
 			wp_send_json_error( $data );
 		}
+		error_log( print_r( __LINE__, true ) );
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
 		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 		$responses = array();
@@ -440,6 +441,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
 		$data = $post->post_excerpt;
+		error_log( print_r( "the data is " . $data, true ) );
 		wp_send_json_error( array( $data ) );
 	}
 }
