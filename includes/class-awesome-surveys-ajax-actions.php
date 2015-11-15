@@ -138,6 +138,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$html .= '<span class="label">' . __( 'Number of answers required?', 'awesome-surveys' ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
 			$html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
 			$html .= '</div>';
+			$html .= '<p><button class="button-primary" name="options-default-none">' . __( 'Clear default', 'awesome-surveys' ) . '</button></p>';
 		}
 
 		$html .= '<p><button class="button-primary">' . __( 'Add Question', 'awesome-surveys' ) . '</button></p>';
@@ -292,8 +293,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			include_once( plugin_dir_path( __FILE__ ) . 'PFBC/Overrides.php' );
 		}
 
-		$saved_elements = stripslashes( ( ! empty( $_POST['existing_elements'] ) && 'null' != $_POST['existing_elements'] ) ? $_POST['existing_elements'] : get_post_meta( $_POST['survey_id'], 'existing_elements', true ) );
-		$this->existing_elements = ( ! empty( $saved_elements ) && 'null' != $saved_elements ) ? array_merge( json_decode( $saved_elements, true ), array( wp_unslash( $form_elements_array['options'] ), ) ) : array( wp_unslash( $form_elements_array['options'] ) );
+		$saved_elements = ( ! empty( $_POST['existing_elements'] ) && 'null' != $_POST['existing_elements'] ) ? stripslashes( $_POST['existing_elements'] ) : get_post_meta( $_POST['survey_id'], 'existing_elements', true );
+		$this->existing_elements = ( ! empty( $saved_elements ) && 'null' != $saved_elements ) ? array_merge( json_decode( $saved_elements, true ), array( $form_elements_array['options'], ) ) : array( $form_elements_array['options'] );
 		$form = new FormOverrides();
 		$form->configure( array( 'class' => 'pure-form pure-form-stacked' ) );
 		$preview_form = $this->get_form_preview_html( $_POST['survey_id'] );
@@ -360,7 +361,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		* @link http://willthewebmechanic.com
 		*/
 	public function process_response() {
-		error_log( print_r( __FUNCTION__, true ) );
+
 		if ( ! wp_verify_nonce( $_POST['answer_survey_nonce'], 'answer-survey' ) || is_null( $_POST['survey_id'] ) ) {
 			status_header( 403 );
 			exit;
@@ -371,9 +372,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$data = array( __( 'Answers not saved. Survey in draft status.', 'awesome-surveys' ) );
 			wp_send_json_error( $data );
 		}
-		error_log( print_r( __LINE__, true ) );
 		$saved_answers = get_post_meta( $survey_id, '_response', false );
-		$existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
+		$existing_elements = json_decode( stripslashes( get_post_meta( $survey_id, 'existing_elements', true ) ), true );
 		$responses = array();
 		$auth_type = get_post_meta( $survey_id, 'survey_auth_method', true );
 		$auth_method = $this->auth_methods[ $auth_type ]['name'];
@@ -441,7 +441,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
 		$data = $post->post_excerpt;
-		error_log( print_r( "the data is " . $data, true ) );
-		wp_send_json_error( array( $data ) );
+		$redirect_url_after_answer = get_post_meta( $survey_id, 'redirect_url_after_answer', true );
+		$redirect_timeout_after_answer = get_post_meta( $survey_id, 'redirect_timeout_after_answer', true );
+		wp_send_json_success( array( 'thank_you' => $data, 'url' => $redirect_url_after_answer, 'urltimeout' => $redirect_timeout_after_answer ) );
 	}
 }

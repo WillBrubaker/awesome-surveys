@@ -53,6 +53,15 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( isset( $_POST['meta']['survey_auth_method'] ) ) {
 			update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['meta']['survey_auth_method'] ) );
 		}
+		if ( isset( $_POST['meta']['redirect_url_after_answer'] ) ) {
+			$url = trim($_POST['meta']['redirect_url_after_answer']);
+			if ( empty($url) || filter_var($url, FILTER_VALIDATE_URL ) !== false) {
+				update_post_meta( $post_id, 'redirect_url_after_answer', $url );
+			}
+		}
+		if ( isset( $_POST['meta']['redirect_timeout_after_answer'] ) ) {
+			update_post_meta( $post_id, 'redirect_timeout_after_answer', absint( $_POST['meta']['redirect_timeout_after_answer'] ) );
+		}
 	}
 
 	/**
@@ -282,6 +291,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$post_metas = array(
 					'existing_elements',
 					'survey_auth_method',
+					'redirect_url_after_answer',
+					'redirect_timeout_after_answer',
 					);
 		$new_post_data = array(
 			'post_content' => $post->post_content,
