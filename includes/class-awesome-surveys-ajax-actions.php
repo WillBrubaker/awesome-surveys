@@ -276,7 +276,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 
 		$form_args = array( 'survey_id' => $_POST['survey_id'] );
 		$form_elements_array = $_POST;
-		$form_elements_array['options']['name'] = stripslashes( $form_elements_array['options']['name'] );
+
 		/**
 			* This filter facilitates the modification of form elements
 			* prior to the form being output to preview, and prior to the
