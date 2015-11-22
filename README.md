@@ -135,6 +135,9 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 ## Changelog ##
 
+## v2.0.10 ##
+1. *FIX* Single quotes break JSON encode/decoding - hopefully fixed
+
 ## v2.0.9 ##
 1. *FIX* - improper escaping/unescaping
 
