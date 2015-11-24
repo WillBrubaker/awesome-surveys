@@ -6,7 +6,7 @@ class Awesome_Surveys {
 	public $text_domain, $buttons, $plugin_version, $dbversion;
 
 	public function __construct() {
-		$this->plugin_version = '2.0.10-pre';
+		$this->plugin_version = '2.0.10';
 		$this->text_domain = 'awesome-surveys';
 		$this->dbversion = '1.2';
 		$this->buttons = $this->get_buttons();
@@ -184,7 +184,7 @@ class Awesome_Surveys {
 			'required' => false,
 			'rules' => array(),
 		);
-		$form_elements_array['options']['name'] = stripslashes( $form_elements_array['options']['name'] );
+		$form_elements_array['name'] = stripslashes( $form_elements_array['name'] );
 		$form_elements_array['validation'] = wp_parse_args( ( isset( $form_elements_array['validation'] ) ) ? $form_elements_array['validation'] : array(), $defaults );
 		if ( isset( $form_elements_array['validation']['rules'] ) ) {
 			unset( $form_elements_array['validation']['rules']['number_validation_type'] );

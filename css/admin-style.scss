@@ -72,6 +72,10 @@ div fieldset, div .field-validation > * {
 #current-element-wrapper, #form-preview-wrapper {
 	display:none;
 }
+
+#current-element button {
+	margin-top: 1em;
+}
 .validation {
   float: left;
   width: 100%;

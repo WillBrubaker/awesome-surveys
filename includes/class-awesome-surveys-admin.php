@@ -54,8 +54,8 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			update_post_meta( $post_id, 'survey_auth_method', absint( $_POST['meta']['survey_auth_method'] ) );
 		}
 		if ( isset( $_POST['meta']['redirect_url_after_answer'] ) ) {
-			$url = trim($_POST['meta']['redirect_url_after_answer']);
-			if ( empty($url) || filter_var($url, FILTER_VALIDATE_URL ) !== false) {
+			$url = esc_url( trim( $_POST['meta']['redirect_url_after_answer'] ) );
+			if ( ! empty( $url ) && filter_var( $url, FILTER_VALIDATE_URL ) !== false) {
 				update_post_meta( $post_id, 'redirect_url_after_answer', $url );
 			}
 		}
@@ -73,6 +73,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 	public function admin_enqueue_scripts() {
 		$defaults = array(
 			'num_answers' => 10,
+			'clear_default' => __( 'Clear Default', 'awesome-surveys' ),
 			);
 		$args = apply_filters( 'wwm_as_admin_script_vars', $defaults );
 		$args = wp_parse_args( $args, $defaults );

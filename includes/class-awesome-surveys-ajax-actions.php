@@ -138,7 +138,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			$html .= '<span class="label">' . __( 'Number of answers required?', 'awesome-surveys' ) . '</span><div class="slider-wrapper"><div id="slider"></div><div class="slider-legend"></div></div><div id="options-holder">';
 			$html .= $this->options_fields( array( 'num_options' => 1, 'ajax' => false ) );
 			$html .= '</div>';
-			$html .= '<p><button class="button-primary" name="options-default-none">' . __( 'Clear default', 'awesome-surveys' ) . '</button></p>';
+			$html .= '<p><button class="button-primary" name="options-default-none">' . __( 'Clear Default', 'awesome-surveys' ) . '</button></p>';
 		}
 
 		$html .= '<p><button class="button-primary">' . __( 'Add Question', 'awesome-surveys' ) . '</button></p>';
@@ -441,9 +441,14 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			);
 		do_action( 'awesome_surveys_update_' . $auth_method, $action_args );
 		do_action( 'wwm_as_response_saved', array( $survey_id, $responses, $existing_elements, $respondent_key ) );
-		$data = $post->post_excerpt;
+
 		$redirect_url_after_answer = get_post_meta( $survey_id, 'redirect_url_after_answer', true );
 		$redirect_timeout_after_answer = get_post_meta( $survey_id, 'redirect_timeout_after_answer', true );
+		$data = $post->post_excerpt;
+		if ( ! empty( $redirect_url_after_answer ) ) {
+			/* translators: the placeholders %s and %d represent the redirect url and the number of seconds before a redirect respectively */
+		 $data = $data . ' ' . sprintf( __( 'You will be redirected to %s in %d seconds', 'awesome-surveys' ), $redirect_url_after_answer,  $redirect_timeout_after_answer );
+		}
 		wp_send_json_success( array( 'thank_you' => $data, 'url' => $redirect_url_after_answer, 'urltimeout' => $redirect_timeout_after_answer ) );
 	}
 }

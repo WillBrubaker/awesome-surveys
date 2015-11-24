@@ -53,7 +53,7 @@ jQuery('document').ready(function($) {
 				}
 			})
 			$('#current-element button').button()
-			$('#current-element').on('click', 'button[name=options-default-none]', function(e) {
+			$('#current-element').on('click', 'button[name="options-default-none"]', function(e) {
 				$('input[name="options[default]"]').prop('checked', false)
 				e.preventDefault()
 				e.stopImmediatePropagation()
@@ -314,8 +314,7 @@ function generateDynamicDialog(obj) {
 			}
 			html += '>'
 		}
-		html += '<p>other:</p>'
-		html += '<input type="button" name="options-default-none" value="Clear default" />'
+		html += '<p><input type="button" name="options-default-none" value="' + wwm_as_admin_script.clear_default + '" /></p>'
 		html += '</div>'
 	}
 	if ('undefined' != typeof obj.validation && 'undefined' != typeof obj.validation.rules) {

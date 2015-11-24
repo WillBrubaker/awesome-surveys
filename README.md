@@ -7,9 +7,9 @@
 
 **Requires at least:** 3.9.1
 
-**Tested up to:** 4.2.2
+**Tested up to:** 4.4
 
-**Stable tag:** 2.0.9
+**Stable tag:** 2.0.10
 
 **Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
 
@@ -137,6 +137,11 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 ## v2.0.10 ##
 1. *FIX* Single quotes break JSON encode/decoding - hopefully fixed
+2. Added a "translate" button to the survey options panel - if you have changed your site language since creating a survey, you can use this button to translate the static form existing_elements
+3.Results display tweaks
+4. User Contributed: Added a button to reset default selection for radios/checkboxes
+5. User Contributed: Added Hungarian translation
+6. User Contributed: Redirect after survey completion now in the interface with the ability to designate a number of seconds before redirect
 
 ## v2.0.9 ##
 1. *FIX* - improper escaping/unescaping
