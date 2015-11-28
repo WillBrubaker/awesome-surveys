@@ -95,7 +95,7 @@ class Awesome_Surveys {
 
 	/**
 		* Builds the survey form from the stored options in the database.
-		* @param  array $args an array of arguments, includes the survey id and the survey name
+		* @param  array $args an array of arguments (only 'survey_id' at this time)
 		* @return string an html form
 		* @since  1.0
 		* @author Will the Web Mechanic <will@willthewebmechanic.com>

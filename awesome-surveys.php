@@ -94,6 +94,7 @@ load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FI
 			'wwm-as-get-json' => 'get_json',
 			'parse-elements' => 'parse_elements',
 			'update-post-content' => 'update_post_content',
+			'wwm_delete_responses' => 'delete_responses',
 			);
 
 		foreach ( $awesome_surveys_nopriv_ajax_actions as $action => $function ) {

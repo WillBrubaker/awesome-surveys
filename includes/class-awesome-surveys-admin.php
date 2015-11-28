@@ -98,6 +98,10 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 				wp_enqueue_style( $this->text_domain . '-results-style' );
 			}
 		}
+		if ( 'edit-awesome-surveys' === $screen->id ) {
+			wp_enqueue_script( $this->text_domain . '-edit-screen-script', WWM_AWESOME_SURVEYS_URL . '/js/edit-screen-script' . $suffix . '.js', $deps = array( 'jquery' ), $this->plugin_version, true );
+			wp_localize_script( $this->text_domain . '-edit-screen-script', 'wwm_edit_screen', array( 'confirm' => __( 'Do you really want to delete these resluts? This action can not be undone.', 'awesome-surveys' ), 'failure_message' => __( 'Operation Failed', 'awesome_surveys' ) ) );
+		}
 	}
 
 	public function admin_print_scripts() {
@@ -223,7 +227,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			$duplicate_url = admin_url( 'post.php?post=' . $post->ID . '&action=duplicate&duplicate_survey_nonce=' . $nonce );
 			$show_link = get_post_meta( $post->ID, '_response', true );
 			if ( ! empty( $show_link ) ) {
+				$delete_results_nonce = wp_create_nonce( 'wwm-delete-results' );
 				$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
+				$actions['clear_results'] = '<a class="delete-results" title="' . __( 'Delete Survey Results', 'awesome-surveys' ) . '" href="#" data-nonce="' . $delete_results_nonce .'" data-postid="' . $post->ID . '">' . __( 'Delete Results', 'awesome-surveys' ) . '</a>';
 			}
 			$actions['duplicate'] = '<a href="' . $duplicate_url . '" title="' . __( 'Create a copy of this survey', 'awesome-surveys' ) . '">' . __( 'Duplicate', 'awesome-surveys' ) . '</a>';
 		}

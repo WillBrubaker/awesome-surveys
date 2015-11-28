@@ -451,4 +451,21 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		}
 		wp_send_json_success( array( 'thank_you' => $data, 'url' => $redirect_url_after_answer, 'urltimeout' => $redirect_timeout_after_answer ) );
 	}
+
+	/**
+	 * AJAX handler to delete survey responses
+		* @since 2.1
+	 */
+	public function delete_responses() {
+		if ( ! current_user_can( 'edit_published_posts' ) || ! wp_verify_nonce( $_POST['nonce'], 'wwm-delete-results' ) ) {
+			status_header( 403 );
+			exit;
+		}
+		$deleted = delete_post_meta( absint( $_POST['post_id'] ), '_response' );
+		if ( $deleted ) {
+			wp_send_json_success();
+		} else {
+			wp_send_json_error();
+		}
+	}
 }

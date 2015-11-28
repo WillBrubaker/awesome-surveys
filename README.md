@@ -135,8 +135,8 @@ as 'post_content'. This means that if WordPress was in English when you built th
 
 ## Changelog ##
 
-## v2.0 ##
-
+## v2.1 ##
+1. *New Feature* Add ability to delete survey responses
 
 ## v2.0.10 ##
 1. *FIX* Single quotes break JSON encode/decoding - hopefully fixed
