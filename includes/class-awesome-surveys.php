@@ -95,7 +95,6 @@ class Awesome_Surveys {
 
 	/**
 		* Builds the survey form from the stored options in the database.
-		* @param  array $form an array of form elements - this array was stored in the db when the survey was created
 		* @param  array $args an array of arguments, includes the survey id and the survey name
 		* @return string an html form
 		* @since  1.0
@@ -209,6 +208,16 @@ class Awesome_Surveys {
 	public function the_content( $content ) {
 		global $post;
 		if ( is_singular( 'awesome-surveys' ) ) {
+
+				/*
+				On multisite, only network admins can post unfiltered html so the stored html
+				is stripped. This will fetch the json string stored in 'existing_elements' and generate the
+				form on the fly if on multisite and the user does not have the unfiltered_html capability.
+				*/
+				if ( is_multisite() && ! user_can( absint( $post->post_author ), 'unfiltered_html' ) ) {
+					$this->existing_elements = json_decode( get_post_meta( $post->ID, 'existing_elements', true ), true );
+					$content = $this->awesome_surveys_render_form( array( 'survey_id' => $post->ID ) );
+				}
 			$nonce = wp_create_nonce( 'answer-survey' );
 			$auth_method = get_post_meta( $post->ID, 'survey_auth_method', true );
 			$auth_type = $this->auth_methods[ $auth_method ]['name'];
@@ -424,7 +433,7 @@ class Awesome_Surveys {
 		}
 	}
 
-		protected function get_form_preview_html( $post_id = 0 ) {
+	protected function get_form_preview_html( $post_id = 0 ) {
 
 		$output = null;
 		if ( ! class_exists( 'Form' ) ) {
