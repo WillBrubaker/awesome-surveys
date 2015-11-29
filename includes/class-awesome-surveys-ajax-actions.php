@@ -62,6 +62,9 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		*/
 	private function element_info_inputs( $form_element = 'Element_Textbox' ) {
 		$elements = array();
+		if ( 'html' === $form_element ) {
+			return $this->add_html_element( 'html' );
+		}
 		/**
 			* Filter hook wwm_survey_validation_elements adds elements to the validation elements array
 			* $elements is an array with keys that hope to be self-explanatory (see the $defaults array below). The 'tag' key may be
@@ -467,5 +470,19 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		} else {
 			wp_send_json_error();
 		}
+	}
+
+	/**
+	* AJAX handler for the bit that adds custom HTML to the form
+	* @since 2.1
+	*/
+	function add_html_element( $form_element = 'html' ) {
+		$html = '<div class="pure-form pure-form-stacked">';
+		$html .= '<input type="hidden" name="action" value="generate-preview">';
+		$html .= '<input type="hidden" name="options[type]" value="' . $form_element . '">';
+		$html .= '<label>' . __( 'Enter your custom HTML', 'awesome-surveys' ) . '<br><textarea/></label>';
+		$html .= '<p><button class="button-primary">' . __( 'Add Question', 'awesome-surveys' ) . '</button></p>';
+		$html .= '</div>';
+		return $html;
 	}
 }

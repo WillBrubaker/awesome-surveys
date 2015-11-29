@@ -52,6 +52,10 @@ class Awesome_Surveys {
 				'type' => 'Element_Textarea',
 				'label' => __( 'Textarea', 'awesome-surveys' ),
 					),
+				'html' => array(
+					'type' => 'Element_HTML',
+					'label' => __( 'Custom HTML', 'awesome-surveys' ),
+				),
 		);
 	}
 
@@ -178,7 +182,9 @@ class Awesome_Surveys {
 		* @link http://willthewebmechanic.com
 		*/
 	public function awesome_surveys_form_preview( $form_elements_array ) {
-
+		if ( 'html' === $form_elements_array['type'] ) {
+			return;
+		}
 		$defaults = array(
 			'required' => false,
 			'rules' => array(),
@@ -456,6 +462,7 @@ class Awesome_Surveys {
 
 		if ( isset( $this->existing_elements ) && ! empty( $this->existing_elements ) ) {
 			foreach ( $this->existing_elements as $element ) {
+				error_log( print_r( $element, true ) );
 					$method = $this->buttons[ $element['type'] ]['type'];
 					$options = $atts = $rules = array();
 					if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {

@@ -100,7 +100,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		}
 		if ( 'edit-awesome-surveys' === $screen->id ) {
 			wp_enqueue_script( $this->text_domain . '-edit-screen-script', WWM_AWESOME_SURVEYS_URL . '/js/edit-screen-script' . $suffix . '.js', $deps = array( 'jquery' ), $this->plugin_version, true );
-			wp_localize_script( $this->text_domain . '-edit-screen-script', 'wwm_edit_screen', array( 'confirm' => __( 'Do you really want to delete these resluts? This action can not be undone.', 'awesome-surveys' ), 'failure_message' => __( 'Operation Failed', 'awesome_surveys' ) ) );
+			wp_localize_script( $this->text_domain . '-edit-screen-script', 'wwm_edit_screen', array( 'confirm' => __( 'Do you really want to delete these results? This action can not be undone.', 'awesome-surveys' ), 'failure_message' => __( 'Error: Operation Failed', 'awesome_surveys' ) ) );
 		}
 	}
 
