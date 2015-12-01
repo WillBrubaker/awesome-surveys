@@ -431,6 +431,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$questions = $args['args'][1];
 		$answers = reset( $args['args'][0][ $args['args'][2] ] );
 		foreach ( $questions as $key => $question ) {
+			if ( 'html' == $question['type'] ) {
+				continue;
+			}
 			$response = null;
 			$has_options = array( 'dropdown', 'radio', 'checkbox' );
 			$label = $question['name'];

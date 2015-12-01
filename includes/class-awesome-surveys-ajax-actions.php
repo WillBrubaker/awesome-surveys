@@ -279,7 +279,6 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 
 		$form_args = array( 'survey_id' => $_POST['survey_id'] );
 		$form_elements_array = $_POST;
-
 		/**
 			* This filter facilitates the modification of form elements
 			* prior to the form being output to preview, and prior to the
@@ -477,10 +476,16 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	* @since 2.1
 	*/
 	function add_html_element( $form_element = 'html' ) {
+		global $allowedtags;
+
 		$html = '<div class="pure-form pure-form-stacked">';
 		$html .= '<input type="hidden" name="action" value="generate-preview">';
 		$html .= '<input type="hidden" name="options[type]" value="' . $form_element . '">';
-		$html .= '<label>' . __( 'Enter your custom HTML', 'awesome-surveys' ) . '<br><textarea/></label>';
+		$html .= '<p>' . __( 'The following HTML tags are allowed', 'awesome-surveys' ) . ':</p>';
+		foreach ( $allowedtags as $tag => $atts ) {
+			$html .= $tag . ', ';
+		}
+		$html .= '<hr /><p><label>' . __( 'Enter your custom HTML', 'awesome-surveys' ) . '<br><textarea name="options[name]"/></label></p>';
 		$html .= '<p><button class="button-primary">' . __( 'Add Question', 'awesome-surveys' ) . '</button></p>';
 		$html .= '</div>';
 		return $html;

@@ -183,7 +183,8 @@ class Awesome_Surveys {
 		*/
 	public function awesome_surveys_form_preview( $form_elements_array ) {
 		if ( 'html' === $form_elements_array['type'] ) {
-			return;
+			$form_elements_array['name'] = balanceTags( wp_kses_post( $form_elements_array['name'] ), true );
+			return $form_elements_array;
 		}
 		$defaults = array(
 			'required' => false,
@@ -462,7 +463,6 @@ class Awesome_Surveys {
 
 		if ( isset( $this->existing_elements ) && ! empty( $this->existing_elements ) ) {
 			foreach ( $this->existing_elements as $element ) {
-				error_log( print_r( $element, true ) );
 					$method = $this->buttons[ $element['type'] ]['type'];
 					$options = $atts = $rules = array();
 					if ( isset( $element['validation']['rules'] ) && is_array( $element['validation']['rules'] ) ) {
@@ -498,7 +498,11 @@ class Awesome_Surveys {
 					$has_responses = get_post_meta( $post_id, '_response', true );
 					$class = ( empty( $has_responses ) ) ? 'single-element-edit' : 'label-edit';
 					$form->addElement( new Element_HTML( '<div class="' . $class . '">' ) );
-					$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
+					if ( 'Element_HTML' == $method ) {
+						$form->addElement( new Element_HTML( balanceTags( wp_kses_post( $element['name'] ), true ) ) );
+					} else {
+						$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
+					}
 						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
 						if ( empty( $has_responses ) ) {
 							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
