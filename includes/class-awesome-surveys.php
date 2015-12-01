@@ -504,10 +504,12 @@ class Awesome_Surveys {
 						$form->addElement( new $method( htmlentities( stripslashes( $element['name'] ) ), sanitize_title( $element['name'] ), $options, $atts ) );
 					}
 						$form->addElement( new Element_HTML( '<div class="button-holder">' ) );
+						$word = ( 'html' == $element['type'] ) ? 'HTML' : __( 'question', 'awesome-surveys' );
+						$edit_button_html = ( 'html' == $element['type'] ) ? '' : '<button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>';
 						if ( empty( $has_responses ) ) {
-							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . __( 'Delete question', 'awesome-surveys' ) . '</button><button class="element-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+							$form->addElement( new Element_HTML( '<button class="element-edit" data-action="delete" data-index="' . $elements_count . '">' . sprintf( '%s %s', __( 'Delete', 'awesome-surveys' ), $word ) . '</button>' . $edit_button_html ) );
 						} else {
-							$form->addElement( new Element_HTML( '<button class="element-label-edit" data-action="edit" data-index="' . $elements_count . '">' . __( 'Edit question', 'awesome-surveys' ) . '</button>' ) );
+							$form->addElement( new Element_HTML( $edit_button_html ) );
 						}
 						$form->addElement( new Element_HTML( '</div><div class="clear"></div></div>' ) );
 					$elements_count++;
