@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: FR (French; français)
@@ -47,3 +55,5 @@ $.extend($.validator.messages, {
 	cifES: "Veuillez fournir un numéro CIF valide.",
 	postalCodeCA: "Veuillez fournir un code postal valide."
 });
+
+}));

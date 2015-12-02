@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Language: SL (Slovenian; slovenski jezik)
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	max: $.validator.format("Prosimo vnesite vrednost manjše ali enako {0}."),
 	min: $.validator.format("Prosimo vnesite vrednost večje ali enako {0}.")
 });
+
+}));

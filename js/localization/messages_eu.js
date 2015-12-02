@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: EU (Basque; euskara, euskera)
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	max: $.validator.format("Mesedez, idatzi {0} edo txikiagoa den balio bat."),
 	min: $.validator.format("Mesedez, idatzi {0} edo handiagoa den balio bat.")
 });
+
+}));

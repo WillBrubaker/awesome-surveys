@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: MY (Malay; Melayu)
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	max: $.validator.format("Sila masukkan nilai yang kurang atau sama dengan {0}."),
 	min: $.validator.format("Sila masukkan nilai yang lebih atau sama dengan {0}.")
 });
+
+}));

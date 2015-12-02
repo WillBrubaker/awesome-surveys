@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: FA (Persian; فارسی)
@@ -24,3 +32,5 @@ $.extend($.validator.messages, {
 	minWords: $.validator.format("لطفا حداقل {0} کلمه وارد کنید."),
 	maxWords: $.validator.format("لطفا حداکثر {0} کلمه وارد کنید.")
 });
+
+}));

@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: NO (Norwegian; Norsk)
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	min: $.validator.format("Angi en verdi som er st&oslash;rre eller lik {0}."),
 	creditcard: "Angi et gyldig kredittkortnummer."
 });
+
+}));

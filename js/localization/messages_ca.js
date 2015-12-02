@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: CA (Catalan; català)
@@ -12,7 +20,7 @@ $.extend($.validator.messages, {
 	number: "Si us plau, escriu un número enter vàlid.",
 	digits: "Si us plau, escriu només dígits.",
 	creditcard: "Si us plau, escriu un número de tarjeta vàlid.",
-	equalTo: "Si us plau, escriu el maateix valor de nou.",
+	equalTo: "Si us plau, escriu el mateix valor de nou.",
 	extension: "Si us plau, escriu un valor amb una extensió acceptada.",
 	maxlength: $.validator.format("Si us plau, no escriguis més de {0} caracters."),
 	minlength: $.validator.format("Si us plau, no escriguis menys de {0} caracters."),
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	max: $.validator.format("Si us plau, escriu un valor menor o igual a {0}."),
 	min: $.validator.format("Si us plau, escriu un valor major o igual a {0}.")
 });
+
+}));

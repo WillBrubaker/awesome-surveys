@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: RO (Romanian, limba română)
@@ -21,3 +29,5 @@ $.extend($.validator.messages, {
 	max: $.validator.format("Te rugăm să introduci o valoare egal sau mai mică decât {0}."),
 	min: $.validator.format("Te rugăm să introduci o valoare egal sau mai mare decât {0}.")
 });
+
+}));

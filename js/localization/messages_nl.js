@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: NL (Dutch; Nederlands, Vlaams)
@@ -31,3 +39,5 @@ $.extend($.validator.messages, {
 	giroaccountNL: "Vul hier een geldig gironummer in.",
 	bankorgiroaccountNL: "Vul hier een geldig bank- of gironummer in."
 });
+
+}));

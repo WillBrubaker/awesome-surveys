@@ -1,3 +1,11 @@
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+		define( ["jquery", "../jquery.validate"], factory );
+	} else {
+		factory( jQuery );
+	}
+}(function( $ ) {
+
 /*
  * Translated default messages for the jQuery validation plugin.
  * Locale: IS (Icelandic; íslenska)
@@ -19,3 +27,5 @@ $.extend($.validator.messages, {
 	min: $.validator.format("Sláðu inn gildi sem er stærra en eða jafnt og {0}."),
 	creditcard: "Sláðu inn gilt greiðslukortanúmer."
 });
+
+}));
