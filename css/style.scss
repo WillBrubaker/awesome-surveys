@@ -32,6 +32,9 @@ form.answer-survey {
    background: url('../images/maintenance.gif') no-repeat center;
   }
  }
+	span#recaptcha-error {
+		display: none;
+	}
 }
 
 .control-group {

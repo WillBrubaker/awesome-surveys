@@ -239,7 +239,7 @@ class Awesome_Surveys {
 		}
 		//add captcha?
 		$options = get_option( 'wwm_awesome_surveys_options', array() );
-		$content = str_replace( '<input type="submit"', '<input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '"></div><input type="submit"', $content );
+		$content = str_replace( '<input type="submit"', '<span id="recaptcha-error" class="error hidden">' . __( 'Captcha Required', 'awesome-surveys' ) . '</span><input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '" data-callback="hideRecaptchaError"></div><input type="submit"', $content );
 		return $content;
 	}
 

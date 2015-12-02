@@ -1,3 +1,6 @@
+function hideRecaptchaError(input) {
+	jQuery('span#recaptcha-error').hide()
+}
 jQuery(document).ready(function($) {
 	$('form.answer-survey input[type="submit"]').prop('disabled', false);
 	$('form.answer-survey label.control-label > span.required').each(function() {
@@ -44,6 +47,8 @@ jQuery(document).ready(function($) {
 						window.scroll(currentPosition.left, -currentPosition.top)
 						overlay.hide();
 					});
+				} else if ($('span#recaptcha-error').length > 0) {
+					$('span#recaptcha-error').show()
 				}
 			},
 		});
