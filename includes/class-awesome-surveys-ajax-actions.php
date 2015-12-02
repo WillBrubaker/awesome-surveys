@@ -369,6 +369,16 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			status_header( 403 );
 			exit;
 		}
+		$options = get_option( 'wwm_awesome_surveys_options', array() );
+
+		$args = array( 'body' => array( 'secret' => $options['general_options']['captcha_secret_key'], 'response' => $_POST['g-recaptcha-response'] ) );
+		$recaptcha_response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $args );
+		$recaptcha_success = json_decode( $recaptcha_response['body'] );
+		if ( $recaptcha_success->success ) {
+			//do success stuff
+		} else {
+		//do failure stuff
+		}
 		$survey_id = absint( $_POST['survey_id'] );
 		$post = get_post( $survey_id, 'OBJECT', 'display' );
 		if ( 'publish' != $post->post_status ) {
