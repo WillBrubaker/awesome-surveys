@@ -30,9 +30,6 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			'post_row_actions' => array( 'post_row_actions', 10, 2 ),
 			);
 
-		foreach ( $actions as $key => $action ) {
-			add_action( $key, array( $this, $action[0] ), $action[1], $action[2] );
-		}
 		foreach ( $filters as $key => $filter ) {
 			add_filter( $key, array( $this, $filter[0] ), $filter[1], $filter[2] );
 		}
