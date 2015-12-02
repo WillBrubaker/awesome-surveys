@@ -13,14 +13,23 @@
 		<div class="overlay">
 			<span class="preloader"></span>
 		</div>
-		<div class="control-group"><label class="control-label" for="enable_captcha"><?php _e( 'Enable captcha', 'awesome-surveys' ) ?></label><div class="controls"><input type="checkbox" name="options[general_options][enable_captcha]" id="enable_captcha" <?php checked( $options['general_options']['enable_captcha'] ); ?> value="1"></div>
+		<div class="control-group">
+			<label class="control-label" for="enable_captcha"><?php _e( 'Enable captcha', 'awesome-surveys' ) ?></label>
+			<div class="controls">
+				<input type="checkbox" name="options[general_options][enable_captcha]" id="enable_captcha" <?php checked( $options['general_options']['enable_captcha'] ); ?> value="1">
+			</div>
 	</div>
-
-		<div class="control-group"><label class="control-label" for="captcha_site_key"><?php _e( 'Your re-captcha Site Key', 'awesome-surveys' ) ?></label><div class="controls"><input type="text" name="options[general_options][captcha_site_key]" id="captcha_site_key" value="<?php echo  sanitize_text_field( $options['general_options']['captcha_site_key'] ); ?>"></div>
-	</div>
-
-		<div class="control-group"><label class="control-label" for="captcha_secret_key"><?php _e( 'Your re-captcha Secret', 'awesome-surveys' ) ?></label><div class="controls"><input type="password" name="options[general_options][captcha_secret_key]" id="captcha_secret_key" value="<?php echo sanitize_text_field( $options['general_options']['captcha_secret_key'] ); ?>"></div>
-	</div>
+		<div class="control-group">
+			<label class="control-label" for="captcha_site_key"><?php _e( 'Your re-captcha Site Key', 'awesome-surveys' ) ?></label>
+			<div class="controls">
+				<input type="text" name="options[general_options][captcha_site_key]" id="captcha_site_key" value="<?php echo  sanitize_text_field( $options['general_options']['captcha_site_key'] ); ?>">
+			</div>
+		</div>
+		<div class="control-group">
+			<label class="control-label" for="captcha_secret_key"><?php _e( 'Your re-captcha Secret', 'awesome-surveys' ) ?></label>
+			<div class="controls"><input type="password" name="options[general_options][captcha_secret_key]" id="captcha_secret_key" value="<?php echo sanitize_text_field( $options['general_options']['captcha_secret_key'] ); ?>">
+			</div>
+		</div>
 		<div class="control-group">
 			<label class="control-label" for="styling-options-element-1">
 				<?php _e( 'Use included css?', 'awesome-surveys' ); ?></label>
