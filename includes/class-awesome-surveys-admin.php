@@ -491,6 +491,9 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			return array(
 			'general_options' => array(
 				'include_css' => 1,
+				'enable_captcha' => 0,
+				'captcha_site_key' => null,
+				'captcha_secret_key' => null,
 				),
 			'email_options' => array(
 				'enable_emails' => 0,

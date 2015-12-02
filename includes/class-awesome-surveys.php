@@ -237,6 +237,9 @@ class Awesome_Surveys {
 				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 			}
 		}
+		//add captcha?
+		$options = get_option( 'wwm_awesome_surveys_options', array() );
+		$content = str_replace( '<input type="submit"', '<input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '"></div><input type="submit"', $content );
 		return $content;
 	}
 

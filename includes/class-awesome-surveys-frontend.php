@@ -110,6 +110,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		wp_register_style( 'awesome-surveys-frontend-styles', WWM_AWESOME_SURVEYS_URL . '/css/style' . $suffix . '.css', array( 'normalize-css', 'pure-forms-css' ), $this->plugin_version, 'all' );
 		wp_localize_script( 'awesome-surveys-frontend', 'wwm_awesome_surveys', array( 'ajaxurl' => admin_url( 'admin-ajax.php' ), 'countDownMessage' => apply_filters( 'wwm_as_countdown_message', __( 'Characters remaining', 'awesome-surveys' ) ) ) );
 		if ( is_singular( 'awesome-surveys' ) ) {
+			wp_enqueue_script( 'grecaptcha', 'https://www.google.com/recaptcha/api.js' );
 			$options = get_option( 'wwm_awesome_surveys_options', array() );
 			$include_css = ( isset( $options['general_options']['include_css'] ) ) ? absint( $options['general_options']['include_css'] ) : 1;
 			if ( $include_css ) {

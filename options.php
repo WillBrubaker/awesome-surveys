@@ -19,5 +19,8 @@ if ( isset( $_POST ) && ! empty( $_POST ) ) {
 	$options_to_save['email_options']['email_subject'] = sanitize_text_field( $options_to_save['email_options']['email_subject'] );
 	$options_to_save['email_options']['mail_to'] = sanitize_email( $options_to_save['email_options']['mail_to'] );
 	$options_to_save['email_options']['respondent_email_message'] = wp_filter_kses( $options_to_save['email_options']['respondent_email_message'] );
+	$options_to_save['general_options']['enable_captcha'] = absint( $options_to_save['general_options']['enable_captcha'] );
+	$options_to_save['general_options']['captcha_site_key'] = sanitize_text_field( $options_to_save['general_options']['captcha_site_key'] );
+	$options_to_save['general_options']['captcha_secret_key'] = sanitize_text_field( $options_to_save['general_options']['captcha_secret_key'] );
 	update_option( 'wwm_awesome_surveys_options', $options_to_save );
 }
