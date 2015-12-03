@@ -138,6 +138,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 ## v2.1 ##
 1. *Feature* Add ability to delete survey responses
 2. *Feature* Add custom HTML element to surveys
+3. *Feature* Option to add captchas to surveys
 
 ## v2.0.10 ##
 1. *FIX* Single quotes break JSON encode/decoding - hopefully fixed

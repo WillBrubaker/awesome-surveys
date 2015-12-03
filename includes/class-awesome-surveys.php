@@ -541,7 +541,6 @@ class Awesome_Surveys {
 	 * @since 2.1
 	 */
 	protected function is_captcha_enabled_for_post( $post_id = 0 ) {
-		$options = get_option( 'wwm_awesome_surveys_options', array() );
 		$enabled = get_post_meta( $post_id, 'captcha_enabled', true );
 		return ( $enabled && $this->is_captcha_enabled() );
 	}
