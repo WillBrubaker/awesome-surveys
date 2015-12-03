@@ -59,6 +59,11 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		if ( isset( $_POST['meta']['redirect_timeout_after_answer'] ) ) {
 			update_post_meta( $post_id, 'redirect_timeout_after_answer', absint( $_POST['meta']['redirect_timeout_after_answer'] ) );
 		}
+		if ( isset( $_POST['meta']['captcha_enabled'] ) ) {
+			update_post_meta( $post_id, 'captcha_enabled', absint( $_POST['meta']['captcha_enabled'] ) );
+		} else {
+			update_post_meta( $post_id, 'captcha_enabled', 0 );
+		}
 	}
 
 	/**

@@ -237,9 +237,11 @@ class Awesome_Surveys {
 				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 			}
 		}
-		//add captcha?
-		$options = get_option( 'wwm_awesome_surveys_options', array() );
-		$content = str_replace( '<input type="submit"', '<span id="recaptcha-error" class="error hidden">' . __( 'Captcha Required', 'awesome-surveys' ) . '</span><input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '" data-callback="hideRecaptchaError"></div><input type="submit"', $content );
+		if ( $this->is_captcha_enabled_for_post( $post->ID ) ) {
+			//decided to filter the HTML here for backwards compat :(
+			$options = get_option( 'wwm_awesome_surveys_options', array() );
+			$content = str_replace( '<input type="submit"', '<span id="recaptcha-error" class="error hidden">' . __( 'Captcha Required', 'awesome-surveys' ) . '</span><input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '" data-callback="hideRecaptchaError"></div><input type="submit"', $content );
+		}
 		return $content;
 	}
 
@@ -530,5 +532,27 @@ class Awesome_Surveys {
 		$replacement = '</div';
 		$output = preg_replace( $pattern, $replacement, $output );
 		return $output;
+	}
+
+	/**
+	 * checks if the captcha is enabled for a post
+	 * @param  integer $post_id the post id
+	 * @return boolean          whether or not the captcha is enabled for this post
+	 * @since 2.1
+	 */
+	protected function is_captcha_enabled_for_post( $post_id = 0 ) {
+		$options = get_option( 'wwm_awesome_surveys_options', array() );
+		$enabled = get_post_meta( $post_id, 'captcha_enabled', true );
+		return ( $enabled && $this->is_captcha_enabled() );
+	}
+
+	/**
+	 * checks if captcha settings are enabled and filled out
+	 * @return boolean whether or not the options have been set to enable captcha_secret_key
+	 * @since 2.1
+	 */
+	protected function is_captcha_enabled() {
+		$options = get_option( 'wwm_awesome_surveys_options', array() );
+		return ( ! empty( $options['general_options']['enable_captcha'] ) && ! empty( $options['general_options']['captcha_site_key'] ) && ! empty( $options['general_options']['captcha_secret_key'] ) );
 	}
 }

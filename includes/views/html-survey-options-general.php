@@ -65,7 +65,12 @@ $thank_you_message = ( ! empty( $post->post_excerpt ) ) ? $post->post_excerpt : 
 	<?php
 		} else {
 			echo '<div style="margin-top: 10px; float: left;"><h3>' . __( 'Auth method can not be edited', 'awesome-surveys' ) . '</h3></div>';
-	?>
-	<?php } ?>
+		}
+	if ( $this->is_captcha_enabled() ) : ?>
+	<div class="control-group">
+			<label for="enable-captcha-for-survey"><?php _e( 'Enable captcha for this survey', 'awesome-surveys' ); ?></label>
+			<input id="enable-captcha-for-survey" type="checkbox" name="meta[captcha_enabled]" value="1" <?php checked( $this->is_captcha_enabled_for_post( $post->ID ) ); ?>>
+		</div>
+	<?php endif; ?>
 	</fieldset>
 </div>
