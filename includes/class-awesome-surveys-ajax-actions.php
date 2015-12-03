@@ -370,16 +370,15 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 			exit;
 		}
 		$options = get_option( 'wwm_awesome_surveys_options', array() );
-
-		$args = array( 'body' => array( 'secret' => $options['general_options']['captcha_secret_key'], 'response' => $_POST['g-recaptcha-response'] ) );
-		$recaptcha_response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $args );
-		$recaptcha_success = json_decode( $recaptcha_response['body'] );
-		if ( $recaptcha_success->success ) {
-			//do success stuff
-		} else {
-		//do failure stuff
-		}
 		$survey_id = absint( $_POST['survey_id'] );
+		if ( $this->is_captcha_enabled_for_post( $survey_id ) ) {
+			$args = array( 'body' => array( 'secret' => $options['general_options']['captcha_secret_key'], 'response' => $_POST['g-recaptcha-response'] ) );
+			$recaptcha_response = wp_remote_post( 'https://www.google.com/recaptcha/api/siteverify', $args );
+			$recaptcha_success = json_decode( $recaptcha_response['body'], true );
+			if ( ! $recaptcha_success['success'] ) {
+				wp_send_json_error( array( 'error' => $recaptcha_success['error-codes'][0], ) );
+			}
+		}
 		$post = get_post( $survey_id, 'OBJECT', 'display' );
 		if ( 'publish' != $post->post_status ) {
 			$data = array( __( 'Answers not saved. Survey in draft status.', 'awesome-surveys' ) );

@@ -28,16 +28,20 @@ jQuery(document).ready(function($) {
 							$(form).empty().append('<p class="error">An unknown error occured (data object is null)</p>');
 							return null;
 						}
-						msg = ('undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' +
-							data.data + '</span>';
-						$(form).empty().append('<p class="success">' + msg + '</p>');
-						if (undefined != typeof data.data.url && data.data.url) {
-							if (undefined != typeof data.data.urltimeout && data.data.urltimeout > 0) {
-								setTimeout(function() {
+						if (!data.success) {
+							alert(data.data.error)
+						} else {
+							msg = ('undefined' != typeof data.data.thank_you) ? data.data.thank_you : '<span class="error">' +
+								data.data + '</span>';
+							$(form).empty().append('<p class="success">' + msg + '</p>');
+							if (undefined != typeof data.data.url && data.data.url) {
+								if (undefined != typeof data.data.urltimeout && data.data.urltimeout > 0) {
+									setTimeout(function() {
+										window.location.href = data.data.url;
+									}, data.data.urltimeout * 1000);
+								} else {
 									window.location.href = data.data.url;
-								}, data.data.urltimeout * 1000);
-							} else {
-								window.location.href = data.data.url;
+								}
 							}
 						}
 					}, 'json').fail(function(xhr) {
