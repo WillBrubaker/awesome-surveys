@@ -5,15 +5,16 @@
 <h4>
 	<?php __( 'Survey Styling Options', 'awesome-surveys' ); ?>
 </h4>
-<p>
-	<?php _e( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', 'awesome-surveys' ); ?>
-</p>
 <div id="general-surveys-options">
 	<fieldset>
 		<div class="overlay">
 			<span class="preloader"></span>
 		</div>
 		<div class="control-group">
+			<p>
+				<?php _e( 'You can add a captcha to your surveys. For this to work, you must enter your site key and secret key. You can get those here: ', 'awesome-surveys' ); ?>
+				<a href="https://www.google.com/recaptcha/admin"><?php _e( 'Google reCAPTCHA' ); ?></a>
+			</p>
 			<label class="control-label" for="enable_captcha"><?php _e( 'Enable captcha', 'awesome-surveys' ) ?></label>
 			<div class="controls">
 				<input type="checkbox" name="options[general_options][enable_captcha]" id="enable_captcha" <?php checked( $options['general_options']['enable_captcha'] ); ?> value="1">
@@ -30,7 +31,11 @@
 			<div class="controls"><input type="password" name="options[general_options][captcha_secret_key]" id="captcha_secret_key" value="<?php echo sanitize_text_field( $options['general_options']['captcha_secret_key'] ); ?>">
 			</div>
 		</div>
+		<hr />
 		<div class="control-group">
+			<p>
+				<?php _e( 'This plugin outputs some very basic structural css. You can enable/disable this by setting the option below', 'awesome-surveys' ); ?>
+			</p>
 			<label class="control-label" for="styling-options-element-1">
 				<?php _e( 'Use included css?', 'awesome-surveys' ); ?></label>
 			<div class="controls">
