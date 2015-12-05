@@ -1,5 +1,5 @@
 <?php
-	$options = get_option( 'wwm_awesome_surveys_options', array() );
+	$options = get_option( 'wwm_awesome_surveys_options', self::$options );
 	$include = ( isset( $options['general_options'] ) && isset( $options['general_options']['include_css'] ) ) ? absint( $options['general_options']['include_css'] ) : 1;
 	?>
 <h4>
