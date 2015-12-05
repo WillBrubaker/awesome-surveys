@@ -132,7 +132,7 @@ as 'post_content'. This means that if WordPress was in English when you built th
 ![Survey results view](screenshot-5.png)
 
 ###5. How to View Results - Hover your mouse, click link.###
-![View Results](screenshot-5.png)
+![View Results](screenshot-6.png)
 
 
 
