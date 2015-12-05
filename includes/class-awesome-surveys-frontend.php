@@ -73,23 +73,17 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			if ( $include_css ) {
 				wp_enqueue_style( 'awesome-surveys-frontend-styles' );
 			}
+			if ( $this->is_captcha_enabled_for_post( $atts['id'] ) ) {
+				wp_enqueue_script( 'grecaptcha', 'https://www.google.com/recaptcha/api.js' );
+			}
 			/**
 				* wwm_survey action hook added in v1.4
 				* a hook so that any js/css needed by extensions can be enqueued
 				*/
 			do_action( 'wwm_survey' );
-		} else {
-			/**
-			* If the user fails the authentication method, the failure message can be customized via
-			* add_filter( 'wwm_survey_no_auth_message' )
-			* @var string
-			* @see awesome_surveys_auth_method_login() which adds a filter if the user is not logged in
-			* @see not_logged_in_message() which is the filter used to customize the message if the user is not logged in.
-			*/
-			return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 		}
-		$nonce = wp_create_nonce( 'answer-survey' );
-		$survey_form = sprintf( '<%1$s %3$s>%2$s</%1$s>', apply_filters( 'wwm_survey_title_tag', 'h4' ), $survey->post_title, apply_filters( 'wwm_survey_title_atts', '' ) ) . str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $survey->post_content );
+		
+		$survey_form = sprintf( '<%1$s %3$s>%2$s</%1$s>', apply_filters( 'wwm_survey_title_tag', 'h4' ), $survey->post_title, apply_filters( 'wwm_survey_title_atts', '' ) ) . $this->the_content( $survey->post_content, array( 'survey_id' => $survey->ID, 'post_type' => $survey->post_type, 'post_author' => $survey->post_author) );
 		return $survey_form;
 	}
 

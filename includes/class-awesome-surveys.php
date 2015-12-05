@@ -212,24 +212,31 @@ class Awesome_Surveys {
 	 * @param   $content string - the WordPress post content
 	 * @return string  the filtered content
 	 */
-	public function the_content( $content ) {
+	public function the_content( $content, $args = array() ) {
 		global $post;
-		if ( is_singular( 'awesome-surveys' ) ) {
+		$defaults = array(
+			'survey_id' => $post->ID,
+			'post_type' => $post->post_type,
+			'post_author' => $post->post_author,
+		);
+		$args = wp_parse_args( $args, $defaults );
+		extract( $args );
+		if ( is_singular() && 'awesome-surveys' === $post_type ) {
 
 				/*
 				On multisite, only network admins can post unfiltered html so the stored html
 				is stripped. This will fetch the json string stored in 'existing_elements' and generate the
 				form on the fly if on multisite and the user does not have the unfiltered_html capability.
 				*/
-				if ( is_multisite() && ! user_can( absint( $post->post_author ), 'unfiltered_html' ) ) {
-					$this->existing_elements = json_decode( get_post_meta( $post->ID, 'existing_elements', true ), true );
-					$content = $this->awesome_surveys_render_form( array( 'survey_id' => $post->ID ) );
+				if ( is_multisite() && ! user_can( absint( $post_author ), 'unfiltered_html' ) ) {
+					$this->existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
+					$content = $this->awesome_surveys_render_form( array( 'survey_id' => $survey_id ) );
 				}
 			$nonce = wp_create_nonce( 'answer-survey' );
-			$auth_method = get_post_meta( $post->ID, 'survey_auth_method', true );
+			$auth_method = get_post_meta( $survey_id, 'survey_auth_method', true );
 			$auth_type = $this->auth_methods[ $auth_method ]['name'];
 			$auth_args = array(
-				'survey_id' => $post->ID,
+				'survey_id' => $survey_id,
 			);
 			if ( false !== apply_filters( 'awesome_surveys_auth_method_' . $auth_type, $auth_args ) ) {
 				$content = str_replace( 'value="answer_survey_nonce"', 'value="' . $nonce . '"', $content );
@@ -237,7 +244,7 @@ class Awesome_Surveys {
 				return apply_filters( 'wwm_survey_no_auth_message', sprintf( '<p>%s</p>', __( 'Your response to this survey has already been recorded. Thank you!', 'awesome-surveys' ) ) );
 			}
 		}
-		if ( $this->is_captcha_enabled_for_post( $post->ID ) ) {
+		if ( $this->is_captcha_enabled_for_post( $survey_id ) ) {
 			//decided to filter the HTML here for backwards compat :(
 			$options = get_option( 'wwm_awesome_surveys_options', array() );
 			$content = str_replace( '<input type="submit"', '<span id="recaptcha-error" class="error hidden">' . __( 'Captcha Required', 'awesome-surveys' ) . '</span><input type="hidden" class="hiddenRecaptcha required" name="hiddenRecaptcha" id="hiddenRecaptcha"><div class="g-recaptcha" data-sitekey="' . $options['general_options']['captcha_site_key'] . '" data-callback="hideRecaptchaError"></div><input type="submit"', $content );
