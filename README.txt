@@ -104,13 +104,16 @@ as 'post_content'. This means that if WordPress was in English when you built th
 3. Survey form output on the frontend
 4. The thank you message displayed after the survey has been submitted
 5. Survey results view
+6. How to View Results - Hover your mouse, click link
 
 
 == Changelog ==
-= v2.1 =
+= v2.1 El Valle de Jovel =
 1. *Feature* Add ability to delete survey responses
 2. *Feature* Add custom HTML element to surveys
 3. *Feature* Option to add captchas to surveys
+4. *Enhancement* On multisite - if survey author does not have 'unfiltered_html' capability, generate the form on-the-fly for frontend output.
+5. Use built in filter when doing shortcode rather than filtering the content in the shortcode callback.
 
 = v2.0.10 =
 1. *FIX* Single quotes break JSON encode/decoding - hopefully fixed
