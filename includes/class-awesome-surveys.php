@@ -23,7 +23,7 @@ class Awesome_Surveys {
 		* @return array an array of button types w/labels
 		*/
 	public function get_buttons() {
-		$buttons = array(
+		return array(
 			'text' => array(
 				'type' => 'Element_Textbox',
 				'label' => __( 'Text Input', 'awesome-surveys' )
@@ -52,14 +52,11 @@ class Awesome_Surveys {
 				'type' => 'Element_Textarea',
 				'label' => __( 'Textarea', 'awesome-surveys' ),
 					),
+				'html' => array(
+					'type' => 'Element_HTML',
+					'label' => __( 'Custom HTML', 'awesome-surveys' ),
+				),
 		);
-		if ( current_user_can( 'unfiltered_html' ) ) {
-			$buttons['html'] = array(
-				'type' => 'Element_HTML',
-				'label' => __( 'Custom HTML', 'awesome-surveys' ),
-			);
-		}
-		return $buttons;
 	}
 
 	/**
