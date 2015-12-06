@@ -405,7 +405,7 @@ class Awesome_Surveys {
 		$args = array( $survey_id, $responses, $existing_elements, $respondent_id )
 			*/
 		$form = $args[2];
-		$answers = $args[1][ $args[3] ];
+		$answers = ( isset( $args[1] ) && isset( $args[1][ $args[3] ] ) ? $args[1][ $args[3] ] : array() );
 		$options = get_option( 'wwm_awesome_surveys_options', array() );
 		if ( isset( $options['email_options'] ) && $options['email_options']['enable_emails'] ) {
 			$subject = apply_filters( 'wwm_as_admin_email_subject', __( 'Survey Completed', 'awesome-surveys' ) );
