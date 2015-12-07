@@ -26,7 +26,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	}
 
 	public function add_form_element() {
-		if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
+		if ( ! current_user_can( 'edit_surveys' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
 			status_header( 403 );
 			exit;
 		}
@@ -468,7 +468,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		* @since 2.1
 	 */
 	public function delete_responses() {
-		if ( ! current_user_can( 'edit_published_posts' ) || ! wp_verify_nonce( $_POST['nonce'], 'wwm-delete-results' ) ) {
+		if ( ! current_user_can( 'edit_published_surveys' ) || ! wp_verify_nonce( $_POST['nonce'], 'wwm-delete-results' ) ) {
 			status_header( 403 );
 			exit;
 		}
