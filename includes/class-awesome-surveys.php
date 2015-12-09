@@ -15,10 +15,19 @@ class Awesome_Surveys {
 
 	public function init() {
 		$admin = get_role( 'administrator' );
-		//$this->custom_capabilities();
 		$this->register_post_type();
-		error_log( print_r( $GLOBALS['wp_post_types']['awesome-surveys'], true ) );
-
+		$editor = get_role( 'editor' );
+		$editor->add_cap( 'edit_survey' );
+		$editor->add_cap( 'edit_surveys' );
+		$editor->add_cap( 'read_surveys' );
+		$editor->add_cap( 'read_survey' );
+		$editor->add_cap( 'read_private_surveys' );
+		$editor->add_cap( 'delete_surveys' );
+		$editor->add_cap( 'publish_surveys' );
+		$editor->add_cap( 'edit_others_surveys' );
+		$editor->add_cap( 'edit_published_surveys' );
+		$editor->add_cap( 'delete_surveys' );
+		$user = wp_get_current_user();
 	}
 
 	/**
@@ -82,7 +91,8 @@ class Awesome_Surveys {
 				),
 			'description' => __( 'Surveys for your site', 'awesome-surveys' ),
 			'public' => true,
-			'capability_type' => 'survey',
+			'map_meta_cap' => true,
+			'capability_type' => 'post',
 			'exclude_from_search' => true,
 			'publicly_queryable' => true,
 			'show_ui' => true,
@@ -232,7 +242,7 @@ class Awesome_Surveys {
 				is stripped. This will fetch the json string stored in 'existing_elements' and generate the
 				form on the fly if on multisite and the user does not have the unfiltered_html capability.
 				*/
-				if ( is_multisite() && ! user_can( absint( $post_author ), 'unfiltered_html' ) ) {
+				if ( user_can( absint( $post_author ), 'publish_surveys' ) && ! user_can( absint( $post_author ), 'unfiltered_html' ) ) {
 					$this->existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 					$content = $this->awesome_surveys_render_form( array( 'survey_id' => $survey_id ) );
 				}
