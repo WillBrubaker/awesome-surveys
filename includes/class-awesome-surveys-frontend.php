@@ -166,7 +166,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 		}
 
 		$path = WWM_AWESOME_SURVEYS_PATH . '/js/localization/';
-		$file = $path . 'messages_' . $lang . '.js';
+		$file = $path . 'messages_' . $lang . '.min.js';
 		//There are some language files which are regionally specific
 		//if that one exists, use it, if not, look for the general one
 		if ( ! file_exists( $file ) ) {
@@ -174,7 +174,7 @@ class Awesome_Surveys_Frontend extends Awesome_Surveys {
 			$file = $path . 'messages_' . $lang . '.js';
 		}
 		if ( file_exists( $file ) && $messages_file = fopen( $file, 'r' ) ) {
-			$messages = fread( $messages_file, filesize( $path . 'messages_' . $lang . '.js' ) );
+			$messages = fread( $messages_file, filesize( $path . 'messages_' . $lang . '.min.js' ) );
 			echo '<script>';
 			echo 'jQuery(document).ready(function($){';
 			echo $messages;
