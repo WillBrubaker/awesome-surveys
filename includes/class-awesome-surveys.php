@@ -14,20 +14,7 @@ class Awesome_Surveys {
 	}
 
 	public function init() {
-		$admin = get_role( 'administrator' );
 		$this->register_post_type();
-		$editor = get_role( 'editor' );
-		$editor->add_cap( 'edit_survey' );
-		$editor->add_cap( 'edit_surveys' );
-		$editor->add_cap( 'read_surveys' );
-		$editor->add_cap( 'read_survey' );
-		$editor->add_cap( 'read_private_surveys' );
-		$editor->add_cap( 'delete_surveys' );
-		$editor->add_cap( 'publish_surveys' );
-		$editor->add_cap( 'edit_others_surveys' );
-		$editor->add_cap( 'edit_published_surveys' );
-		$editor->add_cap( 'delete_surveys' );
-		$user = wp_get_current_user();
 	}
 
 	/**
@@ -574,10 +561,5 @@ class Awesome_Surveys {
 	protected function is_captcha_enabled() {
 		$options = get_option( 'wwm_awesome_surveys_options', array() );
 		return ( ! empty( $options['general_options']['enable_captcha'] ) && ! empty( $options['general_options']['captcha_site_key'] ) && ! empty( $options['general_options']['captcha_secret_key'] ) );
-	}
-
-	private function custom_capabilities() {
-		$admin = get_role( 'administrator' );
-		//$admin->add_cap( 'edit_survey' );
 	}
 }
