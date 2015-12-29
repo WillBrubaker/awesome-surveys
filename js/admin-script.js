@@ -263,7 +263,7 @@ function getPreview($) {
 
 //added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
 function renumberButtons($) {
-	var parent = $('.survey-preview form')
+	var parent = $('div#pfbc')
 	$('.single-element-edit', parent).each(function() {
 		$('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
 	})
