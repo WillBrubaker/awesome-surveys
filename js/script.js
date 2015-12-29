@@ -102,8 +102,8 @@ jQuery('document').ready(function($) {
 			})
 		} else {
 			var qIndex = $(this).attr('name').replace(re, '')
-			var selectedValue = ($(':selected', this).val()) ? $(':selected', this).val() : $(this).val()
-			var show = $(this)
+			var selectedValue = $(this).val()
+			var show = false
 			$('[data-rule-conditional-on^="[' + qIndex).each(function() {
 				$(this).closest('.control-group').each(function() {
 					$('input', $(this)).each(function() {
@@ -120,7 +120,16 @@ jQuery('document').ready(function($) {
 				$(this).closest('.control-group').hide()
 			})
 			$('[data-rule-conditional-on="[' + qIndex + '[' + selectedValue + ']]"').each(function() {
-				$(this).closest('.control-group').show()
+				show = false
+				$('[name="question[' + qIndex + ']"]').each(function() {
+					if ($(this).is(':checked')) {
+						show = true
+					}
+				})
+				if ($('[name="question[' + qIndex + ']"]').val() == selectedValue) {
+					show = true
+				}
+				$(this).closest('.control-group').toggle(show)
 			})
 		}
 	})
