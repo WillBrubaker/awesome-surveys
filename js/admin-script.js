@@ -429,8 +429,6 @@ function removeNulls(elementsJSON) {
 
 function fixConditionals(startingIndex, endingIndex, $) {
 	var elementsJSON = $.parseJSON($('#existing_elements').val())
-	var re = /(\[.*\[)/
-	var valre = /(\[.*\[)/
 	var matchIndex = /(?!\[).*(?=\[)/
 	for (index in elementsJSON) {
 		if (typeof elementsJSON[index].validation.rules.conditional_on != 'undefined') {
@@ -441,8 +439,10 @@ function fixConditionals(startingIndex, endingIndex, $) {
 			if (startingIndex == qIndex) {
 				newIndex = endingIndex
 			}
-			elementsJSON[index].validation.rules.conditional_on = elementsJSON[index].validation.rules.conditional_on.replace(
-				matchIndex, newIndex)
+			if (qIndex <= Math.max(startingIndex, endingIndex) && qIndex >= Math.min(startingIndex, endingIndex)) {
+				elementsJSON[index].validation.rules.conditional_on = elementsJSON[index].validation.rules.conditional_on.replace(
+					matchIndex, newIndex)
+			}
 		}
 	}
 	$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
