@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
 });
 
 jQuery('document').ready(function($) {
-	$('[data-rule-conditional-on]').each(function() {
+	$('[data-rule-conditional_on]').each(function() {
 		$(this).closest('.control-group').hide()
 	})
 	$('form#pfbc select, form#pfbc input[type="radio"], form#pfbc input[type="checkbox"]').on('change', function() {
@@ -84,7 +84,7 @@ jQuery('document').ready(function($) {
 				loopqIndex = $(':first-child', this).attr('name').replace(re, '')
 				loopselectedValue = $(':first-child', this).val()
 				toggle = $(':first-child', this).is(':checked')
-				$('[data-rule-conditional-on="[' + loopqIndex + '[' + loopselectedValue + ']]"').each(function() {
+				$('[data-rule-conditional_on="[' + loopqIndex + '[' + loopselectedValue + ']]"').each(function() {
 					$(this).closest('.control-group').each(function() {
 						$('input', $(this)).each(function() {
 							$(this).prop('checked', false).trigger('change')
@@ -104,7 +104,7 @@ jQuery('document').ready(function($) {
 			var qIndex = $(this).attr('name').replace(re, '')
 			var selectedValue = $(this).val()
 			var show = false
-			$('[data-rule-conditional-on^="[' + qIndex).each(function() {
+			$('[data-rule-conditional_on^="[' + qIndex).each(function() {
 				$(this).closest('.control-group').each(function() {
 					$('input', $(this)).each(function() {
 						$(this).prop('checked', false).trigger('change')
@@ -119,7 +119,7 @@ jQuery('document').ready(function($) {
 				})
 				$(this).closest('.control-group').hide()
 			})
-			$('[data-rule-conditional-on="[' + qIndex + '[' + selectedValue + ']]"').each(function() {
+			$('[data-rule-conditional_on="[' + qIndex + '[' + selectedValue + ']]"').each(function() {
 				show = false
 				$('[name="question[' + qIndex + ']"]').each(function() {
 					if ($(this).is(':checked')) {

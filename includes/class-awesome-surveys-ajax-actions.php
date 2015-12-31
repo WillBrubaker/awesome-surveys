@@ -144,8 +144,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 					if ( $has_options ) {
 						$html .= '<label for="enable-conditional-logic">' . __( 'Enable conditional logic?', 'awesome-surveys' );
 						$html .= '<br /><input id="enable-conditional-logic" type="checkbox" name="enable-conditional-logic" value="1" /></label>';
-						$html .= '<div id="conditional-on">';
-						$html .= '<label>' . __( 'Show if', 'awesome_surveys' ) . '<select name="options[validation][rules][conditional-on]">';
+						$html .= '<div id="conditional_on">';
+						$html .= '<label>' . __( 'Show if', 'awesome_surveys' ) . '<select name="options[validation][rules][conditional_on]">';
 						$html .= '<option value="">' . __( 'Choose an option...', 'awesome-surveys' ) . '</option>';
 						foreach ( $existing_elements as $index => $question ) {
 							if ( ! in_array( $question['type'], $can_have_options ) ) {
