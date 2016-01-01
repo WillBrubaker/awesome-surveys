@@ -205,8 +205,8 @@ jQuery('document').ready(function($) {
 			})
 		}
 		elementsJSON = removeNulls(elementsJSON)
+		elementsJSON = (elementsJSON == null) ? [] : elementsJSON
 		$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
-
 	})
 
 	$('#form-preview').on('click', 'input[name="reset"]', function(e) {
