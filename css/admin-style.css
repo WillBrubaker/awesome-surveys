@@ -111,3 +111,6 @@ span.label p {
     left: 50%;
     margin-top: -20px;
     margin-left: -20px; }
+
+#conditional-on {
+  display: none; }

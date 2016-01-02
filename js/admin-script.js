@@ -7,13 +7,18 @@ jQuery('document').ready(function($) {
 
 	$('#survey-elements-buttons button').button().click(function(e) {
 		e.preventDefault()
+		existingElements = $('#existing_elements').val()
 		$.post(ajaxurl, {
 			action: 'add-form-element',
 			element: $(this).attr('name'),
-			_as_nonce: $(this).data('nonce')
+			_as_nonce: $(this).data('nonce'),
+			existing_elements: existingElements
 		}, function(html) {
 			$('#current-element').empty().append(html)
 			existingElements = $('#existing_elements')
+			$('input#enable-conditional-logic').on('click', function() {
+				$('#conditional-on').toggle($(this).is(':checked'))
+			})
 			if ('undefined' != typeof existingElements && 'undefined' != typeof existingElements.val()) {
 				$('#existing_elements').val(existingElements.val())
 			}
@@ -129,7 +134,8 @@ jQuery('document').ready(function($) {
 										target = $('.controls', container)
 										setName = $('[type="' + type + '"]:first', target).attr('name');
 										for (key in elementsJSON[index].value) {
-											newHtml += '<label class="' + type + '"><input type="' + type + '" name="' + setName + '" value="' + key + '"'
+											newHtml += '<label class="' + type + '"><input type="' + type + '" name="' + setName +
+												'" value="' + key + '"'
 											if (key == elementsJSON[index]['default']) {
 												newHtml += ' checked="checked"'
 											}
@@ -229,16 +235,18 @@ jQuery('document').ready(function($) {
 			existing_elements: $('#existing_elements').val(),
 			action: 'update-post-content'
 		}, function(data) {
-			if ( data.success ) {
+			if (data.success) {
 				$('#content').val(data.data)
 			} else {
 				alert(data.data);
 			}
 		})
 	})
-	$('textarea, input[type="email"], input[type="number"], input[type="text"] ', '#form-preview-wrapper').on('keyup', function() {
-		$(this).val('')
-	})
+	$('textarea, input[type="email"], input[type="number"], input[type="text"] ', '#form-preview-wrapper').on(
+		'keyup',
+		function() {
+			$(this).val('')
+		})
 })
 
 function getPreview($) {
@@ -255,7 +263,7 @@ function getPreview($) {
 
 //added in 1.4.3 to properly reindex edit question and delete question buttons when questions re-ordered
 function renumberButtons($) {
-	var parent = $('.survey-preview form')
+	var parent = $('div#pfbc')
 	$('.single-element-edit', parent).each(function() {
 		$('.button-holder button[data-index]', $(this)).attr('data-index', $(this).index())
 	})
@@ -294,32 +302,41 @@ function previewReady($) {
 }
 
 function generateDynamicDialog(obj) {
-	html = '<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal" method="post" action=""><input type="text" name="options[name]" value="'
-	html += '" required="required"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
+	html =
+		'<div class="dyn-diag"><form class="pure-form pure-form-stacked form-horizontal" method="post" action=""><input type="text" name="options[name]" value="'
+	html +=
+		'" required="required"><label for="required-checkbox">Required? </label><input id="required-checkbox" type="checkbox" name="options[validation][required]" value="1"'
 	if (typeof obj.validation != 'undefined' && typeof obj.validation.required != 'undefined' && 1 == obj.validation.required) {
 		html += ' checked="checked"'
 	}
 	html += '>'
 	if ('undefined' != typeof obj.label) {
-		display = ('undefined' != typeof obj.atts && 'undefined' != typeof obj.atts.can_add_options && 'yes' == obj.atts.can_add_options) ? 'block' : 'none'
-		html += '<div class="slider-wrapper" style="display:' + display + ';"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
+		display = ('undefined' != typeof obj.atts && 'undefined' != typeof obj.atts.can_add_options && 'yes' == obj.atts
+			.can_add_options) ? 'block' : 'none'
+		html += '<div class="slider-wrapper" style="display:' + display +
+			';"><div id="edit-slider"></div><div class="slider-legend"></div></div>'
 		html += '<p style="display:' + display + ';">answers:</p>'
 		html += '<div id="edit-answers-holder" style="display:' + display + ';">'
 		for (key in obj.label) {
 			count = Number(key) + 1
-			html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) + '</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key + ']" value="" required="required">'
-			html += '<label for="options-default-' + key + '">default?<br></label><input id="options-default-' + key + '" type="radio" name="options[default]" value="' + key + '"'
+			html += '<label for="options-answer-' + key + '">Answer ' + (Number(key) + 1) +
+				'</label><input id="options-answer-' + key + '" type="text" name="options[label][' + key +
+				']" value="" required="required">'
+			html += '<label for="options-default-' + key + '">default?<br></label><input id="options-default-' + key +
+				'" type="radio" name="options[default]" value="' + key + '"'
 			if (key == obj['default']) {
 				html += ' checked="checked"'
 			}
 			html += '>'
 		}
-		html += '<p><input type="button" name="options-default-none" value="' + wwm_as_admin_script.clear_default + '" /></p>'
+		html += '<p><input type="button" name="options-default-none" value="' + wwm_as_admin_script.clear_default +
+			'" /></p>'
 		html += '</div>'
 	}
 	if ('undefined' != typeof obj.validation && 'undefined' != typeof obj.validation.rules) {
 		for (index in obj.validation.rules) {
-			html += '<input type="hidden" name="options[validation][rules][' + index + ']" value="' + obj.validation.rules[index] + '">'
+			html += '<input type="hidden" name="options[validation][rules][' + index + ']" value="' + obj.validation.rules[
+				index] + '">'
 		}
 	}
 

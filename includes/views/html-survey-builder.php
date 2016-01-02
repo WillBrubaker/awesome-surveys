@@ -37,7 +37,7 @@ $form_preview_html = $awesome_surveys->get_form_preview_html( $post->ID );
 
 		function my_handler_function() {
 			//just an example for the default handler - do as you please
-			if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
+			if ( ! current_user_can( 'edit_surveys' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
 				status_header( 403 );
 				exit;
 			}

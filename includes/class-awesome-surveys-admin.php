@@ -130,12 +130,12 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 		$plugin_panel_version = 2;
 		add_filter( 'wwm_plugin_links', array( $this, 'this_plugin_link' ) );
 		if ( empty( $_wwm_plugins_page ) || ( is_array( $_wwm_plugins_page ) && $plugin_panel_version > $_wwm_plugins_page[1] ) ) {
-			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'edit_others_posts', 'wwm_plugins', array( $this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '90.314' );
+			$_wwm_plugins_page[0] = add_menu_page( 'WtWM Plugins', 'WtWM Plugins', 'edit_surveys', 'wwm_plugins', array( $this, 'wwm_plugin_links' ), WWM_AWESOME_SURVEYS_URL . '/images/wwm_wp_menu.png', '90.314' );
 			$_wwm_plugins_page[1] = $plugin_panel_version;
 		}
-		$this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'edit_others_posts', $this->menu_slug, array( &$this, 'plugin_options' ) );
-		add_submenu_page( 'wwm_plugins', '', __( 'My Surveys', 'awesome-surveys' ), 'edit_others_posts', 'edit.php?post_type=awesome-surveys' );
-		add_submenu_page( 'wwm_plugins', '', __( 'New Survey', 'awesome-surveys' ), 'edit_others_posts', 'post-new.php?post_type=awesome-surveys' );
+		$this->page_hook = add_submenu_page( 'wwm_plugins', $this->page_title, $this->menu_title, 'manage_options', $this->menu_slug, array( $this, 'plugin_options' ) );
+		add_submenu_page( 'wwm_plugins', '', __( 'My Surveys', 'awesome-surveys' ), 'edit_surveys', 'edit.php?post_type=awesome-surveys' );
+		add_submenu_page( 'wwm_plugins', '', __( 'New Survey', 'awesome-surveys' ), 'edit_surveys', 'post-new.php?post_type=awesome-surveys' );
 		add_action( 'admin_print_scripts-' . $this->page_hook, array( $this, 'admin_print_scripts' ) );
 		add_action( 'admin_print_styles-' . $this->page_hook, array( $this, 'admin_print_styles' ) );
 	}
@@ -228,7 +228,7 @@ class Awesome_Surveys_Admin extends Awesome_Surveys {
 			$edit_post_link = get_edit_post_link( $post->ID, true );
 			$duplicate_url = admin_url( 'post.php?post=' . $post->ID . '&action=duplicate&duplicate_survey_nonce=' . $nonce );
 			$show_link = get_post_meta( $post->ID, '_response', true );
-			if ( ! empty( $show_link ) ) {
+			if ( ! empty( $show_link ) && ( current_user_can( 'edit_others_surveys' ) || $post->post_author == get_current_user_id() ) ) {
 				$delete_results_nonce = wp_create_nonce( 'wwm-delete-results' );
 				$actions['results'] = '<a href="' . $edit_post_link . '&amp;view=results' . '" title="' . __( 'View Survey Results', 'awesome-surveys' ) . '">' . __( 'Results', 'awesome-surveys' ) . '</a>';
 				$actions['clear_results'] = '<a class="delete-results" title="' . __( 'Delete Survey Results', 'awesome-surveys' ) . '" href="#" data-nonce="' . $delete_results_nonce .'" data-postid="' . $post->ID . '">' . __( 'Delete Results', 'awesome-surveys' ) . '</a>';

@@ -111,6 +111,27 @@ load_plugin_textdomain( 'awesome-surveys', false, dirname( plugin_basename( __FI
 		global $awesome_surveys;
 		$awesome_surveys->register_post_type();
 		flush_rewrite_rules();
+		$capability_type = 'survey';
+		$caps = array(
+			"edit_{$capability_type}",
+			"read_{$capability_type}",
+			"delete_{$capability_type}",
+			"edit_{$capability_type}s",
+			"edit_others_{$capability_type}s",
+			"publish_{$capability_type}s",
+			"read_private_{$capability_type}s",
+			"delete_{$capability_type}s",
+			"delete_private_{$capability_type}s",
+			"delete_published_{$capability_type}s",
+			"delete_others_{$capability_type}s",
+			"edit_private_{$capability_type}s",
+			"edit_published_{$capability_type}s",
+			"edit_published_{$capability_type}",
+		);
+		$role = get_role( 'administrator' );
+		foreach ( $caps as $cap_type ) {
+			$role->add_cap( $cap_type );
+		}
 	}
 
 	$filters = array(

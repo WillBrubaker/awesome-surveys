@@ -78,6 +78,7 @@ class Awesome_Surveys {
 				),
 			'description' => __( 'Surveys for your site', 'awesome-surveys' ),
 			'public' => true,
+			'map_meta_cap' => true,
 			'capability_type' => 'post',
 			'exclude_from_search' => true,
 			'publicly_queryable' => true,
@@ -228,7 +229,7 @@ class Awesome_Surveys {
 				is stripped. This will fetch the json string stored in 'existing_elements' and generate the
 				form on the fly if on multisite and the user does not have the unfiltered_html capability.
 				*/
-				if ( is_multisite() && ! user_can( absint( $post_author ), 'unfiltered_html' ) ) {
+				if ( user_can( absint( $post_author ), 'publish_surveys' ) && ! user_can( absint( $post_author ), 'unfiltered_html' ) ) {
 					$this->existing_elements = json_decode( get_post_meta( $survey_id, 'existing_elements', true ), true );
 					$content = $this->awesome_surveys_render_form( array( 'survey_id' => $survey_id ) );
 				}

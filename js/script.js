@@ -71,3 +71,66 @@ jQuery(document).ready(function($) {
 		$('.remaining-chars', $(this).parent()).empty().append(remaining)
 	})
 });
+
+jQuery('document').ready(function($) {
+	$('[data-rule-conditional-on]').each(function() {
+		$(this).closest('.control-group').hide()
+	})
+	$('form#pfbc select, form#pfbc input[type="radio"], form#pfbc input[type="checkbox"]').on('change', function() {
+		var re = /(question)|(\[|\])/g
+		if ('checkbox' === $(this).attr('type')) {
+			$(this).parent().each(function() {
+				var toggle = false
+				loopqIndex = $(':first-child', this).attr('name').replace(re, '')
+				loopselectedValue = $(':first-child', this).val()
+				toggle = $(':first-child', this).is(':checked')
+				$('[data-rule-conditional-on="[' + loopqIndex + '[' + loopselectedValue + ']]"').each(function() {
+					$(this).closest('.control-group').each(function() {
+						$('input', $(this)).each(function() {
+							$(this).prop('checked', false).trigger('change')
+							if ('text' === $(this).attr('type') || 'number' === $(this).attr('type') || 'email' === $(this)
+								.attr('type')) {
+								$(this).val('')
+							}
+						})
+						$('textarea', $(this)).each(function() {
+							$(this).val('')
+						})
+					})
+					$(this).closest('.control-group').toggle(toggle)
+				})
+			})
+		} else {
+			var qIndex = $(this).attr('name').replace(re, '')
+			var selectedValue = $(this).val()
+			var show = false
+			$('[data-rule-conditional-on^="[' + qIndex).each(function() {
+				$(this).closest('.control-group').each(function() {
+					$('input', $(this)).each(function() {
+						$(this).prop('checked', false).trigger('change')
+						if ('text' === $(this).attr('type') || 'number' === $(this).attr('type') || 'email' === $(this)
+							.attr('type')) {
+							$(this).val('')
+						}
+					})
+					$('textarea', $(this)).each(function() {
+						$(this).val('')
+					})
+				})
+				$(this).closest('.control-group').hide()
+			})
+			$('[data-rule-conditional-on="[' + qIndex + '[' + selectedValue + ']]"').each(function() {
+				show = false
+				$('[name="question[' + qIndex + ']"]').each(function() {
+					if ($(this).is(':checked')) {
+						show = true
+					}
+				})
+				if ($('[name="question[' + qIndex + ']"]').val() == selectedValue) {
+					show = true
+				}
+				$(this).closest('.control-group').toggle(show)
+			})
+		}
+	})
+})

@@ -220,7 +220,7 @@ function wwmas_remove_unset_responses( $value ) {
 }
 
 function wwmas_translate_post_content() {
-	if ( ! current_user_can( 'edit_others_posts' ) ) {
+	if ( ! current_user_can( 'manage_options' ) ) {
 		die( 'not authorized' );
 	}
 	$query_args = array(

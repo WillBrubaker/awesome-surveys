@@ -26,7 +26,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	}
 
 	public function add_form_element() {
-		if ( ! current_user_can( 'edit_others_posts' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
+		if ( ! current_user_can( 'edit_surveys' ) || ! wp_verify_nonce( $_POST['_as_nonce'], 'wwm-as-add-element' ) ) {
 			status_header( 403 );
 			exit;
 		}
@@ -128,6 +128,36 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 							}
 							$rule_count++;
 						}
+					}
+				}
+				$existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true  );
+				if ( ! empty( $existing_elements ) ) {
+					$can_have_options[] = 'dropdown';
+					$types = wp_list_pluck( $existing_elements, 'type' );
+					$has_options = false;
+					foreach ( $can_have_options as $type ) {
+						if ( in_array( $type, $types ) ) {
+							$has_options = true;
+							break;
+						}
+					}
+					if ( $has_options ) {
+						$html .= '<label for="enable-conditional-logic">' . __( 'Enable conditional logic?', 'awesome-surveys' );
+						$html .= '<br /><input id="enable-conditional-logic" type="checkbox" name="enable-conditional-logic" value="1" /></label>';
+						$html .= '<div id="conditional-on">';
+						$html .= '<label>' . __( 'Show if', 'awesome_surveys' ) . '<select name="options[validation][rules][conditional-on]">';
+						$html .= '<option value="">' . __( 'Choose an option...', 'awesome-surveys' ) . '</option>';
+						foreach ( $existing_elements as $index => $question ) {
+							if ( ! in_array( $question['type'], $can_have_options ) ) {
+								continue;
+							}
+							$html .= '<optgroup label="' . $question['name'] . ' ' . __( 'is answered with..', 'awesome-surveys') . '">';
+								foreach ( $question['label'] as $key => $value ) {
+									$html .= '<option value="[' . $index . '[' . $key . ']]">' . $value . '</option>';
+								}
+								$html .= '</optgroup>';
+						}
+						$html .= '</select></label></div>';
 					}
 				}
 				if ( 'textarea' == $form_element ) {
@@ -468,7 +498,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 		* @since 2.1
 	 */
 	public function delete_responses() {
-		if ( ! current_user_can( 'edit_published_posts' ) || ! wp_verify_nonce( $_POST['nonce'], 'wwm-delete-results' ) ) {
+		if ( ! current_user_can( 'edit_published_surveys' ) || ! wp_verify_nonce( $_POST['nonce'], 'wwm-delete-results' ) ) {
 			status_header( 403 );
 			exit;
 		}
