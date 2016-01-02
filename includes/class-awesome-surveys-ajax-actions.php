@@ -144,8 +144,8 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 					if ( $has_options ) {
 						$html .= '<label for="enable-conditional-logic">' . __( 'Enable conditional logic?', 'awesome-surveys' );
 						$html .= '<br /><input id="enable-conditional-logic" type="checkbox" name="enable-conditional-logic" value="1" /></label>';
-						$html .= '<div id="conditional-on">';
-						$html .= '<label>' . __( 'Show if', 'awesome_surveys' ) . '<select name="options[validation][rules][conditional-on]">';
+						$html .= '<div id="conditional_on">';
+						$html .= '<label>' . __( 'Show if', 'awesome_surveys' ) . '<select name="options[validation][rules][conditional_on]">';
 						$html .= '<option value="">' . __( 'Choose an option...', 'awesome-surveys' ) . '</option>';
 						foreach ( $existing_elements as $index => $question ) {
 							if ( ! in_array( $question['type'], $can_have_options ) ) {
@@ -380,7 +380,7 @@ class Awesome_Surveys_Ajax extends Awesome_Surveys {
 	public function update_post_content() {
 		$form_args = array( 'survey_id' => $_POST['survey_id'] );
 		$this->existing_elements = json_decode( stripslashes( $_POST['existing_elements'] ), true );
-		if ( ! $this->existing_elements ) {
+		if ( ! is_array( $this->existing_elements ) ) {
 			wp_send_json_error( array( sprintf( '%s %s of %s', __( 'There was an error on line ', 'awesome-surveys' ), __LINE__, __FILE__ ) ) );
 		}
 		$post_content = $this->awesome_surveys_render_form( $form_args );

@@ -1,5 +1,4 @@
 jQuery('document').ready(function($) {
-
 	$("#awesome-survey .overlay").hide()
 	if (typeof $('#form-preview').html() != 'undefined' && $('#form-preview').html().length > 0) {
 		previewReady($)
@@ -17,7 +16,7 @@ jQuery('document').ready(function($) {
 			$('#current-element').empty().append(html)
 			existingElements = $('#existing_elements')
 			$('input#enable-conditional-logic').on('click', function() {
-				$('#conditional-on').toggle($(this).is(':checked'))
+				$('#conditional_on').toggle($(this).is(':checked'))
 			})
 			if ('undefined' != typeof existingElements && 'undefined' != typeof existingElements.val()) {
 				$('#existing_elements').val(existingElements.val())
@@ -206,8 +205,8 @@ jQuery('document').ready(function($) {
 			})
 		}
 		elementsJSON = removeNulls(elementsJSON)
+		elementsJSON = (elementsJSON == null) ? [] : elementsJSON
 		$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
-
 	})
 
 	$('#form-preview').on('click', 'input[name="reset"]', function(e) {
@@ -272,6 +271,7 @@ function renumberButtons($) {
 }
 
 function previewReady($) {
+	var startingIndex, endingIndex
 	$('#form-preview button').button()
 	$('#current-element').empty()
 	$('#current-element-wrapper').hide()
@@ -290,6 +290,7 @@ function previewReady($) {
 				surveyElements.splice(endingIndex, 0, activeElement)
 				$('#existing_elements').val(JSON.stringify(surveyElements))
 				renumberButtons($)
+				fixConditionals(parseInt(startingIndex), parseInt(endingIndex), $)
 			}
 		}
 	})
@@ -424,4 +425,25 @@ function removeNulls(elementsJSON) {
 		}
 	}
 	return (temp.length > 0) ? temp : null
+}
+
+function fixConditionals(startingIndex, endingIndex, $) {
+	var elementsJSON = $.parseJSON($('#existing_elements').val())
+	var matchIndex = /(?!\[).*(?=\[)/
+	for (index in elementsJSON) {
+		if (typeof elementsJSON[index].validation.rules.conditional_on != 'undefined') {
+			qIndex = parseInt(elementsJSON[index].validation.rules.conditional_on.match(matchIndex)[0])
+			changeIndex = ((startingIndex - endingIndex) > 0) ? 1 : -1
+			minVal = Math.max(qIndex - 1, 0)
+			newIndex = ((startingIndex - endingIndex) > 0) ? (qIndex + 1) : minVal
+			if (startingIndex == qIndex) {
+				newIndex = endingIndex
+			}
+			if (qIndex <= Math.max(startingIndex, endingIndex) && qIndex >= Math.min(startingIndex, endingIndex)) {
+				elementsJSON[index].validation.rules.conditional_on = elementsJSON[index].validation.rules.conditional_on.replace(
+					matchIndex, newIndex)
+			}
+		}
+	}
+	$('#existing_elements').val(JSON.stringify(elementsJSON)).trigger('change')
 }
