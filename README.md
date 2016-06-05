@@ -11,17 +11,11 @@
 
 **Stable tag:** 2.1
 
-**Tags:** survey, form builder, survey form, data collection, feedback, free, plugin, polls, questionaire, poll builder, opinion, customer satisfaction
-
-**Donate Link:** http://www.willthewebmechanic.com/awesome-surveys/
-
-Create & publish feature-rich surveys with a few mouse clicks. All data collected remains in your control. Works better than healthcare.gov!
+End Of Life - no not use.
 
 ## Description ##
 
-Version 2.0 is a major rewrite to address the issues of data loss that some users have been experiencing. Surveys are now custom post types and leverage the WordPress post editor. Individual responses are stored as post meta - each response is represented by one row in the post meta table for the survey.
-
-This plugin allows you to create surveys with an easy-to-use form builder, publish surveys with a simple shortcode and view survey results in the admin backend. You maintain control of your data. Automatic form validation is included.
+This plugin has reached its end of life and should no longer be used. PHP 7 is not supported and support will not be added
 
 ### Features ###
 
